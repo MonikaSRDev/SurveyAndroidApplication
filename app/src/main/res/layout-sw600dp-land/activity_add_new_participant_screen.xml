@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E5E5E5">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/app_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageView
+            android:id="@+id/appLogo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="52dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/mithra_logo" />
+
+        <ImageView
+            android:id="@+id/dashboardIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="44dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appLogo"
+            app:srcCompat="@drawable/dashboard_icon" />
+
+        <TextView
+            android:id="@+id/dashboardTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="@string/dashboard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.105"
+            app:layout_constraintStart_toEndOf="@+id/dashboardIcon"
+            app:layout_constraintTop_toBottomOf="@+id/appLogo" />
+
+        <ImageView
+            android:id="@+id/participantsIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dashboardIcon"
+            app:layout_constraintVertical_bias="0.032"
+            app:srcCompat="@drawable/participants_icon" />
+
+        <TextView
+            android:id="@+id/participantsTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/participants"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.111"
+            app:layout_constraintStart_toEndOf="@+id/participantsIcon"
+            app:layout_constraintTop_toBottomOf="@+id/dashboardTV"
+            app:layout_constraintVertical_bias="0.044" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/addParticipantTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/add_new_participant"
+        android:textColor="#A6A6A6"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/participantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="56dp"
+        android:text="@string/name_small_case"
+        android:textColor="#414040"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/participantNameET"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/addParticipantTV"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/participantNameET"
+        android:layout_width="400dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="108dp"
+        android:background="@drawable/add_participant_edittext"
+        android:ems="10"
+        android:hint="Name of the participant"
+        android:inputType="textPersonName"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        tools:layout_editor_absoluteY="157dp" />
+
+    <TextView
+        android:id="@+id/genderTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="20dp"
+        android:text="Gender"
+        android:textColor="#414040"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/participantNameET" />
+
+    <TextView
+        android:id="@+id/ageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/age"
+        android:textColor="#414040"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName4"
+        android:layout_width="400dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="356dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/add_participant_edittext"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/ageTextView" />
+
+    <TextView
+        android:id="@+id/phoneNumberTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone number"
+        android:textColor="#414040"
+        android:textSize="22sp"
+        tools:layout_editor_absoluteX="350dp"
+        tools:layout_editor_absoluteY="533dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName5"
+        android:layout_width="345dp"
+        android:layout_height="56dp"
+        android:background="@drawable/add_participant_edittext"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="484dp"
+        tools:layout_editor_absoluteY="580dp" />
+
+    <ImageView
+        android:id="@+id/partcipant_default_user"
+        android:layout_width="192dp"
+        android:layout_height="240dp"
+        android:background="#C4C4C4"
+        app:srcCompat="@drawable/default_user"
+        tools:layout_editor_absoluteX="885dp"
+        tools:layout_editor_absoluteY="58dp" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Village Name"
+        android:textColor="#414040"
+        android:textSize="22sp"
+        tools:layout_editor_absoluteX="944dp"
+        tools:layout_editor_absoluteY="399dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName6"
+        android:layout_width="349dp"
+        android:layout_height="40dp"
+        android:background="@drawable/add_participant_edittext"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="869dp"
+        tools:layout_editor_absoluteY="428dp" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SHG Association"
+        android:textColor="#414040"
+        android:textSize="22sp"
+        tools:layout_editor_absoluteX="951dp"
+        tools:layout_editor_absoluteY="499dp" />
+
+    <Switch
+        android:id="@+id/username_password_switch"
+        android:layout_width="406dp"
+        android:layout_height="119dp"
+        android:checked="true"
+        android:showText="true"
+        android:text="Automatically Generate Username and Password"
+        android:textColor="#414040"
+        android:textOff=""
+        android:textOn=""
+        android:textSize="22sp"
+        tools:layout_editor_absoluteX="858dp"
+        tools:layout_editor_absoluteY="612dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="400dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/add_participant_edittext"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/genderTV">
+
+        <RadioButton
+            android:id="@+id/maleRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Male"
+            android:textColor="#000000" />
+
+        <RadioButton
+            android:id="@+id/femaleRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Female"
+            android:textColor="#000000" />
+
+        <RadioButton
+            android:id="@+id/othersRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Others"
+            android:textColor="#000000" />
+    </RadioGroup>
+
+    <Spinner
+        android:id="@+id/spinnerSHG"
+        android:layout_width="345dp"
+        android:layout_height="58dp"
+        android:background="@drawable/add_participant_edittext"
+        tools:layout_editor_absoluteX="880dp"
+        tools:layout_editor_absoluteY="533dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

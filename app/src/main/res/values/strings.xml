@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">MithraApplication</string>
+    <string name="sign_in">Sign In</string>
+    <string name="password">Password</string>
+    <string name="userid">UserId</string>
+    <string name="welcome">Welcome!</string>
+    <string name="let_s_get_started">Let\'s Get Started</string>
+    <string name="name">NAME</string>
+    <string name="score">SCORE</string>
+    <string name="task_completed">TASK COMPLETED</string>
+    <string name="status">STATUS</string>
+    <string name="name_small_case">Name</string>
+    <string name="age">Age</string>
+    <string name="user_id">User ID</string>
+    <string name="starting_date">Starting Date</string>
+    <string name="score_value">6</string>
+    <string name="status_percentage">64%</string>
+    <string name="report">Report</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="participants">Participants</string>
+    <string name="add_new_participant">ADD NEW PARTICIPANT</string>
+</resources>
