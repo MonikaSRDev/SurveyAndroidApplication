@@ -106,9 +106,9 @@
         android:ems="10"
         android:hint="Name of the participant"
         android:inputType="textPersonName"
-        android:padding="5dp"
+        android:padding="10dp"
         android:textColor="#000000"
-        android:textColorHint="#000000"
+        android:textColorHint="#A7AAAE"
         app:layout_constraintStart_toEndOf="@+id/constraintLayout"
         app:layout_constraintTop_toBottomOf="@+id/participantName" />
 
@@ -136,10 +136,10 @@
         app:layout_constraintEnd_toStartOf="@+id/villageNameTV"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/constraintLayout"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/participantAgeET"
         android:layout_width="400dp"
         android:layout_height="60dp"
         android:layout_marginStart="360dp"
@@ -147,7 +147,8 @@
         android:background="@drawable/add_participant_edittext"
         android:ems="10"
         android:hint="Name"
-        android:inputType="textPersonName"
+        android:inputType="number"
+        android:padding="10dp"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="@+id/constraintLayout"
         app:layout_constraintTop_toBottomOf="@+id/ageTextView" />
@@ -164,21 +165,22 @@
         android:textSize="22sp"
         app:layout_constraintEnd_toStartOf="@+id/SHGSpinner"
         app:layout_constraintStart_toEndOf="@+id/constraintLayout"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toBottomOf="@+id/participantAgeET" />
 
     <EditText
-        android:id="@+id/participantPhoneNum"
+        android:id="@+id/participantPhoneNumberET"
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/add_participant_edittext"
         android:ems="10"
+        android:maxLength="10"
         android:hint="00 000 000"
-        android:inputType="textPersonName"
-        android:padding="5dp"
+        android:inputType="phone"
+        android:padding="10dp"
         android:textColor="#000000"
-        android:textColorHint="#000000"
+        android:textColorHint="#A7AAAE"
         app:layout_constraintStart_toEndOf="@+id/spinnerCountryCode"
         app:layout_constraintTop_toBottomOf="@+id/phoneNumberTV" />
 
@@ -187,7 +189,7 @@
         android:layout_width="176dp"
         android:layout_height="191dp"
         android:layout_marginStart="164dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:background="#C4C4C4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -207,42 +209,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/partcipant_default_user" />
 
-    <EditText
-        android:id="@+id/villageNameET"
+    <Spinner
+        android:id="@+id/villageNameSpinner"
         android:layout_width="400dp"
         android:layout_height="60dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/add_participant_edittext"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:padding="10dp"
         android:textColor="#000000"
         android:textColorHint="#FAF5F5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName4"
+        app:layout_constraintStart_toEndOf="@+id/participantAgeET"
         app:layout_constraintTop_toBottomOf="@+id/villageNameTV" />
 
     <TextView
         android:id="@+id/SHGSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="288dp"
         android:text="SHG Association"
         android:textColor="#414040"
         android:textSize="22sp"
-        app:layout_constraintBottom_toTopOf="@+id/spinnerSHG"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/villageNameET"
-        app:layout_constraintVertical_bias="0.133" />
+        app:layout_constraintTop_toBottomOf="@+id/villageNameSpinner" />
 
     <Switch
         android:id="@+id/username_password_switch"
         android:layout_width="406dp"
         android:layout_height="119dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="44dp"
-        android:layout_marginBottom="52dp"
         android:checked="true"
         android:showText="true"
         android:text="Automatically Generate Username and Password"
@@ -250,13 +250,11 @@
         android:textOff=""
         android:textOn=""
         android:textSize="22sp"
-        app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.918"
-        app:layout_constraintStart_toEndOf="@+id/participantPhoneNum" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerSHG" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/genderRadioGroup"
         android:layout_width="400dp"
         android:layout_height="60dp"
         android:layout_marginStart="112dp"
@@ -297,13 +295,12 @@
         android:id="@+id/spinnerSHG"
         android:layout_width="400dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="52dp"
         android:background="@drawable/add_participant_edittext"
-        app:layout_constraintBottom_toTopOf="@+id/username_password_switch"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toBottomOf="@+id/SHGSpinner" />
 
     <Spinner
         android:id="@+id/spinnerCountryCode"
@@ -321,13 +318,15 @@
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/linear_gradient_color"
         android:text="Register"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_password_switch"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

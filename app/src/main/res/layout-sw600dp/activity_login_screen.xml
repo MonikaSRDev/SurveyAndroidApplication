@@ -57,7 +57,7 @@
         app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/userNameET"
         android:layout_width="568.15dp"
         android:layout_height="69.32dp"
         android:layout_marginStart="83dp"
@@ -73,7 +73,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/userPasswordET"
         android:layout_width="568.15dp"
         android:layout_height="69.32dp"
         android:layout_marginStart="84dp"
@@ -87,10 +87,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.754"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/userNameET" />
 
     <ImageButton
-        android:id="@+id/button"
+        android:id="@+id/signInButton"
         android:layout_width="568.15dp"
         android:layout_height="69.32dp"
         android:layout_marginStart="80dp"

@@ -26,6 +26,12 @@
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="landscape"/>
+        <activity
+            android:name=".QuestionActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".AddNewParticipantActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
