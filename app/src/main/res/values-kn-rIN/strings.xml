@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MithraApplication</string>
+    <string name="name_small_case">ಹೆಸರು</string>
+    <string name="kannada">ಕನ್ನಡ</string>
+    <string name="password">ಕೀಲಿಪದ</string>
+    <string name="confirm_password">ಹೊಸ ಕೀಲಿಪದ ಖಚಿತ ಪಡಿಸಿ</string>
+    <string name="gender">"ಲಿಂಗ "</string>
+    <string name="male">"ಪುಲ್ಲಿಂಗ "</string>
+    <string name="female">ಸ್ತ್ರೀಲಿಂಗ</string>
+    <string name="others">ಇತರೆ</string>
+    <string name="age">ವಯಸ್ಸು</string>
+    <string name="phone_number">ದೂರವಾಣಿ ಸಂಖ್ಯೆ</string>
+    <string name="village_name">ಗ್ರಾಮ</string>
+    <string name="shg_association">ಸ್ವ-ಸಹಾಯ ಗುಂಪು</string>
+    <string name="register">ನೋಂದಣಿ</string>
+    <string name="user_name">ಬಳಕೆದಾರ ಹೆಸರು</string>
+    <string name="participant_name">ಭಾಗವಹಿಸುವವರ ಹೆಸರು</string>
+    <string name="add_new_participant">ಹೊಸ ಭಾಗವಹಿಸುವವರನ್ನು ಸೇರಿಸಿ</string>
+    <string name="participants">ಭಾಗವಹಿಸುವವರು</string>
+    <string name="dashboard">ಡ್ಯಾಶ್ಬೋರ್ಡ್</string>
+</resources>
