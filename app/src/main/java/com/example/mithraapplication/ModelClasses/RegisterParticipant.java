@@ -1,67 +1,96 @@
 package com.example.mithraapplication.ModelClasses;
 
+import com.google.gson.annotations.SerializedName;
+
 public class RegisterParticipant {
-    private String ParticipantName;
-    private int ParticipantGender;
-    private int ParticipantAge;
-    private PhoneNumber ParticipantPhoneNumber;
-    private String ParticipantVillageName;
-    private String ParticipantSHGAssociation;
-    private int AutoGenerateCred;
+    @SerializedName("full_name")
+    private String participantName;
+    @SerializedName("gender")
+    private String participantGender;
+    @SerializedName("age")
+    private String participantAge;
+    @SerializedName("mobile_number")
+    private String participantPhoneNumber;
+    @SerializedName("village_name")
+    private String participantVillageName;
+    @SerializedName("shg_associate")
+    private String participantSHGAssociation;
+    @SerializedName("user_name")
+    private String participantUserName;
+    @SerializedName("password")
+    private String participantPassword;
+    @SerializedName("doctype")
+    private String doctype;
 
     public String getParticipantName() {
-        return ParticipantName;
+        return participantName;
     }
 
     public void setParticipantName(String participantName) {
-        ParticipantName = participantName;
+        this.participantName = participantName;
     }
 
-    public int getParticipantGender() {
-        return ParticipantGender;
+    public String getParticipantGender() {
+        return participantGender;
     }
 
-    public void setParticipantGender(int participantGender) {
-        ParticipantGender = participantGender;
+    public void setParticipantGender(String participantGender) {
+        this.participantGender = participantGender;
     }
 
-    public int getParticipantAge() {
-        return ParticipantAge;
+    public String getParticipantAge() {
+        return participantAge;
     }
 
-    public void setParticipantAge(int participantAge) {
-        ParticipantAge = participantAge;
+    public void setParticipantAge(String participantAge) {
+        this.participantAge = participantAge;
     }
 
-    public PhoneNumber getParticipantPhoneNumber() {
-        return ParticipantPhoneNumber;
+    public String getParticipantPhoneNumber() {
+        return participantPhoneNumber;
     }
 
-    public void setParticipantPhoneNumber(PhoneNumber participantPhoneNumber) {
-        ParticipantPhoneNumber = participantPhoneNumber;
+    public void setParticipantPhoneNumber(String participantPhoneNumber) {
+        this.participantPhoneNumber = participantPhoneNumber;
     }
 
     public String getParticipantVillageName() {
-        return ParticipantVillageName;
+        return participantVillageName;
     }
 
     public void setParticipantVillageName(String participantVillageName) {
-        ParticipantVillageName = participantVillageName;
+        this.participantVillageName = participantVillageName;
     }
 
     public String getParticipantSHGAssociation() {
-        return ParticipantSHGAssociation;
+        return participantSHGAssociation;
     }
 
     public void setParticipantSHGAssociation(String participantSHGAssociation) {
-        ParticipantSHGAssociation = participantSHGAssociation;
+        this.participantSHGAssociation = participantSHGAssociation;
     }
 
-    public int getAutoGenerateCred() {
-        return AutoGenerateCred;
+    public String getParticipantUserName() {
+        return participantUserName;
     }
 
-    public void setAutoGenerateCred(int autoGenerateCred) {
-        AutoGenerateCred = autoGenerateCred;
+    public void setParticipantUserName(String participantUserName) {
+        this.participantUserName = participantUserName;
+    }
+
+    public String getParticipantPassword() {
+        return participantPassword;
+    }
+
+    public void setParticipantPassword(String participantPassword) {
+        this.participantPassword = participantPassword;
+    }
+
+    public String getDoctype() {
+        return doctype;
+    }
+
+    public void setDoctype(String doctype) {
+        this.doctype = doctype;
     }
 }

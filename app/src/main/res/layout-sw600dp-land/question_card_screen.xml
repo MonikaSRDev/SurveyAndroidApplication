@@ -7,15 +7,20 @@
     android:background="@drawable/greenbackground">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
+        android:id="@+id/imageProfileCardView"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="117dp"
+        android:layout_marginTop="47dp"
+        android:layout_marginBottom="38dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="250dp"
+        app:layout_constraintBottom_toTopOf="@+id/questionCardView"
         app:layout_constraintEnd_toStartOf="@+id/participantNameTV"
-        app:layout_constraintHorizontal_bias="0.588"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
     </androidx.cardview.widget.CardView>
 
@@ -23,14 +28,18 @@
         android:id="@+id/participantNameTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="844dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginEnd="884dp"
+        android:layout_marginBottom="38dp"
         android:padding="10dp"
         android:text="Participate 1"
         android:textColor="#FFFFFF"
-        android:textSize="44sp"
+        android:textSize="29sp"
+        app:layout_constraintBottom_toTopOf="@+id/questionCardView"
+        app:layout_constraintStart_toEndOf="@+id/imageProfileCardView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/last_card_image"
@@ -60,8 +69,13 @@
         android:id="@+id/questionCardView"
         android:layout_width="1130dp"
         android:layout_height="600dp"
+        android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:background="@drawable/main_card_image"
+        android:layout_marginStart="182dp"
+        android:layout_marginTop="135dp"
+        android:layout_marginEnd="182dp"
+        android:layout_marginBottom="135dp"
+        android:background="@drawable/question_card_image"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
@@ -71,29 +85,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/participantNameTV">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.865">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/questionNumbers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="100dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="56dp"
-                android:layout_marginTop="48dp"
-                android:layout_toStartOf="@+id/totalQuestions"
-                android:foregroundGravity="right"
-                android:gravity="end"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="81dp"
+                android:layout_marginBottom="409dp"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
                 android:text="5"
                 android:textColor="#000000"
-                android:textSize="40sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="32sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/questionsTV"
@@ -101,98 +115,128 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="48dp"
+                android:layout_marginStart="151dp"
+                android:layout_marginTop="85dp"
+                android:layout_marginEnd="333dp"
+                android:fontFamily="@font/open_sans"
+                android:foregroundGravity="center"
                 android:gravity="center"
-                android:text="Question 1"
+                android:text="Feeling tired or having little energy."
                 android:textColor="#443737"
-                android:textSize="40sp"
-                app:layout_constraintBottom_toTopOf="@+id/questionOptions"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.399"
-                app:layout_constraintStart_toEndOf="@+id/totalQuestions"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.905" />
+                android:textSize="27sp" />
 
             <Button
                 android:id="@+id/nextButton"
-                android:layout_width="400dp"
-                android:layout_height="100dp"
+                android:layout_width="300dp"
+                android:layout_height="67dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="16dp"
+                android:layout_marginStart="313dp"
+                android:layout_marginEnd="318dp"
+                android:layout_marginBottom="58dp"
                 android:background="@drawable/linear_gradient_color"
+                android:fontFamily="@font/open_sans"
                 android:gravity="center"
                 android:text="Next"
                 android:textAllCaps="false"
-                android:textSize="36sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:textSize="36sp" />
 
             <TextView
                 android:id="@+id/totalQuestions"
+                android:layout_width="87dp"
+                android:layout_height="81dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="81dp"
+                android:layout_marginBottom="409dp"
+                android:layout_toStartOf="@+id/questionsTV"
+                android:layout_toEndOf="@+id/questionNumbers"
+                android:fontFamily="@font/open_sans"
+                android:gravity="start|center_vertical"
+                android:text="of 9"
+                android:textColor="#000000"
+                android:textSize="25sp" />
+
+            <LinearLayout
+                android:id="@+id/questionOptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="52dp"
-                android:gravity="center"
-                android:text="Of 9"
-                android:textColor="#B8B4B4"
-                android:textSize="35sp"
-                app:layout_constraintStart_toEndOf="@+id/questionNumbers"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <RadioGroup
-                android:id="@+id/questionOptions"
-                android:layout_width="932dp"
-                android:layout_height="282dp"
                 android:layout_above="@+id/nextButton"
                 android:layout_below="@+id/questionsTV"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
+                android:layout_marginStart="246dp"
+                android:layout_marginTop="61dp"
+                android:layout_marginEnd="255dp"
+                android:layout_marginBottom="63dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/nextButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:paddingRight="10dp">
 
-                <RadioButton
+                <ImageButton
                     android:id="@+id/optionRadioBtn1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:button="@drawable/zero_twentyfive_btn"
-                    android:padding="20dp" />
+                    android:background="@color/white"
+                    android:contentDescription="option1"
+                    android:gravity="center"
+                    android:src="@drawable/option_one" />
 
-                <RadioButton
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
                     android:id="@+id/optionRadioBtn2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:button="@drawable/twentysix_fifty_btn"
-                    android:padding="20dp" />
+                    android:background="@color/white"
+                    android:contentDescription="option2"
+                    android:gravity="center"
+                    android:src="@drawable/option_two" />
 
-                <RadioButton
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
                     android:id="@+id/optionRadioBtn3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_horizontal|center_vertical"
                     android:layout_weight="1"
-                    android:button="@drawable/fiftyone_seventyfive_btn"
-                    android:padding="20dp" />
+                    android:background="@color/white"
+                    android:contentDescription="option3"
+                    android:gravity="center"
+                    android:src="@drawable/option_three" />
 
-                <RadioButton
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
                     android:id="@+id/optionRadioBtn4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:button="@drawable/seventysix_hundred_btn"
-                    android:padding="20dp" />
-            </RadioGroup>
+                    android:background="@color/white"
+                    android:contentDescription="option4"
+                    android:gravity="center"
+                    android:src="@drawable/option_four" />
+            </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </RelativeLayout>
+
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

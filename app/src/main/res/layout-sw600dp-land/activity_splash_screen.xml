@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/whitebackground"
-    tools:context=".MainActivity" >
+    android:background="@color/white"
+    tools:context=".SplashScreenActivity">
 
     <ImageView
         android:id="@+id/splash_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="50dp"
-        android:background="@drawable/greenbackground"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="77dp"
+        android:layout_marginEnd="91dp"
+        android:layout_marginBottom="77dp"
+        android:background="@drawable/splashscreen_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,13 +23,16 @@
 
     <ImageView
         android:id="@+id/app_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="288dp"
+        android:layout_height="288dp"
+        android:layout_marginTop="178dp"
+        android:layout_marginBottom="178dp"
+        android:layout_marginStart="431dp"
+        android:layout_marginEnd="431dp"
+        app:layout_constraintBottom_toBottomOf="@+id/splash_background"
+        app:layout_constraintEnd_toEndOf="@+id/splash_background"
+        app:layout_constraintStart_toStartOf="@+id/splash_background"
+        app:layout_constraintTop_toTopOf="@+id/splash_background"
         app:srcCompat="@drawable/mithra_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

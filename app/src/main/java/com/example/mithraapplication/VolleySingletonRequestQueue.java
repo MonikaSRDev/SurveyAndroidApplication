@@ -2,31 +2,37 @@ package com.example.mithraapplication;
 
 import android.content.Context;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 public class VolleySingletonRequestQueue {
-
-    private static VolleySingletonRequestQueue requestQueueSingleton;
-
+    private static VolleySingletonRequestQueue instance;
     private RequestQueue requestQueue;
-    private static Context context;
+    private static Context ctx;
 
-    private VolleySingletonRequestQueue(Context ctx) {
-        context = ctx;
+    private VolleySingletonRequestQueue(Context context) {
+        ctx = context;
         requestQueue = getRequestQueue();
     }
+
     public static synchronized VolleySingletonRequestQueue getInstance(Context context) {
-        if (requestQueueSingleton == null) {
-            requestQueueSingleton = new VolleySingletonRequestQueue(context);
+        if (instance == null) {
+            instance = new VolleySingletonRequestQueue(context);
         }
-        return requestQueueSingleton;
+        return instance;
     }
 
     public RequestQueue getRequestQueue() {
         if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+            // getApplicationContext() is key, it keeps you from leaking the
+            // Activity or BroadcastReceiver if someone passes one in.
+            requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
         }
         return requestQueue;
+    }
+
+    public <T> void addToRequestQueue(Request<T> req) {
+        getRequestQueue().add(req);
     }
 }

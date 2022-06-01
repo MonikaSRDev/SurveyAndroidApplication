@@ -1,19 +1,24 @@
 package com.example.mithraapplication;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText userName, userPassword;
-    private ImageButton signInButton;
+    private EditText userNameET, userPasswordET;
+    private TextView welcomeTV, getStartedTV;
+    private Button signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +32,12 @@ public class LoginActivity extends AppCompatActivity {
      * Description : This method is used to register the views
      */
     private void RegisterViews() {
-        userName = findViewById(R.id.userNameET);
-        userPassword = findViewById(R.id.userPasswordET);
+        userNameET = findViewById(R.id.userNameET);
+        userPasswordET = findViewById(R.id.userPasswordET);
+
+        welcomeTV = findViewById(R.id.welcomeTV);
+        getStartedTV = findViewById(R.id.lets_get_startedTV);
+
         signInButton = findViewById(R.id.signInButton);
     }
 
@@ -39,11 +48,42 @@ public class LoginActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String userName = userNameET.getText().toString();
+                String password = userPasswordET.getText().toString();
+
                 Intent loginIntent = new Intent(LoginActivity.this, AddNewParticipantActivity.class);
                 startActivity(loginIntent);
                 finish();
             }
         });
+    }
+
+    /**
+     * @param selectedLanguage
+     * Description : This method is used to change the content of the screen to user selected language
+     */
+    private void changeLocalLanguage(String selectedLanguage){
+        Locale myLocale = new Locale(selectedLanguage);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    /**
+     * @param newConfig
+     * Description : This method is used to update the views on change of language
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        userNameET.setText(R.string.userid);
+        userPasswordET.setText(R.string.password);
+        getStartedTV.setText(R.string.let_s_get_started);
+        welcomeTV.setText(R.string.welcome);
+        signInButton.setText(R.string.sign_in);
     }
 
 }

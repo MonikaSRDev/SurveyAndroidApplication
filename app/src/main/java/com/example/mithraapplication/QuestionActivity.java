@@ -17,8 +17,8 @@ public class QuestionActivity extends AppCompatActivity {
 
     private TextView participantName;
     private TextView questionNumber, totalQuestions, ph9Question;
-    private RadioGroup optionsRadioGroup;
-    private RadioButton selectedOption;
+//    private RadioGroup optionsRadioGroup;
+//    private RadioButton selectedOption;
     private Button nextButton;
     private int questionIndex = 0;
     private int selectedOptionValue;
@@ -50,31 +50,31 @@ public class QuestionActivity extends AppCompatActivity {
         questionNumber = findViewById(R.id.questionNumbers);
         totalQuestions = findViewById(R.id.totalQuestions);
         ph9Question = findViewById(R.id.questionsTV);
-        optionsRadioGroup = findViewById(R.id.questionOptions);
+//        optionsRadioGroup = findViewById(R.id.questionOptions);
         nextButton = findViewById(R.id.nextButton);
         enableDisableButton(false);
     }
 
     private void getSelectedOption(){
-        optionsRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                selectedOption = group.findViewById(checkedId);
-                switch(selectedOption.getId()){
-                    case R.id.optionRadioBtn1 : selectedOptionValue = 1;
-                                                break;
-                    case R.id.optionRadioBtn2 : selectedOptionValue = 2;
-                                                break;
-                    case R.id.optionRadioBtn3 : selectedOptionValue = 3;
-                                                break;
-                    case R.id.optionRadioBtn4 : selectedOptionValue = 4;
-                                                break;
-                }
-                if(selectedOption.isChecked()){
-                    enableDisableButton(true);
-                }
-            }
-        });
+//        optionsRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                selectedOption = group.findViewById(checkedId);
+//                switch(selectedOption.getId()){
+//                    case R.id.optionRadioBtn1 : selectedOptionValue = 1;
+//                                                break;
+//                    case R.id.optionRadioBtn2 : selectedOptionValue = 2;
+//                                                break;
+//                    case R.id.optionRadioBtn3 : selectedOptionValue = 3;
+//                                                break;
+//                    case R.id.optionRadioBtn4 : selectedOptionValue = 4;
+//                                                break;
+//                }
+//                if(selectedOption.isChecked()){
+//                    enableDisableButton(true);
+//                }
+//            }
+//        });
     }
 
     /**

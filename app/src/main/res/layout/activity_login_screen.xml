@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/sign_up_background"
         android:layout_width="387dp"
         android:layout_height="398dp"
         app:layout_constraintBottom_toBottomOf="parent"
