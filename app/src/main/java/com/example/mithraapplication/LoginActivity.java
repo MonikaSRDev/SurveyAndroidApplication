@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mithraapplication.ModelClasses.UserLogin;
+
 import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
@@ -51,11 +53,24 @@ public class LoginActivity extends AppCompatActivity {
                 String userName = userNameET.getText().toString();
                 String password = userPasswordET.getText().toString();
 
+                callServerForUserLogin(userName, password);
+
                 Intent loginIntent = new Intent(LoginActivity.this, AddNewParticipantActivity.class);
                 startActivity(loginIntent);
                 finish();
             }
         });
+    }
+
+    /**
+     * Description : call the server to get if the login is successful or not
+     */
+    private void callServerForUserLogin(String userName, String password){
+        UserLogin userLogin = new UserLogin();
+        userLogin.setUserName(userName);
+        userLogin.setUserPassword(password);
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.userLogin(LoginActivity.this, userLogin);
     }
 
     /**

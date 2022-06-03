@@ -37,6 +37,12 @@
         <activity
             android:name=".AddNewParticipantActivity"
             android:screenOrientation="landscape"/>
+        <activity
+            android:name=".SocioDemographyActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".DiseasesProfileActivity"
+            android:screenOrientation="landscape"/>
 
         <meta-data
             android:name="preloaded_fonts"

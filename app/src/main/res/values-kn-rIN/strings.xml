@@ -14,9 +14,9 @@
     <string name="village_name">ಗ್ರಾಮ</string>
     <string name="shg_association">ಸ್ವ-ಸಹಾಯ ಗುಂಪು</string>
     <string name="register">ನೋಂದಣಿ</string>
-    <string name="user_name">ಬಳಕೆದಾರ ಹೆಸರು</string>
+    <string name="user_name">ಬಳಕೆದಾರರ ಹೆಸರು</string>
     <string name="participant_name">ಭಾಗವಹಿಸುವವರ ಹೆಸರು</string>
-    <string name="add_new_participant">ಹೊಸ ಭಾಗವಹಿಸುವವರನ್ನು ಸೇರಿಸಿ</string>
+    <string name="add_new_participant">ಹೊಸದಾಗಿ ಭಾಗವಹಿಸುವವರನ್ನು ಸೇರಿಸಿ</string>
     <string name="participants">ಭಾಗವಹಿಸುವವರು</string>
     <string name="dashboard">ಡ್ಯಾಶ್ಬೋರ್ಡ್</string>
 </resources>

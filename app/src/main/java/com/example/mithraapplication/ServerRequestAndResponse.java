@@ -13,6 +13,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.mithraapplication.ModelClasses.UserLogin;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -20,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerRequestAndResponse extends Application {
+
+    Gson gson = new Gson();
 
     @Override
     public void onCreate() {
@@ -60,22 +66,22 @@ public class ServerRequestAndResponse extends Application {
         VolleySingletonRequestQueue.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
-    public void postJsonRequest(Context context, JSONObject json){
-        String url = "https://jsonplaceholder.typicode.com/todos/1";
+    public void postJsonRequest(Context context, String json, String methodName){
+        String url = "https://domain.com" + methodName + "?jsonStr=".concat(json);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
+        StringRequest newRequest = new StringRequest(Request.Method.POST,
+                url, new Response.Listener<String>() {
 
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("JSONGETREQUEST","Success");
+                    public void onResponse(String response) {
+                        Log.i("JSONPOSTREQUEST","Success");
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Log.i("JSONGETREQUEST","Failure");
+                        Log.i("JSONPOSTREQUEST","Failure");
                     }
                 }) {
 
@@ -90,6 +96,11 @@ public class ServerRequestAndResponse extends Application {
         };
 
         // Access the RequestQueue through your singleton class.
-        VolleySingletonRequestQueue.getInstance(context).addToRequestQueue(jsonObjectRequest);
+        VolleySingletonRequestQueue.getInstance(context).addToRequestQueue(newRequest);
     }
+
+    public void userLogin(Context context, UserLogin userLoginObject){
+        postJsonRequest(context, userLoginObject.ToJSON(), "");
+    }
+
 }

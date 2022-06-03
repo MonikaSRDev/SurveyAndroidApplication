@@ -20,7 +20,33 @@
     <string name="female">Female</string>
     <string name="others">Others</string>
     <string name="english" translatable="false">English</string>
-    <string name="kannada">ಕನ್ನಡ</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="user_name">User Name</string>
+    <string name="years_of_education">Years Of education</string>
+    <string name="marital_status">Marital Status</string>
+    <string name="occupation">Occupation</string>
+    <string name="nearest_phc">Nearest PHC</string>
+    <string name="religion">Religion</string>
+    <string name="total_family_income_per_month">Total family Income per month</string>
+    <string name="unmarried">Unmarried</string>
+    <string name="married">Married</string>
+    <string name="caste">Caste</string>
+    <string name="number_of_family_members">Number of family members</string>
+    <string name="earning_members">Total earning members in the family</string>
+    <string name="CBOMeetings">How many CBO meetings attended in the last months?</string>
+    <string name="type_of_family">Type of family</string>
+    <string name="association_duration">Duration of association with CBO/SHG</string>
+    <string name="nuclear">Nuclear</string>
+    <string name="joint">Joint</string>
+    <string name="next">Next</string>
+    <string name="socio_demography">Socio Demography</string>
+    <string name="disease_profile">Disease Profile</string>
+    <string name="thyroid">Thyroid</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="diagnosed_thyroid">Have you been diagnosed with Thyroid</string>
+    <string name="limit_activities">Does this condition limit your activities?</string>
+    <string name="received_treatment">Do you receive treatment for this condition?</string>
+    <string name="diagnosed_age">If yes, how old were you when this was diagnosed?</string>
+    <string name="kannada">ಕನ್ನಡ</string>
 </resources>

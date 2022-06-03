@@ -1,8 +1,12 @@
 package com.example.mithraapplication.ModelClasses;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterParticipant {
+public class RegisterParticipant extends JsonServerObject {
     @SerializedName("full_name")
     private String participantName;
     @SerializedName("gender")
@@ -92,5 +96,14 @@ public class RegisterParticipant {
 
     public void setDoctype(String doctype) {
         this.doctype = doctype;
+    }
+
+    public JsonServerObject FromJson(String jsonString, String methodName){
+
+        Gson gson = new Gson();
+        JsonElement jsonElement = JsonParser.parseString(jsonString);
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        JsonObject jsonObject1 = jsonObject.getAsJsonObject(methodName);
+        return gson.fromJson(jsonObject1.toString(), RegisterParticipant.class);
     }
 }

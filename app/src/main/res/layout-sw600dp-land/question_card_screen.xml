@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/greenbackground">
+    android:background="@drawable/splashscreen_background">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/imageProfileCardView"
@@ -55,8 +55,8 @@
 
     <ImageView
         android:id="@+id/middle_card_image"
-        android:layout_width="1050dp"
-        android:layout_height="600dp"
+        android:layout_width="1044dp"
+        android:layout_height="636dp"
         android:foregroundGravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,12 +67,12 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/questionCardView"
-        android:layout_width="1130dp"
-        android:layout_height="600dp"
+        android:layout_width="1137dp"
+        android:layout_height="632dp"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:layout_marginStart="182dp"
-        android:layout_marginTop="135dp"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="182dp"
         android:layout_marginBottom="135dp"
         android:background="@drawable/question_card_image"
@@ -89,8 +89,8 @@
         app:layout_constraintVertical_bias="0.865">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="1089dp"
+            android:layout_height="548dp">
 
             <TextView
                 android:id="@+id/questionNumbers"
@@ -126,21 +126,22 @@
                 android:textSize="27sp" />
 
             <Button
-                android:id="@+id/nextButton"
+                android:id="@+id/nextQuestionButton"
                 android:layout_width="300dp"
-                android:layout_height="67dp"
+                android:layout_height="66dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="313dp"
                 android:layout_marginEnd="318dp"
                 android:layout_marginBottom="58dp"
-                android:background="@drawable/linear_gradient_color"
+                android:background="@drawable/rounded_corners"
                 android:fontFamily="@font/open_sans"
                 android:gravity="center"
-                android:text="Next"
+                android:text="@string/next"
                 android:textAllCaps="false"
-                android:textSize="36sp" />
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/totalQuestions"
@@ -163,7 +164,7 @@
                 android:id="@+id/questionOptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/nextButton"
+                android:layout_above="@+id/nextQuestionButton"
                 android:layout_below="@+id/questionsTV"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"

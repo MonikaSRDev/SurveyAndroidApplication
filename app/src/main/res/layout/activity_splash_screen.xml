@@ -12,7 +12,7 @@
         android:layout_width="388dp"
         android:layout_height="696dp"
         android:layout_margin="50dp"
-        android:background="@drawable/greenbackground"
+        android:background="@drawable/splashscreen_background"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

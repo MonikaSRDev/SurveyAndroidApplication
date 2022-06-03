@@ -51,7 +51,7 @@ public class QuestionActivity extends AppCompatActivity {
         totalQuestions = findViewById(R.id.totalQuestions);
         ph9Question = findViewById(R.id.questionsTV);
 //        optionsRadioGroup = findViewById(R.id.questionOptions);
-        nextButton = findViewById(R.id.nextButton);
+        nextButton = findViewById(R.id.nextQuestionButton);
         enableDisableButton(false);
     }
 
@@ -114,12 +114,12 @@ public class QuestionActivity extends AppCompatActivity {
     private void enableDisableButton(boolean isEnabled){
         if(isEnabled){
             nextButton.setEnabled(true);
-            nextButton.setBackgroundResource(R.drawable.linear_gradient_color);
+            nextButton.setBackgroundResource(R.drawable.selected_button);
             nextButton.setTextColor(Color.parseColor("#ffffff"));
         }else{
             nextButton.setEnabled(false);
-            nextButton.setBackgroundResource(R.color.text_color);
-            nextButton.setTextColor(Color.parseColor("#000000"));
+            nextButton.setBackgroundResource(R.drawable.rounded_corners);
+            nextButton.setTextColor(getResources().getColor(R.color.text_color));
         }
     }
 

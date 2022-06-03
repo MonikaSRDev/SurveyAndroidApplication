@@ -1,5 +1,6 @@
 package com.example.mithraapplication;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -169,6 +170,7 @@ public class AddNewParticipantActivity extends AppCompatActivity implements Adap
                     ServerRequestAndResponse object = new ServerRequestAndResponse();
                     object.getJsonRequest(AddNewParticipantActivity.this);
 //                object.postJsonRequest(AddNewParticipantActivity.this, gson.toJson(registerParticipant));
+                    moveToSocioDemographyScreen();
                 }
             }
         });
@@ -202,6 +204,15 @@ public class AddNewParticipantActivity extends AppCompatActivity implements Adap
     }
 
     /**
+     * Description : This method is used to move from the AddNewParticipant Screen to SocioDemography Screen
+     */
+    private void moveToSocioDemographyScreen(){
+        Intent intent = new Intent(AddNewParticipantActivity.this, SocioDemographyActivity.class);
+        startActivity(intent);
+//        finish();
+    }
+
+    /**
      * @param selectedLanguage
      * Description : This method is used to change the content of the screen to user selected language
      */
@@ -226,6 +237,7 @@ public class AddNewParticipantActivity extends AppCompatActivity implements Adap
         participantPasswordET.setHint(R.string.password);
         participantConfirmPasswordET.setHint(R.string.confirm_password);
         participantNameET.setHint(R.string.participant_name);
+        participantAgeET.setHint(R.string.age);
 
         dashboardTV.setText(R.string.dashboard);
         participantsTV.setText(R.string.participants);
@@ -243,6 +255,7 @@ public class AddNewParticipantActivity extends AppCompatActivity implements Adap
         maleButton.setText(R.string.male);
         femaleButton.setText(R.string.female);
         othersButton.setText(R.string.others);
+        registerButton.setText(R.string.register);
 
         super.onConfigurationChanged(newConfig);
         // Checks the active language
