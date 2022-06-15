@@ -1,6 +1,10 @@
 package com.example.mithraapplication;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +14,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfileAdapter.ViewHolder> {
@@ -93,6 +99,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         onClickOfNoReceivedTreatmentButton(holder);
         onClickOfYesLimitActivitiesButton(holder);
         onClickOfNoLimitActivitiesButton(holder);
+        getDiagnosedAgeOfParticipant(holder);
     }
 
     private void onClickOfYesDiseaseButton(ViewHolder holder) {
@@ -183,5 +190,35 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
                 holder.noLimitActivities.setBackgroundResource(R.drawable.selected_no_button);
             }
         });
+    }
+
+    private void getDiagnosedAgeOfParticipant(ViewHolder holder){
+        holder.diagnosedAgeET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "NULL";
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diagnosedAge);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "NULL";
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diagnosedAge);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "NULL";
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diagnosedAge);
+            }
+        });
+    }
+
+    public void sendDataToActivity(){
+        Intent intent = new Intent("DiseasesProfileData");
+        Bundle args = new Bundle();
+        args.putSerializable("ARRAYLIST",(Serializable)userEnteredDiseasesProfileArrayList);
+        intent.putExtra("ParticipantDiseaseData",args);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }

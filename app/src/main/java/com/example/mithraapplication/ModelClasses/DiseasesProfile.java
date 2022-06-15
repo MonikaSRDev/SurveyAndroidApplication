@@ -1,11 +1,13 @@
 package com.example.mithraapplication.ModelClasses;
 
-public class DiseasesProfile {
-    private String DiseaseName;
-    private String diagnosedAge;
-    private String Diagnosed;
-    private String receivedTreatment;
-    private String limitActivities;
+import java.io.Serializable;
+
+public class DiseasesProfile extends JsonServerObject {
+    private String DiseaseName = "NULL";
+    private String diagnosedAge = "NULL";
+    private String Diagnosed = "NULL";
+    private String receivedTreatment = "NULL";
+    private String limitActivities = "NULL";
 
     public String getDiseaseName() {
         return DiseaseName;

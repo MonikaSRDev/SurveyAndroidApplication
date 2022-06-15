@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 @SuppressLint("CustomSplashScreen")
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             // Using handler with postDelayed called runnable run method
             @Override
             public void run() {
-                Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                Intent i = new Intent(SplashScreen.this, LoginScreen.class);
                 startActivity(i);
                 finish();
             }

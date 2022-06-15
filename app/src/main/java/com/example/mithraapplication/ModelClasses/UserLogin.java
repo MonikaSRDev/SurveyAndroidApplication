@@ -9,11 +9,11 @@ import com.google.gson.annotations.SerializedName;
 public class UserLogin extends JsonServerObject{
 
     @SerializedName("user_name")
-    private String userName;
+    private String userName = "NULL";
     @SerializedName("password")
-    private String userPassword;
+    private String userPassword = "NULL";
     @SerializedName("role")
-    private String userRole;
+    private String userRole = "NULL";
 
     public String getUserName() {
         return userName;

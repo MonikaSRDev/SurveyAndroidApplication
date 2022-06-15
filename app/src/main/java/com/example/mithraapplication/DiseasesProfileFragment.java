@@ -1,41 +1,67 @@
 package com.example.mithraapplication;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.aware.DiscoverySession;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 
 import java.util.ArrayList;
 
-public class DiseasesProfileActivity extends AppCompatActivity {
+public class DiseasesProfileFragment extends Fragment {
 
     private ArrayList<DiseasesProfile> diseasesProfilesArray = new ArrayList<>();
-    private RecyclerView recyclerViewLeft, recyclerViewRight;
+    private RecyclerView recyclerViewLeft;
     private DiseasesProfileAdapter diseasesProfileAdapter;
     private Button nextDiseaseProfileButton;
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_disease_profile_screen);
-        initializeData();
-        RegisterViews();
-        setRecyclerView();
-        onClickOfNextButton();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_disease_profile_screen, container, false);
     }
 
-    private void RegisterViews(){
-        recyclerViewLeft = findViewById(R.id.leftRecyclerView);
-        recyclerViewRight = findViewById(R.id.rightRecyclerView);
-        nextDiseaseProfileButton = findViewById(R.id.diseasesNextButton);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initializeData();
+        RegisterViews(view);
+        setRecyclerView();
+        onClickOfNextButton();
+
+        // Register to receive messages.
+        // We are registering an observer (mMessageReceiver) to receive Intents
+        // with actions named "custom-message".
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+                new IntentFilter("DiseasesProfileData"));
+    }
+
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle args = intent.getBundleExtra("ParticipantDiseaseData");
+            ArrayList<DiseasesProfile> diseasesProfile = (ArrayList<DiseasesProfile>) args.getSerializable("ARRAYLIST");
+        }
+    };
+
+    private void RegisterViews(View view){
+        recyclerViewLeft = view.findViewById(R.id.diseasesRecyclerView);
+        nextDiseaseProfileButton = view.findViewById(R.id.diseasesNextButton);
     }
 
     private void initializeData(){
@@ -97,32 +123,29 @@ public class DiseasesProfileActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView(){
-        int size = diseasesProfilesArray.size();
-
-        ArrayList<DiseasesProfile> firstList = new ArrayList<>(diseasesProfilesArray.subList(0, (size/2) ));
-        ArrayList<DiseasesProfile> secondList = new ArrayList<>(diseasesProfilesArray.subList((size/2), size));
-
-        diseasesProfileAdapter = new DiseasesProfileAdapter(DiseasesProfileActivity.this, firstList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerViewLeft.setLayoutManager(linearLayoutManager);
+        diseasesProfileAdapter = new DiseasesProfileAdapter(getActivity(), diseasesProfilesArray);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
+        recyclerViewLeft.setLayoutManager(staggeredGridLayoutManager);
         recyclerViewLeft.setAdapter(diseasesProfileAdapter);
-
-        diseasesProfileAdapter = new DiseasesProfileAdapter(DiseasesProfileActivity.this, secondList);
-        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(this);
-        recyclerViewRight.setLayoutManager(linearLayoutManager1);
-        recyclerViewRight.setAdapter(diseasesProfileAdapter);
     }
 
     private void onClickOfNextButton(){
         nextDiseaseProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DiseasesProfileActivity.this, QuestionActivity.class);
-                startActivity(intent);
-//                finish();
+                if(diseasesProfileAdapter != null){
+                    diseasesProfileAdapter.sendDataToActivity();
+                }else{
+                    Log.d("TESTING", "Adapter is Empty");
+                }
+                moveToParticipantsScreen();
             }
         });
+    }
 
+    private void moveToParticipantsScreen(){
+        Intent intent = new Intent(getActivity(), ParticipantsScreen.class);
+        startActivity(intent);
     }
 
 }

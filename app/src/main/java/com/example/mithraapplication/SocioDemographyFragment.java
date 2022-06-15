@@ -5,33 +5,40 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.mithraapplication.ModelClasses.SocioDemography;
 
 import java.util.Locale;
 
-public class SocioDemographyActivity extends AppCompatActivity {
+public class SocioDemographyFragment extends Fragment {
 
-    private Button englishButton, kannadaButton, nextButton, unmarriedButton, marriedButton, nuclearButton, jointButton;
-    private TextView socioDemographyTV, educationYearsTV, maritalStatusTV, occupationTV, nearestPHCTV, religionTV, familyIncomeTV,
+    private Button nextButton, unmarriedButton, marriedButton, nuclearButton, jointButton;
+    private TextView educationYearsTV, maritalStatusTV, occupationTV, nearestPHCTV, religionTV, familyIncomeTV,
             casteTV, familyMembersTV, earningMembersTV, CBOMeetingsTV, familyTypeTV, associationDurationTV;
     private EditText educationYearsET, occupationET, nearestPHCET, religionET, familyIncomeET,
             casteET, familyMembersET, earningMembersET, CBOMeetingsET, associationDurationET;
     private String  participantMaritalStatus = "NULL", participantFamilyType = "NULL";
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_socio_demography_screen);
-        RegisterViews();
-        onClickOfLanguageButton();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_socio_demography_screen, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RegisterViews(view);
         getSelectedMaritalStatus();
         getSelectedFamilyType();
         onClickOfNextButton();
@@ -40,67 +47,64 @@ public class SocioDemographyActivity extends AppCompatActivity {
     /**
      * Description : This method is used to register the views
      */
-    private void RegisterViews(){
-        socioDemographyTV = findViewById(R.id.socioDemographyTitleTV);
-        educationYearsTV = findViewById(R.id.educationYearsTV);
-        maritalStatusTV = findViewById(R.id.maritalStatusTV);
-        occupationTV = findViewById(R.id.occupationTV);
-        nearestPHCTV = findViewById(R.id.nearestPHCTV);
-        religionTV = findViewById(R.id.religionTV);
-        familyIncomeTV = findViewById(R.id.familyIncomeTV);
-        casteTV = findViewById(R.id.casteTV);
-        familyMembersTV = findViewById(R.id.familyMembersTV);
-        earningMembersTV = findViewById(R.id.earningMembersTV);
-        CBOMeetingsTV = findViewById(R.id.CBOMeetingsTV);
-        familyTypeTV = findViewById(R.id.familyTypeTV);
-        associationDurationTV = findViewById(R.id.associationDurationTV);
+    private void RegisterViews(View view){
+        educationYearsTV = view.findViewById(R.id.educationYearsTV);
+        maritalStatusTV = view.findViewById(R.id.maritalStatusTV);
+        occupationTV = view.findViewById(R.id.occupationTV);
+        nearestPHCTV = view.findViewById(R.id.nearestPHCTV);
+        religionTV = view.findViewById(R.id.religionTV);
+        familyIncomeTV = view.findViewById(R.id.familyIncomeTV);
+        casteTV = view.findViewById(R.id.casteTV);
+        familyMembersTV = view.findViewById(R.id.familyMembersTV);
+        earningMembersTV = view.findViewById(R.id.earningMembersTV);
+        CBOMeetingsTV = view.findViewById(R.id.CBOMeetingsTV);
+        familyTypeTV = view.findViewById(R.id.familyTypeTV);
+        associationDurationTV = view.findViewById(R.id.associationDurationTV);
 
-        educationYearsET = findViewById(R.id.educationYearsET);
-        occupationET = findViewById(R.id.occupationET);
-        nearestPHCET = findViewById(R.id.nearestPHCET);
-        religionET = findViewById(R.id.religionET);
-        familyIncomeET = findViewById(R.id.familyIncomeET);
-        casteET = findViewById(R.id.casteET);
-        familyMembersET = findViewById(R.id.familyMembersET);
-        earningMembersET = findViewById(R.id.earningMembersET);
-        CBOMeetingsET = findViewById(R.id.CBOMeetingsET);
-        associationDurationET = findViewById(R.id.associationDurationET);
+        educationYearsET = view.findViewById(R.id.educationYearsET);
+        occupationET = view.findViewById(R.id.occupationET);
+        nearestPHCET = view.findViewById(R.id.nearestPHCET);
+        religionET = view.findViewById(R.id.religionET);
+        familyIncomeET = view.findViewById(R.id.familyIncomeET);
+        casteET = view.findViewById(R.id.casteET);
+        familyMembersET = view.findViewById(R.id.familyMembersET);
+        earningMembersET = view.findViewById(R.id.earningMembersET);
+        CBOMeetingsET = view.findViewById(R.id.CBOMeetingsET);
+        associationDurationET = view.findViewById(R.id.associationDurationET);
 
-        englishButton = findViewById(R.id.socioEnglishButton);
-        kannadaButton = findViewById(R.id.socioKannadaButton);
-        nextButton = findViewById(R.id.socioNextButton);
-        unmarriedButton = findViewById(R.id.unmarriedButton);
-        marriedButton = findViewById(R.id.marriedButton);
-        nuclearButton = findViewById(R.id.nuclearButton);
-        jointButton = findViewById(R.id.jointButton);
+        nextButton = view.findViewById(R.id.socioNextButton);
+        unmarriedButton = view.findViewById(R.id.unmarriedButton);
+        marriedButton = view.findViewById(R.id.marriedButton);
+        nuclearButton = view.findViewById(R.id.nuclearButton);
+        jointButton = view.findViewById(R.id.jointButton);
     }
 
-    /**
-     * Description : This method is used to change the language of the screen based on the button clicked
-     */
-    private void onClickOfLanguageButton(){
-        englishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_toggle_selected_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_toggle_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
-        });
-
-        kannadaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_toggle_selected_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_toggle_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
-        });
-    }
+//    /**
+//     * Description : This method is used to change the language of the screen based on the button clicked
+//     */
+//    private void onClickOfLanguageButton(){
+//        englishButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                englishButton.setBackgroundResource(R.drawable.left_toggle_selected_button);
+//                englishButton.setTextColor(getResources().getColor(R.color.black));
+//                kannadaButton.setBackgroundResource(R.drawable.right_toggle_button);
+//                kannadaButton.setTextColor(getResources().getColor(R.color.black));
+//                changeLocalLanguage("en");
+//            }
+//        });
+//
+//        kannadaButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                kannadaButton.setBackgroundResource(R.drawable.right_toggle_selected_button);
+//                kannadaButton.setTextColor(getResources().getColor(R.color.black));
+//                englishButton.setBackgroundResource(R.drawable.left_toggle_button);
+//                englishButton.setTextColor(getResources().getColor(R.color.black));
+//                changeLocalLanguage("kn");
+//            }
+//        });
+//    }
 
     /**
      * @param selectedLanguage
@@ -124,7 +128,6 @@ public class SocioDemographyActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        socioDemographyTV.setText(R.string.socio_demography);
         educationYearsTV.setText(R.string.years_of_education);
         maritalStatusTV.setText(R.string.marital_status);
         occupationTV.setText(R.string.occupation);
@@ -138,8 +141,6 @@ public class SocioDemographyActivity extends AppCompatActivity {
         familyTypeTV.setText(R.string.type_of_family);
         associationDurationTV.setText(R.string.association_duration);
 
-        englishButton.setText(R.string.english);
-        kannadaButton.setText(R.string.kannada);
         nextButton.setText(R.string.next);
         unmarriedButton.setText(R.string.unmarried);
         marriedButton.setText(R.string.married);
@@ -239,18 +240,14 @@ public class SocioDemographyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getUserEnteredData();
-                moveToDiseasesProfileScreen();
+                moveToDiseaseProfileTab();
             }
         });
     }
 
-    /**
-     * Description : This method is used to move from the SocioDemographyActivity to DiseasesProfileActivity
-     */
-    private void moveToDiseasesProfileScreen(){
-        Intent intent = new Intent(SocioDemographyActivity.this, DiseasesProfileActivity.class);
-        startActivity(intent);
-//        finish();
+    private void moveToDiseaseProfileTab(){
+        ((ProfileScreen)getActivity()).setupSelectedTabFragment(2);
     }
+
 
 }

@@ -19,7 +19,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".SplashScreen"
             android:exported="true"
             android:screenOrientation="landscape">
             <intent-filter>
@@ -29,19 +29,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginScreen"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".QuestionActivity"
+            android:name=".SurveyScreen"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".AddNewParticipantActivity"
+            android:name=".ParticipantsScreen"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".SocioDemographyActivity"
+            android:name=".SocioDemographyFragment"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".DiseasesProfileActivity"
+            android:name=".DiseasesProfileFragment"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".ParticipantLandingScreen"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".DashboardScreen"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".ProfileScreen"
             android:screenOrientation="landscape"/>
 
         <meta-data

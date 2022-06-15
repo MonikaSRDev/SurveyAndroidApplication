@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutParticipant"
+        android:layout_width="166dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/vertical_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/appLogoParticipants"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/mithra_logo" />
+
+        <LinearLayout
+            android:id="@+id/dashboardLinearLayoutParticipant"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="80dp"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.686"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appLogoParticipants">
+
+            <ImageView
+                android:id="@+id/dashboardIconParticipant"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="18dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/dashboard_icon" />
+
+            <TextView
+                android:id="@+id/dashboardTVParticipant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
+                android:text="@string/dashboard"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/participantLinearLayoutParticipant"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.627"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dashboardLinearLayoutParticipant"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/participantsIconParticipant"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="18dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/participants_icon" />
+
+            <TextView
+                android:id="@+id/participantsTVParticipant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
+                android:text="@string/participants"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/logoutButtonParticipant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:textAllCaps="false"
+            android:text="Logout"
+            android:elevation="10dp"
+            android:background="@drawable/rounded_corners"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans_semibold"
+            android:drawableLeft="@drawable/logout_icon"
+            android:paddingStart="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.205"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/participantsTitleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:text="@string/participants"
+        android:textAllCaps="true"
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutParticipant"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutParticipant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="40dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.973"
+        app:layout_constraintStart_toEndOf="@+id/participantsTitleTV"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:baselineAligned="false">
+
+            <Button
+                android:id="@+id/englishButtonParticipant"
+                android:layout_width="93dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/english_toggle_button"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:text="@string/english"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/kannadaButtonParticipant"
+                android:layout_width="93dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/kannada_toggle_button"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:text="@string/kannada"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/notificationsLogoParticipant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/notification_icon"
+            android:padding="10dp"
+            android:layout_gravity="center"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/coordinatorProfileParticipant"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:src="@drawable/coordinator_profile"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/coordinatorNameTVParticipant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Jessica Jones"
+            android:fontFamily="@font/open_sans_semibold"
+            android:layout_gravity="center"
+            android:textSize="12sp"
+            android:textColor="@color/text_color" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="986dp"
+        android:layout_height="600dp"
+        android:layout_margin="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutParticipant"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutParticipant">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutParticipant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabGravity="start"
+            app:tabMode="scrollable"
+            app:tabPadding="5dp"
+            app:tabIndicator="@drawable/tab_indicator_inner_shape"
+            app:tabIndicatorColor="@android:color/transparent"
+            app:tabIndicatorFullWidth="true"
+            app:tabTextAppearance="@style/custom_tab_text_appearance_participant"
+            app:tabTextColor="@color/text_color">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All List" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Green" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yellow" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Red" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayoutParticipant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayoutParticipant" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

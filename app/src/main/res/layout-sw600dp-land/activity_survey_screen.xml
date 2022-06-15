@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splashscreen_background">
+
+    <LinearLayout
+        android:id="@+id/profileLinearLayoutSurvey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginStart="72dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/imageProfileCardView"-->
+<!--            android:layout_width="64dp"-->
+<!--            android:layout_height="64dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            app:cardBackgroundColor="@color/white"-->
+<!--            app:cardCornerRadius="250dp">-->
+
+<!--        </androidx.cardview.widget.CardView>-->
+
+        <TextView
+            android:id="@+id/participantNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:text="Participate 1"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/last_card_image"
+        android:layout_width="860dp"
+        android:layout_height="486dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="10dp"
+        android:elevation="5dp"
+        android:foregroundGravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileLinearLayoutSurvey"
+        app:layout_constraintVertical_bias="0.969"
+        app:srcCompat="@drawable/last_card_image" />
+
+    <ImageView
+        android:id="@+id/middle_card_image"
+        android:layout_width="900dp"
+        android:layout_height="506dp"
+        android:layout_marginBottom="-40dp"
+        android:elevation="10dp"
+        android:foregroundGravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileLinearLayoutSurvey"
+        app:srcCompat="@drawable/middle_card_image" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/questionCardView"
+        android:layout_width="966dp"
+        android:layout_height="594dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/main_card_image"
+        android:elevation="15dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="12dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileLinearLayoutSurvey">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/questionsTV"
+                android:layout_width="630dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/open_sans"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="Feeling tired or having little energy."
+                android:textColor="@color/text_color"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toTopOf="@+id/questionOptions"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintHorizontal_bias="0.327"
+                app:layout_constraintStart_toEndOf="@+id/totalQuestions"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.276" />
+
+            <Button
+                android:id="@+id/nextQuestionButton"
+                android:layout_width="300dp"
+                android:layout_height="66dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="36dp"
+                android:background="@drawable/rounded_corners"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
+                android:text="@string/next"
+                android:textAllCaps="false"
+                android:textColor="@color/text_color"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/totalQuestions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="8dp"
+                android:layout_toStartOf="@+id/questionsTV"
+                android:layout_toEndOf="@+id/questionNumberLinearLayout"
+                android:fontFamily="@font/open_sans"
+                android:gravity="start|center_vertical"
+                android:text="of 9"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toTopOf="@+id/questionOptions"
+                app:layout_constraintStart_toEndOf="@+id/questionNumberLinearLayout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.322" />
+
+            <LinearLayout
+                android:id="@+id/questionOptions"
+                android:layout_width="wrap_content"
+                android:layout_height="213dp"
+                android:layout_above="@+id/nextQuestionButton"
+                android:layout_below="@+id/questionsTV"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="40dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/nextQuestionButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/optionImageBtn1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:contentDescription="option1"
+                        android:gravity="center"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="20dp"
+                        android:src="@drawable/option_one" />
+
+                    <TextView
+                        android:id="@+id/option_oneTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:gravity="center"
+                        android:text="0%"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/optionImageBtn2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:contentDescription="option2"
+                        android:gravity="center"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="20dp"
+                        android:src="@drawable/option_two" />
+
+                    <TextView
+                        android:id="@+id/option_twoTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:gravity="center"
+                        android:text="33%"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/optionImageBtn3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal|center_vertical"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:contentDescription="option3"
+                        android:gravity="center"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="20dp"
+                        android:src="@drawable/option_three" />
+
+                    <TextView
+                        android:id="@+id/option_threeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:gravity="center"
+                        android:text="66%"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/optionImageBtn4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:contentDescription="option4"
+                        android:gravity="center"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="20dp"
+                        android:src="@drawable/option_four" />
+
+                    <TextView
+                        android:id="@+id/option_fourTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:gravity="center"
+                        android:text="99%"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="44dp"
+                android:background="@color/white"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toTopOf="@+id/questionOptions"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.272"
+                app:srcCompat="@drawable/speaker_icon" />
+
+            <LinearLayout
+                android:id="@+id/questionNumberLinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.035">
+
+                <TextView
+                    android:id="@+id/questionNumbers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="#000000"
+                    android:textSize="32sp"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="26dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/textview_underline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.024"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/questionNumbers" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/questionCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/englishQuestionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/english_toggle_button"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="@string/english"
+            android:textColor="@color/text_color" />
+
+        <Button
+            android:id="@+id/kannadaQuestionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/kannada_toggle_button"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="@string/kannada"
+            android:textColor="@color/text_color" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,23 +8,25 @@ import com.google.gson.annotations.SerializedName;
 
 public class RegisterParticipant extends JsonServerObject {
     @SerializedName("full_name")
-    private String participantName;
+    private String participantName = "NULL";
     @SerializedName("gender")
-    private String participantGender;
+    private String participantGender = "NULL";
     @SerializedName("age")
-    private String participantAge;
+    private String participantAge = "NULL";
     @SerializedName("mobile_number")
-    private String participantPhoneNumber;
+    private String participantPhoneNumber = "NULL";
+    @SerializedName("panchayat")
+    private String participantPanchayat = "NULL";
     @SerializedName("village_name")
-    private String participantVillageName;
+    private String participantVillageName = "NULL";
     @SerializedName("shg_associate")
-    private String participantSHGAssociation;
+    private String participantSHGAssociation = "NULL";
     @SerializedName("user_name")
-    private String participantUserName;
+    private String participantUserName = "NULL";
     @SerializedName("password")
-    private String participantPassword;
+    private String participantPassword = "NULL";
     @SerializedName("doctype")
-    private String doctype;
+    private String doctype = "NULL";
 
     public String getParticipantName() {
         return participantName;
@@ -96,6 +98,14 @@ public class RegisterParticipant extends JsonServerObject {
 
     public void setDoctype(String doctype) {
         this.doctype = doctype;
+    }
+
+    public String getParticipantPanchayat() {
+        return participantPanchayat;
+    }
+
+    public void setParticipantPanchayat(String participantPanchayat) {
+        this.participantPanchayat = participantPanchayat;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

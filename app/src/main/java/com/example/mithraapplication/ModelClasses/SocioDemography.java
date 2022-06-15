@@ -8,31 +8,31 @@ import com.google.gson.annotations.SerializedName;
 
 public class SocioDemography extends JsonServerObject{
     @SerializedName("user_name")
-    private String userName;
+    private String userName = "NULL";
     @SerializedName("years_of_education")
-    private int yearsOfEducation;
+    private int yearsOfEducation = 0;
     @SerializedName("marital_status")
-    private String maritalStatus;
+    private String maritalStatus = "NULL";
     @SerializedName("religion")
-    private String religion;
+    private String religion = "NULL";
     @SerializedName("caste")
-    private String caste;
+    private String caste = "NULL";
     @SerializedName("type_of_family")
-    private String typeOfFamily;
+    private String typeOfFamily = "NULL";
     @SerializedName("number_of_family_members")
     private int numFamilyMembers;
     @SerializedName("occupation")
-    private String occupation;
+    private String occupation = "NULL";
     @SerializedName("total_family_income_per_month")
-    private int familyIncome;
+    private int familyIncome = 0;
     @SerializedName("total_earning_members_in_the_family")
-    private int numEarningFamMembers;
+    private int numEarningFamMembers = 0;
     @SerializedName("nearest_phc")
-    private String nearestPHC;
+    private String nearestPHC = "NULL";
     @SerializedName("duration_of_association_with_cboshg")
-    private String associationDuration;
+    private String associationDuration = "NULL";
     @SerializedName("cbo_meetings_attended_in_last_months")
-    private String CBOMeetings;
+    private String CBOMeetings = "NULL";
 
     public String getUserName() {
         return userName;
