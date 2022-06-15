@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/tab_indicator_participant"
+        android:gravity="center"
+        android:end="2dp"
+        android:start="2dp"
+        android:top="2dp"
+        android:bottom="8dp"
+        android:left="2dp"
+        android:right="2dp"/>
+</layer-list>
+
+
+    <!--<?xml version="1.0" encoding="UTF-8"?>-->
+    <!--<shape xmlns:android="http://schemas.android.com/apk/res/android">-->
+    <!--    <solid android:color="#ffff"/>-->
+    <!--    <corners android:topLeftRadius="10dp"-->
+    <!--        android:topRightRadius="10dp"/>-->
+    <!--</shape>-->

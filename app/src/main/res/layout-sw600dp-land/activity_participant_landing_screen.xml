@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splashscreen_background">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="44dp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/imageProfileCardView"-->
+<!--            android:layout_width="64dp"-->
+<!--            android:layout_height="64dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            app:cardBackgroundColor="@color/white"-->
+<!--            app:cardCornerRadius="250dp">-->
+
+<!--        </androidx.cardview.widget.CardView>-->
+
+        <TextView
+            android:id="@+id/participantNameLPTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:fontFamily="@font/open_sans"
+            android:padding="10dp"
+            android:text="@string/participate_name"
+            android:textColor="@color/white"
+            android:textSize="30sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="100dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/englishLPButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/text_color"
+            android:text="@string/english"
+            android:fontFamily="@font/open_sans_semibold"
+            android:background="@drawable/english_toggle_button"/>
+
+        <Button
+            android:id="@+id/kannadaLPButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/kannada"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans_semibold"
+            android:background="@drawable/kannada_toggle_button"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/surveyButton"
+            android:layout_width="330dp"
+            android:layout_height="330dp"
+            app:srcCompat="@drawable/survey_logo"
+            android:layout_gravity="center_vertical"
+            tools:layout_editor_absoluteX="255dp"
+            tools:layout_editor_absoluteY="323dp" />
+
+        <ImageView
+            android:id="@+id/videoButton"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="30dp"
+            app:srcCompat="@drawable/video_logo"
+            android:layout_gravity="center_vertical"
+            tools:layout_editor_absoluteX="604dp"
+            tools:layout_editor_absoluteY="376dp" />
+
+        <ImageView
+            android:id="@+id/activityButton"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/activity_logo"
+            tools:layout_editor_absoluteX="974dp"
+            tools:layout_editor_absoluteY="397dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
