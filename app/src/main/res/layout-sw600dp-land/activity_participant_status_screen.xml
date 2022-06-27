@@ -7,7 +7,7 @@
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutParticipant"
+        android:id="@+id/constraintLayoutParticipantStatus"
         android:layout_width="166dp"
         android:layout_height="match_parent"
         android:background="@drawable/vertical_background"
@@ -17,7 +17,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
-            android:id="@+id/appLogoParticipants"
+            android:id="@+id/appLogoParticipantStatus"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="18dp"
@@ -27,7 +27,7 @@
             app:srcCompat="@drawable/mithra_logo" />
 
         <LinearLayout
-            android:id="@+id/dashboardLinearLayoutParticipant"
+            android:id="@+id/dashboardLinearLayoutParticipantStatus"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="80dp"
@@ -36,10 +36,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.686"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appLogoParticipants">
+            app:layout_constraintTop_toBottomOf="@+id/appLogoParticipantStatus">
 
             <ImageView
-                android:id="@+id/dashboardIconParticipant"
+                android:id="@+id/dashboardIconParticipantStatus"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginStart="18dp"
@@ -47,31 +47,31 @@
                 app:srcCompat="@drawable/dashboard_icon" />
 
             <TextView
-                android:id="@+id/dashboardTVParticipant"
+                android:id="@+id/dashboardTVParticipantStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_marginStart="13dp"
                 android:text="@string/dashboard"
+                android:layout_gravity="center_vertical"
                 android:textColor="@color/white" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/participantLinearLayoutParticipant"
+            android:id="@+id/participantLinearLayoutParticipantStatus"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:gravity="start"
             android:orientation="horizontal"
+            android:gravity="start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.627"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dashboardLinearLayoutParticipant"
+            app:layout_constraintTop_toBottomOf="@+id/dashboardLinearLayoutParticipantStatus"
             app:layout_constraintVertical_bias="0.0">
 
             <ImageView
-                android:id="@+id/participantsIconParticipant"
+                android:id="@+id/participantsIconParticipantStatus"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginStart="18dp"
@@ -79,54 +79,54 @@
                 app:srcCompat="@drawable/participants_icon" />
 
             <TextView
-                android:id="@+id/participantsTVParticipant"
+                android:id="@+id/participantsTVParticipantStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_marginStart="13dp"
+                android:layout_gravity="center_vertical"
                 android:text="@string/participants"
                 android:textColor="@color/white" />
 
         </LinearLayout>
 
-<!--        <Button-->
-<!--            android:id="@+id/logoutButtonParticipant"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginBottom="28dp"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:text="Logout"-->
-<!--            android:elevation="10dp"-->
-<!--            android:background="@drawable/rounded_corners"-->
-<!--            android:textColor="@color/text_color"-->
-<!--            android:fontFamily="@font/open_sans_semibold"-->
-<!--            android:drawableLeft="@drawable/logout_icon"-->
-<!--            android:paddingStart="5dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.205"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/logoutButtonDashboard"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="28dp"-->
+        <!--            android:textAllCaps="false"-->
+        <!--            android:text="Logout"-->
+        <!--            android:elevation="10dp"-->
+        <!--            android:background="@drawable/rounded_corners"-->
+        <!--            android:textColor="@color/text_color"-->
+        <!--            android:fontFamily="@font/open_sans_semibold"-->
+        <!--            android:drawableLeft="@drawable/logout_icon"-->
+        <!--            android:paddingStart="5dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="0.205"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/participantsTitleTV"
+        android:id="@+id/participantStatusTitleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/open_sans_semibold"
-        android:text="@string/participants"
+        android:text="@string/participant_status"
         android:textAllCaps="true"
         android:textColor="@color/text_color"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayoutParticipant"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutParticipantStatus"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayoutParticipant"
+        android:id="@+id/linearLayoutParticipantStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
@@ -135,11 +135,11 @@
         android:baselineAligned="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.973"
-        app:layout_constraintStart_toEndOf="@+id/participantsTitleTV"
+        app:layout_constraintStart_toEndOf="@+id/participantStatusTitleTV"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/linearLayout3"
+            android:id="@+id/languageLinearLayoutDashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
@@ -147,8 +147,25 @@
             android:layout_gravity="center_vertical"
             android:baselineAligned="false">
 
+            <!--            <net.orandja.shadowlayout.ShadowLayout-->
+            <!--                android:padding="8dp"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/rounded_corners"-->
+            <!--                app:shadow_radius="8"-->
+            <!--                app:shadow_x_shift="-1dp"-->
+            <!--                app:shadow_y_shift="2dp"-->
+            <!--                app:shadow_downscale="1"-->
+            <!--                app:shadow_color="#808"-->
+            <!--                app:shadow_with_foreground="true"-->
+            <!--                app:shadow_with_color="false"-->
+            <!--                app:shadow_with_dpi_scale="true"-->
+            <!--                app:shadow_with_css_scale="true"-->
+            <!--                app:shadow_cast_only_background="true">-->
+
             <Button
-                android:id="@+id/englishButtonParticipant"
+                android:id="@+id/englishButtonParticipantStatus"
                 android:layout_width="93dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -159,8 +176,10 @@
                 android:textColor="@color/text_color"
                 android:textSize="16sp" />
 
+            <!--            </net.orandja.shadowlayout.ShadowLayout>-->
+
             <Button
-                android:id="@+id/kannadaButtonParticipant"
+                android:id="@+id/kannadaButtonParticipantStatus"
                 android:layout_width="93dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
@@ -175,7 +194,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/notificationsLogoParticipant"
+            android:id="@+id/notificationsLogoParticipantStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -185,7 +204,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/coordinatorProfileParticipant"
+            android:id="@+id/coordinatorParticipantStatusProfile"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
@@ -194,7 +213,7 @@
             android:layout_margin="10dp"/>
 
         <TextView
-            android:id="@+id/coordinatorNameTVParticipant"
+            android:id="@+id/coordinatorNameTVParticipantStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -206,65 +225,14 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="986dp"
-        android:layout_height="600dp"
-        android:layout_margin="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/screen_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayoutParticipant"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutParticipant">
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutParticipantStatus"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayoutParticipant"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabGravity="start"
-            app:tabMode="scrollable"
-            app:tabPadding="5dp"
-            app:tabIndicator="@drawable/tab_indicator_inner_shape"
-            app:tabIndicatorColor="@android:color/transparent"
-            app:tabIndicatorFullWidth="true"
-            app:tabTextAppearance="@style/custom_tab_text_appearance_participant"
-            app:tabTextColor="@color/text_color">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All List" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Green" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Yellow" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Red" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-        <FrameLayout
-            android:id="@+id/frameLayoutParticipant"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayoutParticipant" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

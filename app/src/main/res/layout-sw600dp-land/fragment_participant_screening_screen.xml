@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="1053dp"
+    android:layout_height="wrap_content"
+    android:background="@color/screen_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.043">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:elevation="5dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="5dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/inclusionTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:padding="10dp"
+                        android:text="Inclusion"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/inclusionYesButton"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/inclusionYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/inclusionNoButton"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/inclusionNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/aboveEighteenTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:text="Age above 18 years"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/aboveEighteenYesButton"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/inclusionTV" />
+
+                    <Button
+                        android:id="@+id/aboveEighteenYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/aboveEighteenNoButton"
+                        app:layout_constraintTop_toBottomOf="@+id/inclusionYesButton" />
+
+                    <Button
+                        android:id="@+id/aboveEighteenNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/inclusionNoButton" />
+
+                    <TextView
+                        android:id="@+id/residentTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="28dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:text="Resident of the study \nvillage"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/residentYesButton"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/aboveEighteenTV" />
+
+                    <Button
+                        android:id="@+id/residentYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/residentNoButton"
+                        app:layout_constraintTop_toBottomOf="@+id/aboveEighteenYesButton" />
+
+                    <Button
+                        android:id="@+id/residentNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/aboveEighteenNoButton" />
+
+                    <TextView
+                        android:id="@+id/CBOMeetingTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:text="Willing to attend the CBO \nmeeting regulary in the \nupcoming months"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/CBOMeetingYesButton"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/residentTV"
+                        app:layout_constraintVertical_bias="0.6" />
+
+                    <Button
+                        android:id="@+id/CBOMeetingYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/CBOMeetingNoButton"
+                        app:layout_constraintTop_toBottomOf="@+id/residentYesButton"
+                        app:layout_constraintVertical_bias="0.597" />
+
+                    <Button
+                        android:id="@+id/CBOMeetingNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/residentNoButton"
+                        app:layout_constraintVertical_bias="0.6" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:elevation="5dp"
+                android:padding="10dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="5dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/exclusionTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:padding="10dp"
+                        android:text="Exclusion"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/exclusionYesButton"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/exclusionYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/exclusionNoButton"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/exclusionNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/mentalIllnessTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:text="Previously diagnosed with any \nsevere mental illness such as \nbipolar disorder or schizophrenia"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/mentalIllnessYesButton"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/exclusionTV" />
+
+                    <Button
+                        android:id="@+id/mentalIllnessYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/mentalIllnessNoButton"
+                        app:layout_constraintTop_toBottomOf="@+id/exclusionYesButton" />
+
+                    <Button
+                        android:id="@+id/mentalIllnessNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/exclusionNoButton" />
+
+                    <TextView
+                        android:id="@+id/substanceAbuseTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:text="Involved in substance use \nor severe alcohol use in \nlast 6 months"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/substanceAbuseYesButton"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/mentalIllnessTV" />
+
+                    <Button
+                        android:id="@+id/substanceAbuseYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/substanceAbuseNoButton"
+                        app:layout_constraintTop_toBottomOf="@+id/mentalIllnessYesButton" />
+
+                    <Button
+                        android:id="@+id/substanceAbuseNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/mentalIllnessNoButton" />
+
+                    <TextView
+                        android:id="@+id/suicideAttemptTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:text="Attempted suicide in last 6 \nmonths"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/suicideAttemptedYesButton"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/substanceAbuseTV"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <Button
+                        android:id="@+id/suicideAttemptedYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/suicideAttemptedNoButton"
+                        app:layout_constraintTop_toBottomOf="@+id/substanceAbuseYesButton" />
+
+                    <Button
+                        android:id="@+id/suicideAttemptedNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/substanceAbuseNoButton" />
+
+                    <TextView
+                        android:id="@+id/participationConsentTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/white"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:text="Unable to participate in \ninformed consent \ndiscussion"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/participationConsentYesButton"
+                        app:layout_constraintHorizontal_bias="0.057"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/suicideAttemptTV"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <Button
+                        android:id="@+id/participationConsentYesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Yes"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/participationConsentNoButton"
+                        app:layout_constraintTop_toBottomOf="@+id/suicideAttemptedYesButton"
+                        app:layout_constraintVertical_bias="0.344" />
+
+                    <Button
+                        android:id="@+id/participationConsentNoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans"
+                        android:text="No"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/suicideAttemptedNoButton"
+                        app:layout_constraintVertical_bias="0.333" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="930dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
+            app:srcCompat="@drawable/divider_image" />
+
+        <Button
+            android:id="@+id/screeningRegisterButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_background"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:fontFamily="@font/open_sans_semibold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

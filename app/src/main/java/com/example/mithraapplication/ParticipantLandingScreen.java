@@ -14,6 +14,7 @@ public class ParticipantLandingScreen extends AppCompatActivity {
     private Button englishButton, kannadaButton;
     private ImageView surveyImage, videoImage, activityImage;
     private TextView participantNameTV;
+    private MithraUtility mithraUtility = new MithraUtility();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,8 @@ public class ParticipantLandingScreen extends AppCompatActivity {
         videoImage = findViewById(R.id.videoButton);
         activityImage = findViewById(R.id.activityButton);
         participantNameTV = findViewById(R.id.participantNameLPTV);
+        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant));
+        participantNameTV.setText(participantUserName);
     }
 
     /**

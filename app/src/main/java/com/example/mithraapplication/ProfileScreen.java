@@ -1,6 +1,7 @@
 package com.example.mithraapplication;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,8 +22,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.Objects;
-
 public class ProfileScreen extends AppCompatActivity {
 
     private Button englishButtonProfile, kannadaButtonProfile;
@@ -34,6 +33,7 @@ public class ProfileScreen extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private Fragment fragment = null;
+    private MithraUtility mithraUtility = new MithraUtility();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,10 @@ public class ProfileScreen extends AppCompatActivity {
         profileTVProfile = findViewById(R.id.participantsTVProfile);
         profileTVProfile.setTextColor(getResources().getColor(R.color.text_color));
         coordinatorNameTVProfile = findViewById(R.id.coordinatorNameTVProfile);
+        String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator));
+        if(!coordinatorUserName.equals("NULL")){
+            coordinatorNameTVProfile.setText(coordinatorUserName);
+        }
 
         mithraLogoProfile = findViewById(R.id.appLogoProfile);
         coordinatorProfile = findViewById(R.id.coordinatorProfile);
@@ -69,6 +73,7 @@ public class ProfileScreen extends AppCompatActivity {
 //        profileTabLayout.getTabAt(1)
         disableTab(1);
         disableTab(2);
+        disableTab(3);
         setStartupTab();
         setTabSelectedListener();
 
@@ -90,7 +95,7 @@ public class ProfileScreen extends AppCompatActivity {
     }
 
     private void setStartupTab(){
-        fragment = new RegistrationFragment();
+        fragment = new ScreeningFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.profileFrameLayout, fragment);
@@ -120,24 +125,34 @@ public class ProfileScreen extends AppCompatActivity {
     public void setupSelectedTabFragment(int position){
         switch (position) {
             case 0:
-                fragment = new RegistrationFragment();
-                TabLayout.Tab tabdata = profileTabLayout.getTabAt(position);
-                assert tabdata != null;
-                tabdata.select();
+                fragment = new ScreeningFragment();
+                TabLayout.Tab tabData = profileTabLayout.getTabAt(position);
+                assert tabData != null;
+                tabData.select();
                 break;
             case 1:
-                fragment = new SocioDemographyFragment();
-                TabLayout.Tab tabdata1 = profileTabLayout.getTabAt(position);
-                assert tabdata1 != null;
-                tabdata1.select();
+                fragment = new RegistrationFragment();
+                TabLayout.Tab tabData1 = profileTabLayout.getTabAt(position);
+                assert tabData1 != null;
+                tabData1.select();
                 disableTab(0);
                 break;
             case 2:
-                fragment = new DiseasesProfileFragment();
-                TabLayout.Tab tabdata2 = profileTabLayout.getTabAt(position);
-                assert tabdata2 != null;
-                tabdata2.select();
+                fragment = new SocioDemographyFragment();
+                TabLayout.Tab tabData2 = profileTabLayout.getTabAt(position);
+                assert tabData2 != null;
+                tabData2.select();
                 disableTab(0);
+                disableTab(1);
+                break;
+            case 3:
+                fragment = new DiseasesProfileFragment();
+                TabLayout.Tab tabData3 = profileTabLayout.getTabAt(position);
+                assert tabData3 != null;
+                tabData3.select();
+                disableTab(0);
+                disableTab(1);
+                disableTab(2);
                 break;
         }
         FragmentManager fm = getSupportFragmentManager();
@@ -177,5 +192,14 @@ public class ProfileScreen extends AppCompatActivity {
 
             }
         });
+    }
+
+    /**
+     * @param newConfig
+     * Description : This method is used to update the views on change of language
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

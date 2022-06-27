@@ -7,6 +7,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 
 public class RegisterParticipant extends JsonServerObject {
+    @SerializedName("user_name")
+    private String participantUserName = "NULL";
     @SerializedName("full_name")
     private String participantName = "NULL";
     @SerializedName("gender")
@@ -21,12 +23,9 @@ public class RegisterParticipant extends JsonServerObject {
     private String participantVillageName = "NULL";
     @SerializedName("shg_associate")
     private String participantSHGAssociation = "NULL";
-    @SerializedName("user_name")
-    private String participantUserName = "NULL";
-    @SerializedName("password")
-    private String participantPassword = "NULL";
-    @SerializedName("doctype")
-    private String doctype = "NULL";
+    private String screeningid = "NULL";
+//    @SerializedName("password")
+//    private String participantPassword = "NULL";
 
     public String getParticipantName() {
         return participantName;
@@ -84,21 +83,13 @@ public class RegisterParticipant extends JsonServerObject {
         this.participantUserName = participantUserName;
     }
 
-    public String getParticipantPassword() {
-        return participantPassword;
-    }
-
-    public void setParticipantPassword(String participantPassword) {
-        this.participantPassword = participantPassword;
-    }
-
-    public String getDoctype() {
-        return doctype;
-    }
-
-    public void setDoctype(String doctype) {
-        this.doctype = doctype;
-    }
+//    public String getParticipantPassword() {
+//        return participantPassword;
+//    }
+//
+//    public void setParticipantPassword(String participantPassword) {
+//        this.participantPassword = participantPassword;
+//    }
 
     public String getParticipantPanchayat() {
         return participantPanchayat;
@@ -106,6 +97,14 @@ public class RegisterParticipant extends JsonServerObject {
 
     public void setParticipantPanchayat(String participantPanchayat) {
         this.participantPanchayat = participantPanchayat;
+    }
+
+    public String getScreeningid() {
+        return screeningid;
+    }
+
+    public void setScreeningid(String screeningid) {
+        this.screeningid = screeningid;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

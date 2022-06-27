@@ -2,9 +2,7 @@ package com.example.mithraapplication;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -19,8 +17,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.Locale;
-
 public class ParticipantsScreen extends AppCompatActivity{
 
     private Button englishButtonParticipant, kannadaButtonParticipant;
@@ -32,6 +28,7 @@ public class ParticipantsScreen extends AppCompatActivity{
     private FragmentManager fragmentManagerParticipant;
     private FragmentTransaction fragmentTransactionParticipant;
     private Fragment fragmentParticipant = null;
+    private MithraUtility mithraUtility = new MithraUtility();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +53,10 @@ public class ParticipantsScreen extends AppCompatActivity{
         profileTVParticipant = findViewById(R.id.participantsTVParticipant);
         profileTVParticipant.setTextColor(getResources().getColor(R.color.text_color));
         coordinatorNameTVParticipant = findViewById(R.id.coordinatorNameTVParticipant);
+        String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator));
+        if(!coordinatorUserName.equals("NULL")){
+            coordinatorNameTVParticipant.setText(coordinatorUserName);
+        }
 
         mithraLogoParticipant = findViewById(R.id.appLogoParticipants);
         coordinatorParticipant = findViewById(R.id.coordinatorProfileParticipant);
@@ -150,20 +151,6 @@ public class ParticipantsScreen extends AppCompatActivity{
     }
 
     /**
-     * @param selectedLanguage
-     * Description : This method is used to change the content of the screen to user selected language
-     */
-    private void changeLocalLanguage(String selectedLanguage){
-        Locale myLocale = new Locale(selectedLanguage);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        onConfigurationChanged(conf);
-    }
-
-    /**
      * @param newConfig
      * Description : This method is used to update the views on change of language
      */
@@ -195,10 +182,5 @@ public class ParticipantsScreen extends AppCompatActivity{
 //        registerButton.setText(R.string.register);
 
         super.onConfigurationChanged(newConfig);
-        // Checks the active language
-        if (newConfig.locale == Locale.ENGLISH) {
-
-        } else{
-        }
     }
 }

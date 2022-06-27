@@ -10,7 +10,7 @@ public class SocioDemography extends JsonServerObject{
     @SerializedName("user_name")
     private String userName = "NULL";
     @SerializedName("years_of_education")
-    private int yearsOfEducation = 0;
+    private String yearsOfEducation = "NULL";
     @SerializedName("marital_status")
     private String maritalStatus = "NULL";
     @SerializedName("religion")
@@ -20,19 +20,19 @@ public class SocioDemography extends JsonServerObject{
     @SerializedName("type_of_family")
     private String typeOfFamily = "NULL";
     @SerializedName("number_of_family_members")
-    private int numFamilyMembers;
+    private String numFamilyAdultMembers = "NULL";
+    private String numFamilyChildMembers = "NULL";
     @SerializedName("occupation")
     private String occupation = "NULL";
     @SerializedName("total_family_income_per_month")
-    private int familyIncome = 0;
+    private String familyIncome = "NULL";
     @SerializedName("total_earning_members_in_the_family")
-    private int numEarningFamMembers = 0;
+    private String numEarningFamMembers = "NULL";
     @SerializedName("nearest_phc")
     private String nearestPHC = "NULL";
     @SerializedName("duration_of_association_with_cboshg")
     private String associationDuration = "NULL";
-    @SerializedName("cbo_meetings_attended_in_last_months")
-    private String CBOMeetings = "NULL";
+    private String SHGMeetings = "NULL";
 
     public String getUserName() {
         return userName;
@@ -42,11 +42,11 @@ public class SocioDemography extends JsonServerObject{
         this.userName = userName;
     }
 
-    public int getYearsOfEducation() {
+    public String getYearsOfEducation() {
         return yearsOfEducation;
     }
 
-    public void setYearsOfEducation(int yearsOfEducation) {
+    public void setYearsOfEducation(String yearsOfEducation) {
         this.yearsOfEducation = yearsOfEducation;
     }
 
@@ -82,14 +82,6 @@ public class SocioDemography extends JsonServerObject{
         this.typeOfFamily = typeOfFamily;
     }
 
-    public int getNumFamilyMembers() {
-        return numFamilyMembers;
-    }
-
-    public void setNumFamilyMembers(int numFamilyMembers) {
-        this.numFamilyMembers = numFamilyMembers;
-    }
-
     public String getOccupation() {
         return occupation;
     }
@@ -98,24 +90,40 @@ public class SocioDemography extends JsonServerObject{
         this.occupation = occupation;
     }
 
-    public int getFamilyIncome() {
+    public String getNearestPHC() {
+        return nearestPHC;
+    }
+
+    public String getNumFamilyAdultMembers() {
+        return numFamilyAdultMembers;
+    }
+
+    public void setNumFamilyAdultMembers(String numFamilyAdultMembers) {
+        this.numFamilyAdultMembers = numFamilyAdultMembers;
+    }
+
+    public String getNumFamilyChildMembers() {
+        return numFamilyChildMembers;
+    }
+
+    public void setNumFamilyChildMembers(String numFamilyChildMembers) {
+        this.numFamilyChildMembers = numFamilyChildMembers;
+    }
+
+    public String getFamilyIncome() {
         return familyIncome;
     }
 
-    public void setFamilyIncome(int familyIncome) {
+    public void setFamilyIncome(String familyIncome) {
         this.familyIncome = familyIncome;
     }
 
-    public int getNumEarningFamMembers() {
+    public String getNumEarningFamMembers() {
         return numEarningFamMembers;
     }
 
-    public void setNumEarningFamMembers(int numEarningFamMembers) {
+    public void setNumEarningFamMembers(String numEarningFamMembers) {
         this.numEarningFamMembers = numEarningFamMembers;
-    }
-
-    public String getNearestPHC() {
-        return nearestPHC;
     }
 
     public void setNearestPHC(String nearestPHC) {
@@ -130,12 +138,12 @@ public class SocioDemography extends JsonServerObject{
         this.associationDuration = associationDuration;
     }
 
-    public String getCBOMeetings() {
-        return CBOMeetings;
+    public String getSHGMeetings() {
+        return SHGMeetings;
     }
 
-    public void setCBOMeetings(String CBOMeetings) {
-        this.CBOMeetings = CBOMeetings;
+    public void setSHGMeetings(String SHGMeetings) {
+        this.SHGMeetings = SHGMeetings;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

@@ -29,7 +29,7 @@
         <LinearLayout
             android:id="@+id/dashboardLinearLayoutProfile"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
             android:gravity="start"
             android:orientation="horizontal"
@@ -42,17 +42,17 @@
                 android:id="@+id/dashboardIconProfile"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_marginStart="18dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
                 app:srcCompat="@drawable/dashboard_icon" />
 
             <TextView
                 android:id="@+id/dashboardTVProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="13dp"
                 android:text="@string/dashboard"
-                android:layout_gravity="center_vertical"
                 android:textColor="@color/white" />
 
         </LinearLayout>
@@ -60,9 +60,10 @@
         <LinearLayout
             android:id="@+id/participantLinearLayoutProfile"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
             android:gravity="start"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.627"
@@ -74,38 +75,38 @@
                 android:id="@+id/participantsIconProfile"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_marginStart="18dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
                 app:srcCompat="@drawable/participants_icon" />
 
             <TextView
                 android:id="@+id/participantsTVProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
                 android:text="@string/participants"
                 android:textColor="@color/white" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/logoutButtonProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
-            android:textAllCaps="false"
-            android:text="Logout"
-            android:elevation="10dp"
-            android:background="@drawable/rounded_corners"
-            android:textColor="@color/text_color"
-            android:fontFamily="@font/open_sans_semibold"
-            android:drawableLeft="@drawable/logout_icon"
-            android:paddingStart="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.205"
-            app:layout_constraintStart_toStartOf="parent" />
+        <!--        <Button-->
+        <!--            android:id="@+id/logoutButtonProfile"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="28dp"-->
+        <!--            android:textAllCaps="false"-->
+        <!--            android:text="Logout"-->
+        <!--            android:elevation="10dp"-->
+        <!--            android:background="@drawable/rounded_corners"-->
+        <!--            android:textColor="@color/text_color"-->
+        <!--            android:fontFamily="@font/open_sans_semibold"-->
+        <!--            android:drawableLeft="@drawable/logout_icon"-->
+        <!--            android:paddingStart="5dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="0.205"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -114,12 +115,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/open_sans_semibold"
         android:text="@string/profile"
         android:textAllCaps="true"
         android:textColor="@color/text_color"
         android:textSize="16sp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/constraintLayoutProfile"
@@ -130,9 +132,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:layout_marginEnd="40dp"
-        android:orientation="horizontal"
+        android:layout_marginEnd="10dp"
         android:baselineAligned="false"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.973"
         app:layout_constraintStart_toEndOf="@+id/profileTitleTV"
@@ -142,17 +144,17 @@
             android:id="@+id/languageLinearLayoutProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
-            android:baselineAligned="false">
+            android:layout_marginEnd="30dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/englishButtonProfile"
                 android:layout_width="93dp"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/english_toggle_button"
+                android:background="@drawable/left_selected_toggle_button"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:text="@string/english"
@@ -162,10 +164,10 @@
             <Button
                 android:id="@+id/kannadaButtonProfile"
                 android:layout_width="93dp"
-                android:layout_height="44dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:background="@drawable/kannada_toggle_button"
+                android:background="@drawable/right_unselected_toggle_button"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:text="@string/kannada"
@@ -178,43 +180,46 @@
             android:id="@+id/notificationsLogoProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            app:srcCompat="@drawable/notification_icon"
             android:padding="10dp"
-            android:layout_gravity="center"/>
+            app:srcCompat="@drawable/notification_icon" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/coordinatorProfile"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_weight="1"
-            android:src="@drawable/coordinator_profile"
             android:layout_gravity="center"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/coordinator_profile" />
 
         <TextView
             android:id="@+id/coordinatorNameTVProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Jessica Jones"
-            android:fontFamily="@font/open_sans_semibold"
             android:layout_gravity="center"
-            android:textSize="12sp"
-            android:textColor="@color/text_color" />
+            android:layout_weight="1"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Jessica Jones"
+            android:textColor="@color/text_color"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="986dp"
-        android:layout_height="600dp"
-        android:layout_margin="100dp"
+        android:id="@+id/constraintLayout"
+        android:layout_width="1053dp"
+        android:layout_height="580dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/curved_corners"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toEndOf="@+id/constraintLayoutProfile"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutProfile">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutProfile"
+        app:layout_constraintVertical_bias="0.88">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/profileTabLayout"
@@ -228,16 +233,23 @@
             app:layout_constraintVertical_bias="0.0"
             app:tabBackground="@color/white"
             app:tabGravity="fill"
-            app:tabMaxWidth="0dp"
-            app:tabPaddingStart="20dp"
-            app:tabPaddingEnd="20dp"
             app:tabIndicator="@drawable/selected_shape_tab_indicator"
             app:tabIndicatorColor="@android:color/transparent"
             app:tabIndicatorFullWidth="false"
-            app:tabTextAppearance="@style/custom_tab_text_appearance_profile"
+            app:tabMaxWidth="0dp"
             app:tabMode="fixed"
+            app:tabPaddingEnd="20dp"
+            app:tabPaddingStart="20dp"
             app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@style/custom_tab_text_appearance_profile"
             app:tabTextColor="@color/text_color">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/screeningTabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selected_button"
+                android:text="Screening" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/registrationTabItem"
@@ -267,7 +279,7 @@
 
         <FrameLayout
             android:id="@+id/profileFrameLayout"
-            android:layout_width="match_parent"
+            android:layout_width="1053dp"
             android:layout_height="wrap_content"
             android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -277,5 +289,38 @@
 
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/profilePartcipantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:text="Roopa"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutProfile"
+        app:layout_constraintTop_toBottomOf="@+id/profileTitleTV"
+        app:layout_constraintVertical_bias="0.616" />
+
+    <Button
+        android:id="@+id/profileEditButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/edit_button_background"
+        android:fontFamily="@font/open_sans"
+        android:text="Edit"
+        android:textAllCaps="false"
+        android:textColor="@color/text_color"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.981"
+        app:layout_constraintStart_toEndOf="@+id/profilePartcipantName"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutProfile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.mithraapplication;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
@@ -39,12 +40,15 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private TextView questionNumber, totalQuestions, ph9Question, option_oneTV, option_twoTV, option_threeTV, option_fourTV;
     private Button nextButton;
     private ImageButton optionImageButtonOne, optionImageButtonTwo, optionImageButtonThree, optionImageButtonFour;
+    private View option_view_one, option_view_two, option_view_three, option_view_four;
     private int questionIndex = 0;
     private int selectedOptionValue = 0;
     private ArrayList<QuestionAnswers> questionArray = new ArrayList<>();
     private String startDateTime, endDateTime;
     private Dialog dialog;
-    private HashMap<String, Integer> surveyPHQ9 = new HashMap<>();
+    private HashMap<String, String> surveyPHQ9 = new HashMap<>();
+    private String surveyAnswers = "{";
+//    private ArrayList<String surveyPHQ9 = "NULL";
     private MithraUtility mithraUtility = new MithraUtility();
 
     @Override
@@ -53,7 +57,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         setContentView(R.layout.activity_survey_screen);
         RegisterViews();
 //        initializeData();
-//        startDateTime = getCurrentTime();
+//        startDateTime = mithraUtility.getCurrentTime();
 //        setCardData();
         getSelectedOption();
         onClickNextButton();
@@ -98,6 +102,10 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      */
     private void RegisterViews() {
         participantName = findViewById(R.id.participantNameTV);
+        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant));
+        if(!participantUserName.equals("NULL")){
+           participantName.setText(participantUserName);
+        }
         questionNumber = findViewById(R.id.questionNumbers);
         totalQuestions = findViewById(R.id.totalQuestions);
         ph9Question = findViewById(R.id.questionsTV);
@@ -113,6 +121,11 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         optionImageButtonThree = findViewById(R.id.optionImageBtn3);
         optionImageButtonFour = findViewById(R.id.optionImageBtn4);
 
+        option_view_one = findViewById(R.id.option_one_view);
+        option_view_two = findViewById(R.id.option_two_view);
+        option_view_three = findViewById(R.id.option_three_view);
+        option_view_four = findViewById(R.id.option_four_view);
+
         enableDisableButton(false);
     }
 
@@ -124,10 +137,16 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             @Override
             public void onClick(View v) {
                 selectedOptionValue = 1;
-                optionImageButtonOne.setBackgroundResource(R.drawable.selected_option);
-                optionImageButtonTwo.setBackgroundResource(R.color.white);
-                optionImageButtonThree.setBackgroundResource(R.color.white);
-                optionImageButtonFour.setBackgroundResource(R.color.white);
+                option_view_one.setVisibility(View.VISIBLE);
+                option_view_two.setVisibility(View.INVISIBLE);
+                option_view_three.setVisibility(View.INVISIBLE);
+                option_view_four.setVisibility(View.INVISIBLE);
+
+                option_oneTV.setTextColor(getResources().getColor(R.color.options_color));
+                option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
+
                 enableDisableButton(true);
             }
         });
@@ -136,10 +155,17 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             @Override
             public void onClick(View v) {
                 selectedOptionValue = 2;
-                optionImageButtonOne.setBackgroundResource(R.color.white);
-                optionImageButtonTwo.setBackgroundResource(R.drawable.selected_option);
-                optionImageButtonThree.setBackgroundResource(R.color.white);
-                optionImageButtonFour.setBackgroundResource(R.color.white);
+
+                option_view_one.setVisibility(View.INVISIBLE);
+                option_view_two.setVisibility(View.VISIBLE);
+                option_view_three.setVisibility(View.INVISIBLE);
+                option_view_four.setVisibility(View.INVISIBLE);
+
+                option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_twoTV.setTextColor(getResources().getColor(R.color.options_color));
+                option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
+
                 enableDisableButton(true);
             }
         });
@@ -148,10 +174,17 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             @Override
             public void onClick(View v) {
                 selectedOptionValue = 3;
-                optionImageButtonOne.setBackgroundResource(R.color.white);
-                optionImageButtonTwo.setBackgroundResource(R.color.white);
-                optionImageButtonThree.setBackgroundResource(R.drawable.selected_option);
-                optionImageButtonFour.setBackgroundResource(R.color.white);
+
+                option_view_one.setVisibility(View.INVISIBLE);
+                option_view_two.setVisibility(View.INVISIBLE);
+                option_view_three.setVisibility(View.VISIBLE);
+                option_view_four.setVisibility(View.INVISIBLE);
+
+                option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_threeTV.setTextColor(getResources().getColor(R.color.options_color));
+                option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
+
                 enableDisableButton(true);
             }
         });
@@ -160,10 +193,17 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             @Override
             public void onClick(View v) {
                 selectedOptionValue = 4;
-                optionImageButtonOne.setBackgroundResource(R.color.white);
-                optionImageButtonTwo.setBackgroundResource(R.color.white);
-                optionImageButtonThree.setBackgroundResource(R.color.white);
-                optionImageButtonFour.setBackgroundResource(R.drawable.selected_option);
+
+                option_view_one.setVisibility(View.INVISIBLE);
+                option_view_two.setVisibility(View.INVISIBLE);
+                option_view_three.setVisibility(View.INVISIBLE);
+                option_view_four.setVisibility(View.VISIBLE);
+
+                option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_fourTV.setTextColor(getResources().getColor(R.color.options_color));
+
                 enableDisableButton(true);
             }
         });
@@ -176,16 +216,20 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SurveyScreen.this,
-                        "Selected Value : " + selectedOptionValue,
-                        Toast.LENGTH_LONG).show();
-                surveyPHQ9.put(questionArray.get(questionIndex).getQn_number(), selectedOptionValue);                questionIndex++;
+                surveyPHQ9.put(questionArray.get(questionIndex).getQn_number(), String.valueOf(selectedOptionValue));
+                surveyAnswers = surveyAnswers + "'" +questionArray.get(questionIndex).getQn_number().charAt(0) + "':'" + String.valueOf(selectedOptionValue).charAt(0) + "',";
+                questionIndex++;
                 setCardData();
                 enableDisableButton(false);
-                optionImageButtonOne.setBackgroundResource(R.color.white);
-                optionImageButtonTwo.setBackgroundResource(R.color.white);
-                optionImageButtonThree.setBackgroundResource(R.color.white);
-                optionImageButtonFour.setBackgroundResource(R.color.white);
+                option_view_one.setVisibility(View.INVISIBLE);
+                option_view_two.setVisibility(View.INVISIBLE);
+                option_view_three.setVisibility(View.INVISIBLE);
+                option_view_four.setVisibility(View.INVISIBLE);
+
+                option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
+                option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
             }
         });
     }
@@ -204,7 +248,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             option_fourTV.setText(questionArray.get(questionIndex).getOption_4());
         }
         else{
-            endDateTime = getCurrentTime();
+            endDateTime = mithraUtility.getCurrentTime();
             showCongratulationAlert();
             callServerForPostSurveyAnswers();
             waitAndMoveToAnotherActivity();
@@ -217,8 +261,14 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private void callServerForPostSurveyAnswers(){
         String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_session.api.phqsessionpost";
         SurveyPostRequest surveyPostRequest = new SurveyPostRequest();
-        surveyPostRequest.setUser_name(mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name)));
-        surveyPostRequest.setAnswer(surveyPHQ9);
+        surveyPostRequest.setUser_name(mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant)));
+//        String diseaseStr = String.join(",", (CharSequence) surveyPHQ9);
+        Log.i("SURVEY QUESTIONS", "String List" + surveyPHQ9);
+        Log.i("SURVEY QUESTIONS", "Character List" + surveyAnswers);
+//        String answers = String.join(",", surveyAnswers);
+        surveyAnswers = surveyAnswers.substring(0, surveyAnswers.length()-1) + "}";
+        Log.i("SURVEY QUESTIONS", "After Character List" + surveyAnswers);
+        surveyPostRequest.setAnswer(surveyAnswers);
         surveyPostRequest.setSession_start(startDateTime);
         surveyPostRequest.setSession_stop(endDateTime);
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
@@ -235,7 +285,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             @Override
             public void run() {
                 if(dialog.isShowing()){
-                    dialog.create();
+                    dialog.dismiss();
                     Intent loginIntent = new Intent(SurveyScreen.this, ParticipantLandingScreen.class);
                     startActivity(loginIntent);
                     finish();
@@ -257,17 +307,6 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             nextButton.setBackgroundResource(R.drawable.rounded_corners);
             nextButton.setTextColor(getResources().getColor(R.color.text_color));
         }
-    }
-
-    /**
-     * Description : Get the current time of the user device for calculation of duration taken to complete the survey
-     */
-    private String getCurrentTime(){
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String strDate = sdf.format(c.getTime());
-        Log.d("SurveyScreen","getCurrentTime : " + strDate);
-        return strDate;
     }
 
     /**
@@ -311,11 +350,13 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
 
         try{
             questionAnswersArrayList = gson.fromJson(jsonObject.get("message"), type);
-            Collections.sort(questionAnswersArrayList, Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
-            Log.i("SurveyScreen", "responseReceivedSuccessfully : " +questionAnswersArrayList);
-            questionArray = questionAnswersArrayList;
-            startDateTime = getCurrentTime();
-            setCardData();
+            if(questionAnswersArrayList.size() > 1){
+                questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
+                Log.i("SurveyScreen", "responseReceivedSuccessfully : " +questionAnswersArrayList);
+                questionArray = questionAnswersArrayList;
+                startDateTime = mithraUtility.getCurrentTime();
+                setCardData();
+            }
         }catch(Exception e){
             Toast.makeText(this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
         }
@@ -328,12 +369,21 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     public void responseReceivedFailure(String message) {
         Log.i("SurveyScreen", "responseReceivedFailure : " +message);
 
-        if(message!=null){
-            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-            String serverErrorResponse = jsonObject.get("exception").toString();
-            Toast.makeText(this, serverErrorResponse, Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
-        }
+//        if(message!=null){
+//            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+//            String serverErrorResponse = jsonObject.get("exception").toString();
+//            Toast.makeText(this, serverErrorResponse, Toast.LENGTH_LONG).show();
+//        }else{
+//            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+//        }
+    }
+
+    /**
+     * @param newConfig
+     * Description : This method is used to update the views on change of language
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

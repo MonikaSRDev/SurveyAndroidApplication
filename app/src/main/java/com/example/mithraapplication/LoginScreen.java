@@ -2,9 +2,7 @@ package com.example.mithraapplication;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +20,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class LoginScreen extends AppCompatActivity implements HandleServerResponse {
 
@@ -60,6 +57,7 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
                 String userName = !userNameET.getText().toString().equals("") ? userNameET.getText().toString() : "NULL";
                 String password = !userPasswordET.getText().toString().equals("") ? userPasswordET.getText().toString() : "NULL";
 
+//                moveToParticipantLandingPage();
                 if(!userName.equals("NULL") && !password.equals("NULL")){
                     callServerForUserLogin(userName, password);
                 }else if(userName.equals("NULL") && !password.equals("NULL")){
@@ -119,11 +117,12 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
 
         try{
             userLogins = gson.fromJson(jsonObject.get("message"), type);
-            mithraUtility.putSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name), userLogins.get(0).getUserName());
             mithraUtility.putSharedPreferencesData(this, getString(R.string.user_role), getString(R.string.user_role), userLogins.get(0).getUserRole());
             if(userLogins.get(0).getUserRole().equals("participant")){
+                mithraUtility.putSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
                 moveToParticipantLandingPage();
             }else if(userLogins.get(0).getUserRole().equals("coordinator")){
+                mithraUtility.putSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator), userLogins.get(0).getUserName());
                 moveToCoordinatorDashboard();
             }
         }catch(Exception e){
@@ -151,20 +150,6 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         }else{
             Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
         }
-    }
-
-    /**
-     * @param selectedLanguage
-     * Description : This method is used to change the content of the screen to user selected language
-     */
-    private void changeLocalLanguage(String selectedLanguage){
-        Locale myLocale = new Locale(selectedLanguage);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        onConfigurationChanged(conf);
     }
 
     /**

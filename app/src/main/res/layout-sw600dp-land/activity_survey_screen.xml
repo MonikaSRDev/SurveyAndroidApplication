@@ -46,7 +46,7 @@
         android:layout_height="486dp"
         android:layout_marginStart="220dp"
         android:layout_marginEnd="220dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:elevation="5dp"
         android:foregroundGravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -140,23 +140,23 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:layout_toStartOf="@+id/questionsTV"
                 android:layout_toEndOf="@+id/questionNumberLinearLayout"
                 android:fontFamily="@font/open_sans"
                 android:gravity="start|center_vertical"
                 android:text="of 9"
                 android:textColor="#000000"
-                android:textSize="25sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/questionOptions"
                 app:layout_constraintStart_toEndOf="@+id/questionNumberLinearLayout"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.322" />
+                app:layout_constraintVertical_bias="0.303" />
 
             <LinearLayout
                 android:id="@+id/questionOptions"
                 android:layout_width="wrap_content"
-                android:layout_height="213dp"
+                android:layout_height="wrap_content"
                 android:layout_above="@+id/nextQuestionButton"
                 android:layout_below="@+id/questionsTV"
                 android:layout_alignParentStart="true"
@@ -199,6 +199,15 @@
                         android:textColor="@color/text_color"
                         android:textSize="12sp" />
 
+                    <View
+                        android:id="@+id/option_one_view"
+                        android:layout_width="60dp"
+                        android:layout_height="5dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_gravity="center"
+                        android:visibility="invisible"
+                        android:background="@drawable/options_underline"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -230,6 +239,15 @@
                         android:text="33%"
                         android:textColor="@color/text_color"
                         android:textSize="12sp" />
+
+                    <View
+                        android:id="@+id/option_two_view"
+                        android:layout_width="60dp"
+                        android:layout_height="5dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_gravity="center"
+                        android:visibility="invisible"
+                        android:background="@drawable/options_underline"/>
 
                 </LinearLayout>
 
@@ -263,6 +281,15 @@
                         android:textColor="@color/text_color"
                         android:textSize="12sp" />
 
+                    <View
+                        android:id="@+id/option_three_view"
+                        android:layout_width="60dp"
+                        android:layout_height="5dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_gravity="center"
+                        android:visibility="invisible"
+                        android:background="@drawable/options_underline"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -295,6 +322,15 @@
                         android:textColor="@color/text_color"
                         android:textSize="12sp" />
 
+                    <View
+                        android:id="@+id/option_four_view"
+                        android:layout_width="60dp"
+                        android:layout_height="5dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_gravity="center"
+                        android:visibility="invisible"
+                        android:background="@drawable/options_underline"/>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -321,9 +357,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="28dp"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/questionOptions"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.035">
@@ -332,12 +368,12 @@
                     android:id="@+id/questionNumbers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:text="5"
                     android:textColor="#000000"
                     android:textSize="32sp"
-                    android:layout_gravity="center"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -366,6 +402,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="100dp"
         android:orientation="horizontal"
+        android:padding="5dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/questionCardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -375,7 +413,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/english_toggle_button"
+            android:elevation="3dp"
+            android:background="@drawable/left_selected_toggle_button"
             android:fontFamily="@font/open_sans_semibold"
             android:text="@string/english"
             android:textColor="@color/text_color" />
@@ -385,7 +424,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/kannada_toggle_button"
+            android:background="@drawable/right_unselected_toggle_button"
             android:fontFamily="@font/open_sans_semibold"
             android:text="@string/kannada"
             android:textColor="@color/text_color" />

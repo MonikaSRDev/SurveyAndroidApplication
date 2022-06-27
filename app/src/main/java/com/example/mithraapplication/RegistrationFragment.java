@@ -1,6 +1,5 @@
 package com.example.mithraapplication;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -24,7 +23,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.mithraapplication.ModelClasses.Locations;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
-import com.example.mithraapplication.ModelClasses.ServerErrorResponse;
 import com.example.mithraapplication.ModelClasses.UserLogin;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -34,6 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RegistrationFragment extends Fragment implements AdapterView.OnItemSelectedListener, HandleServerResponse{
@@ -41,16 +40,17 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     private EditText participantNameET, participantAgeET, participantPhoneNumberET, participantUserNameET, participantPasswordET, participantConfirmPasswordET;
     private Button registerButton, maleButton, femaleButton, othersButton;
     private TextView participateAgeTV, participatePhoneNumberTV, participateUserNameTV, participatePasswordTV, participantConfirmPasswordTV, VillageNameTV, PanchayatTV, SHGAssociationTV, participantNameTV, genderTV, addParticipantTV;
-    private Spinner VillageNameSpinner, SHGSpinner, PanchayatSpinner;
+    private Spinner VillageNameSpinner, SHGSpinner, PanchayatSpinner, CountryCodeSpinner;
     private String participantName, participantUserName, participantPassword;
-    private String participantVillageName, participantSHGAssociation, participantPanchayat, participantGender, participantPhoneNum;
+    private String participantVillageName, participantSHGAssociation, participantPanchayat, participantGender, participantPhoneNum, participantCountryCode;
     private int participantAge;
 //    private String[] SHGNamesList = {"SHG 1", "SHG 2", "SHG 3"};
 //    private String[] VillageNamesList = {"Village 1", "Village 2", "Village 3"};
 //    private String[] PanchayatNamesList = {"Panchayat 1", "Panchayat 2", "Panchayat 3"};
-    private List<String> PanchayatNamesList, VillageNamesList, SHGNamesList;
+    private List<String> PanchayatNamesList, VillageNamesList, SHGNamesList, CountryCodeList = new ArrayList<>();
     private List<Locations> locationsArrayList, filteredVillageList, filteredSHGList, locationsList;
-    private ArrayAdapter adapterForVillageNames, SHGSpinnerAdapter, panchayatSpinnerAdapter;
+    private ArrayAdapter adapterForVillageNames, SHGSpinnerAdapter, panchayatSpinnerAdapter, countryCodeAdapter;
+    private MithraUtility mithraUtility = new MithraUtility();
 
     @Nullable
     @Override
@@ -104,6 +104,18 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
         PanchayatSpinner = view.findViewById(R.id.spinnerPanchayat);
         PanchayatSpinner.setOnItemSelectedListener(this);
+
+        CountryCodeSpinner = view.findViewById(R.id.spinnerCountryCode);
+        CountryCodeSpinner.setOnItemSelectedListener(this);
+
+        CountryCodeList.add("+91");
+        countryCodeAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, CountryCodeList);
+        countryCodeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        CountryCodeSpinner.setAdapter(countryCodeAdapter);
+        CountryCodeSpinner.setSelection(0, true);
+        View viewSpinner = CountryCodeSpinner.getSelectedView();
+        ((TextView)viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
+        ((TextView)viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
     }
 
     /**
@@ -115,7 +127,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 //        String participantPhoneNumber = participantPhoneNumberET.getText().toString();
 //        participantPhoneNum = new PhoneNumber();
 //        participantPhoneNum.setNumber(participantPhoneNumber);
-        participantPhoneNum = participantPhoneNumberET.getText().toString();
+        participantPhoneNum = participantCountryCode + participantPhoneNumberET.getText().toString();
         participantUserName = participantUserNameET.getText().toString();
         participantPassword = participantPasswordET.getText().toString();
         return checkIfPasswordMatches(participantPassword);
@@ -145,8 +157,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 boolean isvalid = getUserEnteredData();
                 if(isvalid) {
                     callServerLoginForParticipant();
+//                    moveToSocioDemographyTab();
 //                    callServerRegisterParticipant();
-//                    moveToSocideepak46oDemographyTab();
                 }
             }
         });
@@ -163,17 +175,20 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         registerParticipant.setParticipantVillageName(participantVillageName);
         registerParticipant.setParticipantSHGAssociation(participantSHGAssociation);
         registerParticipant.setParticipantPanchayat(participantPanchayat);
+        String screeningID = mithraUtility.getSharedPreferencesData(getActivity(), "ScreeningName", "screeningName");
+        registerParticipant.setScreeningid(screeningID);
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.postRegisterUser(getActivity(), registerParticipant, url);
     }
 
     private void callServerLoginForParticipant() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/User Table";
+        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.user_table.login.useradd";
         UserLogin userLogin = new UserLogin();
         userLogin.setUserName(participantUserName);
         userLogin.setUserPassword(participantPassword);
         userLogin.setUserRole("participant");
+        userLogin.setActive("yes");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.postUserLogin(getActivity(), userLogin, url);
@@ -190,13 +205,13 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
      * Description : This method is used to move from the Registration tab to SocioDemography tab
      */
     private void moveToSocioDemographyTab(){
-        ((ProfileScreen)getActivity()).setupSelectedTabFragment(1);
+        Log.i("RegistrationFragment", "moveToSocioDemographyTab");
+        ((ProfileScreen) requireActivity()).setupSelectedTabFragment(2);
     }
 
     /**
      * Description : This method is used to get the selected item from the dropdown list
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(parent.getId() == R.id.spinnerSHG){
@@ -220,14 +235,14 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 SHGSpinner.setAdapter(SHGSpinnerAdapter);
                 SHGSpinner.setSelection(0, true);
                 View viewSpinner = SHGSpinner.getSelectedView();
-                ((TextView)viewSpinner).setTextColor(Color.BLACK);
-                ((TextView)viewSpinner).setTextColor(Color.BLACK);
+                ((TextView)viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
+                ((TextView)viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
             }
         }else if(parent.getId() == R.id.spinnerPanchayat){
 
             participantPanchayat = PanchayatNamesList.get(position);
             PanchayatSpinner.setSelection(position);
-            ((TextView) view).setTextColor(Color.BLACK);
+            ((TextView) view).setTextColor(getResources().getColor(R.color.text_color));
 
             if(locationsList!=null && locationsList.size()!=0) {
                 filteredVillageList = locationsArrayList.stream().filter(location -> location.getPanchayat().contains(participantPanchayat)).distinct().collect(Collectors.toList());
@@ -238,10 +253,15 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 VillageNameSpinner.setAdapter(adapterForVillageNames);
                 VillageNameSpinner.setSelection(0, true);
                 View v = VillageNameSpinner.getSelectedView();
-                ((TextView)v).setTextColor(Color.BLACK);
+                ((TextView)v).setTextColor(getResources().getColor(R.color.text_color));
             }else{
                 locationsList = locationsArrayList;
             }
+        }else if(parent.getId() == R.id.spinnerCountryCode) {
+
+            participantCountryCode = CountryCodeList.get(position);
+            CountryCodeSpinner.setSelection(position);
+            ((TextView) view).setTextColor(getResources().getColor(R.color.text_color));
         }
     }
 
@@ -253,69 +273,78 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     /**
      * Handle the server response
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void responseReceivedSuccessfully(String message) {
 
         Gson gson = new Gson();
         Type typeLocation = new TypeToken<ArrayList<Locations>>(){}.getType();
         JsonObject jsonObjectLocation = JsonParser.parseString(message).getAsJsonObject();
-        try{
-            locationsArrayList = gson.fromJson(jsonObjectLocation.get("message"), typeLocation);
-            PanchayatNamesList = locationsArrayList.stream().map(Locations::getPanchayat).distinct().collect(Collectors.toList());
-            VillageNamesList = locationsArrayList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
-            SHGNamesList = locationsArrayList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
 
-            adapterForVillageNames = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, VillageNamesList);
-            adapterForVillageNames.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            VillageNameSpinner.setAdapter(adapterForVillageNames);
-            VillageNameSpinner.setSelection(0, true);
-            View v = VillageNameSpinner.getSelectedView();
-            ((TextView)v).setTextColor(Color.BLACK);
+        if(jsonObjectLocation.get("message")!=null){
+            try{
+                locationsArrayList = gson.fromJson(jsonObjectLocation.get("message"), typeLocation);
+                if(locationsArrayList.size() > 1) {
+                    PanchayatNamesList = locationsArrayList.stream().map(Locations::getPanchayat).distinct().collect(Collectors.toList());
+                    VillageNamesList = locationsArrayList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
+                    SHGNamesList = locationsArrayList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
 
-            SHGSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, SHGNamesList);
-            SHGSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            SHGSpinner.setAdapter(SHGSpinnerAdapter);
-            SHGSpinner.setSelection(0, true);
-            View viewSpinner = SHGSpinner.getSelectedView();
-            ((TextView)viewSpinner).setTextColor(Color.BLACK);
+                    adapterForVillageNames = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, VillageNamesList);
+                    adapterForVillageNames.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    VillageNameSpinner.setAdapter(adapterForVillageNames);
+                    VillageNameSpinner.setSelection(0, true);
+                    participantVillageName = VillageNamesList.get(0);
+                    View v = VillageNameSpinner.getSelectedView();
+                    ((TextView) v).setTextColor(getResources().getColor(R.color.text_color));
 
-            panchayatSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, PanchayatNamesList);
-            panchayatSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            PanchayatSpinner.setAdapter(panchayatSpinnerAdapter);
-            PanchayatSpinner.setSelection(0, true);
-            View viewSpinnerPanchayat = PanchayatSpinner.getSelectedView();
-            ((TextView)viewSpinnerPanchayat).setTextColor(Color.BLACK);
-        }catch(Exception e){
-            if(jsonObjectLocation.get("message")!=null) {
-                Toast.makeText(getActivity(), jsonObjectLocation.get("message").toString(), Toast.LENGTH_LONG).show();
+                    SHGSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, SHGNamesList);
+                    SHGSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    SHGSpinner.setAdapter(SHGSpinnerAdapter);
+                    SHGSpinner.setSelection(0, true);
+                    participantSHGAssociation = SHGNamesList.get(0);
+                    View viewSpinner = SHGSpinner.getSelectedView();
+                    ((TextView) viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
+
+                    panchayatSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, PanchayatNamesList);
+                    panchayatSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    PanchayatSpinner.setAdapter(panchayatSpinnerAdapter);
+                    PanchayatSpinner.setSelection(0, true);
+                    participantPanchayat = PanchayatNamesList.get(0);
+                    View viewSpinnerPanchayat = PanchayatSpinner.getSelectedView();
+                    ((TextView) viewSpinnerPanchayat).setTextColor(getResources().getColor(R.color.text_color));
+                }
+                else{
+                    Type type = new TypeToken<ArrayList<UserLogin>>(){}.getType();
+                    JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+                    ArrayList<UserLogin> userLogins;
+                    try{
+                        userLogins = gson.fromJson(jsonObject.get("message"), type);
+                        if(userLogins!=null){
+                            if(!userLogins.get(0).getUserName().equals("NULL")){
+                                mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.user_name), getString(R.string.user_name_participant), participantUserName);
+                                callServerRegisterParticipant();
+                            }
+                        }
+                    }catch(Exception e){
+                        if(jsonObject.get("message")!=null) {
+                            Toast.makeText(getActivity(), jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            }catch(Exception e){
+                if(jsonObjectLocation.get("message")!=null) {
+                    Toast.makeText(getActivity(), jsonObjectLocation.get("message").toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }else{
+            JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+            if(jsonObjectRegistration.get("data")!=null){
+                moveToSocioDemographyTab();
+            }else{
+                //Do nothing
+                Log.i("RegistrationFragment", "JsonObjectRegistration data is Empty");
             }
         }
-
-        Type type = new TypeToken<ArrayList<UserLogin>>(){}.getType();
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        ArrayList<UserLogin> userLogins;
-        try{
-            userLogins = gson.fromJson(jsonObject.get("data"), type);
-            if(!userLogins.get(0).getUserName().equals("")){
-                callServerRegisterParticipant();
-            }
-        }catch(Exception e){
-            if(jsonObject.get("data")!=null) {
-                Toast.makeText(getActivity(), jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
-            }
-        }
-
         Log.i("Message", "Success");
-
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AuthorizationTokens", getActivity().MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("participant", getString(R.string.mp_token));
-        editor.putString("coordinator", getString(R.string.mc_token));
-        editor.putString("researcher", "");
-        editor.apply();
-
-        callServerRegisterParticipant();
     }
 
     @Override
@@ -325,6 +354,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         String serverErrorResponse = jsonObject.get("exception").toString();
         if(serverErrorResponse.contains("frappe.exceptions.DuplicateEntryError")){
             participantUserNameET.setError("User Name already exits. Please give other user name.");
+        }else{
+            Toast.makeText(getActivity(), "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
         }
     }
 }

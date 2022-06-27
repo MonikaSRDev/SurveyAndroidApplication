@@ -13,7 +13,8 @@ public class UserLogin extends JsonServerObject{
     @SerializedName("password")
     private String userPassword = "NULL";
     @SerializedName("role")
-    private String userRole = "NULL";
+    private String userRole = "participant";
+    private String active = "yes";
 
     public String getUserName() {
         return userName;
@@ -37,6 +38,14 @@ public class UserLogin extends JsonServerObject{
 
     public void setUserRole(String userRole) {
         this.userRole = userRole;
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MithraApplication</string>
+    <string name="app_name">Mithra</string>
     <string name="sign_in">Sign In</string>
     <string name="password">Password</string>
     <string name="userid">UserId</string>
@@ -9,6 +9,7 @@
     <string name="age">Age</string>
     <string name="dashboard">Dashboard</string>
     <string name="participants">Participants</string>
+    <string name="participant_status">Participant Status</string>
     <string name="profile">Profile</string>
     <string name="add_new_participant">Add new participant</string>
     <string name="add_new_participant_text">Add New Participant</string>
@@ -19,6 +20,8 @@
     <string name="shg_association">SHG Association</string>
     <string name="panchayat">Panchayat</string>
     <string name="register">Register</string>
+    <string name="create">Create</string>
+    <string name="save">Save</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="others">Others</string>
@@ -30,15 +33,15 @@
     <string name="occupation">Occupation</string>
     <string name="nearest_phc">Nearest PHC</string>
     <string name="religion">Religion</string>
-    <string name="total_family_income_per_month">Total family Income per month</string>
+    <string name="total_family_income_per_month">Total family Income \n(per month)</string>
     <string name="unmarried">Unmarried</string>
     <string name="married">Married</string>
     <string name="caste">Caste</string>
-    <string name="number_of_family_members">Number of family members</string>
-    <string name="earning_members">Total earning members in the family</string>
+    <string name="number_of_family_members">Number of Adult \nFamily Members</string>
+    <string name="earning_members">Total earning \nmembers in the \nfamily</string>
     <string name="CBOMeetings">How many CBO meetings attended in the last months?</string>
-    <string name="type_of_family">Type of family</string>
-    <string name="association_duration">Duration of association with CBO/SHG</string>
+    <string name="type_of_family">Family Type</string>
+    <string name="association_duration">Duration(in Years) \nof association with \nCBO/SHG</string>
     <string name="nuclear">Nuclear</string>
     <string name="joint">Joint</string>
     <string name="next">Next</string>
@@ -52,14 +55,22 @@
     <string name="received_treatment">Do you receive treatment for this condition?</string>
     <string name="diagnosed_age">If yes, how old were you when this was diagnosed?</string>
     <string name="kannada">ಕನ್ನಡ</string>
-    <string name="base_url">192.168.2.156:80</string>
-    <string name="mp_token">token 2559f591d98ea66:9e2cdc0890cc4eb</string>
-    <string name="mc_token">token c043b3fae600f17:b7d57f73ccc6f7e</string>
-    <string name="participate_name">Participate 1</string>
+    <string name="base_url" translatable="false">192.168.2.156</string>
+    <string name="mp_token" translatable="false">token 2559f591d98ea66:9e2cdc0890cc4eb</string>
+    <string name="mc_token" translatable="false">token c043b3fae600f17:b7d57f73ccc6f7e</string>
+    <string name="participate_name" translatable="false">Participate 1</string>
     <string name="congratulation_text">Thank you for completing this module. We appreciate your time.</string>
-    <string name="authorization_tokens">AuthorizationTokens</string>
-    <string name="participant">participant</string>
-    <string name="coordinator">coordinator</string>
-    <string name="researcher">researcher</string>
-    <string name="user_role">UserRole</string>
+    <string name="authorization_tokens" translatable="false">AuthorizationTokens</string>
+    <string name="participant" translatable="false">participant</string>
+    <string name="coordinator" translatable="false">coordinator</string>
+    <string name="researcher" translatable="false">researcher</string>
+    <string name="user_role" translatable="false">UserRole</string>
+    <string name="user_name_participant" translatable="false">ParticipantUserName</string>
+    <string name="user_name_coordinator" translatable="false">CoordinatorUserName</string>
+    <string name="user_name_researcher" translatable="false">ResearcherUserName</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="child_members">Number of Child \nFamily Members</string>
+    <string name="less_than_five"><![CDATA[< 5]]></string>
+
 </resources>

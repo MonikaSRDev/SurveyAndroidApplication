@@ -45,6 +45,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="100dp"
         android:orientation="horizontal"
+        android:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -55,8 +56,10 @@
             android:layout_weight="1"
             android:textColor="@color/text_color"
             android:text="@string/english"
+            android:gravity="center"
+            android:elevation="10dp"
             android:fontFamily="@font/open_sans_semibold"
-            android:background="@drawable/english_toggle_button"/>
+            android:background="@drawable/left_selected_toggle_button"/>
 
         <Button
             android:id="@+id/kannadaLPButton"
@@ -64,9 +67,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/kannada"
+            android:gravity="center"
+            android:elevation="10dp"
             android:textColor="@color/text_color"
             android:fontFamily="@font/open_sans_semibold"
-            android:background="@drawable/kannada_toggle_button"/>
+            android:background="@drawable/right_unselected_toggle_button"/>
     </LinearLayout>
 
     <LinearLayout

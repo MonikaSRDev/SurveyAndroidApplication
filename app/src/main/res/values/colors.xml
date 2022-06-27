@@ -6,4 +6,5 @@
     <color name="headings">#353535</color>
     <color name="screen_background">#F7F9FA</color>
     <color name="text_color">#414040</color>
+    <color name="options_color">#4EBDEC</color>
 </resources>

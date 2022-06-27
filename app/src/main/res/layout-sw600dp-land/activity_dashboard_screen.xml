@@ -89,23 +89,23 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/logoutButtonDashboard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
-            android:textAllCaps="false"
-            android:text="Logout"
-            android:elevation="10dp"
-            android:background="@drawable/rounded_corners"
-            android:textColor="@color/text_color"
-            android:fontFamily="@font/open_sans_semibold"
-            android:drawableLeft="@drawable/logout_icon"
-            android:paddingStart="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.205"
-            app:layout_constraintStart_toStartOf="parent" />
+<!--        <Button-->
+<!--            android:id="@+id/logoutButtonDashboard"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="28dp"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:text="Logout"-->
+<!--            android:elevation="10dp"-->
+<!--            android:background="@drawable/rounded_corners"-->
+<!--            android:textColor="@color/text_color"-->
+<!--            android:fontFamily="@font/open_sans_semibold"-->
+<!--            android:drawableLeft="@drawable/logout_icon"-->
+<!--            android:paddingStart="5dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.205"-->
+<!--            app:layout_constraintStart_toStartOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -169,7 +169,7 @@
                 android:layout_width="93dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:background="@drawable/english_toggle_button"
+                android:background="@drawable/left_selected_toggle_button"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:text="@string/english"
@@ -181,10 +181,10 @@
             <Button
                 android:id="@+id/kannadaButtonDashboard"
                 android:layout_width="93dp"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:background="@drawable/kannada_toggle_button"
+                android:background="@drawable/right_unselected_toggle_button"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:text="@string/kannada"

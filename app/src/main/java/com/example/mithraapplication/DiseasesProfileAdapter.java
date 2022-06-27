@@ -106,7 +106,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.yesDiseaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiseaseName(holder.diseaseTV.getText().toString());
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("Yes");
                 holder.yesDiseaseButton.setBackgroundResource(R.drawable.selected_yes_button);
                 holder.noDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
                 holder.expandableConstraintLayout.setVisibility(View.VISIBLE);
@@ -118,7 +118,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.noDiseaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiseaseName("NULL");
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("No");
                 holder.noDiseaseButton.setBackgroundResource(R.drawable.selected_no_button);
                 holder.yesDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
                 holder.expandableConstraintLayout.setVisibility(View.GONE);
@@ -163,7 +163,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.noReceivedTreatmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("No)");
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("No");
                 holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
                 holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_no_button);
             }

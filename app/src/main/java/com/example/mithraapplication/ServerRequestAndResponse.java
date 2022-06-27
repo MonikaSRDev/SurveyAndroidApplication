@@ -11,6 +11,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
+import com.example.mithraapplication.ModelClasses.DiseasesProfilePostRequest;
+import com.example.mithraapplication.ModelClasses.ParticipantScreening;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.SocioDemography;
 import com.example.mithraapplication.ModelClasses.SurveyPostRequest;
@@ -61,13 +63,15 @@ public class ServerRequestAndResponse extends Application {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
-                String userRole = mithraUtility.getSharedPreferencesData(context, getString(R.string.user_role), getString(R.string.user_role));
-                if(!userRole.equals("NULL") && userRole.equals(getString(R.string.participant))){
-                    String userToken = mithraUtility.getSharedPreferencesData(context, getString(R.string.authorization_tokens), getString(R.string.participant));
+                String userRole = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.user_role), context.getString(R.string.user_role));
+                if(!userRole.equals("NULL") && userRole.equals(context.getString(R.string.participant))){
+                    String userToken = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.authorization_tokens), context.getString(R.string.participant));
                     params.put("Authorization", userToken);
-                }else if(!userRole.equals("NULL") && userRole.equals(getString(R.string.coordinator))){
-                    String userToken = mithraUtility.getSharedPreferencesData(context, getString(R.string.authorization_tokens), getString(R.string.coordinator));
+                }else if(!userRole.equals("NULL") && userRole.equals(context.getString(R.string.coordinator))){
+                    String userToken = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.authorization_tokens), context.getString(R.string.coordinator));
                     params.put("Authorization", userToken);
+                }else{
+                    params.put("Authorization", context.getString(R.string.mc_token));
                 }
                 return params;
             }
@@ -110,13 +114,15 @@ public class ServerRequestAndResponse extends Application {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
-                String userRole = mithraUtility.getSharedPreferencesData(context, getString(R.string.user_role), getString(R.string.user_role));
-                if(!userRole.equals("NULL") && userRole.equals(getString(R.string.participant))){
-                    String userToken = mithraUtility.getSharedPreferencesData(context, getString(R.string.authorization_tokens), getString(R.string.participant));
+                String userRole = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.user_role), context.getString(R.string.user_role));
+                if(!userRole.equals("NULL") && userRole.equals(context.getString(R.string.participant))){
+                    String userToken = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.authorization_tokens), context.getString(R.string.participant));
                     params.put("Authorization", userToken);
-                }else if(!userRole.equals("NULL") && userRole.equals(getString(R.string.coordinator))){
-                    String userToken = mithraUtility.getSharedPreferencesData(context, getString(R.string.authorization_tokens), getString(R.string.coordinator));
+                }else if(!userRole.equals("NULL") && userRole.equals(context.getString(R.string.coordinator))){
+                    String userToken = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.authorization_tokens), context.getString(R.string.coordinator));
                     params.put("Authorization", userToken);
+                }else{
+                    params.put("Authorization", context.getString(R.string.mc_token));
                 }
                 return params;
             }
@@ -148,8 +154,16 @@ public class ServerRequestAndResponse extends Application {
         getJsonRequest(context, url);
     }
 
+    public void getAllParticipantsDetails(Context context, String url){
+        getJsonRequest(context, url);
+    }
+
     public void postUserLogin(Context context, UserLogin userLoginObject, String url){
         postJsonRequest(context, userLoginObject.ToJSON(), url);
+    }
+
+    public void postScreeningDetails(Context context, ParticipantScreening participantScreening, String url){
+        postJsonRequest(context, participantScreening.ToJSON(), url);
     }
 
     public void postRegisterUser(Context context, RegisterParticipant registerParticipant, String url){
@@ -160,8 +174,8 @@ public class ServerRequestAndResponse extends Application {
         postJsonRequest(context, socioDemography.ToJSON(), url);
     }
 
-    public void postDiseaseProfileDetails(Context context, DiseasesProfile diseasesProfile, String url){
-        postJsonRequest(context, diseasesProfile.ToJSON(), url);
+    public void postDiseaseProfileDetails(Context context, DiseasesProfilePostRequest diseasesProfilePostRequest, String url){
+        postJsonRequest(context, diseasesProfilePostRequest.ToJSON(), url);
     }
 
     public void postSurveyAnswers(Context context, SurveyPostRequest surveyPostRequest, String url){
