@@ -3,6 +3,9 @@ buildscript {
     ext.kotlin_version = '1.7.0-RC2'
     repositories {
         mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://repo.spring.io/plugins-release/" }
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

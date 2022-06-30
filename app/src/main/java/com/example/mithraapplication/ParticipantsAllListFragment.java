@@ -51,9 +51,9 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RegisterViews(view);
-//        callGetAllParticipantsDetails();
+        callGetAllParticipantsDetails();
         onClickAddNewParticipantIcon();
-//        onClickFloatingAddNewParticipantButton();
+        onClickFloatingAddNewParticipantButton();
     }
 
     private void RegisterViews(View view) {
@@ -72,15 +72,15 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         });
     }
 
-//    private void onClickFloatingAddNewParticipantButton() {
-//        addNewParticipantIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), ProfileScreen.class);
-//                startActivity(intent);
-//            }
-//        });
-//    }
+    private void onClickFloatingAddNewParticipantButton() {
+        addNewParticipantIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfileScreen.class);
+                startActivity(intent);
+            }
+        });
+    }
 
     private void callGetAllParticipantsDetails(){
         String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.participant.api.participants";
@@ -101,11 +101,11 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
 //            if(registerParticipantsArrayList.size() == 0){
 //                addNewParticipantIcon.setVisibility(View.VISIBLE);
 //                addNewParticipantTV.setVisibility(View.VISIBLE);
-////                floatingAddButton.setVisibility(View.GONE);
+//                floatingAddButton.setVisibility(View.GONE);
 //            }else{
 //                addNewParticipantIcon.setVisibility(View.GONE);
 //                addNewParticipantTV.setVisibility(View.GONE);
-////                floatingAddButton.setVisibility(View.VISIBLE);
+//                floatingAddButton.setVisibility(View.VISIBLE);
 //            }
 
         }catch(Exception e){

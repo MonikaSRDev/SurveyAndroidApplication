@@ -16,6 +16,6 @@
     </style>
 
     <style name="floating_button_style">
-        <item name="android:background">@drawable/circular_gradient</item>
+        <item name="android:background">@drawable/floating_action_add_button</item>
     </style>
 </resources>

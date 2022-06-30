@@ -7,4 +7,9 @@
     <color name="screen_background">#F7F9FA</color>
     <color name="text_color">#414040</color>
     <color name="options_color">#4EBDEC</color>
+    <color name="completed_color">#8BC34A</color>
+    <color name="pending_color">#FFC107</color>
+    <color name="survey_text_color">#34A7E0</color>
+    <color name="video_text_color">#F5365C</color>
+    <color name="activity_text_color">#85CA53</color>
 </resources>

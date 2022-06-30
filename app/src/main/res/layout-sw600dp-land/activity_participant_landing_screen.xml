@@ -7,46 +7,49 @@
     android:background="@drawable/splashscreen_background">
 
     <LinearLayout
+        android:id="@+id/linearLayout9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="44dp"
         android:layout_marginStart="100dp"
+        android:layout_marginTop="44dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/imageProfileCardView"-->
-<!--            android:layout_width="64dp"-->
-<!--            android:layout_height="64dp"-->
-<!--            android:layout_gravity="center"-->
-<!--            app:cardBackgroundColor="@color/white"-->
-<!--            app:cardCornerRadius="250dp">-->
+        <!--        <androidx.cardview.widget.CardView-->
+        <!--            android:id="@+id/imageProfileCardView"-->
+        <!--            android:layout_width="64dp"-->
+        <!--            android:layout_height="64dp"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            app:cardBackgroundColor="@color/white"-->
+        <!--            app:cardCornerRadius="250dp">-->
 
-<!--        </androidx.cardview.widget.CardView>-->
+        <!--        </androidx.cardview.widget.CardView>-->
 
         <TextView
             android:id="@+id/participantNameLPTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
             android:fontFamily="@font/open_sans"
+            android:gravity="center"
             android:padding="10dp"
             android:text="@string/participate_name"
             android:textColor="@color/white"
-            android:textSize="30sp"/>
+            android:textSize="30sp" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="100dp"
-        android:orientation="horizontal"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"
         android:elevation="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
+        app:layout_constraintEnd_toStartOf="@+id/logoutIcon"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
@@ -54,27 +57,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/text_color"
-            android:text="@string/english"
-            android:gravity="center"
+            android:background="@drawable/left_selected_toggle_button"
             android:elevation="10dp"
             android:fontFamily="@font/open_sans_semibold"
-            android:background="@drawable/left_selected_toggle_button"/>
+            android:gravity="center"
+            android:text="@string/english"
+            android:textColor="@color/text_color" />
 
         <Button
             android:id="@+id/kannadaLPButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/kannada"
-            android:gravity="center"
+            android:background="@drawable/right_unselected_toggle_button"
             android:elevation="10dp"
-            android:textColor="@color/text_color"
             android:fontFamily="@font/open_sans_semibold"
-            android:background="@drawable/right_unselected_toggle_button"/>
+            android:gravity="center"
+            android:text="@string/kannada"
+            android:textColor="@color/text_color" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -83,39 +87,150 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/surveyButton"
-            android:layout_width="330dp"
-            android:layout_height="330dp"
-            app:srcCompat="@drawable/survey_logo"
-            android:layout_gravity="center_vertical"
-            tools:layout_editor_absoluteX="255dp"
-            tools:layout_editor_absoluteY="323dp" />
-
-        <ImageView
-            android:id="@+id/videoButton"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/surveyCardView"
             android:layout_width="230dp"
             android:layout_height="230dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginBottom="30dp"
-            app:srcCompat="@drawable/video_logo"
+            android:layout_margin="15dp"
             android:layout_gravity="center_vertical"
-            tools:layout_editor_absoluteX="604dp"
-            tools:layout_editor_absoluteY="376dp" />
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="15dp">
 
-        <ImageView
-            android:id="@+id/activityButton"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/surveyIcon"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/survey_icon"
+                    tools:layout_editor_absoluteX="604dp"
+                    tools:layout_editor_absoluteY="376dp" />
+
+                <TextView
+                    android:id="@+id/surveyTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/survey"
+                    android:textSize="26sp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/survey_text_color"
+                    android:fontFamily="@font/open_sans_semibold"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/videoCardView"
             android:layout_width="230dp"
             android:layout_height="230dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:layout_marginStart="30dp"
+            android:layout_margin="15dp"
             android:layout_gravity="center_vertical"
-            app:srcCompat="@drawable/activity_logo"
-            tools:layout_editor_absoluteX="974dp"
-            tools:layout_editor_absoluteY="397dp" />
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="15dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/videoIcon"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/video_icon"
+                    tools:layout_editor_absoluteX="604dp"
+                    tools:layout_editor_absoluteY="376dp" />
+
+                <TextView
+                    android:id="@+id/videoTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/video"
+                    android:textSize="26sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/video_text_color"
+                    android:fontFamily="@font/open_sans_semibold"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/activityCardView"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_vertical"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="15dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/activityIcon"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/activity_icon"
+                    tools:layout_editor_absoluteX="604dp"
+                    tools:layout_editor_absoluteY="376dp" />
+
+                <TextView
+                    android:id="@+id/activityTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity"
+                    android:textSize="26sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/activity_text_color"
+                    android:fontFamily="@font/open_sans_semibold"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/logoutIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
+        app:layout_constraintEnd_toStartOf="@+id/logoutTV"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22"
+        app:srcCompat="@drawable/logout_icon" />
+
+    <TextView
+        android:id="@+id/logoutTV"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/logout"
+        android:layout_marginEnd="60dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.287" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

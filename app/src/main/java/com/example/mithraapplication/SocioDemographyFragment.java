@@ -136,7 +136,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         lessThanFiveButton.setOnClickListener(v -> {
-            participantSchooling = noSchoolingButton.getText().toString();
+            participantSchooling = lessThanFiveButton.getText().toString();
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -146,7 +146,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         fiveToSevenButton.setOnClickListener(v -> {
-            participantSchooling = noSchoolingButton.getText().toString();
+            participantSchooling = fiveToSevenButton.getText().toString();
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -188,7 +188,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
 
     public void getOccupation(){
         professionalButton.setOnClickListener(v -> {
-            participantSchooling = professionalButton.getText().toString();
+            participantOccupation = professionalButton.getText().toString();
             professionalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -198,7 +198,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         clericalButton.setOnClickListener(v -> {
-            participantSchooling = clericalButton.getText().toString();
+            participantOccupation = clericalButton.getText().toString();
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -208,7 +208,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         salesAndServicesButton.setOnClickListener(v -> {
-            participantSchooling = salesAndServicesButton.getText().toString();
+            participantOccupation = salesAndServicesButton.getText().toString();
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -218,7 +218,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         skilledManualButton.setOnClickListener(v -> {
-            participantSchooling = skilledManualButton.getText().toString();
+            participantOccupation = skilledManualButton.getText().toString();
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -228,7 +228,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         unskilledManualButton.setOnClickListener(v -> {
-            participantSchooling = unskilledManualButton.getText().toString();
+            participantOccupation = unskilledManualButton.getText().toString();
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -238,7 +238,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         agricultureButton.setOnClickListener(v -> {
-            participantSchooling = agricultureButton.getText().toString();
+            participantOccupation = agricultureButton.getText().toString();
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);

@@ -2,11 +2,17 @@ package com.example.mithraapplication.ModelClasses;
 
 public class QuestionAnswers {
     String qn_number = "NULL";
+    String qn_numberKannada = "NULL";
     String question = "NULL";
+    String questionKannada = "NULL";
     String option_1 = "NULL";
     String option_2 = "NULL";
     String option_3 = "NULL";
     String option_4 = "NULL";
+    String option_1Kannada = "NULL";
+    String option_2Kannada = "NULL";
+    String option_3Kannada = "NULL";
+    String option_4Kannada = "NULL";
 
     public String getQn_number() {
         return qn_number;
@@ -54,5 +60,53 @@ public class QuestionAnswers {
 
     public void setOption_4(String option_4) {
         this.option_4 = option_4;
+    }
+
+    public String getQuestionKannada() {
+        return questionKannada;
+    }
+
+    public void setQuestionKannada(String questionKannada) {
+        this.questionKannada = questionKannada;
+    }
+
+    public String getOption_1Kannada() {
+        return option_1Kannada;
+    }
+
+    public void setOption_1Kannada(String option_1Kannada) {
+        this.option_1Kannada = option_1Kannada;
+    }
+
+    public String getOption_2Kannada() {
+        return option_2Kannada;
+    }
+
+    public void setOption_2Kannada(String option_2Kannada) {
+        this.option_2Kannada = option_2Kannada;
+    }
+
+    public String getOption_3Kannada() {
+        return option_3Kannada;
+    }
+
+    public void setOption_3Kannada(String option_3Kannada) {
+        this.option_3Kannada = option_3Kannada;
+    }
+
+    public String getOption_4Kannada() {
+        return option_4Kannada;
+    }
+
+    public void setOption_4Kannada(String option_4Kannada) {
+        this.option_4Kannada = option_4Kannada;
+    }
+
+    public String getQn_numberKannada() {
+        return qn_numberKannada;
+    }
+
+    public void setQn_numberKannada(String qn_numberKannada) {
+        this.qn_numberKannada = qn_numberKannada;
     }
 }

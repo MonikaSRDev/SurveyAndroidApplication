@@ -7,7 +7,7 @@
     android:background="@drawable/splashscreen_background">
 
     <LinearLayout
-        android:id="@+id/linearLayout11"
+        android:id="@+id/linearLayoutParticipantVFS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/participantNameTVVP"
+            android:id="@+id/participantNameVFSTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -31,18 +31,18 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/languageLinearLayoutVideoScreen"
+        android:id="@+id/languageLinearLayoutVideoFullScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:elevation="15dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/videoCardViewVP"
-        app:layout_constraintEnd_toStartOf="@+id/logoutVPIcon"
+        app:layout_constraintBottom_toTopOf="@+id/videoCardViewVFS"
+        app:layout_constraintEnd_toStartOf="@+id/logoutVFSIcon"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/englishVPButton"
+            android:id="@+id/englishVFSButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -54,7 +54,7 @@
             android:textColor="@color/text_color" />
 
         <Button
-            android:id="@+id/kannadaVPButton"
+            android:id="@+id/kannadaVFSButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -67,30 +67,31 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/logoutVPIcon"
+        android:id="@+id/logoutVFSIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="14dp"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/videoCardViewVP"
-        app:layout_constraintEnd_toStartOf="@+id/logoutVPTV"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/videoCardViewVFS"
+        app:layout_constraintEnd_toStartOf="@+id/logoutVFSTV"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.428"
+        app:layout_constraintVertical_bias="0.373"
         app:srcCompat="@drawable/logout_icon" />
 
     <TextView
-        android:id="@+id/logoutVPTV"
+        android:id="@+id/logoutVFSTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="44dp"
         android:fontFamily="@font/open_sans"
         android:text="@string/logout"
-        app:layout_constraintBottom_toTopOf="@+id/videoCardViewVP"
+        app:layout_constraintBottom_toTopOf="@+id/videoCardViewVFS"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.468" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/videoCardViewVP"
+        android:id="@+id/videoCardViewVFS"
         android:layout_width="1100dp"
         android:layout_height="600dp"
         android:layout_gravity="center_horizontal"
@@ -107,30 +108,48 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.723">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/verticalRVVideos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="40dp"
+            android:orientation="vertical">
+
+            <VideoView
+                android:id="@+id/fullScreenVideoView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/fullScreenVideoTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/default_text"
+                android:textColor="@color/text_color"
+                android:textSize="14sp" />
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
     <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
+        android:id="@+id/backButtonVFS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutParticipantVFS"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8"
-        android:src="@drawable/back_icon"
-        tools:srcCompat="@drawable/back_icon" />
+        app:srcCompat="@drawable/back_icon" />
 
     <TextView
-        android:id="@+id/backButtonTV"
+        android:id="@+id/backButtonTVVFS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -139,8 +158,8 @@
         android:textSize="12sp"
         android:layout_marginTop="12dp"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
-        app:layout_constraintStart_toEndOf="@+id/backButton"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutParticipantVFS"
+        app:layout_constraintStart_toEndOf="@+id/backButtonVFS"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.64" />
 

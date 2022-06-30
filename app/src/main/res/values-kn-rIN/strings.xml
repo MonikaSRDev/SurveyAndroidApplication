@@ -14,9 +14,23 @@
     <string name="village_name">ಗ್ರಾಮ</string>
     <string name="shg_association">ಸ್ವ-ಸಹಾಯ ಗುಂಪು</string>
     <string name="register">ನೋಂದಣಿ</string>
-    <string name="user_name">ಬಳಕೆದಾರರ ಹೆಸರು</string>
+<!--    <string name="user_name">ಬಳಕೆದಾರರ ಹೆಸರು</string>-->
     <string name="participant_name">ಭಾಗವಹಿಸುವವರ ಹೆಸರು</string>
     <string name="add_new_participant">ಹೊಸದಾಗಿ ಭಾಗವಹಿಸುವವರನ್ನು ಸೇರಿಸಿ</string>
     <string name="participants">ಭಾಗವಹಿಸುವವರು</string>
     <string name="dashboard">ಡ್ಯಾಶ್ಬೋರ್ಡ್</string>
+    <string name="logout">ಲಾಗ್ ಔಟ್</string>
+    <string name="next">ಮುಂದಿನ ಪ್ರಶ್ನೆ</string>
+    <string name="back">ಹಿಂದೆ</string>
+    <string name="survey">ಸಮೀಕ್ಷೆ</string>
+    <string name="video">ವೀಡಿಯೊ</string>
+    <string name="activity">ಚಟುವಟಿಕೆ</string>
+    <string name="congratulation_text">ಈ ಘಟಕವನ್ನು ಪೂರ್ಣಗೊಳಿಸಿದ್ದಕ್ಕಾಗಿ ಧನ್ಯವಾದಗಳು. ನಿಮ್ಮ ಸಮಯವನ್ನು ನಾವು ಗೌರವಿಸುತ್ತೇವೆ.</string>
+    <string name="was_this_video_helpful">ಈ ವೀಡಿಯೊ ಸಹಾಯಕವಾಗಿದೆಯೇ?</string>
+    <string name="completed">ಪೂರ್ಣಗೊಂಡಿದೆ</string>
+    <string name="pending">ಬಾಕಿಯಿದೆ</string>
+    <string name="default_text">ಇದು ಪರಿಚಯಾತ್ಮಕ ವೀಡಿಯೊ.</string>
+    <string name="yes">ಹೌದು</string>
+    <string name="no">ಇಲ್ಲ</string>
+
 </resources>

@@ -33,20 +33,6 @@ public class MithraUtility extends Application {
     }
 
     /**
-     * @param selectedLanguage
-     * Description : This method is used to change the content of the screen to user selected language
-     */
-    public void changeLocalLanguage(String selectedLanguage){
-        Locale myLocale = new Locale(selectedLanguage);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.setLocale(myLocale);
-        res.updateConfiguration(conf, dm);
-        onConfigurationChanged(conf);
-    }
-
-    /**
      * Description : Get the current time of the user device for calculation of duration taken to complete the survey
      */
     public String getCurrentTime(){

@@ -57,9 +57,11 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
                 String userName = !userNameET.getText().toString().equals("") ? userNameET.getText().toString() : "NULL";
                 String password = !userPasswordET.getText().toString().equals("") ? userPasswordET.getText().toString() : "NULL";
 
-//                moveToParticipantLandingPage();
+
                 if(!userName.equals("NULL") && !password.equals("NULL")){
-                    callServerForUserLogin(userName, password);
+//                    callServerForUserLogin(userName, password);
+                    moveToParticipantLandingPage(userName);
+                    mithraUtility.putSharedPreferencesData(LoginScreen.this, getString(R.string.user_name), getString(R.string.user_name_participant), userName);
                 }else if(userName.equals("NULL") && !password.equals("NULL")){
                     userNameET.setError("Please enter username.");
                 }else if(!userName.equals("NULL") && password.equals("NULL")){
@@ -76,8 +78,9 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
     /**
      * Description : This method is used to move to the participant landing page if the user is a participant
      */
-    private void moveToParticipantLandingPage(){
+    private void moveToParticipantLandingPage(String userName){
         Intent loginIntent = new Intent(LoginScreen.this, ParticipantLandingScreen.class);
+        loginIntent.putExtra("FromActivity", "LoginScreen");
         startActivity(loginIntent);
         finish();
     }
@@ -120,7 +123,7 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
             mithraUtility.putSharedPreferencesData(this, getString(R.string.user_role), getString(R.string.user_role), userLogins.get(0).getUserRole());
             if(userLogins.get(0).getUserRole().equals("participant")){
                 mithraUtility.putSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
-                moveToParticipantLandingPage();
+                moveToParticipantLandingPage(userLogins.get(0).getUserName());
             }else if(userLogins.get(0).getUserRole().equals("coordinator")){
                 mithraUtility.putSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator), userLogins.get(0).getUserName());
                 moveToCoordinatorDashboard();

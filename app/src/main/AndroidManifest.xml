@@ -19,11 +19,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".VideoFeedbackScreen"
+            android:exported="false"
+            android:screenOrientation="landscape"/>
+        <activity
             android:name=".ActivitiesScreen"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".VideoScreen"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".FullScreenVideoView"
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".SplashScreen"
             android:exported="true"

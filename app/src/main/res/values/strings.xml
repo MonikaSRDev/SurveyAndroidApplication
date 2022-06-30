@@ -72,5 +72,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="child_members">Number of Child \nFamily Members</string>
     <string name="less_than_five"><![CDATA[< 5]]></string>
+    <string name="logout">Logout</string>
+    <string name="back">Back</string>
+    <string name="survey">Survey</string>
+    <string name="video">Video</string>
+    <string name="activity">Activity</string>
+    <string name="was_this_video_helpful">Was this video helpful?</string>
+    <string name="completed">Completed</string>
+    <string name="pending">Pending</string>
+    <string name="default_text">This is an introductory video.</string>
 
 </resources>

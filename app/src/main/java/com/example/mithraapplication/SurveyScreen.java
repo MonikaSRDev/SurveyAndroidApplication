@@ -3,12 +3,15 @@ package com.example.mithraapplication;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.LocaleList;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -33,12 +36,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class SurveyScreen extends AppCompatActivity implements HandleServerResponse {
 
-    private TextView participantName;
+    private TextView participantName, congratulationTV;
     private TextView questionNumber, totalQuestions, ph9Question, option_oneTV, option_twoTV, option_threeTV, option_fourTV;
-    private Button nextButton;
+    private Button nextButton, englishButton, kannadaButton;
     private ImageButton optionImageButtonOne, optionImageButtonTwo, optionImageButtonThree, optionImageButtonFour;
     private View option_view_one, option_view_two, option_view_three, option_view_four;
     private int questionIndex = 0;
@@ -50,50 +54,159 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private String surveyAnswers = "{";
 //    private ArrayList<String surveyPHQ9 = "NULL";
     private MithraUtility mithraUtility = new MithraUtility();
+    private String selectedLanguage = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_screen);
         RegisterViews();
-//        initializeData();
-//        startDateTime = mithraUtility.getCurrentTime();
-//        setCardData();
+        initializeData();
+        startDateTime = mithraUtility.getCurrentTime();
+        setCardData();
         getSelectedOption();
         onClickNextButton();
-        callServerToGetPHQ9Questions();
+        onClickOfLanguageButton();
+        getCurrentLocale();
+//        callServerToGetPHQ9Questions();
     }
 
     private void initializeData() {
-        QuestionAnswers questionAnswers = new QuestionAnswers();
-        questionAnswers.setQuestion("ABC");
-        questionAnswers.setQn_number("1");
-        questionAnswers.setOption_1("option 1");
-        questionAnswers.setOption_2("option 2");
-        questionAnswers.setOption_3("option 3");
-        questionAnswers.setOption_4("option 4");
+        String message = "{\"message\":\n" +
+                "\t[\n" +
+                "\t\t{\"qn_number\":\"9\",\n" +
+                "\t\t\"question\":\"Thoughts that you would be better off dead, or of hurting yourself. \",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several Days\",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"Nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೯\",\n" +
+                "\t\t\"questionKannada\":\"ನೀವು ಸತ್ತರೆ ಚೆನ್ನಾಗಿರುತ್ತದೆ ಎಂಬ ಅಥವಾ ಯಾವುದಾದರೂ ರೀತಿಯಲ್ಲಿ ನಿಮ್ಮನ್ನು ಹಾನಿಪಡಿಸಿಕೊಳ್ಳುವ ಯೋಚನೆಗಳು.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"},\n" +
+                "\t\t\n" +
+                "\t\t{\"qn_number\":\"8\",\n" +
+                "\t\t\"question\":\"Moving or speaking so slowly that other people could have noticed. Or the opposite being so fidgety or restless that you have been moving around a lot more than usual. \\n\",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several Days\",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೮\",\n" +
+                "\t\t\"questionKannada\":\"ಇತರರ ಗಮನಕ್ಕೆ ಬರುವಷ್ಟು ನಿದಾನವಾಗಿ ನಡೆದಾಡುವುದು ಅಥವಾ ಮಾತನಾಡುವುದು? ಅಥವಾ ತದ್ವಿರುದ್ಧವಾಗಿ - ಸಾಮಾನ್ಯಕ್ಕಿಂತ ಹೆಚ್ಚು ಅತ್ತಿಂದಿತ್ತ ಓಡಾಡುವಷ್ಟು ಚಡಪಡಿಕೆ ಅಥವಾ ಅಶಾಂತಿ.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"},\n" +
+                "\t\t\n" +
+                "\t\t{\"qn_number\":\"7\",\n" +
+                "\t\t\"question\":\"Trouble concentrating on things, such as reading the newspaper or watching television.  \",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several Days \",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"Nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೭\",\n" +
+                "\t\t\"questionKannada\":\"ಪತ್ರಿಕೆಯನ್ನ ಓದಲು ಅಥವಾ ಟೆಲಿವಿಷನ್ ನೋಡುವುದು ಇತ್ಯಾದಿ ವಿಷಯಗಳಲ್ಲಿ ಗಮನ ಕೇಂದ್ರೀಕರಿಸಲು ತೊಂದರೆ.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"},\n" +
+                "\n" +
+                "\t\t{\"qn_number\":\"6\",\n" +
+                "\t\t\"question\":\"Feeling bad about yourself or that you are a failure or have let yourself or your family down.\",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several Days\",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"Nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೬\",\n" +
+                "\t\t\"questionKannada\":\"ನಿಮ್ಮ ಬಗ್ಗೆ ನಿಮಗೆ ಕೆಟ್ಟ ಭಾವನೆ - ಅಥವಾ ನೀವು ವಿಫಲರು ಅಥವಾ ನೀವು ನಿಮ್ಮ ಹಾಗು ಕುಟುಂಬದವರ ನಿರೀಕ್ಷೆಗಿಂತ ಕೆಳಮಟ್ಟದಲ್ಲಿದ್ದೀರಿ ಎಂಬ ಭಾವನೆ.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"},\n" +
+                "\n" +
+                "\t\t{\"qn_number\":\"5\",\n" +
+                "\t\t\"question\":\"Poor appetite or over eating\",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several Days\",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"Nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೫\",\n" +
+                "\t\t\"questionKannada\":\"ಕಡಿಮೆ ಹಸಿವು ಅಥವಾ ಅತಿಯಾಗಿ ತಿನ್ನುವುದು.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"},\n" +
+                "\n" +
+                "\t\t{\"qn_number\":\"4\",\n" +
+                "\t\t\"question\":\"Feeling tired or having little energy.\",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several Days\",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"Nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೪\",\n" +
+                "\t\t\"questionKannada\":\"ಆಯಾಸಗೊಳ್ಳುವುದು ಅಥವಾ ಚೈತನ್ಯ ಇಲ್ಲದಿರುವುದು.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"},\n" +
+                "\n" +
+                "\t\t{\"qn_number\":\"3\",\n" +
+                "\t\t\"question\":\"Trouble falling or staying asleep, or sleeping too much\",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several Days\",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"Nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೩\",\n" +
+                "\t\t\"questionKannada\":\"ನಿದ್ರೆ ಬರುವದು ಅಥವಾ ನಿದ್ರೆಯಲ್ಲಿರುವುದಕ್ಕೆ ತೊಂದರೆ ಅಥವಾ ಅತಿಯಾಗಿ ನಿದ್ರೆ ಮಾಡುವುದು.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"},\n" +
+                "\n" +
+                "\t\t{\"qn_number\":\"1\",\n" +
+                "\t\t\"question\":\"Little interest or pleasure in doing things.\",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several Days\",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"Nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೧\",\n" +
+                "\t\t\"questionKannada\":\"ಕೆಲಸಗಳನ್ನು ಮಾಡುವುದರಲ್ಲಿ ಕಡಿಮೆ ಆಸಕ್ತಿ ಅಥವಾ ಆನಂದ.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"},\n" +
+                "\n" +
+                "\t\t{\"qn_number\":\"2\",\n" +
+                "\t\t\"question\":\"Feeling down, depressed, or hopeless.\",\n" +
+                "\t\t\"option_1\":\"Not at all\",\n" +
+                "\t\t\"option_2\":\"Several days\",\n" +
+                "\t\t\"option_3\":\"More than half the days\",\n" +
+                "\t\t\"option_4\":\"Nearly every day\",\n" +
+                "\t\t\"qn_numberKannada\":\"೨\",\n" +
+                "\t\t\"questionKannada\":\"ಬೇಸರ, ಖಿನ್ನತೆ ಅಥವಾ ಹತಾಶೆ.\",\n" +
+                "\t\t\"option_1Kannada\":\"ಇಲ್ಲವೇ ಇಲ್ಲ\",\n" +
+                "\t\t\"option_2Kannada\":\"ಹಲವು ದಿನಗಳು\",\n" +
+                "\t\t\"option_3Kannada\":\"ಅರ್ಧಕ್ಕಿಂತ ಹೆಚ್ಚು ದಿನಗಳು\",\n" +
+                "\t\t\"option_4Kannada\":\"ಬಹುತೇಕ ಪ್ರತಿದಿನ\"}]}";
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<QuestionAnswers>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        ArrayList<QuestionAnswers> questionAnswersArrayList = new ArrayList<>();
 
-        questionArray.add(questionAnswers);
-
-        QuestionAnswers questionAnswers1 = new QuestionAnswers();
-        questionAnswers1.setQuestion("DEF");
-        questionAnswers1.setQn_number("2");
-        questionAnswers1.setOption_1("option 1");
-        questionAnswers1.setOption_2("option 2");
-        questionAnswers1.setOption_3("option 3");
-        questionAnswers1.setOption_4("option 4");
-
-        questionArray.add(questionAnswers1);
-
-        QuestionAnswers questionAnswers2 = new QuestionAnswers();
-        questionAnswers2.setQuestion("GHI");
-        questionAnswers2.setQn_number("3");
-        questionAnswers2.setOption_1("option 1");
-        questionAnswers2.setOption_2("option 2");
-        questionAnswers2.setOption_3("option 3");
-        questionAnswers2.setOption_4("option 4");
-
-        questionArray.add(questionAnswers2);
+        try{
+            questionAnswersArrayList = gson.fromJson(jsonObject.get("message"), type);
+            if(questionAnswersArrayList.size() > 1){
+                questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
+                Log.i("SurveyScreen", "responseReceivedSuccessfully : " +questionAnswersArrayList);
+                questionArray = questionAnswersArrayList;
+                startDateTime = mithraUtility.getCurrentTime();
+                setCardData();
+            }
+        }catch(Exception e){
+            Toast.makeText(this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -125,6 +238,11 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         option_view_two = findViewById(R.id.option_two_view);
         option_view_three = findViewById(R.id.option_three_view);
         option_view_four = findViewById(R.id.option_four_view);
+
+        englishButton = findViewById(R.id.englishQuestionButton);
+        kannadaButton = findViewById(R.id.kannadaQuestionButton);
+
+        congratulationTV = findViewById(R.id.congratulateTV);
 
         enableDisableButton(false);
     }
@@ -239,18 +357,29 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      */
     private void setCardData() {
         if(questionIndex < questionArray.size()){
-            ph9Question.setText(questionArray.get(questionIndex).getQuestion());
-            totalQuestions.setText("of " + questionArray.size() +"");
-            questionNumber.setText(questionArray.get(questionIndex).getQn_number());
-            option_oneTV.setText(questionArray.get(questionIndex).getOption_1());
-            option_twoTV.setText(questionArray.get(questionIndex).getOption_2());
-            option_threeTV.setText(questionArray.get(questionIndex).getOption_3());
-            option_fourTV.setText(questionArray.get(questionIndex).getOption_4());
+            if(selectedLanguage.equals("1")){
+                ph9Question.setText(questionArray.get(questionIndex).getQuestion());
+                totalQuestions.setText("of " + questionArray.size() +"");
+                questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+                option_oneTV.setText(questionArray.get(questionIndex).getOption_1());
+                option_twoTV.setText(questionArray.get(questionIndex).getOption_2());
+                option_threeTV.setText(questionArray.get(questionIndex).getOption_3());
+                option_fourTV.setText(questionArray.get(questionIndex).getOption_4());
+            }else{
+                ph9Question.setText(questionArray.get(questionIndex).getQuestionKannada());
+                totalQuestions.setText("of " + questionArray.size() +"");
+                questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+                option_oneTV.setText(questionArray.get(questionIndex).getOption_1Kannada());
+                option_twoTV.setText(questionArray.get(questionIndex).getOption_2Kannada());
+                option_threeTV.setText(questionArray.get(questionIndex).getOption_3Kannada());
+                option_fourTV.setText(questionArray.get(questionIndex).getOption_4Kannada());
+            }
+
         }
         else{
             endDateTime = mithraUtility.getCurrentTime();
             showCongratulationAlert();
-            callServerForPostSurveyAnswers();
+//            callServerForPostSurveyAnswers();
             waitAndMoveToAnotherActivity();
         }
     }
@@ -287,6 +416,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 if(dialog.isShowing()){
                     dialog.dismiss();
                     Intent loginIntent = new Intent(SurveyScreen.this, ParticipantLandingScreen.class);
+                    loginIntent.putExtra("FromActivity", "SurveyScreen");
                     startActivity(loginIntent);
                     finish();
                 }
@@ -379,11 +509,101 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     /**
+     * Description : This method is used to change the language of the screen based on the button clicked
+     */
+    private void onClickOfLanguageButton(){
+        englishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedLanguage = "1";
+                englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButton.setTextColor(getResources().getColor(R.color.black));
+                kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButton.setTextColor(getResources().getColor(R.color.black));
+                changeLocalLanguage("en");
+            }
+        });
+
+        kannadaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedLanguage = "2";
+                kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButton.setTextColor(getResources().getColor(R.color.black));
+                englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButton.setTextColor(getResources().getColor(R.color.black));
+                changeLocalLanguage("kn");
+            }
+        });
+    }
+
+    /**
+     * @param selectedLanguage
+     * Description : This method is used to change the content of the screen to user selected language
+     */
+    public void changeLocalLanguage(String selectedLanguage){
+        Locale myLocale = new Locale(selectedLanguage);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(myLocale);
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    public void getCurrentLocale(){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        LocaleList lang = conf.getLocales();
+        if(lang.get(0).getLanguage().equals("kn")){
+            selectedLanguage = "2";
+            kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+        }else{
+            selectedLanguage = "1";
+            englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+        }
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    /**
      * @param newConfig
      * Description : This method is used to update the views on change of language
      */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        nextButton.setText(R.string.next);
+        if(congratulationTV!=null){
+            congratulationTV.setText(R.string.congratulation_text);
+        }
+        if(selectedLanguage.equals("1")){
+            ph9Question.setText(questionArray.get(questionIndex).getQuestion());
+            totalQuestions.setText("of " + questionArray.size() +"");
+            questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+            option_oneTV.setText(questionArray.get(questionIndex).getOption_1());
+            option_twoTV.setText(questionArray.get(questionIndex).getOption_2());
+            option_threeTV.setText(questionArray.get(questionIndex).getOption_3());
+            option_fourTV.setText(questionArray.get(questionIndex).getOption_4());
+        }else{
+            ph9Question.setText(questionArray.get(questionIndex).getQuestionKannada());
+            totalQuestions.setText("of " + questionArray.size() +"");
+            questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+            option_oneTV.setText(questionArray.get(questionIndex).getOption_1Kannada());
+            option_twoTV.setText(questionArray.get(questionIndex).getOption_2Kannada());
+            option_threeTV.setText(questionArray.get(questionIndex).getOption_3Kannada());
+            option_fourTV.setText(questionArray.get(questionIndex).getOption_4Kannada());
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }
