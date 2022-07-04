@@ -3,7 +3,6 @@
     <string name="app_name">MithraApplication</string>
     <string name="name_small_case">ಹೆಸರು</string>
     <string name="kannada">ಕನ್ನಡ</string>
-    <string name="password">ಕೀಲಿಪದ</string>
     <string name="confirm_password">ಹೊಸ ಕೀಲಿಪದ ಖಚಿತ ಪಡಿಸಿ</string>
     <string name="gender">"ಲಿಂಗ "</string>
     <string name="male">"ಪುಲ್ಲಿಂಗ "</string>
@@ -32,5 +31,6 @@
     <string name="default_text">ಇದು ಪರಿಚಯಾತ್ಮಕ ವೀಡಿಯೊ.</string>
     <string name="yes">ಹೌದು</string>
     <string name="no">ಇಲ್ಲ</string>
+    <string name="opinion_toast">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯಕ್ಕೆ ಧನ್ಯವಾದಗಳು.</string>
 
 </resources>

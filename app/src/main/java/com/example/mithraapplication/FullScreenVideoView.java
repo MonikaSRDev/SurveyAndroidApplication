@@ -21,7 +21,9 @@ import android.os.LocaleList;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,6 +31,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,10 +40,10 @@ import com.example.mithraapplication.ModelClasses.SingleVideo;
 
 import java.util.Locale;
 
-public class FullScreenVideoView extends AppCompatActivity {
+public class FullScreenVideoView extends AppCompatActivity{
 
-    private ImageView backButton, logoutButton;
-    private TextView backTV, logoutTV, participantName;
+    private ImageView backButton, logoutButton, videoPlayButton, videoPauseButton, videoBackwardButton;
+    private TextView backTV, logoutTV, participantName, videoModuleNameTV;
     private Button englishButton, kannadaButton;
     private VideoView videoViewFullScreen;
     private MithraUtility mithraUtility = new MithraUtility();
@@ -56,6 +59,10 @@ public class FullScreenVideoView extends AppCompatActivity {
         onClickOfLogoutButton();
         onClickOfLanguageButton();
         getCurrentLocale();
+        onClickOfVideoPlayButton();
+        onClickOfVideoPauseButton();
+//        onClickOfBackwardButton();
+        onTouchVideoEvent();
 
         pos = getIntent().getIntExtra("ModulePosition", 0);
         position = getIntent().getIntExtra("VideoPosition", 0);
@@ -66,9 +73,16 @@ public class FullScreenVideoView extends AppCompatActivity {
         String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant));
         participantName = findViewById(R.id.participantNameVFSTV);
         participantName.setText(participantUserName);
+        videoModuleNameTV = findViewById(R.id.videoModuleNameTV);
+        videoModuleNameTV.setText(videoModulesArrayList.get(pos).getVideoModuleName());
 
         backButton = findViewById(R.id.backButtonVFS);
         logoutButton = findViewById(R.id.logoutVFSIcon);
+        videoPlayButton = findViewById(R.id.fullScreenVideoPlayButton);
+        videoPauseButton = findViewById(R.id.fullScreenVideoPauseButton);
+        videoPauseButton.setVisibility(View.GONE);
+        videoBackwardButton = findViewById(R.id.fullScreenBackwardButton);
+        videoBackwardButton.setVisibility(View.GONE);
 
         logoutTV = findViewById(R.id.logoutVFSTV);
         backTV = findViewById(R.id.backButtonTVVFS);
@@ -78,11 +92,10 @@ public class FullScreenVideoView extends AppCompatActivity {
 
         videoViewFullScreen = findViewById(R.id.fullScreenVideoView);
         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.mithra_introduction_video);
-        MediaController mc = new MediaController(this);
-        videoViewFullScreen.setMediaController(mc);
+//        MediaController mc = new MediaController(this);
+//        videoViewFullScreen.setMediaController(mc);
         videoViewFullScreen.setVideoURI(uri);
         videoViewFullScreen.requestFocus();
-        videoViewFullScreen.start();
         videoViewFullScreen.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
             @Override
@@ -95,6 +108,108 @@ public class FullScreenVideoView extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void onClickOfVideoPlayButton(){
+        videoPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                videoViewFullScreen.start();
+                videoPlayButton.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void onClickOfVideoPauseButton(){
+        videoPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                videoViewFullScreen.pause();
+                videoPauseButton.setVisibility(View.GONE);
+                videoBackwardButton.setVisibility(View.GONE);
+                videoPlayButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void onClickOfBackwardButton(){
+        videoBackwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = videoViewFullScreen.getCurrentPosition();
+                videoViewFullScreen.seekTo(position - 10000);
+            }
+        });
+    }
+
+    private void onTouchVideoEvent(){
+        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                int position = videoViewFullScreen.getCurrentPosition();
+                videoViewFullScreen.seekTo(position - 10000);
+                return true;
+            }
+
+            public boolean onSingleTapUp(MotionEvent e) {
+                if(e.getAction() == MotionEvent.ACTION_UP){
+                    if(videoPlayButton.getVisibility() == View.VISIBLE){
+                        videoPauseButton.setVisibility(View.GONE);
+                        videoBackwardButton.setVisibility(View.GONE);
+                    } else{
+                        videoPauseButton.setVisibility(View.VISIBLE);
+                        videoBackwardButton.setVisibility(View.VISIBLE);
+                        new Handler().postDelayed(new Runnable() {
+                            // Using handler with postDelayed called runnable run method
+                            @Override
+                            public void run() {
+                                videoPauseButton.setVisibility(View.GONE);
+                                videoBackwardButton.setVisibility(View.GONE);
+                            }
+                        }, 2*1000);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+//        videoViewFullScreen.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                    if(videoPlayButton.getVisibility() == View.VISIBLE){
+//                        videoPauseButton.setVisibility(View.GONE);
+//                        videoBackwardButton.setVisibility(View.GONE);
+//                    } else{
+//                        videoPauseButton.setVisibility(View.VISIBLE);
+//                        videoBackwardButton.setVisibility(View.VISIBLE);
+//                        new Handler().postDelayed(new Runnable() {
+//                            // Using handler with postDelayed called runnable run method
+//                            @Override
+//                            public void run() {
+//                                videoPauseButton.setVisibility(View.GONE);
+//                                videoBackwardButton.setVisibility(View.GONE);
+//                            }
+//                        }, 2*1000);
+//                    }
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+
+        videoViewFullScreen.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
     }
 
     private Bitmap generateThumbnailForVideo(){
@@ -118,7 +233,7 @@ public class FullScreenVideoView extends AppCompatActivity {
                 imageViewThumbnail.setBackground(new BitmapDrawable(getResources(), generateThumbnailForVideo()));
             }
 
-            dialog.setView(customLayout).create();
+            dialog.setView(customLayout);
             dialog.setCancelable(false);
 
             AlertDialog alertDialog = dialog.create();
@@ -128,6 +243,7 @@ public class FullScreenVideoView extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //do something when clicked
+                    Toast.makeText(FullScreenVideoView.this, getString(R.string.opinion_toast), Toast.LENGTH_LONG).show();
                     alertDialog.dismiss();
                     Intent loginIntent = new Intent(FullScreenVideoView.this, VideoScreen.class);
                     loginIntent.putExtra("FromActivity", "FullScreenVideoView");
@@ -140,6 +256,7 @@ public class FullScreenVideoView extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //do something when clicked
+                    Toast.makeText(FullScreenVideoView.this, getString(R.string.opinion_toast), Toast.LENGTH_LONG).show();
                     alertDialog.dismiss();
                     Intent loginIntent = new Intent(FullScreenVideoView.this, VideoScreen.class);
                     loginIntent.putExtra("FromActivity", "FullScreenVideoView");
@@ -158,10 +275,29 @@ public class FullScreenVideoView extends AppCompatActivity {
                 finish();
             }
         });
+
+        backTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FullScreenVideoView.this, VideoScreen.class);
+                intent.putExtra("FromActivity", "FullScreenVideoView");
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void onClickOfLogoutButton(){
         logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FullScreenVideoView.this, LoginScreen.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        logoutTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FullScreenVideoView.this, LoginScreen.class);

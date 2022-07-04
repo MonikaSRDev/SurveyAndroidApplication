@@ -33,7 +33,6 @@
             android:layout_gravity="center"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
-            android:padding="10dp"
             android:text="@string/participate_name"
             android:textColor="@color/white"
             android:textSize="30sp" />
@@ -214,23 +213,23 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="14dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
         app:layout_constraintEnd_toStartOf="@+id/logoutTV"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22"
+        app:layout_constraintVertical_bias="0.263"
         app:srcCompat="@drawable/logout_icon" />
 
     <TextView
         android:id="@+id/logoutTV"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="36dp"
         android:fontFamily="@font/open_sans"
         android:text="@string/logout"
-        android:layout_marginEnd="60dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.287" />
+        app:layout_constraintVertical_bias="0.314" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,9 +4,13 @@ import static com.example.mithraapplication.VideoScreen.videoModulesArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +20,14 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 import java.util.ArrayList;
+
+import jp.wasabeef.blurry.Blurry;
 
 public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideoAdapter.ViewHolder> {
 
@@ -42,30 +50,38 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
         this.pos = pos;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     public void onBindViewHolder(@NonNull HorizontalVideoAdapter.ViewHolder holder, int position) {
-        holder.singleVideoViewThumbnail.setImageBitmap(generateThumbnailForVideo(singleVideoArrayList.get(position).getVideoPath()));
+        holder.singleVideoViewThumbnail.setImageBitmap(generateThumbnailForVideo());
         if(singleVideoArrayList.get(position).getVideoStatus().equals("Completed")){
             holder.videoStatusTV.setText(R.string.completed);
             holder.videoStatusTV.setTextColor(context.getResources().getColor(R.color.completed_color));
             holder.videoStatusIcon.setImageDrawable(context.getDrawable(R.drawable.completed_icon));
             onClickOfVideoPlayButton(holder, singleVideoArrayList.get(position));
-            holder.videoPlayButton.setEnabled(true);
+            holder.videoCardView.setEnabled(true);
+            holder.imageOverlayCardView.setVisibility(View.GONE);
         }else{
             holder.videoStatusTV.setText(R.string.pending);
             holder.videoStatusTV.setTextColor(context.getResources().getColor(R.color.pending_color));
             holder.videoStatusIcon.setImageDrawable(context.getDrawable(R.drawable.pending_icon));
-            holder.videoPlayButton.setEnabled(false);
+            holder.videoCardView.setEnabled(false);
+            holder.imageOverlayCardView.setVisibility(View.VISIBLE);
+
+//            RenderEffect blurEffect = RenderEffect.createBlurEffect(16, 16, Shader.TileMode.MIRROR);
+//            holder.videoCardView.setRenderEffect(blurEffect);
+//            Blurry.with(context).sampling(2).onto(holder.videoCardView);
         }
 
         if(singleVideoArrayList.get(position).isVideoPlayed()){
             onClickOfVideoPlayButton(holder, singleVideoArrayList.get(position));
-            holder.videoPlayButton.setEnabled(true);
+            holder.videoCardView.setEnabled(true);
+            holder.imageOverlayCardView.setVisibility(View.GONE);
         }
 
     }
 
-    private Bitmap generateThumbnailForVideo(String path){
+    private Bitmap generateThumbnailForVideo(){
         Uri uri = Uri.parse("android.resource://"+context.getPackageName()+"/"+R.raw.mithra_introduction_video);
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(context.getApplicationContext(), uri);
@@ -74,7 +90,7 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
     }
 
     private void onClickOfVideoPlayButton(ViewHolder holder, SingleVideo singleVideo) {
-        holder.videoPlayButton.setOnClickListener(new View.OnClickListener() {
+        holder.videoCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, FullScreenVideoView.class);
@@ -95,6 +111,8 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
         ImageView singleVideoViewThumbnail, videoPlayButton;
         TextView videoDescription, videoStatusTV;
         ImageView videoStatusIcon;
+        CardView videoCardView;
+        View imageOverlayCardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,6 +122,8 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
             videoDescription = itemView.findViewById(R.id.videoDescription);
             videoStatusTV = itemView.findViewById(R.id.videoStatusTV);
             videoStatusIcon = itemView.findViewById(R.id.videoStatusIcon);
+            videoCardView = itemView.findViewById(R.id.videoCardView);
+            imageOverlayCardView = itemView.findViewById(R.id.imageOverlayCardView);
         }
     }
 }

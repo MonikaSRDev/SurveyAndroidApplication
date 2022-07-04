@@ -81,5 +81,6 @@
     <string name="completed">Completed</string>
     <string name="pending">Pending</string>
     <string name="default_text">This is an introductory video.</string>
+    <string name="opinion_toast">Thank you for your opinion.</string>
 
 </resources>

@@ -63,6 +63,9 @@
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/drawable/tab_indicator_selector_participant.xml" value="0.1185" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/drawable/vector1.xml" value="0.1165" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/drawable/vector2.xml" value="0.1165" />
+        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/drawable/video_backward_icon.xml" value="0.111" />
+        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/drawable/video_pause_icon.xml" value="0.111" />
+        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/drawable/video_play_icon.xml" value="0.111" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/drawable/whitebackgr.xml" value="0.1165" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/drawable/yes_no_button.xml" value="0.115" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/font/open_sans_bold.xml" value="0.1" />
@@ -73,7 +76,7 @@
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_disease_profile_screen.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_login_screen.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_login_successful.xml" value="0.13168724279835392" />
-        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_participant_landing_screen.xml" value="0.1" />
+        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_participant_landing_screen.xml" value="0.1325102880658436" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_participant_screen.xml" value="0.13333333333333333" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_participant_status_screen.xml" value="0.13168724279835392" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_participants_screen.xml" value="0.1325102880658436" />
@@ -84,7 +87,7 @@
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_survey_screen.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_user_dashboard.xml" value="0.13168724279835392" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_video_feedback_screen.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_video_screen.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/activity_video_screen.xml" value="0.12" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/custom_card_layout.xml" value="0.1325102880658436" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/disease_profile_row.xml" value="0.1" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/fragment_disease_profile_screen.xml" value="0.1325102880658436" />
@@ -95,7 +98,7 @@
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/participant_row.xml" value="0.13168724279835392" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/participant_tab_item.xml" value="0.1" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/question_card_screen.xml" value="0.16625916870415647" />
-        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/video_full_screen_view.xml" value="0.1" />
+        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp-land/video_full_screen_view.xml" value="0.1325102880658436" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp/activity_login_screen.xml" value="0.1325102880658436" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-sw600dp/activity_splash_screen.xml" value="0.1419753086419753" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout-xlarge-land/custom_card_layout.xml" value="0.14666666666666667" />
@@ -130,7 +133,7 @@
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout/participant_row.xml" value="0.1" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout/participant_tab_item.xml" value="0.1" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout/question_card_screen.xml" value="0.1" />
-        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout/single_video_row.xml" value="0.1" />
+        <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout/single_video_row.xml" value="0.5" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout/spinner_item.xml" value="0.1" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/layout/video_full_screen_view.xml" value="0.1" />
         <entry key="..\:/Users/monik/AndroidStudioProjects/MithraApplication/app/src/main/res/menu/menu_user.xml" value="0.4466666666666667" />

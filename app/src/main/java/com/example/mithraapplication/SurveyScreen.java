@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private Button nextButton, englishButton, kannadaButton;
     private ImageButton optionImageButtonOne, optionImageButtonTwo, optionImageButtonThree, optionImageButtonFour;
     private View option_view_one, option_view_two, option_view_three, option_view_four;
+    private LinearLayout option1LinearLayout, option2LinearLayout, option3LinearLayout, option4LinearLayout;
     private int questionIndex = 0;
     private int selectedOptionValue = 0;
     private ArrayList<QuestionAnswers> questionArray = new ArrayList<>();
@@ -244,6 +246,11 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
 
         congratulationTV = findViewById(R.id.congratulateTV);
 
+        option1LinearLayout = findViewById(R.id.option_one_linearLayout);
+        option2LinearLayout = findViewById(R.id.option_two_linearLayout);
+        option3LinearLayout = findViewById(R.id.option_three_linearLayout);
+        option4LinearLayout = findViewById(R.id.option_four_linearLayout);
+
         enableDisableButton(false);
     }
 
@@ -251,80 +258,124 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      * Description : Get the option selected by the participant and assign weightage to it.
      */
     private void getSelectedOption(){
+        option1LinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickOfOptionOne();
+            }
+        });
+
+        option2LinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               onClickOfOptionTwo();
+            }
+        });
+
+        option3LinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickOfOptionThree();
+            }
+        });
+
+        option4LinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickOfOptionFour();
+            }
+        });
+
         optionImageButtonOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedOptionValue = 1;
-                option_view_one.setVisibility(View.VISIBLE);
-                option_view_two.setVisibility(View.INVISIBLE);
-                option_view_three.setVisibility(View.INVISIBLE);
-                option_view_four.setVisibility(View.INVISIBLE);
-
-                option_oneTV.setTextColor(getResources().getColor(R.color.options_color));
-                option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
-
-                enableDisableButton(true);
+                onClickOfOptionOne();
             }
         });
 
         optionImageButtonTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedOptionValue = 2;
-
-                option_view_one.setVisibility(View.INVISIBLE);
-                option_view_two.setVisibility(View.VISIBLE);
-                option_view_three.setVisibility(View.INVISIBLE);
-                option_view_four.setVisibility(View.INVISIBLE);
-
-                option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_twoTV.setTextColor(getResources().getColor(R.color.options_color));
-                option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
-
-                enableDisableButton(true);
+                onClickOfOptionTwo();
             }
         });
 
         optionImageButtonThree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedOptionValue = 3;
-
-                option_view_one.setVisibility(View.INVISIBLE);
-                option_view_two.setVisibility(View.INVISIBLE);
-                option_view_three.setVisibility(View.VISIBLE);
-                option_view_four.setVisibility(View.INVISIBLE);
-
-                option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_threeTV.setTextColor(getResources().getColor(R.color.options_color));
-                option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
-
-                enableDisableButton(true);
+                onClickOfOptionThree();
             }
         });
 
         optionImageButtonFour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedOptionValue = 4;
-
-                option_view_one.setVisibility(View.INVISIBLE);
-                option_view_two.setVisibility(View.INVISIBLE);
-                option_view_three.setVisibility(View.INVISIBLE);
-                option_view_four.setVisibility(View.VISIBLE);
-
-                option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_fourTV.setTextColor(getResources().getColor(R.color.options_color));
-
-                enableDisableButton(true);
+                onClickOfOptionFour();
             }
         });
+    }
+
+    private void onClickOfOptionOne() {
+        selectedOptionValue = 0;
+        option_view_one.setVisibility(View.VISIBLE);
+        option_view_two.setVisibility(View.INVISIBLE);
+        option_view_three.setVisibility(View.INVISIBLE);
+        option_view_four.setVisibility(View.INVISIBLE);
+
+        option_oneTV.setTextColor(getResources().getColor(R.color.options_color));
+        option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
+
+        enableDisableButton(true);
+    }
+
+    private void onClickOfOptionTwo() {
+        selectedOptionValue = 1;
+
+        option_view_one.setVisibility(View.INVISIBLE);
+        option_view_two.setVisibility(View.VISIBLE);
+        option_view_three.setVisibility(View.INVISIBLE);
+        option_view_four.setVisibility(View.INVISIBLE);
+
+        option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_twoTV.setTextColor(getResources().getColor(R.color.options_color));
+        option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
+
+        enableDisableButton(true);
+    }
+
+    private void onClickOfOptionThree() {
+        selectedOptionValue = 2;
+
+        option_view_one.setVisibility(View.INVISIBLE);
+        option_view_two.setVisibility(View.INVISIBLE);
+        option_view_three.setVisibility(View.VISIBLE);
+        option_view_four.setVisibility(View.INVISIBLE);
+
+        option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_threeTV.setTextColor(getResources().getColor(R.color.options_color));
+        option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
+
+        enableDisableButton(true);
+    }
+
+    private void onClickOfOptionFour() {
+        selectedOptionValue = 3;
+
+        option_view_one.setVisibility(View.INVISIBLE);
+        option_view_two.setVisibility(View.INVISIBLE);
+        option_view_three.setVisibility(View.INVISIBLE);
+        option_view_four.setVisibility(View.VISIBLE);
+
+        option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
+        option_fourTV.setTextColor(getResources().getColor(R.color.options_color));
+
+        enableDisableButton(true);
     }
 
     /**
@@ -447,7 +498,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.activity_congratulation_popup);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
         wmlp.gravity = Gravity.CENTER;
         wmlp.dimAmount = 0.5f;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/videoCardView"
     android:layout_width="200dp"
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -23,6 +24,7 @@
             android:id="@+id/singleVideoView"
             android:layout_width="match_parent"
             android:layout_height="120dp"
+            android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -86,8 +88,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/singleVideoView"
             app:srcCompat="@android:drawable/ic_media_play" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/imageOverlayCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:alpha="0.7"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.cardview.widget.CardView>

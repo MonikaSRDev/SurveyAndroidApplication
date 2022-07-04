@@ -32,10 +32,12 @@ public class VideoScreen extends AppCompatActivity {
     private Button englishButton, kannadaButton;
     private TextView logoutTV, backTV, participantName;
     private MithraUtility mithraUtility = new MithraUtility();
+    private TextView videoDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        BlurKit.init(this);
         setContentView(R.layout.activity_video_screen);
         initializeData();
         RegisterViews();
@@ -143,6 +145,7 @@ public class VideoScreen extends AppCompatActivity {
 
         logoutTV = findViewById(R.id.logoutVPTV);
         backTV = findViewById(R.id.backButtonTV);
+        videoDescription = findViewById(R.id.videoDescription);
     }
 
     private void setRecyclerView(){
@@ -162,10 +165,29 @@ public class VideoScreen extends AppCompatActivity {
                 finish();
             }
         });
+
+        backTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VideoScreen.this, ParticipantLandingScreen.class);
+                intent.putExtra("FromActivity", "VideoScreen");
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void onClickOfLogoutButton(){
         logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VideoScreen.this, LoginScreen.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        logoutTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VideoScreen.this, LoginScreen.class);
@@ -187,6 +209,7 @@ public class VideoScreen extends AppCompatActivity {
                 kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
+                verticalVideoModulesAdapter.notifyDataSetChanged();
             }
         });
 
@@ -198,6 +221,7 @@ public class VideoScreen extends AppCompatActivity {
                 englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
+                verticalVideoModulesAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -245,6 +269,9 @@ public class VideoScreen extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         logoutTV.setText(R.string.logout);
         backTV.setText(R.string.back);
+        if(videoDescription!=null){
+            videoDescription.setText(R.string.default_text);
+        }
     }
 
     @Override

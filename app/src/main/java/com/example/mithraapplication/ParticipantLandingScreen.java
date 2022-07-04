@@ -25,6 +25,7 @@ public class ParticipantLandingScreen extends AppCompatActivity {
     private CardView surveyButton, videoButton, activityButton;
     private TextView participantNameTV, surveyTV, videoTV, activityTV, logoutTV;
     private MithraUtility mithraUtility = new MithraUtility();
+    private ImageView logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,28 @@ public class ParticipantLandingScreen extends AppCompatActivity {
         onClickOfActivityButton();
         onClickOfLanguageButton();
         checkFromActivity();
+        onClickOfLogoutButton();
         getCurrentLocale();
+    }
+
+    private void onClickOfLogoutButton(){
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ParticipantLandingScreen.this, LoginScreen.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        logoutTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ParticipantLandingScreen.this, LoginScreen.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     /**
@@ -53,6 +75,7 @@ public class ParticipantLandingScreen extends AppCompatActivity {
         videoTV = findViewById(R.id.videoTV);
         activityTV = findViewById(R.id.activityTV);
         logoutTV = findViewById(R.id.logoutTV);
+        logoutButton = findViewById(R.id.logoutIcon);
         String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant));
         participantNameTV.setText(participantUserName);
     }
