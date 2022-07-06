@@ -249,26 +249,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selected_button"
-                android:text="Screening" />
+                android:text="@string/screening" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/registrationTabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selected_button"
-                android:text="Registration" />
+                android:text="@string/registration" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/socioDemoTabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Socio Demography" />
+                android:text="@string/socio_demography" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/diseaseTabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Disease Profile" />
+                android:text="@string/disease_profile" />
 
             <!--            <com.google.android.material.tabs.TabItem-->
             <!--                android:id="@+id/reportTabItem"-->
@@ -291,7 +291,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/profilePartcipantName"
+        android:id="@+id/profileParticipantName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -320,7 +320,7 @@
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.981"
-        app:layout_constraintStart_toEndOf="@+id/profilePartcipantName"
+        app:layout_constraintStart_toEndOf="@+id/profileParticipantName"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutProfile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

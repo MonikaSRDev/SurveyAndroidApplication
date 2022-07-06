@@ -5,7 +5,9 @@
     android:viewportHeight="49">
   <path
       android:pathData="M63.427,0.903L39.305,16.647V3.897C39.305,0.619 36.997,-0.721 34.15,0.904L2.943,21.271C0.096,22.896 0.096,25.53 2.943,27.154L34.15,47.522C36.997,49.147 39.305,47.807 39.305,44.529V31.778L63.427,47.522C66.274,49.147 68.582,47.807 68.582,44.529V3.897C68.582,0.619 66.274,-0.721 63.427,0.903Z"
-      android:strokeAlpha="0.6"
-      android:fillColor="#ffffff"
-      android:fillAlpha="0.6"/>
+      android:strokeAlpha="1"
+      android:strokeWidth="0.5"
+      android:strokeColor="@color/video_duration"
+      android:fillColor="@color/white"
+      android:fillAlpha="1"/>
 </vector>

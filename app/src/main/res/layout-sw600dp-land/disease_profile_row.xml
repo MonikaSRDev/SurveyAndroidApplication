@@ -105,13 +105,60 @@
                 app:layout_constraintTop_toBottomOf="@+id/fixedConstrainLayout">
 
                 <LinearLayout
+                    android:id="@+id/specifyDiseaseLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/specifyDiseaseTV"
+                        android:layout_width="175dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="30dp"
+                        android:fontFamily="@font/open_sans"
+                        android:text="@string/diagnosed_age"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/diagnosedAgeET"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/specifyDiseaseET"
+                        android:layout_width="220dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/yes_no_button"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:inputType="text"
+                        android:padding="10dp"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/diagnosedAgeTV"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:id="@+id/diagnosedAgeLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/specifyDiseaseLinearLayout">
 
                     <TextView
                         android:id="@+id/diagnosedAgeTV"

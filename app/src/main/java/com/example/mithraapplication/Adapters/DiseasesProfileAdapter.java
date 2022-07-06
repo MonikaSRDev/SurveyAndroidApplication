@@ -1,4 +1,4 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
+import com.example.mithraapplication.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,10 +50,11 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView diseaseTV, diagnosedAgeTV, receivedTreatmentTV, limitActivitiesTV;
-        EditText diagnosedAgeET;
+        TextView diseaseTV, diagnosedAgeTV, receivedTreatmentTV, limitActivitiesTV, specifyDiseaseTV;
+        EditText diagnosedAgeET, specifyDiseaseET;
         Button yesDiseaseButton, noDiseaseButton, yesReceivedTreatmentButton, noReceivedTreatmentButton, yesLimitActivities,  noLimitActivities;
         ConstraintLayout expandableConstraintLayout;
+        LinearLayout specifyDiseaseLinearLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,8 +63,10 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
             diagnosedAgeTV = itemView.findViewById(R.id.diagnosedAgeTV);
             receivedTreatmentTV = itemView.findViewById(R.id.treatmentReceivedTV);
             limitActivitiesTV = itemView.findViewById(R.id.limitActivitiesTV);
+            specifyDiseaseTV = itemView.findViewById(R.id.specifyDiseaseTV);
 
             diagnosedAgeET = itemView.findViewById(R.id.diagnosedAgeET);
+            specifyDiseaseET = itemView.findViewById(R.id.specifyDiseaseET);
 
             yesDiseaseButton = itemView.findViewById(R.id.yesDiseaseButton);
             noDiseaseButton = itemView.findViewById(R.id.noDiseaseButton);
@@ -72,6 +77,9 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
 
             expandableConstraintLayout = itemView.findViewById(R.id.expandableConstraintLayout);
             expandableConstraintLayout.setVisibility(View.GONE);
+
+            specifyDiseaseLinearLayout = itemView.findViewById(R.id.specifyDiseaseLinearLayout);
+            specifyDiseaseLinearLayout.setVisibility(View.GONE);
         }
     }
 
@@ -91,6 +99,11 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.receivedTreatmentTV.setText(diseasesProfile.getReceivedTreatment());
         holder.limitActivitiesTV.setText(diseasesProfile.getLimitActivities());
 
+        if(!diseasesProfile.getSpecifyDisease().equals("NULL")){
+            holder.specifyDiseaseLinearLayout.setVisibility(View.VISIBLE);
+            holder.specifyDiseaseTV.setText(diseasesProfile.getSpecifyDisease());
+        }
+
         onClickOfYesDiseaseButton(holder);
         onClickOfNoDiseaseButton(holder);
 //        onClickOfYesDiagnosedButton(holder);
@@ -100,6 +113,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         onClickOfYesLimitActivitiesButton(holder);
         onClickOfNoLimitActivitiesButton(holder);
         getDiagnosedAgeOfParticipant(holder);
+        getSpecificDiseaseOfParticipant(holder);
     }
 
     private void onClickOfYesDiseaseButton(ViewHolder holder) {
@@ -210,6 +224,28 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
             public void afterTextChanged(Editable s) {
                 String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "NULL";
                 userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diagnosedAge);
+            }
+        });
+    }
+
+    private void getSpecificDiseaseOfParticipant(ViewHolder holder){
+        holder.specifyDiseaseET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "NULL";
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setSpecifyDisease(specificDisease);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "NULL";
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setSpecifyDisease(specificDisease);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "NULL";
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setSpecifyDisease(specificDisease);
             }
         });
     }

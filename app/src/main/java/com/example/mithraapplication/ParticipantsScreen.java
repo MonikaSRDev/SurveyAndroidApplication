@@ -2,7 +2,10 @@ package com.example.mithraapplication;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.LocaleList;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -15,12 +18,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.mithraapplication.Fragments.ParticipantsAllListFragment;
+import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.Locale;
+import java.util.Objects;
 
 public class ParticipantsScreen extends AppCompatActivity{
 
     private Button englishButtonParticipant, kannadaButtonParticipant;
-    private TextView participantTitleTV, dashboardTVParticipant, profileTVParticipant, coordinatorNameTVParticipant;
+    private TextView participantTitleTV, dashboardTVParticipant, participantTVParticipant, coordinatorNameTVParticipant;
     private LinearLayout dashboardLinearLayoutParticipant, participantLinearLayoutParticipant;
     private ImageView mithraLogoParticipant, coordinatorParticipant, notificationsIconParticipant, participantIcon;
     private TabLayout participantTabLayout;
@@ -29,12 +37,16 @@ public class ParticipantsScreen extends AppCompatActivity{
     private FragmentTransaction fragmentTransactionParticipant;
     private Fragment fragmentParticipant = null;
     private MithraUtility mithraUtility = new MithraUtility();
+    private TabItem participantTabItem1, participantTabItem2, participantTabItem3, participantTabItem4, participantTabItem5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_participant_screen);
         RegisterViews();
+        onClickOfLanguageButton();
+        getCurrentLocale();
+        onClickOfDashboardButton();
     }
 
     /**
@@ -50,8 +62,8 @@ public class ParticipantsScreen extends AppCompatActivity{
 
         participantTitleTV = findViewById(R.id.participantsTitleTV);
         dashboardTVParticipant = findViewById(R.id.dashboardTVParticipant);
-        profileTVParticipant = findViewById(R.id.participantsTVParticipant);
-        profileTVParticipant.setTextColor(getResources().getColor(R.color.text_color));
+        participantTVParticipant = findViewById(R.id.participantsTVParticipant);
+        participantTVParticipant.setTextColor(getResources().getColor(R.color.text_color));
         coordinatorNameTVParticipant = findViewById(R.id.coordinatorNameTVParticipant);
         String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator));
         if(!coordinatorUserName.equals("NULL")){
@@ -69,15 +81,12 @@ public class ParticipantsScreen extends AppCompatActivity{
         setStartupTab();
         setTabSelectedListener();
 
-        dashboardLinearLayoutParticipant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ParticipantsScreen.this, DashboardScreen.class);
-                startActivity(intent);
-            }
-        });
+        participantTabItem1 = findViewById(R.id.participantTabItem1);
+        participantTabItem2 = findViewById(R.id.participantTabItem2);
+        participantTabItem3 = findViewById(R.id.participantTabItem3);
+        participantTabItem4 = findViewById(R.id.participantTabItem4);
+        participantTabItem5 = findViewById(R.id.participantTabItem5);
     }
-
 
     private void setStartupTab(){
         fragmentParticipant = new ParticipantsAllListFragment();
@@ -123,31 +132,75 @@ public class ParticipantsScreen extends AppCompatActivity{
         ft.commit();
     }
 
+    private void onClickOfDashboardButton(){
+        dashboardLinearLayoutParticipant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ParticipantsScreen.this, DashboardScreen.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     /**
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-//        englishButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                englishButton.setBackgroundResource(R.drawable.left_toggle_selected_button);
-//                englishButton.setTextColor(getResources().getColor(R.color.black));
-//                kannadaButton.setBackgroundResource(R.drawable.right_toggle_button);
-//                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-//                changeLocalLanguage("en");
-//            }
-//        });
-//
-//        kannadaButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                kannadaButton.setBackgroundResource(R.drawable.right_toggle_selected_button);
-//                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-//                englishButton.setBackgroundResource(R.drawable.left_toggle_button);
-//                englishButton.setTextColor(getResources().getColor(R.color.black));
-//                changeLocalLanguage("kn");
-//            }
-//        });
+        englishButtonParticipant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                englishButtonParticipant.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+                kannadaButtonParticipant.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+                changeLocalLanguage("en");
+            }
+        });
+
+        kannadaButtonParticipant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kannadaButtonParticipant.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+                englishButtonParticipant.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+                changeLocalLanguage("kn");
+            }
+        });
+    }
+
+    /**
+     * @param selectedLanguage
+     * Description : This method is used to change the content of the screen to user selected language
+     */
+    public void changeLocalLanguage(String selectedLanguage){
+        Locale myLocale = new Locale(selectedLanguage);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(myLocale);
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    public void getCurrentLocale(){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        LocaleList lang = conf.getLocales();
+        if(lang.get(0).getLanguage().equals("kn")){
+            kannadaButtonParticipant.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+            englishButtonParticipant.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+        }else{
+            englishButtonParticipant.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+            kannadaButtonParticipant.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+        }
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
     }
 
     /**
@@ -156,7 +209,6 @@ public class ParticipantsScreen extends AppCompatActivity{
      */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        // refresh your views here
 //        participantUserNameET.setHint(R.string.user_name);
 //        participantPasswordET.setHint(R.string.password);
 //        participantConfirmPasswordET.setHint(R.string.confirm_password);
@@ -180,6 +232,15 @@ public class ParticipantsScreen extends AppCompatActivity{
 //        femaleButton.setText(R.string.female);
 //        othersButton.setText(R.string.others);
 //        registerButton.setText(R.string.register);
+
+        participantTitleTV.setText(R.string.participants);
+        dashboardTVParticipant.setText(R.string.dashboard);
+        participantTVParticipant.setText(R.string.participants);
+        Objects.requireNonNull(participantTabLayout.getTabAt(0)).setText(R.string.all_list);
+        Objects.requireNonNull(participantTabLayout.getTabAt(1)).setText(R.string.new_tab);
+        Objects.requireNonNull(participantTabLayout.getTabAt(2)).setText(R.string.green_tab);
+        Objects.requireNonNull(participantTabLayout.getTabAt(3)).setText(R.string.yellow_tab);
+        Objects.requireNonNull(participantTabLayout.getTabAt(4)).setText(R.string.red_tab);
 
         super.onConfigurationChanged(newConfig);
     }

@@ -1,6 +1,5 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.Fragments;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -16,8 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.SocioDemography;
-import com.example.mithraapplication.ModelClasses.UserLogin;
+import com.example.mithraapplication.ParticipantProfileScreen;
+import com.example.mithraapplication.R;
+import com.example.mithraapplication.ServerRequestAndResponse;
 
 import java.util.Locale;
 
@@ -580,8 +583,8 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
      */
     private void onClickOfNextButton(){
         nextButton.setOnClickListener(v -> {
-                callServerPostSocioDemography();
-//            moveToDiseaseProfileTab();
+//                callServerPostSocioDemography();
+            moveToDiseaseProfileTab();
         });
     }
 
@@ -593,7 +596,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     }
 
     private void moveToDiseaseProfileTab(){
-        ((ProfileScreen)getActivity()).setupSelectedTabFragment(3);
+        ((ParticipantProfileScreen)getActivity()).setupSelectedTabFragment(3);
     }
 
 

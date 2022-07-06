@@ -61,6 +61,7 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
                 if(!userName.equals("NULL") && !password.equals("NULL")){
 //                    callServerForUserLogin(userName, password);
                     moveToParticipantLandingPage(userName);
+//                    moveToCoordinatorDashboard();
                     mithraUtility.putSharedPreferencesData(LoginScreen.this, getString(R.string.user_name), getString(R.string.user_name_participant), userName);
                 }else if(userName.equals("NULL") && !password.equals("NULL")){
                     userNameET.setError("Please enter username.");
@@ -155,16 +156,16 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         }
     }
 
-    /**
-     * @param newConfig
-     * Description : This method is used to update the views on change of language
-     */
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        userNameET.setText(R.string.userid);
-        userPasswordET.setText(R.string.password);
-        welcomeTV.setText(R.string.welcome);
-        signInButton.setText(R.string.sign_in);
-    }
+//    /**
+//     * @param newConfig
+//     * Description : This method is used to update the views on change of language
+//     */
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        userNameET.setText(R.string.userid);
+//        userPasswordET.setText(R.string.password);
+//        welcomeTV.setText(R.string.welcome);
+//        signInButton.setText(R.string.sign_in);
+//    }
 }

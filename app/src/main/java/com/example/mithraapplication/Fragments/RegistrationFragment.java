@@ -1,8 +1,6 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.Fragments;
 
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,12 +16,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.Locations;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.UserLogin;
+import com.example.mithraapplication.ParticipantProfileScreen;
+import com.example.mithraapplication.R;
+import com.example.mithraapplication.ServerRequestAndResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -32,10 +34,9 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class RegistrationFragment extends Fragment implements AdapterView.OnItemSelectedListener, HandleServerResponse{
+public class RegistrationFragment extends Fragment implements AdapterView.OnItemSelectedListener, HandleServerResponse {
 
     private EditText participantNameET, participantAgeET, participantPhoneNumberET, participantUserNameET, participantPasswordET, participantConfirmPasswordET;
     private Button registerButton, maleButton, femaleButton, othersButton;
@@ -61,7 +62,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        callGetLocationsForParticipant();
+//        callGetLocationsForParticipant();
         RegisterViews(view);
         onClickRegisterButton();
     }
@@ -156,8 +157,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             public void onClick(View v) {
                 boolean isvalid = getUserEnteredData();
                 if(isvalid) {
-                    callServerLoginForParticipant();
-//                    moveToSocioDemographyTab();
+//                    callServerLoginForParticipant();
+                    moveToSocioDemographyTab();
 //                    callServerRegisterParticipant();
                 }
             }
@@ -206,7 +207,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
      */
     private void moveToSocioDemographyTab(){
         Log.i("RegistrationFragment", "moveToSocioDemographyTab");
-        ((ProfileScreen) requireActivity()).setupSelectedTabFragment(2);
+        ((ParticipantProfileScreen) requireActivity()).setupSelectedTabFragment(2);
     }
 
     /**

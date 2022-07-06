@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class DiseasesProfile extends JsonServerObject {
     private String DiseaseName = "NULL";
+    private String specifyDisease = "NULL";
     private String diagnosedAge = "NULL";
     private String Diagnosed = "NULL";
     private String receivedTreatment = "NULL";
@@ -49,4 +50,11 @@ public class DiseasesProfile extends JsonServerObject {
         this.limitActivities = limitActivities;
     }
 
+    public String getSpecifyDisease() {
+        return specifyDisease;
+    }
+
+    public void setSpecifyDisease(String specifyDisease) {
+        this.specifyDisease = specifyDisease;
+    }
 }

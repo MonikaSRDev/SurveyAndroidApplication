@@ -83,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="44dp"
         android:fontFamily="@font/open_sans"
+        android:textSize="12sp"
         android:text="@string/logout"
         app:layout_constraintBottom_toTopOf="@+id/videoCardViewVP"
         app:layout_constraintEnd_toEndOf="parent"

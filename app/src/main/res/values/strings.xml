@@ -53,7 +53,8 @@
     <string name="diagnosed_thyroid">Have you been diagnosed with Thyroid</string>
     <string name="limit_activities">Does this condition limit your activities?</string>
     <string name="received_treatment">Do you receive treatment for this condition?</string>
-    <string name="diagnosed_age">If yes, how old were you when this was diagnosed?</string>
+    <string name="diagnosed_age">How old were you when this was diagnosed?</string>
+    <string name="specify_disease">Specify other disease</string>
     <string name="kannada">ಕನ್ನಡ</string>
     <string name="base_url" translatable="false">192.168.2.156</string>
     <string name="mp_token" translatable="false">token 2559f591d98ea66:9e2cdc0890cc4eb</string>
@@ -82,5 +83,23 @@
     <string name="pending">Pending</string>
     <string name="default_text">This is an introductory video.</string>
     <string name="opinion_toast">Thank you for your opinion.</string>
+    <string name="village">Village</string>
+    <string name="all_list">All List</string>
+    <string name="new_tab">New</string>
+    <string name="green_tab">Green</string>
+    <string name="yellow_tab">Yellow</string>
+    <string name="red_tab">Red</string>
+    <string name="screening">Screening</string>
+    <string name="registration">Registration</string>
+    <string name="inclusion">Inclusion</string>
+    <string name="age_above_18_years">Age above 18 years</string>
+    <string name="resident">Resident of the study \nvillage</string>
+    <string name="CBOMeetingMonths">Willing to attend the CBO \nmeeting regulary in the \nupcoming months</string>
+    <string name="exclusion">Exclusion</string>
+    <string name="diagnosed_with_mental_illness">Previously diagnosed with any \nsevere mental illness such as \nbipolar disorder or schizophrenia</string>
+    <string name="substance_abuse">Involved in substance use \nor severe alcohol use in \nlast 6 months</string>
+    <string name="user_consent">Unable to participate in \ninformed consent \ndiscussion</string>
+    <string name="attempted_suicide">Attempted suicide in last 6 \nmonths</string>
+
 
 </resources>

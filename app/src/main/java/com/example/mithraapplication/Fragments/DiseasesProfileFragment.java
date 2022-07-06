@@ -1,4 +1,4 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.Fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,13 +19,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.example.mithraapplication.Adapters.DiseasesProfileAdapter;
+import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.DiseasesProfilePostRequest;
+import com.example.mithraapplication.ParticipantsScreen;
+import com.example.mithraapplication.R;
+import com.example.mithraapplication.ServerRequestAndResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiseasesProfileFragment extends Fragment implements HandleServerResponse{
+public class DiseasesProfileFragment extends Fragment implements HandleServerResponse {
 
     private ArrayList<DiseasesProfile> diseasesProfilesArray = new ArrayList<>();
     private RecyclerView recyclerViewLeft;
@@ -60,7 +66,8 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         public void onReceive(Context context, Intent intent) {
             Bundle args = intent.getBundleExtra("ParticipantDiseaseData");
             diseasesProfile = (ArrayList<DiseasesProfile>) args.getSerializable("ARRAYLIST");
-            callServerPostDiseasesProfile();
+//            callServerPostDiseasesProfile();
+            moveToParticipantsScreen();
         }
     };
 
@@ -84,98 +91,99 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     private void initializeData(){
         DiseasesProfile profile1 = new DiseasesProfile();
         profile1.setDiseaseName("DIABETES MELLITUS");
-        profile1.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile1.setDiagnosedAge("How old were you when this was diagnosed?");
         profile1.setReceivedTreatment("Do you receive treatment for this condition?");
         profile1.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile1);
 
         DiseasesProfile profile2 = new DiseasesProfile();
         profile2.setDiseaseName("HYPERTENSION");
-        profile2.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile2.setDiagnosedAge("How old were you when this was diagnosed?");
         profile2.setReceivedTreatment("Do you receive treatment for this condition?");
         profile2.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile2);
 
         DiseasesProfile profile3 = new DiseasesProfile();
         profile3.setDiseaseName("HEART DISEASE");
-        profile3.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile3.setDiagnosedAge("How old were you when this was diagnosed?");
         profile3.setReceivedTreatment("Do you receive treatment for this condition?");
         profile3.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile3);
 
         DiseasesProfile profile4 = new DiseasesProfile();
         profile4.setDiseaseName("Thyroid");
-        profile4.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile4.setDiagnosedAge("How old were you when this was diagnosed?");
         profile4.setReceivedTreatment("Do you receive treatment for this condition?");
         profile4.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile4);
 
         DiseasesProfile profile5 = new DiseasesProfile();
         profile5.setDiseaseName("CHRONIC LIVER DISEASE");
-        profile5.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile5.setDiagnosedAge("How old were you when this was diagnosed?");
         profile5.setReceivedTreatment("Do you receive treatment for this condition?");
         profile5.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile5);
 
         DiseasesProfile profile6 = new DiseasesProfile();
         profile6.setDiseaseName("CHRONIC RENAL DISEASE");
-        profile6.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile6.setDiagnosedAge("How old were you when this was diagnosed?");
         profile6.setReceivedTreatment("Do you receive treatment for this condition?");
         profile6.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile6);
 
         DiseasesProfile profile7 = new DiseasesProfile();
         profile7.setDiseaseName("MALIGNANCY");
-        profile7.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile7.setDiagnosedAge("How old were you when this was diagnosed?");
         profile7.setReceivedTreatment("Do you receive treatment for this condition?");
         profile7.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile7);
 
         DiseasesProfile profile8 = new DiseasesProfile();
         profile8.setDiseaseName("DISABILITIES");
-        profile8.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile8.setDiagnosedAge("How old were you when this was diagnosed?");
         profile8.setReceivedTreatment("Do you receive treatment for this condition?");
         profile8.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile8);
 
         DiseasesProfile profile9 = new DiseasesProfile();
         profile9.setDiseaseName("GASTRIC PROBLEM");
-        profile9.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile9.setDiagnosedAge("How old were you when this was diagnosed?");
         profile9.setReceivedTreatment("Do you receive treatment for this condition?");
         profile9.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile9);
 
         DiseasesProfile profile10 = new DiseasesProfile();
         profile10.setDiseaseName("MENTAL ILLNESS");
-        profile10.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile10.setDiagnosedAge("How old were you when this was diagnosed?");
         profile10.setReceivedTreatment("Do you receive treatment for this condition?");
         profile10.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile10);
 
         DiseasesProfile profile11 = new DiseasesProfile();
         profile11.setDiseaseName("EPILEPSY");
-        profile11.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile11.setDiagnosedAge("How old were you when this was diagnosed?");
         profile11.setReceivedTreatment("Do you receive treatment for this condition?");
         profile11.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile11);
 
         DiseasesProfile profile12 = new DiseasesProfile();
         profile12.setDiseaseName("ASTHMA");
-        profile12.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile12.setDiagnosedAge("How old were you when this was diagnosed?");
         profile12.setReceivedTreatment("Do you receive treatment for this condition?");
         profile12.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile12);
 
         DiseasesProfile profile13 = new DiseasesProfile();
         profile13.setDiseaseName("SKIN DISEASE");
-        profile13.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile13.setDiagnosedAge("How old were you when this was diagnosed?");
         profile13.setReceivedTreatment("Do you receive treatment for this condition?");
         profile13.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile13);
 
         DiseasesProfile profile14 = new DiseasesProfile();
         profile14.setDiseaseName("ANY OTHER DISEASES");
-        profile14.setDiagnosedAge("If yes, how old were you when this was diagnosed?");
+        profile14.setSpecifyDisease("Specify other disease");
+        profile14.setDiagnosedAge("How old were you when this was diagnosed?");
         profile14.setReceivedTreatment("Do you receive treatment for this condition?");
         profile14.setLimitActivities("Does this condition limit your activities?");
         diseasesProfilesArray.add(profile14);

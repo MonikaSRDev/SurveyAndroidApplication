@@ -1,4 +1,4 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mithraapplication.HandleServerResponse;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
-import com.example.mithraapplication.ModelClasses.UserLogin;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.mithraapplication.ParticipantProfileScreen;
+import com.example.mithraapplication.R;
+import com.example.mithraapplication.ServerRequestAndResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -25,7 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class ParticipantsAllListFragment extends Fragment implements HandleServerResponse{
+public class ParticipantsAllListFragment extends Fragment implements HandleServerResponse {
 
     private TextView addNewParticipantTV;
     private ImageView addNewParticipantIcon;
@@ -51,7 +53,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RegisterViews(view);
-        callGetAllParticipantsDetails();
+//        callGetAllParticipantsDetails();
         onClickAddNewParticipantIcon();
         onClickFloatingAddNewParticipantButton();
     }
@@ -66,7 +68,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         addNewParticipantIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ProfileScreen.class);
+                Intent intent = new Intent(getActivity(), ParticipantProfileScreen.class);
                 startActivity(intent);
             }
         });
@@ -76,7 +78,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         addNewParticipantIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ProfileScreen.class);
+                Intent intent = new Intent(getActivity(), ParticipantProfileScreen.class);
                 startActivity(intent);
             }
         });

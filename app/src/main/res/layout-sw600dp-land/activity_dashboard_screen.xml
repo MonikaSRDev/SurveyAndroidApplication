@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen_background">
+    android:background="@drawable/linear_gradient_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutDashboard"
@@ -223,5 +222,173 @@
             android:textSize="12sp"
             android:textColor="@color/text_color" />
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dashboardContentLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="166dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutDashboard">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/dashboardVerticalCardView"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_marginEnd="-15dp"
+            android:layout_marginBottom="-15dp"
+            app:cardBackgroundColor="@color/dashboard_card_background"
+            app:cardCornerRadius="15dp"
+            android:layout_marginTop="10dp"
+            android:foregroundGravity="right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:layout_gravity="start">
+
+                <TextView
+                    android:id="@+id/villageSpinnerDashboard"
+                    android:layout_width="125dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/dropdown_with_arrow"
+                    android:fontFamily="@font/open_sans"
+                    android:padding="15dp"
+                    android:text="@string/village"
+                    android:textColor="@color/text_color"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.905"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/columnLLDashboardCV"
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginEnd="36dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/participantIDDashboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Part ID"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/participantDetailsDashboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Details"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/participantEnrollmentStatusDashboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Enrollment Status"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/participantSurveyStatusDashboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Survay Status"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/participantModuleStatusDashboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Module Status"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/participantReferralStatusDashboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Referral Status"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dashboardVerticalRV"
+                    android:layout_width="1076dp"
+                    android:layout_height="353dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/columnLLDashboardCV"
+                    app:layout_constraintVertical_bias="0.976" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dashboardHorizontalRV"
+        android:layout_width="match_parent"
+        android:layout_height="187dp"
+        android:layout_marginTop="104dp"
+        android:foregroundGravity="right"
+        android:layout_marginStart="166dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutDashboard"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

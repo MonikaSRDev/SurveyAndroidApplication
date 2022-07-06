@@ -1,12 +1,12 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.Fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.provider.Telephony;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +15,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.ParticipantScreening;
-import com.example.mithraapplication.ModelClasses.UserLogin;
+import com.example.mithraapplication.ParticipantProfileScreen;
+import com.example.mithraapplication.R;
+import com.example.mithraapplication.ServerRequestAndResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
-public class ScreeningFragment extends Fragment implements HandleServerResponse{
+public class ScreeningFragment extends Fragment implements HandleServerResponse {
 
     public ScreeningFragment() {
         // Required empty public constructor
@@ -147,7 +150,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse{
 
                 Log.i("SCREENING SCORE", "Score : "+score);
 
-                callServerPostScreeningDetails(participantScreening);
+                moveToRegistrationFragment();
+
+//                callServerPostScreeningDetails(participantScreening);
             }
         });
     }
@@ -160,7 +165,7 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse{
     }
 
     private void moveToRegistrationFragment() {
-        ((ProfileScreen) requireActivity()).setupSelectedTabFragment(1);
+        ((ParticipantProfileScreen) requireActivity()).setupSelectedTabFragment(1);
     }
 
     private void getUserEnteredData(){
@@ -405,5 +410,46 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse{
     @Override
     public void responseReceivedFailure(String message) {
 
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        inclusionTV.setText(R.string.inclusion);
+        inclusionYesButton.setText(R.string.yes);
+        inclusionNoButton.setText(R.string.no);
+
+        ageAboveEighteenTV.setText(R.string.age_above_18_years);
+        ageAboveEighteenYesButton.setText(R.string.yes);
+        ageAboveEighteenNoButton.setText(R.string.no);
+
+        residentTV.setText(R.string.resident);
+        residentYesButton.setText(R.string.yes);
+        residentNoButton.setText(R.string.no);
+
+        CBOMeetingTV.setText(R.string.CBOMeetingMonths);
+        CBOMeetingYesButton.setText(R.string.yes);
+        CBOMeetingNoButton.setText(R.string.no);
+
+        exclusionTV.setText(R.string.exclusion);
+        exclusionYesButton.setText(R.string.yes);
+        exclusionNoButton.setText(R.string.no);
+
+        mentalIllnessTV.setText(R.string.yes);
+        inclusionYesButton.setText(R.string.yes);
+        inclusionYesButton.setText(R.string.yes);
+
+        substanceAbuseTV.setText(R.string.yes);
+        inclusionYesButton.setText(R.string.yes);
+        inclusionYesButton.setText(R.string.yes);
+
+        suicideAttemptTV.setText(R.string.attempted_suicide);
+        inclusionYesButton.setText(R.string.yes);
+        inclusionYesButton.setText(R.string.no);
+
+        participationConsentTV.setText(R.string.user_consent);
+        participationConsentYesButton.setText(R.string.yes);
+        participationConsentNoButton.setText(R.string.no);
     }
 }

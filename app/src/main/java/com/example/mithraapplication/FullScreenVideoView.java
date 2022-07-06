@@ -30,6 +30,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -39,16 +40,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class FullScreenVideoView extends AppCompatActivity{
 
     private ImageView backButton, logoutButton, videoPlayButton, videoPauseButton, videoBackwardButton;
-    private TextView backTV, logoutTV, participantName, videoModuleNameTV;
+    private TextView backTV, logoutTV, participantName, videoModuleNameTV, videoDurationTV;
+    private SeekBar fullScreenVideoSeekBar;
     private Button englishButton, kannadaButton;
     private VideoView videoViewFullScreen;
     private MithraUtility mithraUtility = new MithraUtility();
     private SingleVideo singleVideo = new SingleVideo();
     private int pos = 0, position = 0;
+    private String totalDuration = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class FullScreenVideoView extends AppCompatActivity{
         getCurrentLocale();
         onClickOfVideoPlayButton();
         onClickOfVideoPauseButton();
-//        onClickOfBackwardButton();
+        onClickOfBackwardButton();
         onTouchVideoEvent();
 
         pos = getIntent().getIntExtra("ModulePosition", 0);
@@ -90,6 +94,33 @@ public class FullScreenVideoView extends AppCompatActivity{
         englishButton = findViewById(R.id.englishVFSButton);
         kannadaButton = findViewById(R.id.kannadaVFSButton);
 
+        videoDurationTV = findViewById(R.id.videoDuration);
+        fullScreenVideoSeekBar = findViewById(R.id.fullScreenVideoSeekbar);
+        fullScreenVideoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser) {
+                    // this is when actually seekbar has been sought to a new position
+                    videoViewFullScreen.seekTo(progress);
+                }
+            }
+        });
+        fullScreenVideoSeekBar.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
         videoViewFullScreen = findViewById(R.id.fullScreenVideoView);
         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.mithra_introduction_video);
 //        MediaController mc = new MediaController(this);
@@ -100,6 +131,7 @@ public class FullScreenVideoView extends AppCompatActivity{
 
             @Override
             public void onCompletion(MediaPlayer mp) {
+                videoViewFullScreen.stopPlayback();
                 showAlertForFeedback();
                 if(!(position + 1 >= videoModulesArrayList.get(pos).getSingleVideoArrayList().size())){
                     videoModulesArrayList.get(pos).getSingleVideoArrayList().get(position + 1).setVideoPlayed(true);
@@ -110,15 +142,48 @@ public class FullScreenVideoView extends AppCompatActivity{
 
     }
 
+    private String timeConversion(int millis){
+//        String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
+//                TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+//                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+
+        String hms = String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+
+        return hms;
+    }
+
     private void onClickOfVideoPlayButton(){
         videoPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 videoViewFullScreen.start();
+                totalDuration = timeConversion(videoViewFullScreen.getDuration());
+                fullScreenVideoSeekBar.setMax(videoViewFullScreen.getDuration());
+                fullScreenVideoSeekBar.postDelayed(onEverySecond, 1000);
                 videoPlayButton.setVisibility(View.GONE);
             }
         });
     }
+
+    private Runnable onEverySecond=new Runnable() {
+
+        @Override
+        public void run() {
+
+            if(fullScreenVideoSeekBar != null) {
+                fullScreenVideoSeekBar.setProgress(videoViewFullScreen.getCurrentPosition());
+                String currentTime = timeConversion(videoViewFullScreen.getCurrentPosition());
+                videoDurationTV.setText(currentTime+"/"+ totalDuration);
+            }
+
+            if(videoViewFullScreen.isPlaying()) {
+                fullScreenVideoSeekBar.postDelayed(onEverySecond, 1000);
+            }
+
+        }
+    };
 
     private void onClickOfVideoPauseButton(){
         videoPauseButton.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +202,7 @@ public class FullScreenVideoView extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 int position = videoViewFullScreen.getCurrentPosition();
-                videoViewFullScreen.seekTo(position - 10000);
+                videoViewFullScreen.seekTo(position - (10 * 1000));
             }
         });
     }
@@ -151,9 +216,9 @@ public class FullScreenVideoView extends AppCompatActivity{
 
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                int position = videoViewFullScreen.getCurrentPosition();
-                videoViewFullScreen.seekTo(position - 10000);
-                return true;
+//                int position = videoViewFullScreen.getCurrentPosition();
+//                videoViewFullScreen.seekTo(position - 10000);
+                return false;
             }
 
             public boolean onSingleTapUp(MotionEvent e) {
@@ -222,8 +287,8 @@ public class FullScreenVideoView extends AppCompatActivity{
 
     private void showAlertForFeedback(){
 
-            final AlertDialog.Builder dialog= new AlertDialog.Builder(FullScreenVideoView.this);
-            final View customLayout = getLayoutInflater().inflate(R.layout.feedback_popup, null);
+            AlertDialog.Builder dialog= new AlertDialog.Builder(FullScreenVideoView.this);
+            View customLayout = getLayoutInflater().inflate(R.layout.feedback_popup, null);
 
             Button yesFeedbackButton = customLayout.findViewById(R.id.yesFeedbackButton);
             Button noFeedbackButton = customLayout.findViewById(R.id.noFeedbackButton);

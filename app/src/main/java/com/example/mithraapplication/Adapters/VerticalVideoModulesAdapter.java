@@ -1,4 +1,4 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.ModelClasses.VideoModules;
+import com.example.mithraapplication.R;
 
 import java.util.ArrayList;
 

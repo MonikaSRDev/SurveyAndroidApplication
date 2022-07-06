@@ -231,29 +231,34 @@
             app:tabTextColor="@color/text_color">
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/participantTabItem1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All List" />
+                android:text="@string/all_list" />
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/participantTabItem2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New" />
+                android:text="@string/new_tab" />
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/participantTabItem3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Green" />
+                android:text="@string/green_tab" />
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/participantTabItem4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Yellow" />
+                android:text="@string/yellow_tab" />
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/participantTabItem5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Red" />
+                android:text="@string/red_tab" />
 
         </com.google.android.material.tabs.TabLayout>
 

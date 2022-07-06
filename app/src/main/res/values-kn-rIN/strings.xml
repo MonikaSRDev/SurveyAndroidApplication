@@ -32,5 +32,22 @@
     <string name="yes">ಹೌದು</string>
     <string name="no">ಇಲ್ಲ</string>
     <string name="opinion_toast">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯಕ್ಕೆ ಧನ್ಯವಾದಗಳು.</string>
+    <string name="all_list">All List</string>
+    <string name="new_tab">New</string>
+    <string name="green_tab">Green</string>
+    <string name="yellow_tab">Yellow</string>
+    <string name="red_tab">Red</string>
+    <string name="screening">Screening</string>
+    <string name="registration">Registration</string>
+    <string name="disease_profile">ಹೌದು</string>
+    <string name="inclusion">Inclusion</string>
+    <string name="age_above_18_years">Age above 18 years</string>
+    <string name="resident">Resident of the study \nvillage</string>
+    <string name="CBOMeetingMonths">Willing to attend the CBO \nmeeting regulary in the \nupcoming months</string>
+    <string name="exclusion">Exclusion</string>
+    <string name="diagnosed_with_mental_illness">Previously diagnosed with any \nsevere mental illness such as \nbipolar disorder or schizophrenia</string>
+    <string name="substance_abuse">Involved in substance use \nor severe alcohol use in \nlast 6 months</string>
+    <string name="user_consent">Unable to participate in \ninformed consent \ndiscussion</string>
+    <string name="attempted_suicide">Attempted suicide in last 6 \nmonths</string>
 
 </resources>

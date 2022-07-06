@@ -242,4 +242,10 @@ public class ParticipantLandingScreen extends AppCompatActivity {
         videoTV.setText(R.string.video);
         activityTV.setText(R.string.activity);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

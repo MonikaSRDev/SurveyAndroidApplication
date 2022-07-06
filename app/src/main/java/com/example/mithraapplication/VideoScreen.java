@@ -3,20 +3,19 @@ package com.example.mithraapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.LocaleList;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mithraapplication.Adapters.VerticalVideoModulesAdapter;
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 import com.example.mithraapplication.ModelClasses.VideoModules;
 
@@ -161,6 +160,7 @@ public class VideoScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(VideoScreen.this, ParticipantLandingScreen.class);
                 intent.putExtra("FromActivity", "VideoScreen");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             }
@@ -170,6 +170,7 @@ public class VideoScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VideoScreen.this, ParticipantLandingScreen.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("FromActivity", "VideoScreen");
                 startActivity(intent);
                 finish();
@@ -278,6 +279,7 @@ public class VideoScreen extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(VideoScreen.this, ParticipantLandingScreen.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("FromActivity", "VideoScreen");
         startActivity(intent);
         finish();

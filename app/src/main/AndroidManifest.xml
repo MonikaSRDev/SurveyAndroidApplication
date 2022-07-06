@@ -60,10 +60,7 @@
             android:name=".DashboardScreen"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ProfileScreen"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".ParticipantStatusScreen"
+            android:name=".ParticipantProfileScreen"
             android:screenOrientation="landscape" />
 
         <meta-data
