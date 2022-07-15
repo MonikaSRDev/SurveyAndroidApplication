@@ -6,8 +6,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.LocaleList;
@@ -27,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mithraapplication.ModelClasses.QuestionAnswers;
 import com.example.mithraapplication.ModelClasses.SurveyPostRequest;
+import com.example.mithraapplication.ModelClasses.SurveyQuestions;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -34,7 +33,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
@@ -54,8 +52,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private Dialog dialog;
     private HashMap<String, String> surveyPHQ9 = new HashMap<>();
     private String surveyAnswers = "{";
-//    private ArrayList<String surveyPHQ9 = "NULL";
-    private MithraUtility mithraUtility = new MithraUtility();
+    private final MithraUtility mithraUtility = new MithraUtility();
     private String selectedLanguage = "1";
 
     @Override
@@ -63,14 +60,14 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_screen);
         RegisterViews();
-        initializeData();
-        startDateTime = mithraUtility.getCurrentTime();
-        setCardData();
+//        initializeData();
+//        startDateTime = mithraUtility.getCurrentTime();
+//        setCardData();
         getSelectedOption();
         onClickNextButton();
         onClickOfLanguageButton();
         getCurrentLocale();
-//        callServerToGetPHQ9Questions();
+        callServerToGetPHQ9Questions();
     }
 
     private void initializeData() {
@@ -217,7 +214,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      */
     private void RegisterViews() {
         participantName = findViewById(R.id.participantNameTV);
-        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant));
+        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant));
         if(!participantUserName.equals("NULL")){
            participantName.setText(participantUserName);
         }
@@ -409,21 +406,21 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private void setCardData() {
         if(questionIndex < questionArray.size()){
             if(selectedLanguage.equals("1")){
-                ph9Question.setText(questionArray.get(questionIndex).getQuestion());
+                ph9Question.setText(questionArray.get(questionIndex).getQuestion_e());
                 totalQuestions.setText("of " + questionArray.size() +"");
                 questionNumber.setText(questionArray.get(questionIndex).getQn_number());
-                option_oneTV.setText(questionArray.get(questionIndex).getOption_1());
-                option_twoTV.setText(questionArray.get(questionIndex).getOption_2());
-                option_threeTV.setText(questionArray.get(questionIndex).getOption_3());
-                option_fourTV.setText(questionArray.get(questionIndex).getOption_4());
+                option_oneTV.setText(questionArray.get(questionIndex).getOption_1_e());
+                option_twoTV.setText(questionArray.get(questionIndex).getOption_2_e());
+                option_threeTV.setText(questionArray.get(questionIndex).getOption_3_e());
+                option_fourTV.setText(questionArray.get(questionIndex).getOption_4_e());
             }else{
-                ph9Question.setText(questionArray.get(questionIndex).getQuestionKannada());
+                ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
                 totalQuestions.setText("of " + questionArray.size() +"");
                 questionNumber.setText(questionArray.get(questionIndex).getQn_number());
-                option_oneTV.setText(questionArray.get(questionIndex).getOption_1Kannada());
-                option_twoTV.setText(questionArray.get(questionIndex).getOption_2Kannada());
-                option_threeTV.setText(questionArray.get(questionIndex).getOption_3Kannada());
-                option_fourTV.setText(questionArray.get(questionIndex).getOption_4Kannada());
+                option_oneTV.setText(questionArray.get(questionIndex).getOption_1_k());
+                option_twoTV.setText(questionArray.get(questionIndex).getOption_2_k());
+                option_threeTV.setText(questionArray.get(questionIndex).getOption_3_k());
+                option_fourTV.setText(questionArray.get(questionIndex).getOption_4_k());
             }
 
         }
@@ -441,7 +438,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private void callServerForPostSurveyAnswers(){
         String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_session.api.phqsessionpost";
         SurveyPostRequest surveyPostRequest = new SurveyPostRequest();
-        surveyPostRequest.setUser_name(mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant)));
+        surveyPostRequest.setUser_name(mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant)));
 //        String diseaseStr = String.join(",", (CharSequence) surveyPHQ9);
         Log.i("SURVEY QUESTIONS", "String List" + surveyPHQ9);
         Log.i("SURVEY QUESTIONS", "Character List" + surveyAnswers);
@@ -511,10 +508,12 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      * Description : Call the server to get the PHQ9 questions for the participant
      */
     private void callServerToGetPHQ9Questions(){
-        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_question_english.api.phqs";
+        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.survey_questions.api.questions";
+        SurveyQuestions surveyQuestions = new SurveyQuestions();
+        surveyQuestions.setType("PHQ 9");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getPHQ9Questions(SurveyScreen.this, url);
+        requestObject.getPHQ9Questions(SurveyScreen.this, surveyQuestions, url);
     }
 
     /**
@@ -567,9 +566,9 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             @Override
             public void onClick(View v) {
                 selectedLanguage = "1";
-                englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
             }
@@ -579,9 +578,9 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             @Override
             public void onClick(View v) {
                 selectedLanguage = "2";
-                kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
             }
@@ -609,15 +608,15 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
             selectedLanguage = "2";
-            kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
-            englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
         }else{
             selectedLanguage = "1";
-            englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
-            kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
         }
         res.updateConfiguration(conf, dm);
@@ -631,26 +630,28 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        nextButton.setText(R.string.next);
+        nextButton.setText(R.string.next_question);
         if(congratulationTV!=null){
             congratulationTV.setText(R.string.congratulation_text);
         }
-        if(selectedLanguage.equals("1")){
-            ph9Question.setText(questionArray.get(questionIndex).getQuestion());
-            totalQuestions.setText("of " + questionArray.size() +"");
-            questionNumber.setText(questionArray.get(questionIndex).getQn_number());
-            option_oneTV.setText(questionArray.get(questionIndex).getOption_1());
-            option_twoTV.setText(questionArray.get(questionIndex).getOption_2());
-            option_threeTV.setText(questionArray.get(questionIndex).getOption_3());
-            option_fourTV.setText(questionArray.get(questionIndex).getOption_4());
-        }else{
-            ph9Question.setText(questionArray.get(questionIndex).getQuestionKannada());
-            totalQuestions.setText("of " + questionArray.size() +"");
-            questionNumber.setText(questionArray.get(questionIndex).getQn_number());
-            option_oneTV.setText(questionArray.get(questionIndex).getOption_1Kannada());
-            option_twoTV.setText(questionArray.get(questionIndex).getOption_2Kannada());
-            option_threeTV.setText(questionArray.get(questionIndex).getOption_3Kannada());
-            option_fourTV.setText(questionArray.get(questionIndex).getOption_4Kannada());
+        if(questionArray.size()!=0){
+            if(selectedLanguage.equals("1")){
+                ph9Question.setText(questionArray.get(questionIndex).getQuestion_e());
+                totalQuestions.setText("of " + questionArray.size() +"");
+                questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+                option_oneTV.setText(questionArray.get(questionIndex).getOption_1_e());
+                option_twoTV.setText(questionArray.get(questionIndex).getOption_2_e());
+                option_threeTV.setText(questionArray.get(questionIndex).getOption_3_e());
+                option_fourTV.setText(questionArray.get(questionIndex).getOption_4_e());
+            }else{
+                ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
+                totalQuestions.setText("of " + questionArray.size() +"");
+                questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+                option_oneTV.setText(questionArray.get(questionIndex).getOption_1_k());
+                option_twoTV.setText(questionArray.get(questionIndex).getOption_2_k());
+                option_threeTV.setText(questionArray.get(questionIndex).getOption_3_k());
+                option_fourTV.setText(questionArray.get(questionIndex).getOption_4_k());
+            }
         }
     }
 

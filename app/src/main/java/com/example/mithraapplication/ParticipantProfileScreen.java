@@ -27,15 +27,23 @@ import com.example.mithraapplication.Fragments.DiseasesProfileFragment;
 import com.example.mithraapplication.Fragments.RegistrationFragment;
 import com.example.mithraapplication.Fragments.ScreeningFragment;
 import com.example.mithraapplication.Fragments.SocioDemographyFragment;
+import com.example.mithraapplication.ModelClasses.RegisterParticipant;
+import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
-public class ParticipantProfileScreen extends AppCompatActivity {
+public class ParticipantProfileScreen extends AppCompatActivity implements HandleServerResponse{
 
-    private Button englishButtonProfile, kannadaButtonProfile;
-    private TextView profileTitleTV, dashboardTVProfile, participantTVProfile, coordinatorNameTVProfile;
+    private Button englishButtonProfile, kannadaButtonProfile, profileEditButton;
+    private TextView profileTitleTV, dashboardTVProfile, participantTVProfile, coordinatorNameTVProfile, profileParticipantName;
     private LinearLayout dashboardLinearLayoutProfile, participantLinearLayoutProfile;
     private ImageView mithraLogoProfile, coordinatorProfile, notificationsIconProfile, participantsIconParticipant;
     private TabLayout profileTabLayout;
@@ -44,6 +52,10 @@ public class ParticipantProfileScreen extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
     private Fragment fragment = null;
     private MithraUtility mithraUtility = new MithraUtility();
+    public static String isLanguageSelected = "en";
+    private RegisterParticipant registerParticipant = new RegisterParticipant();
+    private String isEditable = "true";
+    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +65,8 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         onClickOfLanguageButton();
         getCurrentLocale();
         onClickOfDashboardButton();
+        onClickOfEditButton();
+        getIntentData();
     }
 
     private void RegisterViews() {
@@ -68,7 +82,7 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         participantTVProfile = findViewById(R.id.participantsTVProfile);
         participantTVProfile.setTextColor(getResources().getColor(R.color.text_color));
         coordinatorNameTVProfile = findViewById(R.id.coordinatorNameTVProfile);
-        String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator));
+        String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator));
         if(!coordinatorUserName.equals("NULL")){
             coordinatorNameTVProfile.setText(coordinatorUserName);
         }
@@ -79,7 +93,6 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         participantsIconParticipant = findViewById(R.id.participantsIconProfile);
         participantsIconParticipant.setImageDrawable(getResources().getDrawable(R.drawable.participants_icon_black));
 
-
         profileTabLayout = findViewById(R.id.profileTabLayout);
         profileFrameLayout = findViewById(R.id.profileFrameLayout);
 //        profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 3);
@@ -87,8 +100,11 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         disableTab(1);
         disableTab(2);
         disableTab(3);
-        setStartupTab();
         setTabSelectedListener();
+
+        profileParticipantName = findViewById(R.id.profileParticipantName);
+        profileEditButton = findViewById(R.id.profileEditButton);
+        setVisibilityForEdit(false);
     }
 
     private void disableTab(int tabNumber)
@@ -98,6 +114,23 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         vgTab.setEnabled(false);
     }
 
+    private void enableTab(int tabNumber)
+    {
+        ViewGroup vg = (ViewGroup) profileTabLayout.getChildAt(0);
+        ViewGroup vgTab = (ViewGroup) vg.getChildAt(tabNumber);
+        vgTab.setEnabled(true);
+    }
+
+    private void setVisibilityForEdit(boolean isVisible){
+        if(isVisible){
+            profileParticipantName.setVisibility(View.VISIBLE);
+            profileEditButton.setVisibility(View.VISIBLE);
+        }else{
+            profileParticipantName.setVisibility(View.GONE);
+            profileEditButton.setVisibility(View.GONE);
+        }
+    }
+
     private void setStartupTab(){
         fragment = new ScreeningFragment();
         fragmentManager = getSupportFragmentManager();
@@ -105,6 +138,29 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         fragmentTransaction.replace(R.id.profileFrameLayout, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
+    }
+
+    private void getIntentData(){
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if(extras!=null){
+            registerParticipant = (RegisterParticipant) intent.getSerializableExtra("RegisterParticipant Array");
+            isEditable = intent.getStringExtra("isEditable");
+        }
+
+        if(isEditable!=null && !isEditable.equals("true")){
+            ((LinearLayout)profileTabLayout.getTabAt(0).view).setVisibility(View.GONE);
+            profileTabLayout.getTabAt(1).setText("Profile");
+            enableTab(2);
+            enableTab(3);
+            if(registerParticipant!=null){
+                profileParticipantName.setText(registerParticipant.getParticipantName());
+            }
+            setVisibilityForEdit(true);
+            callGetParticipantTrackingDetails();
+        }else{
+            setStartupTab();
+        }
     }
 
     private void setTabSelectedListener(){
@@ -135,28 +191,26 @@ public class ParticipantProfileScreen extends AppCompatActivity {
                 tabData.select();
                 break;
             case 1:
-                fragment = new RegistrationFragment();
+                fragment = new RegistrationFragment(trackingParticipantStatus, isEditable, registerParticipant);
                 TabLayout.Tab tabData1 = profileTabLayout.getTabAt(position);
                 assert tabData1 != null;
                 tabData1.select();
-                disableTab(0);
+                ((LinearLayout)profileTabLayout.getTabAt(0).view).setVisibility(View.GONE);
                 break;
             case 2:
-                fragment = new SocioDemographyFragment();
+                fragment = new SocioDemographyFragment(trackingParticipantStatus, isEditable);
                 TabLayout.Tab tabData2 = profileTabLayout.getTabAt(position);
                 assert tabData2 != null;
                 tabData2.select();
-                disableTab(0);
-                disableTab(1);
+                enableTab(1);
                 break;
             case 3:
-                fragment = new DiseasesProfileFragment();
+                fragment = new DiseasesProfileFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
                 TabLayout.Tab tabData3 = profileTabLayout.getTabAt(position);
                 assert tabData3 != null;
                 tabData3.select();
-                disableTab(0);
-                disableTab(1);
-                disableTab(2);
+                enableTab(1);
+                enableTab(2);
                 break;
         }
         FragmentManager fm = getSupportFragmentManager();
@@ -164,6 +218,16 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         ft.replace(R.id.profileFrameLayout, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
+    }
+
+    private void onClickOfEditButton(){
+        profileEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isEditable = "reEdit";
+                setupSelectedTabFragment(profileTabLayout.getSelectedTabPosition());
+            }
+        });
     }
 
     public void showPopupWindow(final View view) {
@@ -216,9 +280,10 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         englishButtonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                englishButtonProfile.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                isLanguageSelected = "en";
+                englishButtonProfile.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
                 englishButtonProfile.setTextColor(getResources().getColor(R.color.black));
-                kannadaButtonProfile.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButtonProfile.setBackgroundResource(R.drawable.right_kannada_toggle_button);
                 kannadaButtonProfile.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
             }
@@ -227,13 +292,21 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         kannadaButtonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kannadaButtonProfile.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                isLanguageSelected = "kn";
+                kannadaButtonProfile.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
                 kannadaButtonProfile.setTextColor(getResources().getColor(R.color.black));
-                englishButtonProfile.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButtonProfile.setBackgroundResource(R.drawable.left_english_toggle_button);
                 englishButtonProfile.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
             }
         });
+    }
+
+    private void callGetParticipantTrackingDetails(){
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"user_pri_id\", \"=\", \"" + registerParticipant.getUser_pri_id() + "\"]]";
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.getTrackingDetails(ParticipantProfileScreen.this, url);
     }
 
     /**
@@ -256,14 +329,14 @@ public class ParticipantProfileScreen extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
-            kannadaButtonProfile.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButtonProfile.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
             kannadaButtonProfile.setTextColor(getResources().getColor(R.color.black));
-            englishButtonProfile.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButtonProfile.setBackgroundResource(R.drawable.left_english_toggle_button);
             englishButtonProfile.setTextColor(getResources().getColor(R.color.black));
         }else{
-            englishButtonProfile.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButtonProfile.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
             englishButtonProfile.setTextColor(getResources().getColor(R.color.black));
-            kannadaButtonProfile.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButtonProfile.setBackgroundResource(R.drawable.right_kannada_toggle_button);
             kannadaButtonProfile.setTextColor(getResources().getColor(R.color.black));
         }
         res.updateConfiguration(conf, dm);
@@ -276,34 +349,11 @@ public class ParticipantProfileScreen extends AppCompatActivity {
      */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-//        participantUserNameET.setHint(R.string.user_name);
-//        participantPasswordET.setHint(R.string.password);
-//        participantConfirmPasswordET.setHint(R.string.confirm_password);
-//        participantNameET.setHint(R.string.participant_name);
-//        participantAgeET.setHint(R.string.age);
-//
-//        dashboardTV.setText(R.string.dashboard);
-//        participantsTV.setText(R.string.participants);
-//        participateAgeTV.setText(R.string.age);
-//        participatePhoneNumberTV.setText(R.string.phone_number);
-//        participateUserNameTV.setText(R.string.user_name);
-//        participatePasswordTV.setText(R.string.password);
-//        participantConfirmPasswordTV.setText(R.string.confirm_password);
-//        VillageNameTV.setText(R.string.village_name);
-//        SHGAssociationTV.setText(R.string.shg_association);
-//        participantNameTV.setText(R.string.name_small_case);
-//        genderTV.setText(R.string.gender);
-//        addParticipantTV.setText(R.string.add_new_participant);
-//
-//        maleButton.setText(R.string.male);
-//        femaleButton.setText(R.string.female);
-//        othersButton.setText(R.string.others);
-//        registerButton.setText(R.string.register);
 
         profileTitleTV.setText(R.string.profile);
         dashboardTVProfile.setText(R.string.dashboard);
         participantTVProfile.setText(R.string.participants);
-        if(profileTabLayout.getTabAt(0)!= null){
+        if(profileTabLayout.getTabAt(0)!= null && ((LinearLayout)profileTabLayout.getTabAt(0).view).getVisibility()!=View.GONE){
             Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.screening);
         }
         Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText(R.string.registration);
@@ -312,5 +362,27 @@ public class ParticipantProfileScreen extends AppCompatActivity {
 //        Objects.requireNonNull(profileTabLayout.getTabAt(4)).setText(R.string.red_tab);
 
         super.onConfigurationChanged(newConfig);
+    }
+
+    public String getIsLanguageSelected(){
+        return isLanguageSelected;
+    }
+
+    @Override
+    public void responseReceivedSuccessfully(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        try{
+            trackingParticipantStatus = gson.fromJson(jsonObject.get("data"), type);
+            setupSelectedTabFragment(1);
+        }catch(Exception e){
+            Toast.makeText(ParticipantProfileScreen.this, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+
     }
 }

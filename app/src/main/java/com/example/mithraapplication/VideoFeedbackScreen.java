@@ -82,9 +82,9 @@ public class VideoFeedbackScreen extends AppCompatActivity {
         englishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
             }
@@ -93,9 +93,9 @@ public class VideoFeedbackScreen extends AppCompatActivity {
         kannadaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
             }
@@ -122,14 +122,14 @@ public class VideoFeedbackScreen extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
-            kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
-            englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
         }else{
-            englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
-            kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
         }
         res.updateConfiguration(conf, dm);

@@ -21,23 +21,23 @@
         <activity
             android:name=".VideoFeedbackScreen"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".ActivitiesScreen"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".VideoScreen"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".FullScreenVideoView"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".SplashScreen"
             android:exported="true"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,22 +46,24 @@
         </activity>
         <activity
             android:name=".LoginScreen"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".SurveyScreen"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".ParticipantsScreen"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".ParticipantLandingScreen"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".DashboardScreen"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".ParticipantProfileScreen"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="locale"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Mithra</string>
     <string name="sign_in">Sign In</string>
-    <string name="password">Password</string>
     <string name="userid">UserId</string>
     <string name="welcome">Welcome to Mithra App</string>
     <string name="let_s_get_started">Let\'s Get Started</string>
@@ -14,45 +13,19 @@
     <string name="add_new_participant">Add new participant</string>
     <string name="add_new_participant_text">Add New Participant</string>
     <string name="participant_name">Name of the participant</string>
-    <string name="gender">Gender</string>
-    <string name="phone_number">Phone number</string>
-    <string name="village_name">Village Name</string>
-    <string name="shg_association">SHG Association</string>
-    <string name="panchayat">Panchayat</string>
+
     <string name="register">Register</string>
-    <string name="create">Create</string>
     <string name="save">Save</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-    <string name="others">Others</string>
-    <string name="english" translatable="false">English</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="user_name">User Name</string>
-    <string name="years_of_education">Years Of education</string>
-    <string name="marital_status">Marital Status</string>
-    <string name="occupation">Occupation</string>
-    <string name="nearest_phc">Nearest PHC</string>
-    <string name="religion">Religion</string>
-    <string name="total_family_income_per_month">Total family Income \n(per month)</string>
-    <string name="unmarried">Unmarried</string>
-    <string name="married">Married</string>
-    <string name="caste">Caste</string>
-    <string name="number_of_family_members">Number of Adult \nFamily Members</string>
-    <string name="earning_members">Total earning \nmembers in the \nfamily</string>
-    <string name="CBOMeetings">How many CBO meetings attended in the last months?</string>
-    <string name="type_of_family">Family Type</string>
-    <string name="association_duration">Duration(in Years) \nof association with \nCBO/SHG</string>
-    <string name="nuclear">Nuclear</string>
-    <string name="joint">Joint</string>
-    <string name="next">Next</string>
-    <string name="socio_demography">Socio Demography</string>
+
+
+    <string name="next_question">Next</string>
     <string name="disease_profile">Disease Profile</string>
-    <string name="thyroid">Thyroid</string>
+    <string name="thyroid" translatable="false">Thyroid</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="diagnosed_thyroid">Have you been diagnosed with Thyroid</string>
+    <string name="diagnosed_thyroid" translatable="false">Have you been diagnosed with Thyroid</string>
     <string name="limit_activities">Does this condition limit your activities?</string>
-    <string name="received_treatment">Do you receive treatment for this condition?</string>
+    <string name="received_treatment">Do you receive\ntreatment for this condition?</string>
     <string name="diagnosed_age">How old were you when this was diagnosed?</string>
     <string name="specify_disease">Specify other disease</string>
     <string name="kannada">ಕನ್ನಡ</string>
@@ -71,8 +44,6 @@
     <string name="user_name_researcher" translatable="false">ResearcherUserName</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="child_members">Number of Child \nFamily Members</string>
-    <string name="less_than_five"><![CDATA[< 5]]></string>
     <string name="logout">Logout</string>
     <string name="back">Back</string>
     <string name="survey">Survey</string>
@@ -89,17 +60,98 @@
     <string name="green_tab">Green</string>
     <string name="yellow_tab">Yellow</string>
     <string name="red_tab">Red</string>
+    <string name="next">Next</string>
+
     <string name="screening">Screening</string>
-    <string name="registration">Registration</string>
     <string name="inclusion">Inclusion</string>
     <string name="age_above_18_years">Age above 18 years</string>
     <string name="resident">Resident of the study \nvillage</string>
-    <string name="CBOMeetingMonths">Willing to attend the CBO \nmeeting regulary in the \nupcoming months</string>
+    <string name="CBOMeetingMonths">Willing to attend the CBO \nmeeting regularly in the \nupcoming months</string>
     <string name="exclusion">Exclusion</string>
     <string name="diagnosed_with_mental_illness">Previously diagnosed with any \nsevere mental illness such as \nbipolar disorder or schizophrenia</string>
     <string name="substance_abuse">Involved in substance use \nor severe alcohol use in \nlast 6 months</string>
     <string name="user_consent">Unable to participate in \ninformed consent \ndiscussion</string>
     <string name="attempted_suicide">Attempted suicide in last 6 \nmonths</string>
 
+    <string name="registration">Registration</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="others">Others</string>
+    <string name="english" translatable="false">English</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="userName" translatable="false">User Name</string>
+    <string name="primaryID" translatable="false">PrimaryID</string>
+    <string name="tracking" translatable="false">Tracking</string>
+    <string name="trackingRegistrationName" translatable="false">RegistrationName</string>
+    <string name="trackingSocioDemography" translatable="false">SocioDemographyName</string>
+    <string name="trackingDiseaseProfile" translatable="false">DiseaseProfileName</string>
+    <string name="participantPrimaryID" translatable="false">ParticipantPrimaryID</string>
+    <string name="coordinatorPrimaryID" translatable="false">CoordinatorPrimaryID</string>
+    <string name="userScreeningName" translatable="false">User Name</string>
+    <string name="userPassword" translatable="false">Password</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="gender">Gender</string>
+    <string name="phone_number">Phone number</string>
+    <string name="village_name">Village Name</string>
+    <string name="shg_association">SHG Association</string>
+    <string name="panchayat">Panchayat</string>
+    <string name="create">Create</string>
+
+    <string name="socio_demography">Socio Demography</string>
+    <string name="SHGMeetings6Months">How many SHG \nmeetings attended \nin last 6 Months?</string>
+    <string name="no_schooling">No Schooling</string>
+    <string name="ten_to_eleven">10 – 11</string>
+    <string name="eight_to_nine">8 – 9</string>
+    <string name="five_to_seven">5 – 7</string>
+    <string name="less_than_five"><![CDATA[< 5]]></string>
+    <string name="twelve_or_more">12 or more</string>
+    <string name="professional">Professional</string>
+    <string name="unskilled_manual">Unskilled Manual</string>
+    <string name="skilled_manual">Skilled Manual</string>
+    <string name="sales_and_services">Sales and Services</string>
+    <string name="agriculture">Agriculture</string>
+    <string name="clerical">Clerical</string>
+    <string name="hindu">Hindu</string>
+    <string name="buddhist_neo_buddhist">Buddhist/Neo buddhist</string>
+    <string name="sikh">Sikh</string>
+    <string name="christian">Christian</string>
+    <string name="jain">Jain</string>
+    <string name="other">Other</string>
+    <string name="muslim">Muslim</string>
+    <string name="preferred_not_to_answer">Preferred Not to Answer</string>
+    <string name="scheduled_caste">Scheduled Caste</string>
+    <string name="do_not_know">Don\'t Know</string>
+    <string name="other_backward_class">Other Backward Class</string>
+    <string name="scheduled_tribe">Scheduled Tribe</string>
+    <string name="never_married">Never Married</string>
+    <string name="widow">Widow</string>
+    <string name="separated">Separated</string>
+    <string name="divorced">Divorced</string>
+    <string name="nuclear_family">Nuclear Family</string>
+    <string name="joint_family">Joint Family</string>
+    <string name="number">Number</string>
+    <string name="phc">PHC</string>
+    <string name="years_of_education">Years Of education</string>
+    <string name="marital_status">Marital Status</string>
+    <string name="occupation">Occupation</string>
+    <string name="nearest_phc">Nearest PHC</string>
+    <string name="religion">Religion</string>
+    <string name="total_family_income_per_month">Total family Income \n(per month)</string>
+    <string name="married">Married</string>
+    <string name="caste">Caste</string>
+    <string name="number_of_family_members">Number of Adult \nFamily Members</string>
+    <string name="child_members">Number of Child \nFamily Members</string>
+    <string name="earning_members">Total earning \nmembers in the \nfamily</string>
+    <string name="CBOMeetings">How many CBO\nmeetings attended\nin the last months?</string>
+    <string name="type_of_family">Family Type</string>
+    <string name="association_duration">Duration(in Years) \nof association with \nCBO/SHG</string>
+    <string name="part_id">Part ID</string>
+    <string name="details">Details</string>
+    <string name="enrollment_status">Enrollment Status</string>
+    <string name="survey_status">Survey Status</string>
+    <string name="module_status">Module Status</string>
+    <string name="referral_status">Referral Status</string>
+    <string name="name">Name</string>
 
 </resources>

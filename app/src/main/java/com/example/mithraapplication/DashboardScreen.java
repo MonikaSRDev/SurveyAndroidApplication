@@ -1,5 +1,6 @@
 package com.example.mithraapplication;
 
+import android.app.admin.DeviceAdminService;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -11,27 +12,40 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mithraapplication.Adapters.DashboardVerticalParticipantsAdapter;
 import com.example.mithraapplication.Adapters.HorizontalDashboardAdapter;
+import com.example.mithraapplication.Adapters.VerticalVideoModulesAdapter;
 import com.example.mithraapplication.ModelClasses.ParticipantStatus;
+import com.example.mithraapplication.ModelClasses.RegisterParticipant;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DashboardScreen extends AppCompatActivity {
+public class DashboardScreen extends AppCompatActivity implements HandleServerResponse{
 
     private Button englishButtonDashboard, kannadaButtonDashboard;
-    private RecyclerView horizontalRecyclerView;
-    private TextView dashboardTitleTV, dashboardTVDashboard, participantTVDashboard, coordinatorNameTVDashboard, villageNameDashboardTV;
+    private RecyclerView horizontalRecyclerView, verticalRecyclerView;
+    private TextView dashboardTitleTV, dashboardTVDashboard, participantTVDashboard, coordinatorNameTVDashboard, villageNameDashboardTV,
+            participantIDDashboard, participantDetailsDashboard, participantEnrollmentStatusDashboard, participantSurveyStatusDashboard, participantModuleStatusDashboard, participantReferralStatusDashboard;
     private LinearLayout dashboardLinearLayout, participantLinearLayout;
     private ImageView mithraLogoDashboard, coordinatorProfileDashboard, notificationsIconDashboard, dashboardIconDashboard;
     private MithraUtility mithraUtility = new MithraUtility();
     private ArrayList<ParticipantStatus> participantStatusArrayList = new ArrayList<>();
     private HorizontalDashboardAdapter horizontalDashboardAdapter;
+    private DashboardVerticalParticipantsAdapter dashboardVerticalParticipantsAdapter;
+    private FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +54,10 @@ public class DashboardScreen extends AppCompatActivity {
         initializeData();
         RegisterViews();
         setRecyclerView();
+        callGetAllParticipantsDetails();
         setOnClickForParticipants();
         onClickOfLanguageButton();
+        onClickFloatingAddNewParticipantButton();
         getCurrentLocale();
     }
 
@@ -89,6 +105,7 @@ public class DashboardScreen extends AppCompatActivity {
         kannadaButtonDashboard = findViewById(R.id.kannadaButtonDashboard);
 
         horizontalRecyclerView = findViewById(R.id.dashboardHorizontalRV);
+        verticalRecyclerView = findViewById(R.id.dashboardVerticalRV);
 
         dashboardLinearLayout = findViewById(R.id.dashboardLinearLayoutDashboard);
         dashboardLinearLayout.setBackgroundResource(R.drawable.selected_page);
@@ -99,18 +116,27 @@ public class DashboardScreen extends AppCompatActivity {
         dashboardTVDashboard.setTextColor(getResources().getColor(R.color.text_color));
         participantTVDashboard = findViewById(R.id.participantsTVDashboard);
         coordinatorNameTVDashboard = findViewById(R.id.coordinatorNameTVDashboard);
-        String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator));
+        String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator));
         if(!coordinatorUserName.equals("NULL")){
             coordinatorNameTVDashboard.setText(coordinatorUserName);
         }
 
         villageNameDashboardTV = findViewById(R.id.villageSpinnerDashboard);
 
+        participantIDDashboard = findViewById(R.id.participantIDDashboard);
+        participantDetailsDashboard = findViewById(R.id.participantDetailsDashboard);
+        participantEnrollmentStatusDashboard = findViewById(R.id.participantEnrollmentStatusDashboard);
+        participantModuleStatusDashboard = findViewById(R.id.participantModuleStatusDashboard);
+        participantSurveyStatusDashboard = findViewById(R.id.participantSurveyStatusDashboard);
+        participantReferralStatusDashboard = findViewById(R.id.participantReferralStatusDashboard);
+
         mithraLogoDashboard = findViewById(R.id.appLogoDashboard);
         coordinatorProfileDashboard = findViewById(R.id.coordinatorProfileDashboard);
         notificationsIconDashboard = findViewById(R.id.notificationsLogoDashboard);
         dashboardIconDashboard = findViewById(R.id.dashboardIconDashboard);
         dashboardIconDashboard.setImageDrawable(getResources().getDrawable(R.drawable.dashboard_icon_black));
+
+        floatingActionButton = findViewById(R.id.floatingActionButtonDashboard);
 
     }
 
@@ -120,6 +146,30 @@ public class DashboardScreen extends AppCompatActivity {
         horizontalRecyclerView.setAdapter(horizontalDashboardAdapter);
         horizontalRecyclerView.setLayoutManager(linearLayoutManager);
 
+    }
+
+    private void setVerticalRecyclerView(ArrayList<RegisterParticipant> participantArrayList){
+        dashboardVerticalParticipantsAdapter = new DashboardVerticalParticipantsAdapter(this, participantArrayList, new DashboardVerticalParticipantsAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(RegisterParticipant registerParticipant) {
+
+            }
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        verticalRecyclerView.setAdapter(dashboardVerticalParticipantsAdapter);
+        verticalRecyclerView.setLayoutManager(linearLayoutManager);
+
+    }
+
+
+    private void onClickFloatingAddNewParticipantButton() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardScreen.this, ParticipantProfileScreen.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setOnClickForParticipants(){
@@ -140,9 +190,9 @@ public class DashboardScreen extends AppCompatActivity {
         englishButtonDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                englishButtonDashboard.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
                 englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
                 kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
             }
@@ -151,9 +201,9 @@ public class DashboardScreen extends AppCompatActivity {
         kannadaButtonDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
                 kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                englishButtonDashboard.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
                 englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
             }
@@ -180,14 +230,14 @@ public class DashboardScreen extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
-            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
             kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-            englishButtonDashboard.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
             englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
         }else{
-            englishButtonDashboard.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
             englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
             kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
         }
         res.updateConfiguration(conf, dm);
@@ -205,5 +255,44 @@ public class DashboardScreen extends AppCompatActivity {
         participantTVDashboard.setText(R.string.participants);
         dashboardTVDashboard.setText(R.string.dashboard);
         villageNameDashboardTV.setText(R.string.village);
+        participantIDDashboard.setText(R.string.part_id);
+        participantEnrollmentStatusDashboard.setText(R.string.enrollment_status);
+        participantDetailsDashboard.setText(R.string.details);
+        participantModuleStatusDashboard.setText(R.string.module_status);
+        participantSurveyStatusDashboard.setText(R.string.survey_status);
+        participantReferralStatusDashboard.setText(R.string.referral_status);
+
+    }
+
+    private void callGetAllParticipantsDetails(){
+        String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.participant.api.participants";
+        ServerRequestAndResponse serverRequestAndResponse = new ServerRequestAndResponse();
+        serverRequestAndResponse.setHandleServerResponse(this);
+        serverRequestAndResponse.getAllParticipantsDetails(DashboardScreen.this, url);
+    }
+
+    @Override
+    public void responseReceivedSuccessfully(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        ArrayList<RegisterParticipant> registerParticipantsArrayList;
+
+        try{
+            registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
+            if(registerParticipantsArrayList.size() == 0){
+                floatingActionButton.setVisibility(View.GONE);
+            }else{
+                floatingActionButton.setVisibility(View.VISIBLE);
+                setVerticalRecyclerView(registerParticipantsArrayList);
+            }
+        }catch(Exception e){
+            Toast.makeText(DashboardScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+
     }
 }

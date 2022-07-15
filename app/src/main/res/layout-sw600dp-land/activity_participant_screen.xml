@@ -152,7 +152,7 @@
                 android:layout_width="93dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:background="@drawable/left_selected_toggle_button"
+                android:background="@drawable/left_english_toggle_selected_button"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:text="@string/english"
@@ -165,7 +165,7 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:background="@drawable/right_unselected_toggle_button"
+                android:background="@drawable/right_kannada_toggle_button"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:text="@string/kannada"
@@ -270,6 +270,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabLayoutParticipant" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

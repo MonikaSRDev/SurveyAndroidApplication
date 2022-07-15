@@ -3,7 +3,7 @@ package com.example.mithraapplication.ModelClasses;
 import java.util.List;
 
 public class DiseasesProfilePostRequest extends  JsonServerObject{
-    private String user_name = "NULL";
+    private String user_pri_id = "NULL";
     private String diabetes_mellitus;
     private String hypertension;
     private String heart_disease;
@@ -18,14 +18,9 @@ public class DiseasesProfilePostRequest extends  JsonServerObject{
     private String asthma;
     private String skin_disease;
     private String other_diseases;
-
-    public String getUser_name() {
-        return user_name;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
+    private String active = "NULL";
+    private String created_user = "NULL";
+    private String modified_user = "UT-9-2022-07-11-08:19:58-no_one_modified";
 
     public String getDiabetes_mellitus() {
         return diabetes_mellitus;
@@ -137,5 +132,37 @@ public class DiseasesProfilePostRequest extends  JsonServerObject{
 
     public void setOther_diseases(String other_diseases) {
         this.other_diseases = other_diseases;
+    }
+
+    public String getUser_pri_id() {
+        return user_pri_id;
+    }
+
+    public void setUser_pri_id(String user_pri_id) {
+        this.user_pri_id = user_pri_id;
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    public String getCreated_user() {
+        return created_user;
+    }
+
+    public void setCreated_user(String created_user) {
+        this.created_user = created_user;
+    }
+
+    public String getModified_user() {
+        return modified_user;
+    }
+
+    public void setModified_user(String modified_user) {
+        this.modified_user = modified_user;
     }
 }

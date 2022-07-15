@@ -168,7 +168,7 @@
                 android:layout_width="93dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:background="@drawable/left_selected_toggle_button"
+                android:background="@drawable/left_english_toggle_selected_button"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:text="@string/english"
@@ -183,7 +183,7 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:background="@drawable/right_unselected_toggle_button"
+                android:background="@drawable/right_kannada_toggle_button"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:text="@string/kannada"
@@ -226,40 +226,42 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dashboardContentLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="525dp"
         android:layout_marginStart="166dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayoutDashboard">
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutDashboard"
+        app:layout_constraintTop_toBottomOf="@+id/dashboardHorizontalRV">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/dashboardVerticalCardView"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="-15dp"
-            android:layout_marginBottom="-15dp"
+            android:foregroundGravity="right"
             app:cardBackgroundColor="@color/dashboard_card_background"
             app:cardCornerRadius="15dp"
-            android:layout_marginTop="10dp"
-            android:foregroundGravity="right"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="450dp"
+                android:layout_height="525dp"
                 android:layout_gravity="start">
 
                 <TextView
                     android:id="@+id/villageSpinnerDashboard"
                     android:layout_width="125dp"
-                    android:layout_height="45dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/dropdown_with_arrow"
                     android:fontFamily="@font/open_sans"
-                    android:padding="15dp"
+                    android:gravity="center"
+                    android:padding="8dp"
                     android:text="@string/village"
                     android:textColor="@color/text_color"
                     android:textSize="12sp"
@@ -270,11 +272,12 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/columnLLDashboardCV"
-                    android:layout_width="match_parent"
-                    android:layout_height="62dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="80dp"
+                    android:layout_width="1076dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="65dp"
                     android:layout_marginEnd="36dp"
+                    android:layout_marginBottom="10dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="10dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -284,6 +287,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -293,7 +298,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
                             android:gravity="center"
-                            android:text="Part ID"
+                            android:text="@string/part_id"
                             android:textAllCaps="true"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
@@ -305,7 +310,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
                             android:gravity="center"
-                            android:text="Details"
+                            android:text="@string/details"
                             android:textAllCaps="true"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
@@ -317,7 +322,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
                             android:gravity="center"
-                            android:text="Enrollment Status"
+                            android:text="@string/enrollment_status"
                             android:textAllCaps="true"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
@@ -329,7 +334,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
                             android:gravity="center"
-                            android:text="Survay Status"
+                            android:text="@string/survey_status"
                             android:textAllCaps="true"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
@@ -341,7 +346,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
                             android:gravity="center"
-                            android:text="Module Status"
+                            android:text="@string/module_status"
                             android:textAllCaps="true"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
@@ -353,7 +358,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
                             android:gravity="center"
-                            android:text="Referral Status"
+                            android:text="@string/referral_status"
                             android:textAllCaps="true"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
@@ -364,13 +369,17 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/dashboardVerticalRV"
-                    android:layout_width="1076dp"
-                    android:layout_height="353dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/columnLLDashboardCV"
-                    app:layout_constraintVertical_bias="0.976" />
+                    app:layout_constraintVertical_bias="0.03" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -381,14 +390,32 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dashboardHorizontalRV"
         android:layout_width="match_parent"
-        android:layout_height="187dp"
-        android:layout_marginTop="104dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="80dp"
         android:foregroundGravity="right"
         android:layout_marginStart="166dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/constraintLayoutDashboard"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonDashboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:clickable="true"
+        android:contentDescription="FAB"
+        android:elevation="0dp"
+        android:focusable="true"
+        android:scaleType="fitCenter"
+        app:backgroundTint="@android:color/holo_blue_light"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.946"
+        app:srcCompat="@drawable/plus_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

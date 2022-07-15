@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="1072dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:id="@+id/verticalRowLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/participantIDValTV"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="000"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:id="@+id/detailsLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/partDetailsName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/partDetailsAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Age"
+                android:layout_margin="5dp"
+                android:textSize="14sp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/partDetailsVillage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/village"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/enrollmentStatusIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/enrolment_status_icon"/>
+
+        <ImageView
+            android:id="@+id/surveyStatusIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/survey_status_icon"/>
+
+        <TextView
+            android:id="@+id/moduleStatusDashboardTV"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="00%"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/referralStatusTV"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textSize="14sp"
+            android:layout_margin="10dp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

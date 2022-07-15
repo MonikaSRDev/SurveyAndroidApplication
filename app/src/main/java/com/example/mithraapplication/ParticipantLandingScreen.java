@@ -1,6 +1,5 @@
 package com.example.mithraapplication;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +25,7 @@ public class ParticipantLandingScreen extends AppCompatActivity {
     private TextView participantNameTV, surveyTV, videoTV, activityTV, logoutTV;
     private MithraUtility mithraUtility = new MithraUtility();
     private ImageView logoutButton;
+    private RelativeLayout logoutLayoutLP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +42,7 @@ public class ParticipantLandingScreen extends AppCompatActivity {
     }
 
     private void onClickOfLogoutButton(){
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ParticipantLandingScreen.this, LoginScreen.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        logoutTV.setOnClickListener(new View.OnClickListener() {
+        logoutLayoutLP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ParticipantLandingScreen.this, LoginScreen.class);
@@ -76,8 +67,9 @@ public class ParticipantLandingScreen extends AppCompatActivity {
         activityTV = findViewById(R.id.activityTV);
         logoutTV = findViewById(R.id.logoutTV);
         logoutButton = findViewById(R.id.logoutIcon);
-        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant));
+        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant));
         participantNameTV.setText(participantUserName);
+        logoutLayoutLP = findViewById(R.id.logoutButtonLP);
     }
 
     private void checkFromActivity(){
@@ -175,9 +167,9 @@ public class ParticipantLandingScreen extends AppCompatActivity {
         englishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
             }
@@ -186,9 +178,9 @@ public class ParticipantLandingScreen extends AppCompatActivity {
         kannadaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
             }
@@ -215,14 +207,14 @@ public class ParticipantLandingScreen extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
-            kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
-            englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
         }else{
-            englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
-            kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
         }
         res.updateConfiguration(conf, dm);

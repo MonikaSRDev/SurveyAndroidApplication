@@ -6,7 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterParticipant extends JsonServerObject {
+import java.io.Serializable;
+
+public class RegisterParticipant extends JsonServerObject implements Serializable {
     @SerializedName("user_name")
     private String participantUserName = "NULL";
     @SerializedName("full_name")
@@ -24,8 +26,9 @@ public class RegisterParticipant extends JsonServerObject {
     @SerializedName("shg_associate")
     private String participantSHGAssociation = "NULL";
     private String screeningid = "NULL";
-//    @SerializedName("password")
-//    private String participantPassword = "NULL";
+    private String user_pri_id = "NULL";
+    private String created_user = "NULL";
+    private String modified_user = "UT-9-2022-07-11-08:19:58-no_one_modified";
 
     public String getParticipantName() {
         return participantName;
@@ -83,14 +86,6 @@ public class RegisterParticipant extends JsonServerObject {
         this.participantUserName = participantUserName;
     }
 
-//    public String getParticipantPassword() {
-//        return participantPassword;
-//    }
-//
-//    public void setParticipantPassword(String participantPassword) {
-//        this.participantPassword = participantPassword;
-//    }
-
     public String getParticipantPanchayat() {
         return participantPanchayat;
     }
@@ -105,6 +100,30 @@ public class RegisterParticipant extends JsonServerObject {
 
     public void setScreeningid(String screeningid) {
         this.screeningid = screeningid;
+    }
+
+    public String getUser_pri_id() {
+        return user_pri_id;
+    }
+
+    public void setUser_pri_id(String user_pri_id) {
+        this.user_pri_id = user_pri_id;
+    }
+
+    public String getCreated_user() {
+        return created_user;
+    }
+
+    public void setCreated_user(String created_user) {
+        this.created_user = created_user;
+    }
+
+    public String getModified_user() {
+        return modified_user;
+    }
+
+    public void setModified_user(String modified_user) {
+        this.modified_user = modified_user;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

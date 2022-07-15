@@ -7,22 +7,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.LocaleList;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.mithraapplication.Adapters.VerticalVideoModulesAdapter;
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 import com.example.mithraapplication.ModelClasses.VideoModules;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class VideoScreen extends AppCompatActivity {
+public class VideoScreen extends AppCompatActivity implements HandleServerResponse{
 
     public static ArrayList<VideoModules> videoModulesArrayList = new ArrayList<>();
     private RecyclerView verticalRecyclerView;
@@ -32,6 +37,7 @@ public class VideoScreen extends AppCompatActivity {
     private TextView logoutTV, backTV, participantName;
     private MithraUtility mithraUtility = new MithraUtility();
     private TextView videoDescription;
+    private RelativeLayout logoutButtonVP, backButtonVP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +137,7 @@ public class VideoScreen extends AppCompatActivity {
     }
 
     private void RegisterViews(){
-        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant));
+        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant));
         participantName = findViewById(R.id.participantNameTVVP);
         participantName.setText(participantUserName);
 
@@ -145,6 +151,9 @@ public class VideoScreen extends AppCompatActivity {
         logoutTV = findViewById(R.id.logoutVPTV);
         backTV = findViewById(R.id.backButtonTV);
         videoDescription = findViewById(R.id.videoDescription);
+
+        logoutButtonVP = findViewById(R.id.logoutButtonVP);
+        backButtonVP = findViewById(R.id.backButtonVP);
     }
 
     private void setRecyclerView(){
@@ -155,23 +164,12 @@ public class VideoScreen extends AppCompatActivity {
     }
 
     private void onClickOfBackButton(){
-        backButton.setOnClickListener(new View.OnClickListener() {
+        backButtonVP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VideoScreen.this, ParticipantLandingScreen.class);
                 intent.putExtra("FromActivity", "VideoScreen");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        backTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VideoScreen.this, ParticipantLandingScreen.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("FromActivity", "VideoScreen");
                 startActivity(intent);
                 finish();
             }
@@ -179,16 +177,7 @@ public class VideoScreen extends AppCompatActivity {
     }
 
     private void onClickOfLogoutButton(){
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VideoScreen.this, LoginScreen.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        logoutTV.setOnClickListener(new View.OnClickListener() {
+        logoutButtonVP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VideoScreen.this, LoginScreen.class);
@@ -205,9 +194,9 @@ public class VideoScreen extends AppCompatActivity {
         englishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
                 verticalVideoModulesAdapter.notifyDataSetChanged();
@@ -217,9 +206,9 @@ public class VideoScreen extends AppCompatActivity {
         kannadaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
                 verticalVideoModulesAdapter.notifyDataSetChanged();
@@ -247,14 +236,14 @@ public class VideoScreen extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
-            kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
-            englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
         }else{
-            englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
-            kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
         }
         res.updateConfiguration(conf, dm);
@@ -283,5 +272,15 @@ public class VideoScreen extends AppCompatActivity {
         intent.putExtra("FromActivity", "VideoScreen");
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void responseReceivedSuccessfully(String message) {
+
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+
     }
 }

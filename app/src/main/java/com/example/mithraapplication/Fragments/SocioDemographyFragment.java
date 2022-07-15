@@ -1,15 +1,18 @@
 package com.example.mithraapplication.Fragments;
 
+import static com.example.mithraapplication.Fragments.RegistrationFragment.trackingName;
+
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,12 +20,22 @@ import androidx.fragment.app.Fragment;
 
 import com.example.mithraapplication.HandleServerResponse;
 import com.example.mithraapplication.MithraUtility;
+import com.example.mithraapplication.ModelClasses.FrappeResponse;
+import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.SocioDemography;
+import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
+import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
+import com.example.mithraapplication.ModelClasses.UpdateSocioDemographyTracking;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
 import com.example.mithraapplication.ServerRequestAndResponse;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.Locale;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class SocioDemographyFragment extends Fragment implements HandleServerResponse {
 
@@ -39,6 +52,10 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             participantMaritalStatus = "NULL", participantFamilyType = "NULL", participantCaste = "NULL", participantReligion = "NULL",
             participantOccupation = "NULL", participantSchooling = "NULL", nearestPHC = "NULL", SHGMeetings = "NULL";
     private MithraUtility mithraUtility = new MithraUtility();
+    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = null;
+    private String isEditable = "true";
+    private SocioDemography socioDemographyDetails = null;
+
 
     @Nullable
     @Override
@@ -49,6 +66,9 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(isEditable!= null && !isEditable.equals("true")){
+            callGetIndividualSocioDemographyDetails();
+        }
         RegisterViews(view);
         getYearsOfEducation();
         getOccupation();
@@ -57,6 +77,11 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         getSelectedMaritalStatus();
         getSelectedFamilyType();
         onClickOfNextButton();
+    }
+
+    public SocioDemographyFragment(ArrayList<TrackingParticipantStatus> trackingParticipantStatus, String isEditable){
+        this.trackingParticipantStatus = trackingParticipantStatus;
+        this.isEditable = isEditable;
     }
 
     /**
@@ -126,8 +151,162 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         nearestPHCET = view.findViewById(R.id.nearestPHCET);
     }
 
-    public void getYearsOfEducation(){
+    private void setEditable(){
+        if(isEditable!=null && isEditable.equals("true")){
+            setEditableViews(true);
+        }else {
+            setEditableViews(isEditable == null || !isEditable.equals("false"));
+            totalFamilyIncomeET.setText(socioDemographyDetails.getFamilyIncome());
+            totalEarningFamilyMembersET.setText(socioDemographyDetails.getNumEarningFamMembers());
+            numAdultFamilyET.setText(socioDemographyDetails.getNumFamilyAdultMembers());
+            numChildFamilyET.setText(socioDemographyDetails.getNumFamilyChildMembers());
+            associationDurationET.setText(socioDemographyDetails.getAssociationDuration());
+            SHGMeetingsET.setText(socioDemographyDetails.getCBOMeetings());
+            nearestPHCET.setText(socioDemographyDetails.getNearestPHC());
 
+            if(isEditable!=null && !isEditable.equals("true") && socioDemographyDetails!=null ){
+                participantSchooling = socioDemographyDetails.getYearsOfEducation();
+                participantOccupation = socioDemographyDetails.getOccupation();
+                participantReligion = socioDemographyDetails.getReligion();
+                participantCaste = socioDemographyDetails.getCaste();
+                participantMaritalStatus = socioDemographyDetails.getMaritalStatus();
+                participantFamilyType = socioDemographyDetails.getTypeOfFamily();
+            }
+
+            if(participantSchooling!=null && participantSchooling.equals(noSchoolingButton.getText().toString())){
+                noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantSchooling!=null && participantSchooling.equals(lessThanFiveButton.getText().toString())){
+                lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantSchooling!=null && participantSchooling.equals(fiveToSevenButton.getText().toString())){
+                fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantSchooling!=null && participantSchooling.equals(eightToNineButton.getText().toString())){
+                eightToNineButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantSchooling!=null && participantSchooling.equals(tenToElevenButton.getText().toString())){
+                tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantSchooling!=null && participantSchooling.equals(twelveOrMoreButton.getText().toString())){
+                twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }
+
+            if(participantOccupation!=null && participantOccupation.equals(professionalButton.getText().toString())){
+                professionalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantOccupation!=null && participantOccupation.equals(clericalButton.getText().toString())){
+                clericalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantOccupation!=null && participantOccupation.equals(salesAndServicesButton.getText().toString())){
+                salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantOccupation!=null && participantOccupation.equals(skilledManualButton.getText().toString())){
+                skilledManualButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantOccupation!=null && participantOccupation.equals(unskilledManualButton.getText().toString())){
+                unskilledManualButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantOccupation!=null && participantOccupation.equals(agricultureButton.getText().toString())){
+                agricultureButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }
+
+            if(participantReligion!=null && participantReligion.equals(hinduButton.getText().toString())){
+                hinduButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantReligion!=null && participantReligion.equals(muslimButton.getText().toString())){
+                muslimButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantReligion!=null && participantReligion.equals(christianButton.getText().toString())){
+                christianButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantReligion!=null && participantReligion.equals(sikhButton.getText().toString())){
+                sikhButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantReligion!=null && participantReligion.equals(buddhistButton.getText().toString())){
+                buddhistButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantReligion!=null && participantReligion.equals(jainButton.getText().toString())){
+                jainButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantReligion!=null && participantReligion.equals(otherReligionButton.getText().toString())){
+                otherReligionButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantReligion!=null && participantReligion.equals(pNAReligionButton.getText().toString())){
+                pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }
+
+            if(participantCaste!=null && participantCaste.equals(scheduledCasteButton.getText().toString())){
+                scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantCaste!=null && participantCaste.equals(scheduledTribeButton.getText().toString())){
+                scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantCaste!=null && participantCaste.equals(backwardClassesButton.getText().toString())){
+                backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantCaste!=null && participantCaste.equals(doNotKnowCasteButton.getText().toString())){
+                doNotKnowCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantCaste!=null && participantCaste.equals(otherCasteButton.getText().toString())){
+                otherCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantCaste!=null && participantCaste.equals(pNACasteButton.getText().toString())){
+                pNACasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }
+
+            if(participantMaritalStatus!=null && participantMaritalStatus.equals(neverMarriedButton.getText().toString())){
+                neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantMaritalStatus!=null && participantMaritalStatus.equals(marriedButton.getText().toString())){
+                marriedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantMaritalStatus!=null && participantMaritalStatus.equals(divorcedButton.getText().toString())){
+                divorcedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantMaritalStatus!=null && participantMaritalStatus.equals(separatedButton.getText().toString())){
+                separatedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantMaritalStatus!=null && participantMaritalStatus.equals(widowButton.getText().toString())) {
+                widowButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }
+
+            if(participantFamilyType != null && participantFamilyType.equals(nuclearFamilyButton.getText().toString())){
+                nuclearFamilyButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }else if(participantFamilyType != null && participantFamilyType.equals(jointFamilyButton.getText().toString())){
+                jointFamilyButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+            }
+        }
+    }
+
+    private void setEditableViews(boolean editable){
+        totalFamilyIncomeET.setFocusable(editable);
+        totalEarningFamilyMembersET.setFocusable(editable);
+        numAdultFamilyET.setFocusable(editable);
+        numChildFamilyET.setFocusable(editable);
+        associationDurationET.setFocusable(editable);
+        SHGMeetingsET.setFocusable(editable);
+        nearestPHCET.setFocusable(editable);
+
+        totalFamilyIncomeET.setClickable(editable);
+        totalEarningFamilyMembersET.setClickable(editable);
+        numAdultFamilyET.setClickable(editable);
+        numChildFamilyET.setClickable(editable);
+        associationDurationET.setClickable(editable);
+        SHGMeetingsET.setClickable(editable);
+        nearestPHCET.setClickable(editable);
+
+        nextButton.setEnabled(editable);
+        nuclearFamilyButton.setEnabled(editable);
+        jointFamilyButton.setEnabled(editable);
+        neverMarriedButton.setEnabled(editable);
+        marriedButton.setEnabled(editable);
+        divorcedButton.setEnabled(editable);
+        separatedButton.setEnabled(editable);
+        widowButton.setEnabled(editable);
+        scheduledCasteButton.setEnabled(editable);
+        scheduledTribeButton.setEnabled(editable);
+        backwardClassesButton.setEnabled(editable);
+        doNotKnowCasteButton.setEnabled(editable);
+        otherCasteButton.setEnabled(editable);
+        pNACasteButton.setEnabled(editable);
+        hinduButton.setEnabled(editable);
+        muslimButton.setEnabled(editable);
+        christianButton.setEnabled(editable);
+        sikhButton.setEnabled(editable);
+        buddhistButton.setEnabled(editable);
+        jainButton.setEnabled(editable);
+        otherReligionButton.setEnabled(editable);
+        pNAReligionButton.setEnabled(editable);
+        professionalButton.setEnabled(editable);
+        clericalButton.setEnabled(editable);
+        salesAndServicesButton.setEnabled(editable);
+        skilledManualButton.setEnabled(editable);
+        unskilledManualButton.setEnabled(editable);
+        agricultureButton.setEnabled(editable);
+        noSchoolingButton.setEnabled(editable);
+        lessThanFiveButton.setEnabled(editable);
+        fiveToSevenButton.setEnabled(editable);
+        eightToNineButton.setEnabled(editable);
+        tenToElevenButton.setEnabled(editable);
+        twelveOrMoreButton.setEnabled(editable);
+    }
+
+    private void getYearsOfEducation(){
         noSchoolingButton.setOnClickListener(v -> {
             participantSchooling = noSchoolingButton.getText().toString();
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -189,7 +368,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
     }
 
-    public void getOccupation(){
+    private void getOccupation(){
         professionalButton.setOnClickListener(v -> {
             participantOccupation = professionalButton.getText().toString();
             professionalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -251,7 +430,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
     }
 
-    public void getReligion(){
+    private void getReligion(){
         hinduButton.setOnClickListener(v -> {
             participantReligion = hinduButton.getText().toString();
             hinduButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -349,7 +528,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
     }
 
-    public void getCaste(){
+    private void getCaste(){
         scheduledCasteButton.setOnClickListener(v -> {
             participantCaste = scheduledCasteButton.getText().toString();
             scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -410,74 +589,6 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             pNACasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
         });
     }
-
-//    /**
-//     * Description : This method is used to change the language of the screen based on the button clicked
-//     */
-//    private void onClickOfLanguageButton(){
-//        englishButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                englishButton.setBackgroundResource(R.drawable.left_toggle_selected_button);
-//                englishButton.setTextColor(getResources().getColor(R.color.black));
-//                kannadaButton.setBackgroundResource(R.drawable.right_toggle_button);
-//                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-//                changeLocalLanguage("en");
-//            }
-//        });
-//
-//        kannadaButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                kannadaButton.setBackgroundResource(R.drawable.right_toggle_selected_button);
-//                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-//                englishButton.setBackgroundResource(R.drawable.left_toggle_button);
-//                englishButton.setTextColor(getResources().getColor(R.color.black));
-//                changeLocalLanguage("kn");
-//            }
-//        });
-//    }
-
-    /**
-     * @param selectedLanguage
-     * Description : This method is used to change the content of the screen to user selected language
-     */
-    private void changeLocalLanguage(String selectedLanguage){
-        Locale myLocale = new Locale(selectedLanguage);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        onConfigurationChanged(conf);
-    }
-
-    /**
-     * @param newConfig
-     * Description : This method is used to update the views on change of language
-     */
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        educationYearsTV.setText(R.string.years_of_education);
-        maritalStatusTV.setText(R.string.marital_status);
-        occupationTV.setText(R.string.occupation);
-        religionTV.setText(R.string.religion);
-        familyIncomeTV.setText(R.string.total_family_income_per_month);
-        casteTV.setText(R.string.caste);
-        familyAdultMembersTV.setText(R.string.number_of_family_members);
-        earningMembersTV.setText(R.string.earning_members);
-        familyTypeTV.setText(R.string.type_of_family);
-        associationDurationTV.setText(R.string.association_duration);
-
-        nextButton.setText(R.string.next);
-        neverMarriedButton.setText(R.string.unmarried);
-        marriedButton.setText(R.string.married);
-        nuclearFamilyButton.setText(R.string.nuclear);
-        jointFamilyButton.setText(R.string.joint);
-    }
-
 
     /**
      * Description : This method is used to get the selected marital status
@@ -560,7 +671,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         nearestPHC = !nearestPHCET.getText().toString().isEmpty() ? nearestPHCET.getText().toString(): "NULL";
 
         SocioDemography socioDemographyObject = new SocioDemography();
-        socioDemographyObject.setUserName(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.user_name), getString(R.string.user_name_participant)));
+        socioDemographyObject.setUser_pri_id(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
         socioDemographyObject.setYearsOfEducation(participantSchooling);
         socioDemographyObject.setMaritalStatus(participantMaritalStatus);
         socioDemographyObject.setNumFamilyAdultMembers(numAdultFamily);
@@ -572,8 +683,10 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         socioDemographyObject.setOccupation(participantOccupation);
         socioDemographyObject.setTypeOfFamily(participantFamilyType);
         socioDemographyObject.setAssociationDuration(associationDuration);
-        socioDemographyObject.setSHGMeetings(SHGMeetings);
+        socioDemographyObject.setCBOMeetings(SHGMeetings);
         socioDemographyObject.setNearestPHC(nearestPHC);
+        socioDemographyObject.setActive("yes");
+        socioDemographyObject.setCreated_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
 
         return socioDemographyObject;
     }
@@ -583,8 +696,12 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
      */
     private void onClickOfNextButton(){
         nextButton.setOnClickListener(v -> {
-//                callServerPostSocioDemography();
-            moveToDiseaseProfileTab();
+            if(isEditable!=null && isEditable.equals("true")){
+                callServerPostSocioDemography();
+//            moveToDiseaseProfileTab();
+            }else{
+                callServerUpdateSocioDemographyDetails();
+            }
         });
     }
 
@@ -595,6 +712,33 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         requestObject.postSocioDemographyDetails(getActivity(), getUserEnteredData(), url);
     }
 
+    private void callUpdateTrackingDetails(String socioDemographyName){
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking/" + trackingName;
+        UpdateSocioDemographyTracking trackingParticipantStatus = new UpdateSocioDemographyTracking();
+        trackingParticipantStatus.setSocio_demography(socioDemographyName);
+        trackingParticipantStatus.setModified_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.putTrackingStatusSocioDemography(getActivity(), trackingParticipantStatus, url);
+    }
+
+    private void callGetIndividualSocioDemographyDetails() {
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography/" + trackingParticipantStatus.get(0).getSocio_demography();
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.getParticipantSocioDemographyDetails(getActivity(), url);
+    }
+
+    private void callServerUpdateSocioDemographyDetails() {
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography/" +  trackingParticipantStatus.get(0).getSocio_demography();
+        SocioDemography socioDemographyObject = getUserEnteredData();
+        socioDemographyObject.setUser_pri_id(trackingParticipantStatus.get(0).getUser_pri_id());
+        socioDemographyObject.setModified_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.putSocioDemographyDetails(getActivity(), socioDemographyObject, url);
+    }
+
     private void moveToDiseaseProfileTab(){
         ((ParticipantProfileScreen)getActivity()).setupSelectedTabFragment(3);
     }
@@ -602,11 +746,93 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
 
     @Override
     public void responseReceivedSuccessfully(String message) {
-        moveToDiseaseProfileTab();
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        Type type = new TypeToken<FrappeResponse>(){}.getType();
+        if(jsonObjectRegistration.get("data")!=null){
+            FrappeResponse frappeResponse;
+            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
+            if(isEditable!=null && isEditable.equals("true")){
+                if (frappeResponse != null && frappeResponse.getDoctype().equals("demography")) {
+                    String registrationName = frappeResponse.getName();
+                    callUpdateTrackingDetails(registrationName);
+                } else if (frappeResponse != null && frappeResponse.getDoctype().equals("tracking")) {
+                    trackingName = frappeResponse.getName();
+                    moveToDiseaseProfileTab();
+                }
+            }else{
+                Type typeSocioDemography = new TypeToken<SocioDemography>(){}.getType();
+                socioDemographyDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeSocioDemography);
+                trackingParticipantStatus.get(0).setUser_pri_id(socioDemographyDetails.getUser_pri_id());
+                setEditable();
+                Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            //Do nothing
+            Log.i("SocioDemographyFragment", "JsonObjectRegistration data is Empty");
+        }
     }
 
     @Override
     public void responseReceivedFailure(String message) {
 
+    }
+
+    /**
+     * @param newConfig
+     * Description : This method is used to update the views on change of language
+     */
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        educationYearsTV.setText(R.string.years_of_education);
+        maritalStatusTV.setText(R.string.marital_status);
+        occupationTV.setText(R.string.occupation);
+        religionTV.setText(R.string.religion);
+        familyIncomeTV.setText(R.string.total_family_income_per_month);
+        casteTV.setText(R.string.caste);
+        familyAdultMembersTV.setText(R.string.number_of_family_members);
+        earningMembersTV.setText(R.string.earning_members);
+        familyTypeTV.setText(R.string.type_of_family);
+        associationDurationTV.setText(R.string.association_duration);
+        familyChildMembersTV.setText(R.string.child_members);
+        SHGMeetingsTV.setText(R.string.SHGMeetings6Months);
+        nearestPHCTV.setText(R.string.nearest_phc);
+
+        nextButton.setText(R.string.next);
+        nuclearFamilyButton.setText(R.string.nuclear_family);
+        jointFamilyButton.setText(R.string.joint_family);
+        neverMarriedButton.setText(R.string.never_married);
+        marriedButton.setText(R.string.married);
+        divorcedButton.setText(R.string.divorced);
+        separatedButton.setText(R.string.separated);
+        widowButton.setText(R.string.widow);
+        scheduledCasteButton.setText(R.string.scheduled_caste);
+        scheduledTribeButton.setText(R.string.scheduled_tribe);
+        backwardClassesButton.setText(R.string.other_backward_class);
+        doNotKnowCasteButton.setText(R.string.do_not_know);
+        otherCasteButton.setText(R.string.other);
+        pNACasteButton.setText(R.string.preferred_not_to_answer);
+        hinduButton.setText(R.string.hindu);
+        muslimButton.setText(R.string.muslim);
+        christianButton.setText(R.string.christian);
+        sikhButton.setText(R.string.sikh);
+        buddhistButton.setText(R.string.buddhist_neo_buddhist);
+        jainButton.setText(R.string.jain);
+        otherReligionButton.setText(R.string.other);
+        pNAReligionButton.setText(R.string.preferred_not_to_answer);
+        professionalButton.setText(R.string.professional);
+        clericalButton.setText(R.string.clerical);
+        salesAndServicesButton.setText(R.string.sales_and_services);
+        skilledManualButton.setText(R.string.skilled_manual);
+        unskilledManualButton.setText(R.string.unskilled_manual);
+        agricultureButton.setText(R.string.agriculture);
+        noSchoolingButton.setText(R.string.no_schooling);
+        lessThanFiveButton.setText(R.string.less_than_five);
+        fiveToSevenButton.setText(R.string.five_to_seven);
+        eightToNineButton.setText(R.string.eight_to_nine);
+        tenToElevenButton.setText(R.string.ten_to_eleven);
+        twelveOrMoreButton.setText(R.string.twelve_or_more);
     }
 }

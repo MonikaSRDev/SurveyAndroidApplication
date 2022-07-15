@@ -42,21 +42,24 @@
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="64dp"
         android:elevation="15dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
-        app:layout_constraintEnd_toStartOf="@+id/logoutIcon"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/logoutButtonLP"
+        app:layout_constraintHorizontal_bias="0.994"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.063">
 
         <Button
             android:id="@+id/englishLPButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/left_selected_toggle_button"
+            android:background="@drawable/left_english_toggle_selected_button"
             android:elevation="10dp"
             android:fontFamily="@font/open_sans_semibold"
             android:gravity="center"
@@ -68,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/right_unselected_toggle_button"
+            android:background="@drawable/right_kannada_toggle_button"
             android:elevation="10dp"
             android:fontFamily="@font/open_sans_semibold"
             android:gravity="center"
@@ -90,16 +93,16 @@
             android:id="@+id/surveyCardView"
             android:layout_width="230dp"
             android:layout_height="230dp"
-            android:layout_margin="15dp"
             android:layout_gravity="center_vertical"
+            android:layout_margin="15dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="15dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/surveyIcon"
@@ -114,13 +117,13 @@
                     android:id="@+id/surveyTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/survey"
-                    android:textSize="26sp"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
                     android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:gravity="center"
+                    android:text="@string/survey"
                     android:textColor="@color/survey_text_color"
-                    android:fontFamily="@font/open_sans_semibold"/>
+                    android:textSize="26sp" />
 
             </LinearLayout>
 
@@ -130,16 +133,16 @@
             android:id="@+id/videoCardView"
             android:layout_width="230dp"
             android:layout_height="230dp"
-            android:layout_margin="15dp"
             android:layout_gravity="center_vertical"
+            android:layout_margin="15dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="15dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/videoIcon"
@@ -154,13 +157,13 @@
                     android:id="@+id/videoTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/video"
-                    android:textSize="26sp"
-                    android:gravity="center"
-                    android:layout_margin="5dp"
                     android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:gravity="center"
+                    android:text="@string/video"
                     android:textColor="@color/video_text_color"
-                    android:fontFamily="@font/open_sans_semibold"/>
+                    android:textSize="26sp" />
 
             </LinearLayout>
 
@@ -170,16 +173,16 @@
             android:id="@+id/activityCardView"
             android:layout_width="230dp"
             android:layout_height="230dp"
-            android:layout_margin="15dp"
             android:layout_gravity="center_vertical"
+            android:layout_margin="15dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="15dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/activityIcon"
@@ -194,13 +197,13 @@
                     android:id="@+id/activityTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/activity"
-                    android:textSize="26sp"
-                    android:gravity="center"
-                    android:layout_margin="5dp"
                     android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:gravity="center"
+                    android:text="@string/activity"
                     android:textColor="@color/activity_text_color"
-                    android:fontFamily="@font/open_sans_semibold"/>
+                    android:textSize="26sp" />
 
             </LinearLayout>
 
@@ -208,29 +211,35 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/logoutIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="14dp"
+    <RelativeLayout
+        android:id="@+id/logoutButtonLP"
+        android:layout_width="130dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="22dp"
         android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
-        app:layout_constraintEnd_toStartOf="@+id/logoutTV"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.263"
-        app:srcCompat="@drawable/logout_icon" />
-
-    <TextView
-        android:id="@+id/logoutTV"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:fontFamily="@font/open_sans"
-        android:textSize="12sp"
-        android:text="@string/logout"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.314" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/logoutIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/logoutTV"
+            app:srcCompat="@drawable/logout_icon" />
+
+        <TextView
+            android:id="@+id/logoutTV"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="@string/logout"
+            android:textSize="12sp" />
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

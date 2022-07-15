@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mithraapplication.Fragments.ParticipantsAllListFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
@@ -65,7 +66,7 @@ public class ParticipantsScreen extends AppCompatActivity{
         participantTVParticipant = findViewById(R.id.participantsTVParticipant);
         participantTVParticipant.setTextColor(getResources().getColor(R.color.text_color));
         coordinatorNameTVParticipant = findViewById(R.id.coordinatorNameTVParticipant);
-        String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator));
+        String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator));
         if(!coordinatorUserName.equals("NULL")){
             coordinatorNameTVParticipant.setText(coordinatorUserName);
         }
@@ -149,9 +150,9 @@ public class ParticipantsScreen extends AppCompatActivity{
         englishButtonParticipant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                englishButtonParticipant.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButtonParticipant.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
                 englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
-                kannadaButtonParticipant.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButtonParticipant.setBackgroundResource(R.drawable.right_kannada_toggle_button);
                 kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
             }
@@ -160,9 +161,9 @@ public class ParticipantsScreen extends AppCompatActivity{
         kannadaButtonParticipant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kannadaButtonParticipant.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButtonParticipant.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
                 kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
-                englishButtonParticipant.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButtonParticipant.setBackgroundResource(R.drawable.left_english_toggle_button);
                 englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
             }
@@ -189,14 +190,14 @@ public class ParticipantsScreen extends AppCompatActivity{
         Configuration conf = res.getConfiguration();
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
-            kannadaButtonParticipant.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButtonParticipant.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
             kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
-            englishButtonParticipant.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButtonParticipant.setBackgroundResource(R.drawable.left_english_toggle_button);
             englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
         }else{
-            englishButtonParticipant.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButtonParticipant.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
             englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
-            kannadaButtonParticipant.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButtonParticipant.setBackgroundResource(R.drawable.right_kannada_toggle_button);
             kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
         }
         res.updateConfiguration(conf, dm);
@@ -209,29 +210,6 @@ public class ParticipantsScreen extends AppCompatActivity{
      */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-//        participantUserNameET.setHint(R.string.user_name);
-//        participantPasswordET.setHint(R.string.password);
-//        participantConfirmPasswordET.setHint(R.string.confirm_password);
-//        participantNameET.setHint(R.string.participant_name);
-//        participantAgeET.setHint(R.string.age);
-//
-//        dashboardTV.setText(R.string.dashboard);
-//        participantsTV.setText(R.string.participants);
-//        participateAgeTV.setText(R.string.age);
-//        participatePhoneNumberTV.setText(R.string.phone_number);
-//        participateUserNameTV.setText(R.string.user_name);
-//        participatePasswordTV.setText(R.string.password);
-//        participantConfirmPasswordTV.setText(R.string.confirm_password);
-//        VillageNameTV.setText(R.string.village_name);
-//        SHGAssociationTV.setText(R.string.shg_association);
-//        participantNameTV.setText(R.string.name_small_case);
-//        genderTV.setText(R.string.gender);
-//        addParticipantTV.setText(R.string.add_new_participant);
-//
-//        maleButton.setText(R.string.male);
-//        femaleButton.setText(R.string.female);
-//        othersButton.setText(R.string.others);
-//        registerButton.setText(R.string.register);
 
         participantTitleTV.setText(R.string.participants);
         dashboardTVParticipant.setText(R.string.dashboard);

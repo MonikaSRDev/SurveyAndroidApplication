@@ -4,13 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -18,16 +22,25 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.FullScreenVideoView;
+import com.example.mithraapplication.HandleFileDownloadResponse;
+import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 import com.example.mithraapplication.R;
+import com.example.mithraapplication.ServerRequestAndResponse;
+import com.example.mithraapplication.VideoScreen;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideoAdapter.ViewHolder> {
+public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideoAdapter.ViewHolder> implements HandleServerResponse, HandleFileDownloadResponse {
 
     private Context context;
     private ArrayList<SingleVideo> singleVideoArrayList;
     private int pos = 0;
+    private MithraUtility mithraUtility = new MithraUtility();
 
     @NonNull
     @Override
@@ -49,6 +62,7 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
     public void onBindViewHolder(@NonNull HorizontalVideoAdapter.ViewHolder holder, int position) {
         holder.singleVideoViewThumbnail.setImageBitmap(generateThumbnailForVideo());
         if(singleVideoArrayList.get(position).getVideoStatus().equals("Completed")){
+            downloadFileFromServer(holder);
             holder.videoStatusTV.setText(R.string.completed);
             holder.videoStatusTV.setTextColor(context.getResources().getColor(R.color.completed_color));
             holder.videoStatusIcon.setImageDrawable(context.getDrawable(R.drawable.completed_icon));
@@ -75,6 +89,19 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
 
     }
 
+    private void downloadFileFromServer(ViewHolder holder){
+        String path = context.getFilesDir().getAbsolutePath() + "/" + "videoplayback.mp4";
+        File file = new File(path);
+        if(file.exists()){
+            Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
+            holder.singleVideoViewThumbnail.setImageBitmap(bMap);
+        }else{
+            ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+            requestObject.setHandleFileDownloadResponse(this);
+            requestObject.downloadFileRequest(context, "http://192.168.2.156:5000/return-files/");
+        }
+    }
+
     private Bitmap generateThumbnailForVideo(){
         Uri uri = Uri.parse("android.resource://"+context.getPackageName()+"/"+R.raw.mithra_introduction_video);
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -90,6 +117,7 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
                 Intent intent = new Intent(context, FullScreenVideoView.class);
                 intent.putExtra("ModulePosition", pos);
                 intent.putExtra("VideoPosition", holder.getAbsoluteAdapterPosition());
+                intent.putExtra("VideoPath", "http://192.168.2.156:5000/return-files/");
                 context.startActivity(intent);
             }
         });
@@ -98,6 +126,37 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
     @Override
     public int getItemCount() {
         return singleVideoArrayList.size();
+    }
+
+    @Override
+    public void responseReceivedSuccessfully(String message) {
+
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+
+    }
+
+    @Override
+    public void fileDownloadedSuccessfully(byte[] message)  {
+        Log.i("VIDEODownload", "stop time :" + mithraUtility.getCurrentTime());
+        FileOutputStream outputStream;
+        String name="videoplayback.mp4";
+        try{
+            outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
+            outputStream.write(message);
+            outputStream.close();
+            Toast.makeText(context, "File Downloaded Successfully", Toast.LENGTH_LONG).show();
+        }catch(Exception ex){
+           ex.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void fileDownloadFailure(String message) {
+        Toast.makeText(context, "File Not Downloaded", Toast.LENGTH_LONG).show();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

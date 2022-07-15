@@ -74,7 +74,7 @@ public class FullScreenVideoView extends AppCompatActivity{
 
     private void RegisterViews(){
 
-        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant));
+        String participantUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant));
         participantName = findViewById(R.id.participantNameVFSTV);
         participantName.setText(participantUserName);
         videoModuleNameTV = findViewById(R.id.videoModuleNameTV);
@@ -122,9 +122,11 @@ public class FullScreenVideoView extends AppCompatActivity{
         });
 
         videoViewFullScreen = findViewById(R.id.fullScreenVideoView);
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.mithra_introduction_video);
+        String path = getIntent().getStringExtra("VideoPath");
+//        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.mithra_introduction_video);
 //        MediaController mc = new MediaController(this);
 //        videoViewFullScreen.setMediaController(mc);
+        Uri uri = Uri.parse(path);
         videoViewFullScreen.setVideoURI(uri);
         videoViewFullScreen.requestFocus();
         videoViewFullScreen.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -379,9 +381,9 @@ public class FullScreenVideoView extends AppCompatActivity{
         englishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("en");
             }
@@ -390,9 +392,9 @@ public class FullScreenVideoView extends AppCompatActivity{
         kannadaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
                 kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
                 englishButton.setTextColor(getResources().getColor(R.color.black));
                 changeLocalLanguage("kn");
             }
@@ -419,14 +421,14 @@ public class FullScreenVideoView extends AppCompatActivity{
         Configuration conf = res.getConfiguration();
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
-            kannadaButton.setBackgroundResource(R.drawable.right_selected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
-            englishButton.setBackgroundResource(R.drawable.left_unselected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
         }else{
-            englishButton.setBackgroundResource(R.drawable.left_selected_toggle_button);
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
             englishButton.setTextColor(getResources().getColor(R.color.black));
-            kannadaButton.setBackgroundResource(R.drawable.right_unselected_toggle_button);
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
             kannadaButton.setTextColor(getResources().getColor(R.color.black));
         }
         res.updateConfiguration(conf, dm);

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.UserLogin;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -54,15 +55,15 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userName = !userNameET.getText().toString().equals("") ? userNameET.getText().toString() : "NULL";
-                String password = !userPasswordET.getText().toString().equals("") ? userPasswordET.getText().toString() : "NULL";
+                String userName = !userNameET.getText().toString().equals("") ? userNameET.getText().toString().replace(" ", "") : "NULL";
+                String password = !userPasswordET.getText().toString().equals("") ? userPasswordET.getText().toString().replace(" ", "") : "NULL";
 
 
                 if(!userName.equals("NULL") && !password.equals("NULL")){
-//                    callServerForUserLogin(userName, password);
-                    moveToParticipantLandingPage(userName);
+                    callServerForUserLogin(userName, password);
+//                    moveToParticipantLandingPage(userName);
 //                    moveToCoordinatorDashboard();
-                    mithraUtility.putSharedPreferencesData(LoginScreen.this, getString(R.string.user_name), getString(R.string.user_name_participant), userName);
+                    mithraUtility.putSharedPreferencesData(LoginScreen.this, getString(R.string.userName), getString(R.string.user_name_participant), userName);
                 }else if(userName.equals("NULL") && !password.equals("NULL")){
                     userNameET.setError("Please enter username.");
                 }else if(!userName.equals("NULL") && password.equals("NULL")){
@@ -103,6 +104,7 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         UserLogin userLogin = new UserLogin();
         userLogin.setUserName(userName);
         userLogin.setUserPassword(password);
+        userLogin.setActive("Yes");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.postUserLogin(LoginScreen.this, userLogin, url);
@@ -123,10 +125,12 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
             userLogins = gson.fromJson(jsonObject.get("message"), type);
             mithraUtility.putSharedPreferencesData(this, getString(R.string.user_role), getString(R.string.user_role), userLogins.get(0).getUserRole());
             if(userLogins.get(0).getUserRole().equals("participant")){
-                mithraUtility.putSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
+                mithraUtility.putSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
+                mithraUtility.putSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
                 moveToParticipantLandingPage(userLogins.get(0).getUserName());
             }else if(userLogins.get(0).getUserRole().equals("coordinator")){
-                mithraUtility.putSharedPreferencesData(this, getString(R.string.user_name), getString(R.string.user_name_coordinator), userLogins.get(0).getUserName());
+                mithraUtility.putSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator), userLogins.get(0).getUserName());
+                mithraUtility.putSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID), userLogins.get(0).getUser_pri_id());
                 moveToCoordinatorDashboard();
             }
         }catch(Exception e){

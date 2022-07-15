@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="986dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:id="@+id/verticalRowParticipantLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/custom_border">
+
+        <View
+            android:id="@+id/participantStatusView"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="#F4375C"
+            android:layout_marginEnd="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/detailsParticipantLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/participantDetailsName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/participantDetailsAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/age"
+                android:layout_margin="5dp"
+                android:textSize="14sp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/participantDetailsVillage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/village"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/enrollmentStatusIconPart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/enrolment_status_icon"/>
+
+        <ImageView
+            android:id="@+id/surveyStatusIconPart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/survey_status_icon"/>
+
+        <TextView
+            android:id="@+id/moduleStatusDashboardTVPart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="00%"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/referralStatusTVPart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textSize="14sp"
+            android:layout_margin="10dp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

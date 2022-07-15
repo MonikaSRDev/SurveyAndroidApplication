@@ -15,6 +15,8 @@ public class UserLogin extends JsonServerObject{
     @SerializedName("role")
     private String userRole = "participant";
     private String active = "yes";
+    private String user_pri_id = "NULL";
+    private String created_user = "NULL";
 
     public String getUserName() {
         return userName;
@@ -46,6 +48,22 @@ public class UserLogin extends JsonServerObject{
 
     public void setActive(String active) {
         this.active = active;
+    }
+
+    public String getUser_pri_id() {
+        return user_pri_id;
+    }
+
+    public void setUser_pri_id(String user_pri_id) {
+        this.user_pri_id = user_pri_id;
+    }
+
+    public String getCreated_user() {
+        return created_user;
+    }
+
+    public void setCreated_user(String created_user) {
+        this.created_user = created_user;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

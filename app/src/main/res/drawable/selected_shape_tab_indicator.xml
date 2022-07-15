@@ -6,7 +6,7 @@
         android:end="2dp"
         android:start="2dp"
         android:top="2dp"
-        android:bottom="8dp"
+        android:bottom="6dp"
         android:left="2dp"
         android:right="2dp"/>
 </layer-list>

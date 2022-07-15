@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/screen_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cardNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Survey-1"
+                android:textColor="@color/text_color"
+                android:textSize="11sp"
+                android:padding="20dp"
+                android:fontFamily="@font/open_sans_semibold"/>
+
+            <LinearLayout
+                android:id="@+id/surveyContentLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="30dp">
+
+                <LinearLayout
+                    android:id="@+id/startTimeLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/startTimeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Survey Start Time"
+                        android:textColor="@color/text_color"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:padding="20dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/startTimeValTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="07/02/2022"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/endTimeLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/endTimeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" End Time"
+                        android:textColor="@color/text_color"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:padding="20dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/endTimeValTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10/02/2022"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/scoreLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/scoreStatusTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Score"
+                        android:textColor="@color/text_color"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:padding="20dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/scoreStatusValTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/modulesAssignedLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/modulesAssignedTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Modules Assigned"
+                        android:textColor="@color/text_color"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:padding="20dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/modulesAssignedValTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/activityCompletedLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/activityCompletedTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Activity Completed"
+                        android:textColor="@color/text_color"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:padding="20dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/activityCompletedValTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="70%"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/open_sans"
+                        android:padding="10dp"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

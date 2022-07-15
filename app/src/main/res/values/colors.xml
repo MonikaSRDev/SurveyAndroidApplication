@@ -14,5 +14,6 @@
     <color name="video_text_color">#F5365C</color>
     <color name="activity_text_color">#85CA53</color>
     <color name="video_duration">#A0A0A0</color>
+    <color name="colorAccent">#FF9F00</color>
 
 </resources>

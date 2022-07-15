@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="1053dp"
     android:layout_height="wrap_content"
-    android:background="@color/screen_background"
+    android:background="@drawable/curved_corners"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -175,29 +175,30 @@
                     android:textColorHint="@color/hint_text_color"
                     android:textSize="16sp" />
 
-
             </LinearLayout>
 
             <TextView
-                android:id="@+id/panchayatNameTV"
+                android:id="@+id/villageNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/open_sans"
-                android:text="@string/panchayat"
+                android:text="@string/village_name"
                 android:textColor="@color/text_color"
                 android:textSize="16sp" />
 
             <Spinner
-                android:id="@+id/spinnerPanchayat"
+                android:id="@+id/villageNameSpinner"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/dropdown_with_arrow"
-                android:dropDownVerticalOffset="40dp"
+                android:dropDownVerticalOffset="48dp"
                 android:elevation="3dp"
                 android:padding="10dp"
                 android:spinnerMode="dropdown" />
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -212,22 +213,23 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
 
+
             <TextView
-                android:id="@+id/villageNameTV"
+                android:id="@+id/panchayatNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans"
-                android:text="@string/village_name"
+                android:text="@string/panchayat"
                 android:textColor="@color/text_color"
                 android:textSize="16sp" />
 
             <Spinner
-                android:id="@+id/villageNameSpinner"
+                android:id="@+id/spinnerPanchayat"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/dropdown_with_arrow"
-                android:dropDownVerticalOffset="48dp"
+                android:dropDownVerticalOffset="40dp"
                 android:elevation="3dp"
                 android:padding="10dp"
                 android:spinnerMode="dropdown" />

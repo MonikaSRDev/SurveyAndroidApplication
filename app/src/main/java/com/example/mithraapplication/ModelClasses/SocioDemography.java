@@ -7,8 +7,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 
 public class SocioDemography extends JsonServerObject{
-    @SerializedName("user_name")
-    private String userName = "NULL";
+    private String user_pri_id = "NULL";
     @SerializedName("years_of_education")
     private String yearsOfEducation = "NULL";
     @SerializedName("marital_status")
@@ -19,8 +18,9 @@ public class SocioDemography extends JsonServerObject{
     private String caste = "NULL";
     @SerializedName("type_of_family")
     private String typeOfFamily = "NULL";
-    @SerializedName("number_of_family_members")
+    @SerializedName("number_of_adult_family_members")
     private String numFamilyAdultMembers = "NULL";
+    @SerializedName("number_of_child_family_members")
     private String numFamilyChildMembers = "NULL";
     @SerializedName("occupation")
     private String occupation = "NULL";
@@ -32,15 +32,13 @@ public class SocioDemography extends JsonServerObject{
     private String nearestPHC = "NULL";
     @SerializedName("duration_of_association_with_cboshg")
     private String associationDuration = "NULL";
-    private String SHGMeetings = "NULL";
+    @SerializedName("cbo_meetings_attended_in_last_months")
+    private String CBOMeetings = "NULL";
+    private String active = "null";
+    private String created_user = "NULL";
+    private String modified_user = "UT-9-2022-07-11-08:19:58-no_one_modified";
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public String getYearsOfEducation() {
         return yearsOfEducation;
@@ -138,12 +136,44 @@ public class SocioDemography extends JsonServerObject{
         this.associationDuration = associationDuration;
     }
 
-    public String getSHGMeetings() {
-        return SHGMeetings;
+    public String getUser_pri_id() {
+        return user_pri_id;
     }
 
-    public void setSHGMeetings(String SHGMeetings) {
-        this.SHGMeetings = SHGMeetings;
+    public void setUser_pri_id(String user_pri_id) {
+        this.user_pri_id = user_pri_id;
+    }
+
+    public String getCBOMeetings() {
+        return CBOMeetings;
+    }
+
+    public void setCBOMeetings(String CBOMeetings) {
+        this.CBOMeetings = CBOMeetings;
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    public String getCreated_user() {
+        return created_user;
+    }
+
+    public void setCreated_user(String created_user) {
+        this.created_user = created_user;
+    }
+
+    public String getModified_user() {
+        return modified_user;
+    }
+
+    public void setModified_user(String modified_user) {
+        this.modified_user = modified_user;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

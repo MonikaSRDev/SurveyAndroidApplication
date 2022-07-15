@@ -1,5 +1,7 @@
 package com.example.mithraapplication.Adapters;
 
+import static com.example.mithraapplication.ParticipantProfileScreen.isLanguageSelected;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,16 +21,21 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
+import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Locale;
+
+import okhttp3.MultipartBody;
 
 public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfileAdapter.ViewHolder> {
     private ArrayList<DiseasesProfile>  diseasesProfileArrayList = new ArrayList<>();
     private ArrayList<DiseasesProfile>  userEnteredDiseasesProfileArrayList = new ArrayList<>();
     private DiseasesProfile newDiseaseProfile;
     private Context context;
+    private String isEditable;
 
     @NonNull
     @Override
@@ -38,9 +45,10 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
 
         return new ViewHolder(view);    }
 
-    public DiseasesProfileAdapter(Context context, ArrayList<DiseasesProfile> diseasesProfileArrayList){
+    public DiseasesProfileAdapter(Context context, ArrayList<DiseasesProfile> diseasesProfileArrayList, String isEditable){
         this.diseasesProfileArrayList = diseasesProfileArrayList;
         this.context = context;
+        this.isEditable = isEditable;
     }
 
     @Override
@@ -94,20 +102,30 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
 
         DiseasesProfile diseasesProfile = diseasesProfileArrayList.get(position);
 
-        holder.diseaseTV.setText(diseasesProfile.getDiseaseName());
-        holder.diagnosedAgeTV.setText(diseasesProfile.getDiagnosedAge());
-        holder.receivedTreatmentTV.setText(diseasesProfile.getReceivedTreatment());
-        holder.limitActivitiesTV.setText(diseasesProfile.getLimitActivities());
-
-        if(!diseasesProfile.getSpecifyDisease().equals("NULL")){
-            holder.specifyDiseaseLinearLayout.setVisibility(View.VISIBLE);
-            holder.specifyDiseaseTV.setText(diseasesProfile.getSpecifyDisease());
+        if(isLanguageSelected.equals("kn")){
+            holder.diseaseTV.setText(diseasesProfile.getDiseaseNameKannada());
+        }else{
+            holder.diseaseTV.setText(diseasesProfile.getDiseaseName());
         }
+        holder.diagnosedAgeTV.setText(R.string.diagnosed_age);
+        holder.receivedTreatmentTV.setText(R.string.received_treatment);
+        holder.limitActivitiesTV.setText(R.string.limit_activities);
+
+        if(!diseasesProfile.getSpecifyDisease().equals("null")){
+            holder.specifyDiseaseLinearLayout.setVisibility(View.VISIBLE);
+            holder.specifyDiseaseTV.setText(R.string.specify_disease);
+        }
+
+        if(isEditable!=null && isEditable.equalsIgnoreCase("false")){
+            enableDisableViews(false, holder);
+        }else{
+            enableDisableViews(true, holder);
+        }
+
+        displayDiseaseProfileData(holder, diseasesProfile);
 
         onClickOfYesDiseaseButton(holder);
         onClickOfNoDiseaseButton(holder);
-//        onClickOfYesDiagnosedButton(holder);
-//        onClickOfNoDiagnosedButton(holder);
         onClickOfYesReceivedTreatmentButton(holder);
         onClickOfNoReceivedTreatmentButton(holder);
         onClickOfYesLimitActivitiesButton(holder);
@@ -116,11 +134,97 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         getSpecificDiseaseOfParticipant(holder);
     }
 
+    private void displayDiseaseProfileData(ViewHolder holder, DiseasesProfile diseasesProfile){
+        if(isEditable!=null && !isEditable.equals("true")){
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed(diseasesProfile.getDiagnosed());
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diseasesProfile.getDiagnosedAge());
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment(diseasesProfile.getReceivedTreatment());
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities(diseasesProfile.getLimitActivities());
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setSpecifyDisease(diseasesProfile.getSpecifyDisease());
+
+            if(diseasesProfile.getDiagnosed().equalsIgnoreCase("yes")){
+                holder.yesDiseaseButton.setBackgroundResource(R.drawable.selected_yes_button);
+                holder.noDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
+                holder.expandableConstraintLayout.setVisibility(View.VISIBLE);
+            }else if(diseasesProfile.getDiagnosed().equalsIgnoreCase("no")){
+                holder.noDiseaseButton.setBackgroundResource(R.drawable.selected_no_button);
+                holder.yesDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
+                holder.expandableConstraintLayout.setVisibility(View.GONE);
+            }else{
+                holder.noDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
+                holder.yesDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
+                holder.expandableConstraintLayout.setVisibility(View.GONE);
+            }
+
+            if(!diseasesProfile.getDiagnosedAge().equalsIgnoreCase("null")){
+                holder.diagnosedAgeET.setText(diseasesProfile.getDiagnosedAge());
+            }else{
+                holder.diagnosedAgeET.setText("");
+            }
+
+            if(diseasesProfile.getReceivedTreatment().equalsIgnoreCase("yes")){
+                holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_yes_button);
+                holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
+            }else if(diseasesProfile.getReceivedTreatment().equalsIgnoreCase("no")){
+                holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
+                holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_no_button);
+            }else{
+                holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
+                holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
+            }
+
+            if(diseasesProfile.getLimitActivities().equalsIgnoreCase("yes")){
+                holder.yesLimitActivities.setBackgroundResource(R.drawable.selected_yes_button);
+                holder.noLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
+            }else if(diseasesProfile.getLimitActivities().equalsIgnoreCase("no")){
+                holder.yesLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
+                holder.noLimitActivities.setBackgroundResource(R.drawable.selected_no_button);
+            }else{
+                holder.yesLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
+                holder.noLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
+            }
+
+            if(!diseasesProfile.getSpecifyDisease().equalsIgnoreCase("null")){
+                holder.specifyDiseaseET.setText(diseasesProfile.getSpecifyDisease());
+            }else{
+                holder.specifyDiseaseET.setText("");
+            }
+        }
+    }
+
+    private void enableDisableViews(boolean isEdit, ViewHolder holder){
+        if(isEdit){
+            holder.diagnosedAgeET.setFocusable(true);
+            holder.diagnosedAgeET.setClickable(true);
+            holder.specifyDiseaseET.setFocusable(true);
+            holder.specifyDiseaseET.setClickable(true);
+
+            holder.yesDiseaseButton.setEnabled(true);
+            holder.noDiseaseButton.setEnabled(true);
+            holder.yesLimitActivities.setEnabled(true);
+            holder.noLimitActivities.setEnabled(true);
+            holder.yesReceivedTreatmentButton.setEnabled(true);
+            holder.noReceivedTreatmentButton.setEnabled(true);
+        }else{
+            holder.diagnosedAgeET.setFocusable(false);
+            holder.diagnosedAgeET.setClickable(false);
+            holder.specifyDiseaseET.setFocusable(false);
+            holder.specifyDiseaseET.setClickable(false);
+
+            holder.yesDiseaseButton.setEnabled(false);
+            holder.noDiseaseButton.setEnabled(false);
+            holder.yesLimitActivities.setEnabled(false);
+            holder.noLimitActivities.setEnabled(false);
+            holder.yesReceivedTreatmentButton.setEnabled(false);
+            holder.noReceivedTreatmentButton.setEnabled(false);
+        }
+    }
+
     private void onClickOfYesDiseaseButton(ViewHolder holder) {
         holder.yesDiseaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("Yes");
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("yes");
                 holder.yesDiseaseButton.setBackgroundResource(R.drawable.selected_yes_button);
                 holder.noDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
                 holder.expandableConstraintLayout.setVisibility(View.VISIBLE);
@@ -132,7 +236,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.noDiseaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("No");
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("no");
                 holder.noDiseaseButton.setBackgroundResource(R.drawable.selected_no_button);
                 holder.yesDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
                 holder.expandableConstraintLayout.setVisibility(View.GONE);
@@ -140,33 +244,11 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         });
     }
 
-//    private void onClickOfYesDiagnosedButton(ViewHolder holder) {
-//        holder.yesDiagnosedButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("Yes");
-//                holder.yesDiagnosedButton.setBackgroundResource(R.drawable.selected_yes_button);
-//                holder.noDiagnosedButton.setBackgroundResource(R.drawable.yes_no_button);
-//            }
-//        });
-//    }
-//
-//    private void onClickOfNoDiagnosedButton(ViewHolder holder) {
-//        holder.noDiagnosedButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("No");
-//                holder.yesDiagnosedButton.setBackgroundResource(R.drawable.yes_no_button);
-//                holder.noDiagnosedButton.setBackgroundResource(R.drawable.selected_no_button);
-//            }
-//        });
-//    }
-
     private void onClickOfYesReceivedTreatmentButton(ViewHolder holder) {
         holder.yesReceivedTreatmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("Yes");
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("yes");
                 holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_yes_button);
                 holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
             }
@@ -177,7 +259,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.noReceivedTreatmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("No");
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("no");
                 holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
                 holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_no_button);
             }
@@ -188,7 +270,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.yesLimitActivities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("Yes");
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("yes");
                 holder.yesLimitActivities.setBackgroundResource(R.drawable.selected_yes_button);
                 holder.noLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
             }
@@ -199,7 +281,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.noLimitActivities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("No");
+                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("no");
                 holder.yesLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
                 holder.noLimitActivities.setBackgroundResource(R.drawable.selected_no_button);
             }
@@ -210,19 +292,19 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.diagnosedAgeET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "NULL";
+                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "null";
                 userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diagnosedAge);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "NULL";
+                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "null";
                 userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diagnosedAge);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "NULL";
+                String diagnosedAge = holder.diagnosedAgeET != null ? holder.diagnosedAgeET.getText().toString() : "null";
                 userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diagnosedAge);
             }
         });
@@ -232,19 +314,19 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.specifyDiseaseET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "NULL";
+                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "null";
                 userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setSpecifyDisease(specificDisease);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "NULL";
+                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "null";
                 userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setSpecifyDisease(specificDisease);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "NULL";
+                String specificDisease = holder.specifyDiseaseET != null ? holder.specifyDiseaseET.getText().toString() : "null";
                 userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setSpecifyDisease(specificDisease);
             }
         });

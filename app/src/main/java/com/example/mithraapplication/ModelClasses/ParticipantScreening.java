@@ -2,7 +2,7 @@ package com.example.mithraapplication.ModelClasses;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ParticipantScreening extends  JsonServerObject{
+public class ParticipantScreening extends JsonServerObject{
     private String years = "Yes";
     private String resident = "Yes";
     private String cbo = "Yes";
@@ -12,7 +12,8 @@ public class ParticipantScreening extends  JsonServerObject{
     private String participate = "No";
     private String agree = "Yes";
     private int score = 0;
-    private String name;
+    private String name = "NULL";
+    private String created_user = "NULL";
 
     public String getResident() {
         return resident;
@@ -92,5 +93,13 @@ public class ParticipantScreening extends  JsonServerObject{
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getCreated_user() {
+        return created_user;
+    }
+
+    public void setCreated_user(String created_user) {
+        this.created_user = created_user;
     }
 }

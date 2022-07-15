@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.mithraapplication.HandleServerResponse;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.ParticipantScreening;
+import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
 import com.example.mithraapplication.ServerRequestAndResponse;
@@ -27,6 +28,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class ScreeningFragment extends Fragment implements HandleServerResponse {
 
@@ -121,6 +124,7 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
                 participantScreening.setSubstance(substanceAbuse);
                 participantScreening.setSuicide(suicideAttempt);
                 participantScreening.setAgree(participationConsent);
+                participantScreening.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
 
                 int score = 0;
 
@@ -150,9 +154,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
 
                 Log.i("SCREENING SCORE", "Score : "+score);
 
-                moveToRegistrationFragment();
+//                moveToRegistrationFragment();
 
-//                callServerPostScreeningDetails(participantScreening);
+                callServerPostScreeningDetails(participantScreening);
             }
         });
     }
@@ -396,8 +400,12 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
             participantScreening = gson.fromJson(jsonObject.get("data"), type);
             if(participantScreening!=null){
                 if(!participantScreening.getName().equals("NULL")){
-                    mithraUtility.putSharedPreferencesData(getActivity(), "ScreeningName", "screeningName", participantScreening.getName());
-                    moveToRegistrationFragment();
+                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.userScreeningName), getString(R.string.userScreeningName), participantScreening.getName());
+                    if(participantScreening.getScore() >= 7){
+                        moveToRegistrationFragment();
+                    }else{
+                        Toast.makeText(getActivity(), "Regret to say that you are not eligible for the Survey", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         }catch(Exception e){
@@ -436,20 +444,22 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         exclusionYesButton.setText(R.string.yes);
         exclusionNoButton.setText(R.string.no);
 
-        mentalIllnessTV.setText(R.string.yes);
-        inclusionYesButton.setText(R.string.yes);
-        inclusionYesButton.setText(R.string.yes);
+        mentalIllnessTV.setText(R.string.diagnosed_with_mental_illness);
+        mentalIllnessYesButton.setText(R.string.yes);
+        mentalIllnessNoButton.setText(R.string.no);
 
-        substanceAbuseTV.setText(R.string.yes);
-        inclusionYesButton.setText(R.string.yes);
-        inclusionYesButton.setText(R.string.yes);
+        substanceAbuseTV.setText(R.string.substance_abuse);
+        substanceAbuseYesButton.setText(R.string.yes);
+        substanceAbuseNoButton.setText(R.string.no);
 
         suicideAttemptTV.setText(R.string.attempted_suicide);
-        inclusionYesButton.setText(R.string.yes);
-        inclusionYesButton.setText(R.string.no);
+        suicideAttemptYesButton.setText(R.string.yes);
+        suicideAttemptNoButton.setText(R.string.no);
 
         participationConsentTV.setText(R.string.user_consent);
         participationConsentYesButton.setText(R.string.yes);
         participationConsentNoButton.setText(R.string.no);
+
+        screeningRegisterButton.setText(R.string.register);
     }
 }

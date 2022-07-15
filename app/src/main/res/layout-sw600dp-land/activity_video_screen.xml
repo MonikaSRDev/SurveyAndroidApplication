@@ -32,20 +32,22 @@
     <LinearLayout
         android:id="@+id/languageLinearLayoutVideoScreen"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:elevation="15dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/videoCardViewVP"
-        app:layout_constraintEnd_toStartOf="@+id/logoutVPIcon"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/logoutButtonVP"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.184">
 
         <Button
             android:id="@+id/englishVPButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/left_selected_toggle_button"
+            android:background="@drawable/left_english_toggle_selected_button"
             android:elevation="10dp"
             android:fontFamily="@font/open_sans_semibold"
             android:gravity="center"
@@ -57,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/right_unselected_toggle_button"
+            android:background="@drawable/right_kannada_toggle_button"
             android:elevation="10dp"
             android:fontFamily="@font/open_sans_semibold"
             android:gravity="center"
@@ -65,30 +67,37 @@
             android:textColor="@color/text_color" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/logoutVPIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/videoCardViewVP"
-        app:layout_constraintEnd_toStartOf="@+id/logoutVPTV"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.373"
-        app:srcCompat="@drawable/logout_icon" />
-
-    <TextView
-        android:id="@+id/logoutVPTV"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="44dp"
-        android:fontFamily="@font/open_sans"
-        android:textSize="12sp"
-        android:text="@string/logout"
-        app:layout_constraintBottom_toTopOf="@+id/videoCardViewVP"
+    <RelativeLayout
+        android:id="@+id/logoutButtonVP"
+        android:layout_width="130dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.476" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/logoutVPIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/logoutVPTV"
+            app:srcCompat="@drawable/logout_icon" />
+
+        <TextView
+            android:id="@+id/logoutVPTV"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="@string/logout"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/videoCardViewVP"
@@ -117,32 +126,40 @@
 
     </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="40dp"
+
+    <RelativeLayout
+        android:id="@+id/backButtonVP"
+        android:layout_width="100dp"
         android:layout_height="20dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="44dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
-        android:src="@drawable/back_icon"
-        tools:srcCompat="@drawable/back_icon" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/backButtonTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="@font/open_sans"
-        android:text="@string/back"
-        android:textSize="12sp"
-        android:layout_marginTop="12dp"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
-        app:layout_constraintStart_toEndOf="@+id/backButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.64" />
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/back_icon"
+            tools:srcCompat="@drawable/back_icon" />
+
+        <TextView
+            android:id="@+id/backButtonTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/backButton"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="@string/back"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

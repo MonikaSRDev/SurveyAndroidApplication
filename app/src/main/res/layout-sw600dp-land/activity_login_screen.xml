@@ -6,106 +6,116 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_screen_background">
 
-    <TextView
-        android:id="@+id/welcomeTV"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="600dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
-        android:fontFamily="@font/open_sans_extrabold"
-        android:foregroundGravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:text="@string/welcome"
-        android:textAllCaps="true"
-        android:textColor="@color/headings"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeTV"
-        app:layout_constraintVertical_bias="0.302">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/userNameET"
-            android:layout_width="378dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="167dp"
-            android:layout_marginTop="140dp"
-            android:layout_marginEnd="167dp"
-            android:background="@drawable/inputs_background"
-            android:ems="10"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/open_sans"
-            android:hint="@string/user_name"
-            android:inputType="textPersonName"
-            android:padding="20dp"
-            android:textColor="@color/headings"
-            android:textColorHint="#353535"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toTopOf="@+id/userPasswordET"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_background"
-            app:layout_constraintHorizontal_bias="0.409"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_background"
-            app:layout_constraintTop_toBottomOf="@+id/welcomeTV" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/userPasswordET"
-            android:layout_width="378dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="167dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="167dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/inputs_background"
-            android:layout_gravity="center_horizontal"
-            android:ems="10"
-            android:fontFamily="@font/open_sans"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="20dp"
-            android:textColor="@color/headings"
-            android:textColorHint="#353535"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toTopOf="@+id/signInButton"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_background"
-            app:layout_constraintHorizontal_bias="0.719"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_background"
-            app:layout_constraintTop_toBottomOf="@+id/userNameET" />
+            <TextView
+                android:id="@+id/welcomeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/open_sans_extrabold"
+                android:foregroundGravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="@string/welcome"
+                android:textAllCaps="true"
+                android:textColor="@color/headings"
+                android:textSize="32sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/signInButton"
-            android:layout_width="378dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="167dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="167dp"
-            android:layout_marginBottom="144dp"
-            android:background="@drawable/button_background"
-            android:fontFamily="@font/open_sans"
-            android:layout_gravity="center_horizontal"
-            android:padding="20dp"
-            android:text="@string/sign_in"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/sign_up_background"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_background"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_background" />
+            <LinearLayout
+                android:id="@+id/linearLayout6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/welcomeTV"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/userNameET"
+                    android:layout_width="378dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/inputs_background"
+                    android:ems="10"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="@string/userName"
+                    android:inputType="textPersonName"
+                    android:padding="20dp"
+                    android:textColor="@color/headings"
+                    android:textColorHint="#353535"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toTopOf="@+id/userPasswordET"
+                    app:layout_constraintEnd_toEndOf="@+id/sign_up_background"
+                    app:layout_constraintHorizontal_bias="0.409"
+                    app:layout_constraintStart_toStartOf="@+id/sign_up_background"
+                    app:layout_constraintTop_toBottomOf="@+id/welcomeTV" />
+
+                <EditText
+                    android:id="@+id/userPasswordET"
+                    android:layout_width="378dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/inputs_background"
+                    android:ems="10"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="@string/userPassword"
+                    android:inputType="textPassword"
+                    android:padding="20dp"
+                    android:textColor="@color/headings"
+                    android:textColorHint="#353535"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toTopOf="@+id/signInButton"
+                    app:layout_constraintEnd_toEndOf="@+id/sign_up_background"
+                    app:layout_constraintHorizontal_bias="0.719"
+                    app:layout_constraintStart_toStartOf="@+id/sign_up_background"
+                    app:layout_constraintTop_toBottomOf="@+id/userNameET" />
+
+                <Button
+                    android:id="@+id/signInButton"
+                    android:layout_width="378dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/button_background"
+                    android:fontFamily="@font/open_sans"
+                    android:padding="20dp"
+                    android:text="@string/sign_in"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/sign_up_background"
+                    app:layout_constraintEnd_toEndOf="@+id/sign_up_background"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/sign_up_background" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
 
     <ImageView
         android:id="@+id/login_app_logo"

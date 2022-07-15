@@ -37,9 +37,9 @@ public class MithraUtility extends Application {
      */
     public String getCurrentTime(){
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
         String strDate = sdf.format(c.getTime());
-        Log.d("SurveyScreen","getCurrentTime : " + strDate);
+        Log.d("MithraUtility","getCurrentTime : " + strDate);
         return strDate;
     }
 }

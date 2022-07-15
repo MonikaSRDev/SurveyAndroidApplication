@@ -3,19 +3,28 @@ package com.example.mithraapplication.ModelClasses;
 import java.io.Serializable;
 
 public class DiseasesProfile extends JsonServerObject {
-    private String DiseaseName = "NULL";
-    private String specifyDisease = "NULL";
-    private String diagnosedAge = "NULL";
-    private String Diagnosed = "NULL";
-    private String receivedTreatment = "NULL";
-    private String limitActivities = "NULL";
+    private String diseaseName = "null";
+    private String diseaseNameKannada = "null";
+    private String specifyDisease = "null";
+    private String diagnosedAge = "null";
+    private String Diagnosed = "null";
+    private String receivedTreatment = "null";
+    private String limitActivities = "null";
 
     public String getDiseaseName() {
-        return DiseaseName;
+        return diseaseName;
     }
 
     public void setDiseaseName(String diseaseName) {
-        DiseaseName = diseaseName;
+        this.diseaseName = diseaseName;
+    }
+
+    public String getDiseaseNameKannada() {
+        return diseaseNameKannada;
+    }
+
+    public void setDiseaseNameKannada(String diseaseNameKannada) {
+        this.diseaseNameKannada = diseaseNameKannada;
     }
 
     public String getDiagnosedAge() {
