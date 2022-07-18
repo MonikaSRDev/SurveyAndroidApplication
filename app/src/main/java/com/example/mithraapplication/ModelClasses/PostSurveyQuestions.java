@@ -2,11 +2,11 @@ package com.example.mithraapplication.ModelClasses;
 
 import java.util.ArrayList;
 
-public class SurveyPostRequest extends  JsonServerObject{
+public class PostSurveyQuestions extends JsonServerObject{
     private String user_pri_id = "null";
     private String created_user = "null";
     private String type = "null";
-    private ArrayList<ParticipantAnswers> answer = new ArrayList<>() ;
+    private String answer = "null";
     private String survey_start = "null";
     private String survey_stop = "null";
     private String minutes = "null";
@@ -36,11 +36,11 @@ public class SurveyPostRequest extends  JsonServerObject{
         this.type = type;
     }
 
-    public ArrayList<ParticipantAnswers> getAnswer() {
+    public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(ArrayList<ParticipantAnswers> answer) {
+    public void setAnswer(String answer) {
         this.answer = answer;
     }
 

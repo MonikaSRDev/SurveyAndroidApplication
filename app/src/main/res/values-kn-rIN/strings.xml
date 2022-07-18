@@ -127,5 +127,6 @@
     <string name="module_status">ಮಾಡ್ಯೂಲ್ ಸ್ಥಿತಿ</string>
     <string name="referral_status">ರೆಫರಲ್ ಸ್ಥಿತಿ</string>
     <string name="name">Name</string>
+    <string name="status">Status</string>
 
 </resources>

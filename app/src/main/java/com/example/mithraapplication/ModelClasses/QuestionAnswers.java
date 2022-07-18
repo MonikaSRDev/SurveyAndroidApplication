@@ -5,6 +5,10 @@ public class QuestionAnswers {
     private String qn_number = "NULL";
     private String question_e = "NULL";
     private String question_k = "NULL";
+    private int option_1_weightage = 0;
+    private int option_2_weightage = 1;
+    private int option_3_weightage = 2;
+    private int option_4_weightage = 3;
     private String option_1_e = "NULL";
     private String option_2_e = "NULL";
     private String option_3_e = "NULL";
@@ -126,5 +130,37 @@ public class QuestionAnswers {
 
     public void setActive(String active) {
         this.active = active;
+    }
+
+    public int getOption_1_weightage() {
+        return option_1_weightage;
+    }
+
+    public void setOption_1_weightage(int option_1_weightage) {
+        this.option_1_weightage = option_1_weightage;
+    }
+
+    public int getOption_2_weightage() {
+        return option_2_weightage;
+    }
+
+    public void setOption_2_weightage(int option_2_weightage) {
+        this.option_2_weightage = option_2_weightage;
+    }
+
+    public int getOption_3_weightage() {
+        return option_3_weightage;
+    }
+
+    public void setOption_3_weightage(int option_3_weightage) {
+        this.option_3_weightage = option_3_weightage;
+    }
+
+    public int getOption_4_weightage() {
+        return option_4_weightage;
+    }
+
+    public void setOption_4_weightage(int option_4_weightage) {
+        this.option_4_weightage = option_4_weightage;
     }
 }

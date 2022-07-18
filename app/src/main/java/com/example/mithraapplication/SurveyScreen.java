@@ -23,6 +23,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mithraapplication.ModelClasses.FrappeResponse;
+import com.example.mithraapplication.ModelClasses.ParticipantAnswers;
+import com.example.mithraapplication.ModelClasses.PostSurveyQuestions;
 import com.example.mithraapplication.ModelClasses.QuestionAnswers;
 import com.example.mithraapplication.ModelClasses.SurveyPostRequest;
 import com.example.mithraapplication.ModelClasses.SurveyQuestions;
@@ -35,7 +38,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.http.Part;
 
 public class SurveyScreen extends AppCompatActivity implements HandleServerResponse {
 
@@ -45,21 +51,22 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private ImageButton optionImageButtonOne, optionImageButtonTwo, optionImageButtonThree, optionImageButtonFour;
     private View option_view_one, option_view_two, option_view_three, option_view_four;
     private LinearLayout option1LinearLayout, option2LinearLayout, option3LinearLayout, option4LinearLayout;
-    private int questionIndex = 0;
-    private int selectedOptionValue = 0;
+    private int questionIndex = 0, selectedOptionValue = 0, totalScore = 0;
     private ArrayList<QuestionAnswers> questionArray = new ArrayList<>();
-    private String startDateTime, endDateTime;
+    private String surveyStartDateTime, surveyEndDateTime, totalSurveyTime, questionStartTime, questionEndTime, totalQuestionTime;
     private Dialog dialog;
     private HashMap<String, String> surveyPHQ9 = new HashMap<>();
-    private String surveyAnswers = "{";
+    private ArrayList<ParticipantAnswers> surveyAnswers = new ArrayList<>();
     private final MithraUtility mithraUtility = new MithraUtility();
-    private String selectedLanguage = "1";
+    private String selectedLanguage = "1", strSelectedOption = "null", lastAnsweredQuestionNumber;
+    private String postAnswers = "[";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_screen);
         RegisterViews();
+        getDataStoredFromSharedPreferences();
 //        initializeData();
 //        startDateTime = mithraUtility.getCurrentTime();
 //        setCardData();
@@ -68,6 +75,33 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         onClickOfLanguageButton();
         getCurrentLocale();
         callServerToGetPHQ9Questions();
+    }
+
+    private void getDataStoredFromSharedPreferences(){
+        String user_primary_id = mithraUtility.getSharedPreferencesData(SurveyScreen.this, getString(R.string.primaryID), getString(R.string.participantPrimaryID));
+        Gson gson = new Gson();
+        String surveyAnswersJson = mithraUtility.getSharedPreferencesData(SurveyScreen.this, getString(R.string.survey_answers), user_primary_id);
+        Type listType  = new TypeToken<SurveyPostRequest>() {}.getType();
+        SurveyPostRequest surveyAnswersPostReq = gson.fromJson(surveyAnswersJson, listType);
+        if(surveyAnswersPostReq!=null){
+            ArrayList<ParticipantAnswers> answersArrayList = surveyAnswersPostReq.getAnswer();
+            lastAnsweredQuestionNumber = answersArrayList.get(answersArrayList.size()-1).getQuestion_no();
+            surveyAnswers = answersArrayList;
+            for(int i = 0; i < surveyAnswers.size(); i++){
+                postAnswers += getAnswersList(i, surveyAnswers) + ",";
+                if(i == questionArray.size()-1){
+                    postAnswers += "]";
+                }
+            }
+            questionIndex = Integer.parseInt(lastAnsweredQuestionNumber);
+            totalScore = Integer.parseInt(surveyAnswersPostReq.getScore());
+            surveyStartDateTime = surveyAnswersPostReq.getSurvey_start(); // should it be updated or same?
+        }
+    }
+
+    private void removeDataStoredSharedPreferences(){
+        String user_primary_id = mithraUtility.getSharedPreferencesData(SurveyScreen.this, getString(R.string.primaryID), getString(R.string.participantPrimaryID));
+        mithraUtility.removeSharedPreferencesData(SurveyScreen.this, getString(R.string.survey_answers), user_primary_id);
     }
 
     private void initializeData() {
@@ -200,7 +234,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
                 Log.i("SurveyScreen", "responseReceivedSuccessfully : " +questionAnswersArrayList);
                 questionArray = questionAnswersArrayList;
-                startDateTime = mithraUtility.getCurrentTime();
+                surveyStartDateTime = mithraUtility.getCurrentTime();
                 setCardData();
             }
         }catch(Exception e){
@@ -313,7 +347,10 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     private void onClickOfOptionOne() {
-        selectedOptionValue = 0;
+        selectedOptionValue = questionArray.get(questionIndex).getOption_1_weightage();
+        strSelectedOption = questionArray.get(questionIndex).getOption_1_e();
+        questionEndTime = mithraUtility.getCurrentTime();//here or on click of next button??
+
         option_view_one.setVisibility(View.VISIBLE);
         option_view_two.setVisibility(View.INVISIBLE);
         option_view_three.setVisibility(View.INVISIBLE);
@@ -328,7 +365,9 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     private void onClickOfOptionTwo() {
-        selectedOptionValue = 1;
+        selectedOptionValue = questionArray.get(questionIndex).getOption_2_weightage();
+        strSelectedOption = questionArray.get(questionIndex).getOption_2_e();
+        questionEndTime = mithraUtility.getCurrentTime();
 
         option_view_one.setVisibility(View.INVISIBLE);
         option_view_two.setVisibility(View.VISIBLE);
@@ -344,7 +383,9 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     private void onClickOfOptionThree() {
-        selectedOptionValue = 2;
+        selectedOptionValue = questionArray.get(questionIndex).getOption_3_weightage();
+        strSelectedOption = questionArray.get(questionIndex).getOption_3_e();
+        questionEndTime = mithraUtility.getCurrentTime();
 
         option_view_one.setVisibility(View.INVISIBLE);
         option_view_two.setVisibility(View.INVISIBLE);
@@ -360,7 +401,9 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     private void onClickOfOptionFour() {
-        selectedOptionValue = 3;
+        selectedOptionValue = questionArray.get(questionIndex).getOption_4_weightage();
+        strSelectedOption = questionArray.get(questionIndex).getOption_4_e();
+        questionEndTime = mithraUtility.getCurrentTime();
 
         option_view_one.setVisibility(View.INVISIBLE);
         option_view_two.setVisibility(View.INVISIBLE);
@@ -383,7 +426,28 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             @Override
             public void onClick(View v) {
                 surveyPHQ9.put(questionArray.get(questionIndex).getQn_number(), String.valueOf(selectedOptionValue));
-                surveyAnswers = surveyAnswers + "'" +questionArray.get(questionIndex).getQn_number().charAt(0) + "':'" + String.valueOf(selectedOptionValue).charAt(0) + "',";
+                totalQuestionTime = mithraUtility.getTimeDifferenceSeconds(questionStartTime, questionEndTime);
+                totalScore += selectedOptionValue;
+                ParticipantAnswers participantAnswers = new ParticipantAnswers();
+                participantAnswers.setQuestion_id(questionArray.get(questionIndex).getName());
+                participantAnswers.setQuestion_no(questionArray.get(questionIndex).getQn_number());
+                participantAnswers.setQuestion(questionArray.get(questionIndex).getQuestion_e());
+                participantAnswers.setSelected_answer(strSelectedOption);
+                participantAnswers.setSelected_answer_weightage(String.valueOf(selectedOptionValue));
+                participantAnswers.setQuestion_start_time(questionStartTime);
+                participantAnswers.setQuestion_stop_time(questionEndTime);
+                participantAnswers.setSeconds_taken(totalQuestionTime);
+                surveyAnswers.add(participantAnswers);
+                if(questionIndex < questionArray.size()-1){
+                    postAnswers = postAnswers + getAnswersList(questionIndex, surveyAnswers) + ",";
+                }else{
+                    postAnswers = postAnswers + "]";
+                }
+
+                String user_primary_id = mithraUtility.getSharedPreferencesData(SurveyScreen.this, getString(R.string.primaryID), getString(R.string.participantPrimaryID));
+                Gson gson = new Gson();
+                String surveyAnswersJson = gson.toJson(getPostSurveyAnswers());
+                mithraUtility.putSharedPreferencesData(SurveyScreen.this, getString(R.string.survey_answers), user_primary_id, surveyAnswersJson);
                 questionIndex++;
                 setCardData();
                 enableDisableButton(false);
@@ -400,10 +464,44 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         });
     }
 
+    private String getAnswersList(int position, ArrayList<ParticipantAnswers> surveyAnswersArrayList){
+        List<String> surveyAnswer = new ArrayList<>();
+        surveyAnswer.add("qn_id" + ":" + surveyAnswersArrayList.get(position).getQuestion_id());
+        surveyAnswer.add("qn_no" + ":" + surveyAnswersArrayList.get(position).getQuestion_no());
+        surveyAnswer.add("question" + ":" + surveyAnswersArrayList.get(position).getQuestion());
+        surveyAnswer.add("ans" + ":" + surveyAnswersArrayList.get(position).getSelected_answer());
+        surveyAnswer.add("w" + ":" + surveyAnswersArrayList.get(position).getSelected_answer_weightage());
+        surveyAnswer.add("qn_start" + ":" + surveyAnswersArrayList.get(position).getQuestion_start_time());
+        surveyAnswer.add("qn_stop" + ":" + surveyAnswersArrayList.get(position).getQuestion_stop_time());
+        surveyAnswer.add("seconds" + ":" + surveyAnswersArrayList.get(position).getSeconds_taken());
+        String surveyAnswerStr = String.join(",", surveyAnswer );
+        surveyAnswerStr = "{" + surveyAnswerStr + "}";
+
+        Log.i("ARRAY LIST", "Diseases Data - list" + surveyAnswer);
+        Log.i("ARRAY LIST", "Diseases Data - String" + surveyAnswerStr);
+
+        return surveyAnswerStr;
+    }
+
+    private SurveyPostRequest getPostSurveyAnswers(){
+        totalSurveyTime = mithraUtility.getTimeDifferenceMinutes(surveyStartDateTime, surveyEndDateTime);
+        SurveyPostRequest surveyPostRequest = new SurveyPostRequest();
+        surveyPostRequest.setUser_pri_id(mithraUtility.getSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
+        surveyPostRequest.setCreated_user(mithraUtility.getSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
+        surveyPostRequest.setType("SUR0001");
+        surveyPostRequest.setScore(String.valueOf(totalScore));
+        surveyPostRequest.setMinutes(totalSurveyTime);
+        surveyPostRequest.setAnswer(surveyAnswers);
+        surveyPostRequest.setSurvey_start(surveyStartDateTime);
+        surveyPostRequest.setSurvey_stop(surveyEndDateTime);
+        return surveyPostRequest;
+    }
+
     /**
      * Description : Sets the questions in the card view
      */
     private void setCardData() {
+        questionStartTime = mithraUtility.getCurrentTime();
         if(questionIndex < questionArray.size()){
             if(selectedLanguage.equals("1")){
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_e());
@@ -425,32 +523,11 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
 
         }
         else{
-            endDateTime = mithraUtility.getCurrentTime();
+            surveyEndDateTime = mithraUtility.getCurrentTime();
             showCongratulationAlert();
-//            callServerForPostSurveyAnswers();
+            callServerForPostSurveyAnswers();
             waitAndMoveToAnotherActivity();
         }
-    }
-
-    /**
-     * Description : Update the server with the data entered by the user
-     */
-    private void callServerForPostSurveyAnswers(){
-        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_session.api.phqsessionpost";
-        SurveyPostRequest surveyPostRequest = new SurveyPostRequest();
-        surveyPostRequest.setUser_name(mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant)));
-//        String diseaseStr = String.join(",", (CharSequence) surveyPHQ9);
-        Log.i("SURVEY QUESTIONS", "String List" + surveyPHQ9);
-        Log.i("SURVEY QUESTIONS", "Character List" + surveyAnswers);
-//        String answers = String.join(",", surveyAnswers);
-        surveyAnswers = surveyAnswers.substring(0, surveyAnswers.length()-1) + "}";
-        Log.i("SURVEY QUESTIONS", "After Character List" + surveyAnswers);
-        surveyPostRequest.setAnswer(surveyAnswers);
-        surveyPostRequest.setSession_start(startDateTime);
-        surveyPostRequest.setSession_stop(endDateTime);
-        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
-        requestObject.setHandleServerResponse(this);
-        requestObject.postSurveyAnswers(SurveyScreen.this, surveyPostRequest, url);
     }
 
     /**
@@ -510,10 +587,30 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private void callServerToGetPHQ9Questions(){
         String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.survey_questions.api.questions";
         SurveyQuestions surveyQuestions = new SurveyQuestions();
-        surveyQuestions.setType("PHQ 9");
+        surveyQuestions.setType("SUR0001");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.getPHQ9Questions(SurveyScreen.this, surveyQuestions, url);
+    }
+
+    /**
+     * Description : Update the server with the data entered by the user
+     */
+    private void callServerForPostSurveyAnswers(){
+        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.survey_answer.api.survey_ans";
+        totalSurveyTime = mithraUtility.getTimeDifferenceMinutes(surveyStartDateTime, surveyEndDateTime);
+        PostSurveyQuestions surveyPostRequest = new PostSurveyQuestions();
+        surveyPostRequest.setUser_pri_id(mithraUtility.getSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
+        surveyPostRequest.setCreated_user(mithraUtility.getSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
+        surveyPostRequest.setType("SUR0001");
+        surveyPostRequest.setScore(String.valueOf(totalScore));
+        surveyPostRequest.setMinutes(totalSurveyTime);
+        surveyPostRequest.setAnswer(postAnswers);
+        surveyPostRequest.setSurvey_start(surveyStartDateTime);
+        surveyPostRequest.setSurvey_stop(surveyEndDateTime);
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.postSurveyAnswers(SurveyScreen.this, surveyPostRequest, url);
     }
 
     /**
@@ -526,19 +623,30 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<QuestionAnswers>>(){}.getType();
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        ArrayList<QuestionAnswers> questionAnswersArrayList = new ArrayList<>();
+        if(jsonObject.get("message")!=null) {
+            ArrayList<QuestionAnswers> questionAnswersArrayList = new ArrayList<>();
 
-        try{
-            questionAnswersArrayList = gson.fromJson(jsonObject.get("message"), type);
-            if(questionAnswersArrayList.size() > 1){
-                questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
-                Log.i("SurveyScreen", "responseReceivedSuccessfully : " +questionAnswersArrayList);
-                questionArray = questionAnswersArrayList;
-                startDateTime = mithraUtility.getCurrentTime();
-                setCardData();
+            try {
+                questionAnswersArrayList = gson.fromJson(jsonObject.get("message"), type);
+                if (questionAnswersArrayList.size() > 1) {
+                    questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
+                    Log.i("SurveyScreen", "responseReceivedSuccessfully : " + questionAnswersArrayList);
+                    questionArray = questionAnswersArrayList;
+                    surveyStartDateTime = mithraUtility.getCurrentTime();
+                    setCardData();
+                }
+            } catch (Exception e) {
+                removeDataStoredSharedPreferences();
+                Toast.makeText(this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
             }
-        }catch(Exception e){
-            Toast.makeText(this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }else{
+            JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+            Type typeFrappe = new TypeToken<FrappeResponse>(){}.getType();
+            if(jsonObjectRegistration.get("data")!=null) {
+                FrappeResponse frappeResponse;
+                frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), typeFrappe);
+                removeDataStoredSharedPreferences();
+            }
         }
     }
 

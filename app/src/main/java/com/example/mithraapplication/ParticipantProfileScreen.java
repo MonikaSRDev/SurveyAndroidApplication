@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mithraapplication.Fragments.DiseasesProfileFragment;
+import com.example.mithraapplication.Fragments.ParticipantReportFragment;
 import com.example.mithraapplication.Fragments.RegistrationFragment;
 import com.example.mithraapplication.Fragments.ScreeningFragment;
 import com.example.mithraapplication.Fragments.SocioDemographyFragment;
@@ -42,7 +43,7 @@ import java.util.Objects;
 
 public class ParticipantProfileScreen extends AppCompatActivity implements HandleServerResponse{
 
-    private Button englishButtonProfile, kannadaButtonProfile, profileEditButton;
+    public Button englishButtonProfile, kannadaButtonProfile, profileEditButton;
     private TextView profileTitleTV, dashboardTVProfile, participantTVProfile, coordinatorNameTVProfile, profileParticipantName;
     private LinearLayout dashboardLinearLayoutProfile, participantLinearLayoutProfile;
     private ImageView mithraLogoProfile, coordinatorProfile, notificationsIconProfile, participantsIconParticipant;
@@ -95,8 +96,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
 
         profileTabLayout = findViewById(R.id.profileTabLayout);
         profileFrameLayout = findViewById(R.id.profileFrameLayout);
-//        profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 3);
-//        profileTabLayout.getTabAt(1)
         disableTab(1);
         disableTab(2);
         disableTab(3);
@@ -156,6 +155,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             if(registerParticipant!=null){
                 profileParticipantName.setText(registerParticipant.getParticipantName());
             }
+            profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 4);
             setVisibilityForEdit(true);
             callGetParticipantTrackingDetails();
         }else{
@@ -211,6 +211,16 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 tabData3.select();
                 enableTab(1);
                 enableTab(2);
+                break;
+            case 4:
+                fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
+                profileEditButton.setText(R.string.status);
+                TabLayout.Tab tabData4 = profileTabLayout.getTabAt(position);
+                assert tabData4 != null;
+                tabData4.select();
+                enableTab(1);
+                enableTab(2);
+                enableTab(3);
                 break;
         }
         FragmentManager fm = getSupportFragmentManager();

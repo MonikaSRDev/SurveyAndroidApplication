@@ -42,6 +42,7 @@
     <string name="user_name_participant" translatable="false">ParticipantUserName</string>
     <string name="user_name_coordinator" translatable="false">CoordinatorUserName</string>
     <string name="user_name_researcher" translatable="false">ResearcherUserName</string>
+    <string name="survey_answers" translatable="false">Survey Answers</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logout">Logout</string>
@@ -153,5 +154,6 @@
     <string name="module_status">Module Status</string>
     <string name="referral_status">Referral Status</string>
     <string name="name">Name</string>
+    <string name="status">Status</string>
 
 </resources>

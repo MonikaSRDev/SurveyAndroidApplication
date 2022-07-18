@@ -152,7 +152,8 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         dashboardVerticalParticipantsAdapter = new DashboardVerticalParticipantsAdapter(this, participantArrayList, new DashboardVerticalParticipantsAdapter.onItemClickListener() {
             @Override
             public void onItemClick(RegisterParticipant registerParticipant) {
-
+                Intent intent = new Intent(DashboardScreen.this, DashboardParticipantDetailsScreen.class);
+                startActivity(intent);
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

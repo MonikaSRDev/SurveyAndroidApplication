@@ -169,7 +169,7 @@ public class FullScreenVideoView extends AppCompatActivity{
         });
     }
 
-    private Runnable onEverySecond=new Runnable() {
+    private Runnable onEverySecond = new Runnable() {
 
         @Override
         public void run() {

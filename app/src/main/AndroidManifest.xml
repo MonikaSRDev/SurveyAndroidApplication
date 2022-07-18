@@ -65,6 +65,11 @@
             android:screenOrientation="sensorLandscape"
             android:configChanges="locale"/>
 
+        <activity
+            android:name=".DashboardParticipantDetailsScreen"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="locale"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
