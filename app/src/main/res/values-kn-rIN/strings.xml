@@ -128,5 +128,6 @@
     <string name="referral_status">ರೆಫರಲ್ ಸ್ಥಿತಿ</string>
     <string name="name">Name</string>
     <string name="status">Status</string>
+    <string name="edit">Edit</string>
 
 </resources>

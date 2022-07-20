@@ -198,6 +198,8 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
             holder.diagnosedAgeET.setClickable(true);
             holder.specifyDiseaseET.setFocusable(true);
             holder.specifyDiseaseET.setClickable(true);
+            holder.diagnosedAgeET.setFocusableInTouchMode(true);
+            holder.specifyDiseaseET.setFocusableInTouchMode(true);
 
             holder.yesDiseaseButton.setEnabled(true);
             holder.noDiseaseButton.setEnabled(true);

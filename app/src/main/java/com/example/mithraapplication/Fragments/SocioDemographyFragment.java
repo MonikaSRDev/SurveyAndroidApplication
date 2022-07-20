@@ -44,7 +44,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             scheduledCasteButton, scheduledTribeButton, backwardClassesButton, doNotKnowCasteButton, otherCasteButton, pNACasteButton,
             hinduButton, muslimButton, christianButton, sikhButton, buddhistButton, jainButton, otherReligionButton, pNAReligionButton,
             professionalButton, clericalButton, salesAndServicesButton, skilledManualButton, unskilledManualButton, agricultureButton,
-            noSchoolingButton, lessThanFiveButton, fiveToSevenButton, eightToNineButton, tenToElevenButton, twelveOrMoreButton;
+            noSchoolingButton, lessThanFiveButton, fiveToSevenButton, eightToNineButton, tenToElevenButton, twelveOrMoreButton, editButton;
     private TextView educationYearsTV, maritalStatusTV, occupationTV, religionTV, familyIncomeTV, SHGMeetingsTV, nearestPHCTV,
             casteTV, familyAdultMembersTV, familyChildMembersTV, earningMembersTV, familyTypeTV, associationDurationTV;
     private EditText numAdultFamilyET, numChildFamilyET, totalFamilyIncomeET, totalEarningFamilyMembersET, associationDurationET, SHGMeetingsET, nearestPHCET;
@@ -52,7 +52,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             participantMaritalStatus = "NULL", participantFamilyType = "NULL", participantCaste = "NULL", participantReligion = "NULL",
             participantOccupation = "NULL", participantSchooling = "NULL", nearestPHC = "NULL", SHGMeetings = "NULL";
     private MithraUtility mithraUtility = new MithraUtility();
-    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = null;
+    private TrackingParticipantStatus trackingParticipantStatus = null;
     private String isEditable = "true";
     private SocioDemography socioDemographyDetails = null;
 
@@ -66,10 +66,15 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(isEditable!= null && !isEditable.equals("true")){
-            callGetIndividualSocioDemographyDetails();
-        }
         RegisterViews(view);
+        if(trackingParticipantStatus!=null && trackingParticipantStatus.getSocio_demography()!=null) {
+            if(isEditable!= null && !isEditable.equals("true")){
+                callGetIndividualSocioDemographyDetails();
+            }
+        }else{
+            isEditable = "true";
+            editButton.setEnabled(false);
+        }
         getYearsOfEducation();
         getOccupation();
         getReligion();
@@ -77,9 +82,10 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         getSelectedMaritalStatus();
         getSelectedFamilyType();
         onClickOfNextButton();
+        setOnclickOfEditButton();
     }
 
-    public SocioDemographyFragment(ArrayList<TrackingParticipantStatus> trackingParticipantStatus, String isEditable){
+    public SocioDemographyFragment(TrackingParticipantStatus trackingParticipantStatus, String isEditable){
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
     }
@@ -149,6 +155,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         associationDurationET = view.findViewById(R.id.associationDurationET);
         SHGMeetingsET = view.findViewById(R.id.SHGMeetingsET);
         nearestPHCET = view.findViewById(R.id.nearestPHCET);
+        editButton = requireActivity().findViewById(R.id.profileEditButton);
     }
 
     private void setEditable(){
@@ -269,6 +276,14 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         associationDurationET.setClickable(editable);
         SHGMeetingsET.setClickable(editable);
         nearestPHCET.setClickable(editable);
+
+        totalFamilyIncomeET.setFocusableInTouchMode(editable);
+        totalEarningFamilyMembersET.setFocusableInTouchMode(editable);
+        numAdultFamilyET.setFocusableInTouchMode(editable);
+        numChildFamilyET.setFocusableInTouchMode(editable);
+        associationDurationET.setFocusableInTouchMode(editable);
+        SHGMeetingsET.setFocusableInTouchMode(editable);
+        nearestPHCET.setFocusableInTouchMode(editable);
 
         nextButton.setEnabled(editable);
         nuclearFamilyButton.setEnabled(editable);
@@ -700,10 +715,26 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
                 callServerPostSocioDemography();
 //            moveToDiseaseProfileTab();
             }else{
-                callServerUpdateSocioDemographyDetails();
+                if(trackingParticipantStatus!=null){
+                    callServerUpdateSocioDemographyDetails();
+                }else{
+                    callServerPostSocioDemography();
+                }
             }
         });
     }
+
+    private void setOnclickOfEditButton(){
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editButton.setBackgroundResource(R.drawable.status_button);
+                isEditable = "reEdit";
+                setEditable();
+            }
+        });
+    }
+
 
     private void callServerPostSocioDemography(){
         String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography";
@@ -723,16 +754,16 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     }
 
     private void callGetIndividualSocioDemographyDetails() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography/" + trackingParticipantStatus.get(0).getSocio_demography();
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography/" + trackingParticipantStatus.getSocio_demography();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.getParticipantSocioDemographyDetails(getActivity(), url);
     }
 
     private void callServerUpdateSocioDemographyDetails() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography/" +  trackingParticipantStatus.get(0).getSocio_demography();
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography/" +  trackingParticipantStatus.getSocio_demography();
         SocioDemography socioDemographyObject = getUserEnteredData();
-        socioDemographyObject.setUser_pri_id(trackingParticipantStatus.get(0).getUser_pri_id());
+        socioDemographyObject.setUser_pri_id(trackingParticipantStatus.getUser_pri_id());
         socioDemographyObject.setModified_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
@@ -763,7 +794,9 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             }else{
                 Type typeSocioDemography = new TypeToken<SocioDemography>(){}.getType();
                 socioDemographyDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeSocioDemography);
-                trackingParticipantStatus.get(0).setUser_pri_id(socioDemographyDetails.getUser_pri_id());
+                trackingParticipantStatus.setUser_pri_id(socioDemographyDetails.getUser_pri_id());
+                editButton.setEnabled(true);
+                isEditable = "false";
                 setEditable();
                 Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
             }

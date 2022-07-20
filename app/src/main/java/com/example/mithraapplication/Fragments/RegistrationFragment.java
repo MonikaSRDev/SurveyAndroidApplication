@@ -1,13 +1,19 @@
 package com.example.mithraapplication.Fragments;
 
+import android.app.Dialog;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import com.example.mithraapplication.HandleServerResponse;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
+import com.example.mithraapplication.ModelClasses.GetParticipantDetails;
 import com.example.mithraapplication.ModelClasses.Locations;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
@@ -35,6 +42,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -44,7 +53,7 @@ import java.util.stream.Collectors;
 public class RegistrationFragment extends Fragment implements AdapterView.OnItemSelectedListener, HandleServerResponse {
 
     private EditText participantNameET, participantAgeET, participantPhoneNumberET, participantUserNameET, participantPasswordET, participantConfirmPasswordET;
-    private Button createButton, maleButton, femaleButton, othersButton;
+    private Button createButton, maleButton, femaleButton, othersButton, editButton;
     private TextView participantAgeTV, participantPhoneNumberTV, participantUserNameTV, participantPasswordTV, participantConfirmPasswordTV, VillageNameTV, PanchayatTV, SHGAssociationTV, participantNameTV, genderTV;
     private Spinner VillageNameSpinner, SHGSpinner, PanchayatSpinner, CountryCodeSpinner;
     private String participantName, participantUserName, participantPassword;
@@ -58,9 +67,10 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     private ArrayAdapter adapterForVillageNames, SHGSpinnerAdapter, panchayatSpinnerAdapter, countryCodeAdapter;
     private MithraUtility mithraUtility = new MithraUtility();
     public static String trackingName = "NULL";
-    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = null;
+    private TrackingParticipantStatus trackingParticipantStatus = null;
     private RegisterParticipant registerParticipantDetails = null;
     private String isEditable;
+    private Dialog dialog;
 
     @Nullable
     @Override
@@ -71,20 +81,26 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        callGetLocationsForParticipant();
-        if(isEditable!= null && !isEditable.equals("true")){
-            callGetIndividualParticipantDetails();
-        }
         RegisterViews(view);
+        callGetLocationsForParticipant();
+        if(trackingParticipantStatus!=null && trackingParticipantStatus.getRegistration()!=null){
+            if(isEditable!= null && !isEditable.equals("true")){
+                callGetIndividualParticipantDetails();
+            }
+        }else{
+            isEditable = "true";
+            editButton.setEnabled(false);
+        }
         onClickRegisterButton();
         getSelectedGender();
-        setEditable();
+        setOnclickOfEditButton();
+//        setEditable();
     }
 
-    public RegistrationFragment(ArrayList<TrackingParticipantStatus> trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipantDetails){
+    public RegistrationFragment(TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant){
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
-        this.registerParticipantDetails = registerParticipantDetails;
+        this.registerParticipantDetails = registerParticipant;
     }
 
     /**
@@ -113,9 +129,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         maleButton = view.findViewById(R.id.maleOption);
         femaleButton = view.findViewById(R.id.femaleOption);
         femaleButton.setBackgroundResource(R.drawable.selected_button);
-        femaleButton.setTextColor(getResources().getColor(R.color.white));
         participantGender = "Female";
         othersButton = view.findViewById(R.id.othersOption);
+        editButton = requireActivity().findViewById(R.id.profileEditButton);
 
         VillageNameSpinner = view.findViewById(R.id.villageNameSpinner);
         VillageNameSpinner.setOnItemSelectedListener(this);
@@ -130,12 +146,10 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         CountryCodeSpinner.setOnItemSelectedListener(this);
 
         CountryCodeList.add("+91");
-        countryCodeAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, CountryCodeList);
-        countryCodeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        countryCodeAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, CountryCodeList);
         CountryCodeSpinner.setAdapter(countryCodeAdapter);
         CountryCodeSpinner.setSelection(0, true);
         View viewSpinner = CountryCodeSpinner.getSelectedView();
-        ((TextView)viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
         ((TextView)viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
     }
 
@@ -165,7 +179,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             PanchayatSpinner.setEnabled(true);
             CountryCodeSpinner.setEnabled(true);
 
-        }else if(isEditable.equals("false")){
+        }else if(isEditable!=null && isEditable.equals("false")){
             participantNameET.setFocusable(false);
             participantNameET.setClickable(false);
             participantNameET.setText(registerParticipantDetails.getParticipantName());
@@ -176,7 +190,15 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
             participantPhoneNumberET.setFocusable(false);
             participantPhoneNumberET.setClickable(false);
-            participantPhoneNumberET.setText(registerParticipantDetails.getParticipantPhoneNumber());
+            Phonenumber.PhoneNumber phoneNumber = getCountryCodeAndNumber(registerParticipantDetails.getParticipantPhoneNumber());
+            if(phoneNumber!=null){
+                participantCountryCode = String.valueOf(phoneNumber.getCountryCode());
+                participantPhoneNum = String.valueOf(phoneNumber.getNationalNumber());
+            }else{
+//                participantCountryCode = String.valueOf(phoneNumber.getCountryCode());
+                participantPhoneNum = null;
+            }
+            participantPhoneNumberET.setText(participantPhoneNum);
 
             participantUserNameET.setFocusable(false);
             participantUserNameET.setClickable(false);
@@ -185,6 +207,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             participantPasswordTV.setVisibility(View.INVISIBLE);
             participantPasswordET.setVisibility(View.VISIBLE);
             participantPasswordET.setText("Create New Password");
+            participantPasswordET.setTypeface(Typeface.create("open_sans", Typeface.BOLD));
             participantPasswordET.setFocusable(false);
             participantPasswordET.setClickable(false);
             participantPasswordET.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -202,25 +225,38 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             PanchayatSpinner.setEnabled(false);
             CountryCodeSpinner.setEnabled(false);
         }else{
+            participantNameET.setText(registerParticipantDetails.getParticipantName());
             participantNameET.setFocusable(true);
             participantNameET.setClickable(true);
-            participantNameET.setText(registerParticipantDetails.getParticipantName());
+            participantNameET.setFocusableInTouchMode(true);
 
             participantAgeET.setFocusable(true);
             participantAgeET.setClickable(true);
+            participantAgeET.setFocusableInTouchMode(true);
             participantAgeET.setText(registerParticipantDetails.getParticipantAge());
 
             participantPhoneNumberET.setFocusable(true);
             participantPhoneNumberET.setClickable(true);
-            participantPhoneNumberET.setText(registerParticipantDetails.getParticipantPhoneNumber());
+            participantPhoneNumberET.setFocusableInTouchMode(true);
+            Phonenumber.PhoneNumber phoneNumber = getCountryCodeAndNumber(registerParticipantDetails.getParticipantPhoneNumber());
+            if(phoneNumber!=null){
+                participantCountryCode = String.valueOf(phoneNumber.getCountryCode());
+                participantPhoneNum = String.valueOf(phoneNumber.getNationalNumber());
+            }else{
+                participantCountryCode = String.valueOf(phoneNumber.getCountryCode());
+                participantPhoneNum = null;
+            }
+            participantPhoneNumberET.setText(participantPhoneNum);
 
             participantUserNameET.setFocusable(true);
             participantUserNameET.setClickable(true);
+            participantUserNameET.setFocusableInTouchMode(true);
             participantUserNameET.setText(registerParticipantDetails.getParticipantUserName());
 
             participantPasswordTV.setVisibility(View.INVISIBLE);
             participantPasswordET.setVisibility(View.VISIBLE);
             participantPasswordET.setText("Create New Password");
+            participantPasswordET.setTypeface(Typeface.create("open_sans", Typeface.BOLD));
             participantPasswordET.setFocusable(false);
             participantPasswordET.setClickable(false);
             participantPasswordET.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -245,9 +281,6 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     private boolean getUserEnteredData(){
         participantName = participantNameET.getText().toString();
         participantAge = !participantAgeET.getText().toString().isEmpty() ? Integer.parseInt(participantAgeET.getText().toString()): 0;
-//        String participantPhoneNumber = participantPhoneNumberET.getText().toString();
-//        participantPhoneNum = new PhoneNumber();
-//        participantPhoneNum.setNumber(participantPhoneNumber);
         participantPhoneNum = participantCountryCode + participantPhoneNumberET.getText().toString();
         participantUserName = participantUserNameET.getText().toString();
         participantPassword = participantPasswordET.getText().toString();
@@ -259,13 +292,10 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
                 maleButton.setBackgroundResource(R.drawable.selected_button);
-                maleButton.setTextColor(getResources().getColor(R.color.white));
                 participantGender = "Male";
 
-                femaleButton.setBackgroundResource(R.drawable.inputs_background);
-                femaleButton.setTextColor(getResources().getColor(R.color.text_color));
-                othersButton.setBackgroundResource(R.drawable.inputs_background);
-                othersButton.setTextColor(getResources().getColor(R.color.text_color));
+                femaleButton.setBackgroundResource(R.drawable.yes_no_button);
+                othersButton.setBackgroundResource(R.drawable.yes_no_button);
             }
         });
 
@@ -273,13 +303,10 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
                 femaleButton.setBackgroundResource(R.drawable.selected_button);
-                femaleButton.setTextColor(getResources().getColor(R.color.white));
                 participantGender = "Female";
 
-                othersButton.setBackgroundResource(R.drawable.inputs_background);
-                othersButton.setTextColor(getResources().getColor(R.color.text_color));
-                maleButton.setBackgroundResource(R.drawable.inputs_background);
-                maleButton.setTextColor(getResources().getColor(R.color.text_color));
+                othersButton.setBackgroundResource(R.drawable.yes_no_button);
+                maleButton.setBackgroundResource(R.drawable.yes_no_button);
             }
         });
 
@@ -287,16 +314,62 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
                 othersButton.setBackgroundResource(R.drawable.selected_button);
-                othersButton.setTextColor(getResources().getColor(R.color.white));
                 participantGender = "Other";
 
-                femaleButton.setBackgroundResource(R.drawable.inputs_background);
-                femaleButton.setTextColor(getResources().getColor(R.color.text_color));
-                maleButton.setBackgroundResource(R.drawable.inputs_background);
-                maleButton.setTextColor(getResources().getColor(R.color.text_color));
+                femaleButton.setBackgroundResource(R.drawable.yes_no_button);
+                maleButton.setBackgroundResource(R.drawable.yes_no_button);
             }
         });
 
+    }
+
+    private Phonenumber.PhoneNumber getCountryCodeAndNumber(String phoneNumber){
+        PhoneNumberUtil pnu = PhoneNumberUtil.getInstance();
+        Phonenumber.PhoneNumber pn = null;
+        try{
+            pn = pnu.parse(phoneNumber, "IN");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return pn;
+    }
+
+    private void onClickOfCreateNewPassword(){
+        participantPasswordET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialogToCreatePassword();
+            }
+        });
+    }
+
+    private void showDialogToCreatePassword(){
+        View customLayout = getLayoutInflater().inflate(R.layout.activity_create_password_popup, null);
+
+        TextView userNameTV = customLayout.findViewById(R.id.userNameTVPopup);
+        TextView userPhoneNumberTV = customLayout.findViewById(R.id.userPhoneNumTVPopup);
+        TextView userSHGTV = customLayout.findViewById(R.id.userSHGTVPopup);
+        TextView userCurrentStatusTV = customLayout.findViewById(R.id.userCurrentStatusTVPopup);
+        EditText userNameET = customLayout.findViewById(R.id.userNameETPopup);
+        Button saveButton = customLayout.findViewById(R.id.saveCurrentStatusButton);
+
+        dialog  = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(customLayout);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        wmlp.dimAmount = 0.5f;
+        dialog.getWindow().setAttributes(wmlp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        dialog.show();
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }});
     }
 
     /**
@@ -335,6 +408,18 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             }
         });
     }
+
+    private void setOnclickOfEditButton(){
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editButton.setBackgroundResource(R.drawable.status_button);
+                isEditable = "reEdit";
+                setEditable();
+            }
+        });
+    }
+
 
     private void callGetLocationsForParticipant() {
         String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.location.api.locations";
@@ -390,14 +475,16 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void callGetIndividualParticipantDetails() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/participant/" + trackingParticipantStatus.get(0).getRegistration();
+        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.participant.api.one_participant";
+        GetParticipantDetails participantDetails = new GetParticipantDetails();
+        participantDetails.setUser_pri_id(registerParticipantDetails.getUser_pri_id());
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getParticipantRegistrationDetails(getActivity(), url);
+        requestObject.getParticipantRegistrationDetails(getActivity(), participantDetails, url);
     }
 
     private void callServerUpdateParticipantDetails() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/participant/" +  trackingParticipantStatus.get(0).getRegistration();
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/participant/" +  trackingParticipantStatus.getRegistration();
         UpdateRegisterParticipant registerParticipant = new UpdateRegisterParticipant();
         registerParticipant.setParticipantUserName(participantUserName);
         registerParticipant.setParticipantName(participantName);
@@ -429,7 +516,6 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(parent.getId() == R.id.spinnerSHG){
-
             participantSHGAssociation = SHGNamesList.get(position);
             SHGSpinner.setSelection(position);
             ((TextView) view).setTextColor(Color.BLACK);
@@ -444,12 +530,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 filteredSHGList = filteredVillageList.stream().filter(location -> location.getVillage().contains(participantVillageName)).distinct().collect(Collectors.toList());
                 SHGNamesList.clear();
                 SHGNamesList = filteredSHGList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
-                SHGSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, SHGNamesList);
-                SHGSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
                 SHGSpinner.setAdapter(SHGSpinnerAdapter);
-//                SHGSpinner.setSelection(0, true);
-//                View viewSpinner = SHGSpinner.getSelectedView();
-//                ((TextView)viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
             }
         }else if(parent.getId() == R.id.spinnerPanchayat){
 
@@ -461,12 +543,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 filteredVillageList = locationsArrayList.stream().filter(location -> location.getPanchayat().contains(participantPanchayat)).distinct().collect(Collectors.toList());
                 VillageNamesList.clear();
                 VillageNamesList = filteredVillageList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
-                adapterForVillageNames = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, VillageNamesList);
-                adapterForVillageNames.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                adapterForVillageNames = new ArrayAdapter(getActivity(), R.layout.spinner_item, VillageNamesList);
                 VillageNameSpinner.setAdapter(adapterForVillageNames);
-//                VillageNameSpinner.setSelection(0, true);
-//                View v = VillageNameSpinner.getSelectedView();
-//                ((TextView)v).setTextColor(getResources().getColor(R.color.text_color));
             }else{
                 locationsList = locationsArrayList;
             }
@@ -474,13 +552,20 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
             participantCountryCode = CountryCodeList.get(position);
             CountryCodeSpinner.setSelection(position);
-            ((TextView) view).setTextColor(getResources().getColor(R.color.text_color));
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+        if(parent.getId() == R.id.spinnerSHG){
 
+        }else if(parent.getId() == R.id.villageNameSpinner){
+
+        }else if(parent.getId() == R.id.spinnerPanchayat){
+
+        }else if(parent.getId() == R.id.spinnerCountryCode) {
+
+        }
     }
 
     /**
@@ -501,47 +586,45 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                     VillageNamesList = locationsArrayList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
                     SHGNamesList = locationsArrayList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
 
-                    adapterForVillageNames = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, VillageNamesList);
-                    adapterForVillageNames.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    adapterForVillageNames = new ArrayAdapter(getActivity(), R.layout.spinner_item, VillageNamesList);
                     VillageNameSpinner.setAdapter(adapterForVillageNames);
-//                    VillageNameSpinner.setSelection(0, true);
                     participantVillageName = VillageNamesList.get(0);
-//                    View v = VillageNameSpinner.getSelectedView();
-//                    ((TextView) v).setTextColor(getResources().getColor(R.color.text_color));
 
-                    SHGSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, SHGNamesList);
-                    SHGSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
                     SHGSpinner.setAdapter(SHGSpinnerAdapter);
-//                    SHGSpinner.setSelection(0, true);
                     participantSHGAssociation = SHGNamesList.get(0);
-//                    View viewSpinner = SHGSpinner.getSelectedView();
-//                    ((TextView) viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
 
-                    panchayatSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, PanchayatNamesList);
-                    panchayatSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    panchayatSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, PanchayatNamesList);
                     PanchayatSpinner.setAdapter(panchayatSpinnerAdapter);
-//                    PanchayatSpinner.setSelection(0, true);
                     participantPanchayat = PanchayatNamesList.get(0);
-//                    View viewSpinnerPanchayat = PanchayatSpinner.getSelectedView();
-//                    ((TextView) viewSpinnerPanchayat).setTextColor(getResources().getColor(R.color.text_color));
                 }
                 else{
-                    Type type = new TypeToken<ArrayList<UserLogin>>(){}.getType();
-                    JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-                    ArrayList<UserLogin> userLogins;
-                    try{
-                        userLogins = gson.fromJson(jsonObject.get("message"), type);
-                        if(userLogins!=null){
-                            if(!userLogins.get(0).getUserName().equals("NULL")){
-                                mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.userName), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
-                                mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
-
-                                callServerRegisterParticipant();
-                            }
+                    if(trackingParticipantStatus!=null){
+                        if(isEditable!= null && !isEditable.equals("true")){
+                            Type typeParticipant = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
+                            ArrayList<RegisterParticipant> registerParticipantArrayList = gson.fromJson(jsonObjectLocation.get("message"), typeParticipant);
+                            registerParticipantDetails = registerParticipantArrayList.get(0);
+                            editButton.setEnabled(true);
+                            setEditable();
                         }
-                    }catch(Exception e){
-                        if(jsonObject.get("message")!=null) {
-                            Toast.makeText(getActivity(), jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                    }else{
+                        Type type = new TypeToken<ArrayList<UserLogin>>(){}.getType();
+                        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+                        ArrayList<UserLogin> userLogins;
+                        try{
+                            userLogins = gson.fromJson(jsonObject.get("message"), type);
+                            if(userLogins!=null){
+                                if(!userLogins.get(0).getUserName().equals("NULL")){
+                                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.userName), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
+                                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
+
+                                    callServerRegisterParticipant();
+                                }
+                            }
+                        }catch(Exception e){
+                            if(jsonObject.get("message")!=null) {
+                                Toast.makeText(getActivity(), jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 }
@@ -567,6 +650,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 }else{
                     Type typeParticipant = new TypeToken<RegisterParticipant>(){}.getType();
                     registerParticipantDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeParticipant);
+                    editButton.setEnabled(true);
+                    setEditable();
                     Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
                 }
 

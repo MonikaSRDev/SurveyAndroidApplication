@@ -155,5 +155,6 @@
     <string name="referral_status">Referral Status</string>
     <string name="name">Name</string>
     <string name="status">Status</string>
+    <string name="edit">Edit</string>
 
 </resources>

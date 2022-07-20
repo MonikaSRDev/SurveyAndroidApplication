@@ -1,11 +1,7 @@
 package com.example.mithraapplication.Fragments;
 
-import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -14,12 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,29 +24,35 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.Adapters.ParticipantReportAdapter;
-import com.example.mithraapplication.FullScreenVideoView;
 import com.example.mithraapplication.ModelClasses.ParticipantReport;
+import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.VideoScreen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class ParticipantReportFragment extends Fragment {
+public class ParticipantReportFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = null;
-    private String isEditable;
+    private TrackingParticipantStatus trackingParticipantStatus = null;
+    private String isEditable, userCurrentStatus;
     private Context context;
     private ArrayList<ParticipantReport> participantReportArrayList = new ArrayList<>();
     private RecyclerView participantStatusRecyclerView;
     private ParticipantReportAdapter participantReportAdapter;
     private Button statusButton;
     private Dialog dialog;
+    private final List<String> userStatus = Arrays.asList("Active", "Inactive");
+    private ArrayAdapter userStatusAdapter;
+    private Spinner userCurrentStatusSpinner;
+    private RegisterParticipant registerParticipant;
 
-    public ParticipantReportFragment(Context context, ArrayList<TrackingParticipantStatus> trackingParticipantStatus, String isEditable) {
+    public ParticipantReportFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant) {
         this.context = context;
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
+        this.registerParticipant = registerParticipant;
     }
 
     @Override
@@ -115,7 +117,6 @@ public class ParticipantReportFragment extends Fragment {
      * Description : Used to show alert to the participant after completing the survey
      */
     private void showPopupToUpdateStatus(){
-//        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         View customLayout = getLayoutInflater().inflate(R.layout.activity_status_update_popup, null);
 
         TextView userNameTV = customLayout.findViewById(R.id.userNameTVPopup);
@@ -123,9 +124,16 @@ public class ParticipantReportFragment extends Fragment {
         TextView userSHGTV = customLayout.findViewById(R.id.userSHGTVPopup);
         TextView userCurrentStatusTV = customLayout.findViewById(R.id.userCurrentStatusTVPopup);
         EditText userNameET = customLayout.findViewById(R.id.userNameETPopup);
+        userNameET.setText(registerParticipant.getParticipantUserName());
         EditText userPhoneNumberET = customLayout.findViewById(R.id.userPhoneNumETPopup);
+        userPhoneNumberET.setText(registerParticipant.getParticipantPhoneNumber());
         EditText userSHGET = customLayout.findViewById(R.id.userSHGETPopup);
-        Spinner userCurrentStatusSpinner = customLayout.findViewById(R.id.userCurrentStatusSpinnerPopup);
+        userSHGET.setText(registerParticipant.getParticipantSHGAssociation());
+        userCurrentStatusSpinner = customLayout.findViewById(R.id.userCurrentStatusSpinnerPopup);
+        userStatusAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, userStatus);
+        userStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userCurrentStatusSpinner.setAdapter(userStatusAdapter);
+        userCurrentStatusSpinner.setOnItemSelectedListener(this);
         Button saveButton = customLayout.findViewById(R.id.saveCurrentStatusButton);
 
         dialog  = new Dialog(getActivity());
@@ -137,17 +145,28 @@ public class ParticipantReportFragment extends Fragment {
         wmlp.gravity = Gravity.CENTER;
         wmlp.dimAmount = 0.5f;
         dialog.getWindow().setAttributes(wmlp);
-        dialog.getWindow().setLayout(500, ActionBar.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         dialog.show();
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //do something when clicked
-                Toast.makeText(getActivity(), "Button Pressed", Toast.LENGTH_LONG).show();
+                statusButton.setBackgroundResource(R.drawable.edit_button_background);
                 dialog.dismiss();
             }});
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(parent.getId() == R.id.userCurrentStatusSpinnerPopup){
+            userCurrentStatus = userStatus.get(position);
+            userCurrentStatusSpinner.setSelection(position);
+            ((TextView) view).setTextColor(getResources().getColor(R.color.text_color));
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class RegisterParticipant extends JsonServerObject implements Serializable {
+    private String name = "null";
     @SerializedName("user_name")
     private String participantUserName = "NULL";
     @SerializedName("full_name")
@@ -124,6 +125,14 @@ public class RegisterParticipant extends JsonServerObject implements Serializabl
 
     public void setModified_user(String modified_user) {
         this.modified_user = modified_user;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

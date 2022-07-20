@@ -1,8 +1,11 @@
 package com.example.mithraapplication.ModelClasses;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ParticipantStatus extends JsonServerObject{
     private String statusName = "NULL";
     private String completed = "NULL";
+    @SerializedName("remaining")
     private String pending = "NULL";
     private String total = "NULL";
 

@@ -19,6 +19,9 @@ public class QuestionAnswers {
     private String option_4_k = "NULL";
     private String type = "NULL";
     private String active = "NULL";
+    private String audio_filename_e = "Kalimba.mp3";
+    private String audio_filename_k = "Kalimba.mp3";
+    private String audio_fileURL = "https://www.learningcontainer.com/wp-content/uploads/2020/02";
 
     public String getQn_number() {
         return qn_number;
@@ -162,5 +165,29 @@ public class QuestionAnswers {
 
     public void setOption_4_weightage(int option_4_weightage) {
         this.option_4_weightage = option_4_weightage;
+    }
+
+    public String getAudio_filename_e() {
+        return audio_filename_e;
+    }
+
+    public void setAudio_filename_e(String audio_filename_e) {
+        this.audio_filename_e = audio_filename_e;
+    }
+
+    public String getAudio_filename_k() {
+        return audio_filename_k;
+    }
+
+    public void setAudio_filename_k(String audio_filename_k) {
+        this.audio_filename_k = audio_filename_k;
+    }
+
+    public String getAudio_fileURL() {
+        return audio_fileURL;
+    }
+
+    public void setAudio_fileURL(String audio_fileURL) {
+        this.audio_fileURL = audio_fileURL;
     }
 }

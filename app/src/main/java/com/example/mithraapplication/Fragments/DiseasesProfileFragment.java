@@ -62,9 +62,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     private MithraUtility mithraUtility = new MithraUtility();
     private TextView diseaseTV, diagnosedAgeTV, receivedTreatmentTV, limitActivitiesTV, specifyDiseaseTV;
     private EditText diagnosedAgeET, specifyDiseaseET;
-    private Button yesDiseaseButton, noDiseaseButton, yesReceivedTreatmentButton, noReceivedTreatmentButton, yesLimitActivities,  noLimitActivities;
+    private Button yesDiseaseButton, noDiseaseButton, yesReceivedTreatmentButton, noReceivedTreatmentButton, yesLimitActivities,  noLimitActivities, editButton;
     private ParticipantProfileScreen participantsProfileScreen;
-    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = null;
+    private TrackingParticipantStatus trackingParticipantStatus = null;
     private String isEditable;
     private Context context;
     private DiseasesProfilePostRequest diseasesProfileDetails = null;
@@ -81,12 +81,17 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         super.onViewCreated(view, savedInstanceState);
         initializeData();
         RegisterViews(view);
-        if(isEditable!= null && !isEditable.equals("true")){
-            callGetIndividualDiseaseProfileDetails();
+        if(trackingParticipantStatus!=null && trackingParticipantStatus.getDisease_profile()!=null) {
+            if(isEditable!= null && !isEditable.equals("true")){
+                callGetIndividualDiseaseProfileDetails();
+            }
         }else{
+            isEditable = "true";
+            editButton.setEnabled(false);
             setRecyclerView(isEditable);
         }
         onClickOfNextButton();
+        setOnclickOfEditButton();
 
         // Register to receive messages.
         // We are registering an observer (mMessageReceiver) to receive Intents
@@ -95,7 +100,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 new IntentFilter("DiseasesProfileData"));
     }
 
-    public DiseasesProfileFragment(Context context, ArrayList<TrackingParticipantStatus> trackingParticipantStatus, String isEditable){
+    public DiseasesProfileFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable){
         this.context = context;
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
@@ -106,10 +111,10 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         public void onReceive(Context context, Intent intent) {
             Bundle args = intent.getBundleExtra("ParticipantDiseaseData");
             diseasesProfile = (ArrayList<DiseasesProfile>) args.getSerializable("ARRAYLIST");
-            if(isEditable!=null && isEditable.equals("true")){
-                callServerPostDiseasesProfile();
-            }else{
+            if(isEditable!=null && !isEditable.equals("true")){
                 callServerUpdateDiseaseProfileDetails();
+            }else{
+                callServerPostDiseasesProfile();
             }
         }
     };
@@ -150,6 +155,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         noReceivedTreatmentButton = view.findViewById(R.id.noTreatmentButton);
         yesLimitActivities = view.findViewById(R.id.yesLimitActivitiesButton);
         noLimitActivities = view.findViewById(R.id.noLimitActivitiesButton);
+        editButton = requireActivity().findViewById(R.id.profileEditButton);
     }
 
     private void initializeData(){
@@ -287,6 +293,17 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         });
     }
 
+    private void setOnclickOfEditButton(){
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editButton.setBackgroundResource(R.drawable.status_button);
+                isEditable = "reEdit";
+                setRecyclerView(isEditable);
+            }
+        });
+    }
+
     private void moveToParticipantsScreen(){
         Intent intent = new Intent(getActivity(), ParticipantsScreen.class);
         startActivity(intent);
@@ -300,7 +317,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         profile1.setDiseaseName("DIABETES MELLITUS");
         profile1.setDiseaseNameKannada("ಮಧುಮೇಹ");
         String[] arr;
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile1.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -316,7 +333,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile2 = new DiseasesProfile();
         profile2.setDiseaseName("HYPERTENSION");
         profile2.setDiseaseNameKannada("ಅಧಿಕ ರಕ್ತದೊತ್ತಡ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null" ) || diseaseName.equals("")){
             profile2.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -332,7 +349,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile3 = new DiseasesProfile();
         profile3.setDiseaseName("HEART DISEASE");
         profile3.setDiseaseNameKannada("ಹೃದಯರೋಗ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile3.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -348,7 +365,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile4 = new DiseasesProfile();
         profile4.setDiseaseName("Thyroid");
         profile4.setDiseaseNameKannada("ಥೈರಾಯ್ಡ್");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile4.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -364,7 +381,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile5 = new DiseasesProfile();
         profile5.setDiseaseName("CHRONIC LIVER DISEASE");
         profile5.setDiseaseNameKannada("ದೀರ್ಘಕಾಲದ ಯಕೃತ್ತಿನ ರೋಗ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile5.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -380,7 +397,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile6 = new DiseasesProfile();
         profile6.setDiseaseName("CHRONIC RENAL DISEASE");
         profile6.setDiseaseNameKannada("ದೀರ್ಘಕಾಲದ ಮೂತ್ರಪಿಂಡ ಕಾಯಿಲೆ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile6.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -396,7 +413,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile7 = new DiseasesProfile();
         profile7.setDiseaseName("MALIGNANCY");
         profile7.setDiseaseNameKannada("ಕ್ಯಾನ್ಸರ್");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile7.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -412,7 +429,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile8 = new DiseasesProfile();
         profile8.setDiseaseName("DISABILITIES");
         profile8.setDiseaseNameKannada("ವಿಕಲಾಂಗತೆಗಳು");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile8.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -428,7 +445,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile9 = new DiseasesProfile();
         profile9.setDiseaseName("GASTRIC PROBLEM");
         profile9.setDiseaseNameKannada("ಗ್ಯಾಸ್ಟ್ರಿಕ್ ಸಮಸ್ಯೆ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile9.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -444,7 +461,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile10 = new DiseasesProfile();
         profile10.setDiseaseName("MENTAL ILLNESS");
         profile10.setDiseaseNameKannada("ಮಾನಸಿಕ ಅನಾರೋಗ್ಯ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile10.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -460,7 +477,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile11 = new DiseasesProfile();
         profile11.setDiseaseName("EPILEPSY");
         profile11.setDiseaseNameKannada("ಮೂರ್ಛೆರೋಗ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile11.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -476,7 +493,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile12 = new DiseasesProfile();
         profile12.setDiseaseName("ASTHMA");
         profile12.setDiseaseNameKannada("ಉಬ್ಬಸ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile12.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -492,7 +509,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile13 = new DiseasesProfile();
         profile13.setDiseaseName("SKIN DISEASE");
         profile13.setDiseaseNameKannada("ಚರ್ಮದ ಕಾಯಿಲೆ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile13.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -508,7 +525,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfile profile14 = new DiseasesProfile();
         profile14.setDiseaseName("ANY OTHER DISEASES");
         profile14.setDiseaseNameKannada("ಇತರ ರೋಗ");
-        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null")){
+        if(diseaseName.equalsIgnoreCase("no") || diseaseName.equalsIgnoreCase("null") || diseaseName.equals("")){
             profile14.setDiagnosed(diseaseName);
         }else{
             diseaseName = diseaseName.substring(1, (diseaseName.length() - 1));
@@ -656,16 +673,16 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     }
 
     private void callGetIndividualDiseaseProfileDetails() {
-        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile/" + trackingParticipantStatus.get(0).getDisease_profile();
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile/" + trackingParticipantStatus.getDisease_profile();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.getParticipantDiseaseProfileDetails(getActivity(), url);
     }
 
     private void callServerUpdateDiseaseProfileDetails() {
-        String url = "http://"+ participantsProfileScreen.getString(R.string.base_url)+ "/api/resource/disease_profile/" +  trackingParticipantStatus.get(0).getDisease_profile();
+        String url = "http://"+ participantsProfileScreen.getString(R.string.base_url)+ "/api/resource/disease_profile/" +  trackingParticipantStatus.getDisease_profile();
         DiseasesProfilePostRequest diseasesProfilePostRequest = getDiseaseProfileData();
-        diseasesProfilePostRequest.setUser_pri_id(trackingParticipantStatus.get(0).getUser_pri_id());
+        diseasesProfilePostRequest.setUser_pri_id(trackingParticipantStatus.getUser_pri_id());
         diseasesProfilePostRequest.setModified_user(mithraUtility.getSharedPreferencesData(participantsProfileScreen, participantsProfileScreen.getString(R.string.primaryID), participantsProfileScreen.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
@@ -691,7 +708,8 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             }else{
                 Type typeDiseaseProfile = new TypeToken<DiseasesProfilePostRequest>(){}.getType();
                 diseasesProfileDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeDiseaseProfile);
-                trackingParticipantStatus.get(0).setUser_pri_id(diseasesProfileDetails.getUser_pri_id());
+                trackingParticipantStatus.setUser_pri_id(diseasesProfileDetails.getUser_pri_id());
+                editButton.setEnabled(true);
                 getDiseasesProfileArrayList();
                 Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
             }

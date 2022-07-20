@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="1053dp"
     android:layout_height="wrap_content"
     android:background="@drawable/curved_corners"
@@ -15,37 +16,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:layout_marginStart="100dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/profileDivider"
-            app:layout_constraintEnd_toStartOf="@+id/registrationLLCol2"
-            app:layout_constraintHorizontal_bias="0.195"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/participantName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/name_small_case"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/participantNameET"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/inputs_background"
-                android:elevation="3dp"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:inputType="textPersonName"
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/genderTV"
@@ -53,8 +51,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="@string/gender"
+                android:fontFamily="@font/open_sans_semibold"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/linearLayout2"
@@ -69,13 +68,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/inputs_background"
+                    android:background="@drawable/yes_no_button"
                     android:elevation="3dp"
                     android:fontFamily="@font/open_sans"
                     android:text="@string/male"
                     android:textAllCaps="false"
                     android:textColor="@color/text_color"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/femaleOption"
@@ -84,13 +83,13 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/inputs_background"
+                    android:background="@drawable/yes_no_button"
                     android:elevation="3dp"
                     android:fontFamily="@font/open_sans"
                     android:text="@string/female"
                     android:textAllCaps="false"
                     android:textColor="@color/text_color"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/othersOption"
@@ -98,13 +97,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/inputs_background"
+                    android:background="@drawable/yes_no_button"
                     android:elevation="3dp"
                     android:fontFamily="@font/open_sans"
                     android:text="@string/others"
                     android:textAllCaps="false"
                     android:textColor="@color/text_color"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <TextView
@@ -112,35 +111,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/age"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/participantAgeET"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/inputs_background"
-                android:elevation="3dp"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:inputType="number"
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/phoneNumberTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/phone_number"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -151,19 +149,18 @@
                 <Spinner
                     android:id="@+id/spinnerCountryCode"
                     android:layout_width="90dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:background="@drawable/drop_down_with_arrow_countrycode"
                     android:dropDownVerticalOffset="48dp"
-                    android:elevation="3dp"
                     android:padding="5dp"
+                    android:popupBackground="@color/white"
                     android:spinnerMode="dropdown" />
 
                 <EditText
                     android:id="@+id/participantPhoneNumberET"
                     android:layout_width="225dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:background="@drawable/inputs_background_phone_number"
-                    android:elevation="3dp"
                     android:ems="10"
                     android:fontFamily="@font/open_sans"
                     android:hint="00 000 00000"
@@ -173,29 +170,29 @@
                     android:padding="10dp"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/hint_text_color"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/villageNameTV"
+                android:id="@+id/panchayatNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/open_sans"
-                android:text="@string/village_name"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="@string/panchayat"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Spinner
-                android:id="@+id/villageNameSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/spinnerPanchayat"
+                android:layout_width="318dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/dropdown_with_arrow"
                 android:dropDownVerticalOffset="48dp"
-                android:elevation="3dp"
-                android:padding="10dp"
+                android:padding="5dp"
+                android:popupBackground="@color/white"
                 android:spinnerMode="dropdown" />
 
 
@@ -205,33 +202,32 @@
             android:id="@+id/registrationLLCol2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="52dp"
+            android:layout_marginEnd="100dp"
             android:layout_marginBottom="16dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/profileDivider"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <TextView
-                android:id="@+id/panchayatNameTV"
+                android:id="@+id/villageNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans"
-                android:text="@string/panchayat"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="@string/village_name"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Spinner
-                android:id="@+id/spinnerPanchayat"
-                android:layout_width="wrap_content"
+                android:id="@+id/villageNameSpinner"
+                android:layout_width="318dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/dropdown_with_arrow"
-                android:dropDownVerticalOffset="40dp"
-                android:elevation="3dp"
-                android:padding="10dp"
+                android:dropDownVerticalOffset="48dp"
+                android:padding="5dp"
+                android:popupBackground="@color/white"
                 android:spinnerMode="dropdown" />
 
             <TextView
@@ -239,20 +235,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/shg_association"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Spinner
                 android:id="@+id/spinnerSHG"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="318dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/dropdown_with_arrow"
                 android:dropDownVerticalOffset="48dp"
-                android:elevation="3dp"
-                android:padding="10dp"
+                android:padding="5dp"
+                android:popupBackground="@color/white"
                 android:spinnerMode="dropdown" />
 
             <TextView
@@ -260,18 +256,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/user_name"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/participantUserNameET"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/inputs_background"
-                android:elevation="3dp"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:inputType="textPersonName"
@@ -279,25 +274,24 @@
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/passwordTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/password"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/participantPasswordET"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/inputs_background"
-                android:elevation="3dp"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:inputType="textPassword"
@@ -305,25 +299,24 @@
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/confirmPasswordTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/confirm_password"
                 android:textColor="@color/text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/participantConfirmPasswordET"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/inputs_background"
-                android:elevation="3dp"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:inputType="textPassword"
@@ -331,7 +324,7 @@
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 

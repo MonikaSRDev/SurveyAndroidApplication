@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.DiseasesProfilePostRequest;
+import com.example.mithraapplication.ModelClasses.GetParticipantDetails;
 import com.example.mithraapplication.ModelClasses.ParticipantScreening;
 import com.example.mithraapplication.ModelClasses.PostSurveyQuestions;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
@@ -328,6 +329,10 @@ public class ServerRequestAndResponse extends Application {
         getJsonRequest(context, url);
     }
 
+    public void getCardDetails(Context context, String url){
+        getJsonRequest(context, url);
+    }
+
     public void getPHQ9Questions(Context context, SurveyQuestions surveyQuestions, String url){
         postJsonRequest(context, surveyQuestions.ToJSON(), url);
     }
@@ -336,8 +341,8 @@ public class ServerRequestAndResponse extends Application {
         getJsonRequest(context, url);
     }
 
-    public void getParticipantRegistrationDetails(Context context, String url){
-        getJsonRequest(context, url);
+    public void getParticipantRegistrationDetails(Context context, GetParticipantDetails participantDetails, String url){
+        postJsonRequest(context, participantDetails.ToJSON(), url);
     }
 
     public void getParticipantSocioDemographyDetails(Context context, String url){

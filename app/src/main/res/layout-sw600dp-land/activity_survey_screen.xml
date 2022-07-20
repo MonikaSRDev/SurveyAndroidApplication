@@ -102,7 +102,7 @@
                 android:textColor="@color/text_color"
                 android:textSize="22sp"
                 app:layout_constraintBottom_toTopOf="@+id/questionOptions"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonSpeaker"
                 app:layout_constraintHorizontal_bias="0.467"
                 app:layout_constraintStart_toEndOf="@+id/totalQuestions"
                 app:layout_constraintTop_toTopOf="parent"
@@ -333,7 +333,7 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/imageButtonSpeaker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"

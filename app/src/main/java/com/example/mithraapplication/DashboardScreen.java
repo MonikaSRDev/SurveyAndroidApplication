@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,15 +24,19 @@ import com.example.mithraapplication.Adapters.HorizontalDashboardAdapter;
 import com.example.mithraapplication.Adapters.VerticalVideoModulesAdapter;
 import com.example.mithraapplication.ModelClasses.ParticipantStatus;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
+import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class DashboardScreen extends AppCompatActivity implements HandleServerResponse{
 
@@ -46,27 +51,27 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     private HorizontalDashboardAdapter horizontalDashboardAdapter;
     private DashboardVerticalParticipantsAdapter dashboardVerticalParticipantsAdapter;
     private FloatingActionButton floatingActionButton;
+    private ArrayList<TrackingParticipantStatus> trackingParticipantStatusArrayList = new ArrayList<>();
+    private ArrayList<RegisterParticipant> registerParticipantsArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_screen);
-        initializeData();
         RegisterViews();
-        setRecyclerView();
+        callGetCardDetails();
         callGetAllParticipantsDetails();
+        callGetFilteredData();
         setOnClickForParticipants();
         onClickOfLanguageButton();
         onClickFloatingAddNewParticipantButton();
         getCurrentLocale();
     }
 
-    private void initializeData(){
-        ParticipantStatus participantStatus = new ParticipantStatus();
-        participantStatus.setStatusName("Enrollment Status");
-        participantStatus.setCompleted("90");
-        participantStatus.setPending("70");
-        participantStatus.setTotal("160");
+    private void initializeData(ParticipantStatus participantStatus){
+        if(participantStatus!=null){
+            participantStatus.setStatusName("Enrollment Status");
+        }
 
         ParticipantStatus participantStatus1 = new ParticipantStatus();
         participantStatus1.setStatusName("Survey Status");
@@ -141,7 +146,21 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     }
 
     private void setRecyclerView(){
-        horizontalDashboardAdapter = new HorizontalDashboardAdapter(this, participantStatusArrayList);
+        horizontalDashboardAdapter = new HorizontalDashboardAdapter(this, participantStatusArrayList, new HorizontalDashboardAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(String participantStatus) {
+                if(participantStatus.equalsIgnoreCase("complete")){
+//                    List<RegisterParticipant> registerParticipants = getCompletedParticipantList(registerParticipantsArrayList, trackingParticipantStatusArrayList);
+//                    setVerticalRecyclerView(new ArrayList<>(registerParticipants));
+                    Toast.makeText(DashboardScreen.this, "Complete Clicked", Toast.LENGTH_LONG).show();
+                }else if(participantStatus.equalsIgnoreCase("pending")){
+                    Toast.makeText(DashboardScreen.this, "Pending Clicked", Toast.LENGTH_LONG).show();
+                }else{
+                    setVerticalRecyclerView(registerParticipantsArrayList);
+                    Toast.makeText(DashboardScreen.this, "Total Clicked", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         horizontalRecyclerView.setAdapter(horizontalDashboardAdapter);
         horizontalRecyclerView.setLayoutManager(linearLayoutManager);
@@ -152,8 +171,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         dashboardVerticalParticipantsAdapter = new DashboardVerticalParticipantsAdapter(this, participantArrayList, new DashboardVerticalParticipantsAdapter.onItemClickListener() {
             @Override
             public void onItemClick(RegisterParticipant registerParticipant) {
-                Intent intent = new Intent(DashboardScreen.this, DashboardParticipantDetailsScreen.class);
-                startActivity(intent);
+                moveToParticipantDetailsScreen(registerParticipant);
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -162,6 +180,26 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
 
     }
 
+    @NonNull
+    public static List<RegisterParticipant> getCompletedParticipantList(ArrayList<RegisterParticipant> registerParticipantArrayList, ArrayList<TrackingParticipantStatus> trackingParticipantStatus)
+    {
+//        return registerParticipantArrayList.stream()
+//                .filter(one -> trackingParticipantStatus.stream()
+//                        .anyMatch(two -> two.getName().equals(one.getName())))
+//                .collect(Collectors.toList());
+
+        List<RegisterParticipant> listOneList = registerParticipantArrayList.stream()
+                .filter(two -> trackingParticipantStatus.stream()
+                        .anyMatch(one -> one.getRegistration().equals(two.getName())))
+                .collect(Collectors.toList());
+        return listOneList;
+    }
+
+    private void moveToParticipantDetailsScreen(RegisterParticipant registerParticipant){
+        Intent participantIntent = new Intent(DashboardScreen.this, DashboardParticipantDetailsScreen.class);
+        participantIntent.putExtra("RegisterParticipant Array", (Serializable) registerParticipant);
+        startActivity(participantIntent);
+    }
 
     private void onClickFloatingAddNewParticipantButton() {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -272,24 +310,46 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         serverRequestAndResponse.getAllParticipantsDetails(DashboardScreen.this, url);
     }
 
+    private void callGetCardDetails(){
+        String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.tracking.api.enroll";
+        ServerRequestAndResponse serverRequestAndResponse = new ServerRequestAndResponse();
+        serverRequestAndResponse.setHandleServerResponse(this);
+        serverRequestAndResponse.getCardDetails(DashboardScreen.this, url);
+    }
+
+    private void callGetFilteredData(){
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"enroll\", \"=\", \"" + "yes" + "\"]]";
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.getTrackingDetails(DashboardScreen.this, url);
+    }
+
     @Override
     public void responseReceivedSuccessfully(String message) {
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        ArrayList<RegisterParticipant> registerParticipantsArrayList;
-
-        try{
-            registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
-            if(registerParticipantsArrayList.size() == 0){
-                floatingActionButton.setVisibility(View.GONE);
-            }else{
-                floatingActionButton.setVisibility(View.VISIBLE);
-                setVerticalRecyclerView(registerParticipantsArrayList);
+        if(jsonObject.get("message")!=null){
+            try{
+                registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
+                if(registerParticipantsArrayList.size() == 0){
+                    floatingActionButton.setVisibility(View.GONE);
+                }else{
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                    setVerticalRecyclerView(registerParticipantsArrayList);
+                }
+            }catch(Exception e){
+                Type typeCardDetails = new TypeToken<ParticipantStatus>(){}.getType();
+                ParticipantStatus participantStatus = gson.fromJson(jsonObject.get("message"), typeCardDetails);
+                initializeData(participantStatus);
+                setRecyclerView();
+//            Toast.makeText(DashboardScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
             }
-        }catch(Exception e){
-            Toast.makeText(DashboardScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }else{
+            Type typeTrackingDetails = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
+            trackingParticipantStatusArrayList = gson.fromJson(jsonObject.get("data"), type);
         }
+
     }
 
     @Override

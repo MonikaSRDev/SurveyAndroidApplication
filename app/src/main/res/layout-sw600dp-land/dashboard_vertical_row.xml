@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:weightSum="6"
         android:orientation="horizontal">
 
         <TextView
@@ -23,14 +24,17 @@
             android:textColor="@color/text_color"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"/>
+            android:layout_weight="0.6"
+            android:layout_margin="10dp" />
 
         <LinearLayout
             android:id="@+id/detailsLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:layout_weight="0.4"
+            android:paddingStart="20dp"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -42,8 +46,7 @@
                 android:layout_margin="5dp"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/open_sans"
-                android:gravity="center"
-                android:layout_weight="1"/>
+                android:gravity="start"/>
 
             <TextView
                 android:id="@+id/partDetailsAge"
@@ -54,8 +57,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/open_sans"
-                android:gravity="center"
-                android:layout_weight="1"/>
+                android:gravity="start" />
 
             <TextView
                 android:id="@+id/partDetailsVillage"
@@ -66,8 +68,7 @@
                 android:layout_margin="5dp"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/open_sans"
-                android:gravity="center"
-                android:layout_weight="1"/>
+                android:gravity="start" />
 
         </LinearLayout>
 
@@ -76,8 +77,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/enrolment_status_icon"/>
 
         <ImageView
@@ -85,8 +86,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/survey_status_icon"/>
 
         <TextView
@@ -95,11 +96,11 @@
             android:layout_height="match_parent"
             android:text="00%"
             android:textSize="14sp"
+            android:layout_weight="1.5"
             android:textColor="@color/text_color"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"/>
+            android:layout_margin="10dp" />
 
         <TextView
             android:id="@+id/referralStatusTV"
@@ -107,11 +108,11 @@
             android:layout_height="match_parent"
             android:text=""
             android:textSize="14sp"
+            android:layout_weight="1.5"
             android:layout_margin="10dp"
             android:textColor="@color/text_color"
             android:fontFamily="@font/open_sans"
-            android:gravity="center"
-            android:layout_weight="1"/>
+            android:gravity="center_vertical" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

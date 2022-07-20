@@ -1,10 +1,11 @@
 package com.example.mithraapplication.ModelClasses;
 
-import java.util.ArrayList;
+import com.google.gson.annotations.SerializedName;
 
 public class PostSurveyQuestions extends JsonServerObject{
     private String user_pri_id = "null";
     private String created_user = "null";
+    @SerializedName("type0")
     private String type = "null";
     private String answer = "null";
     private String survey_start = "null";

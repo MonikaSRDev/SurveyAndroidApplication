@@ -56,7 +56,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     public static String isLanguageSelected = "en";
     private RegisterParticipant registerParticipant = new RegisterParticipant();
     private String isEditable = "true";
-    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = new ArrayList<>();
+    private TrackingParticipantStatus trackingParticipantStatus = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         onClickOfLanguageButton();
         getCurrentLocale();
         onClickOfDashboardButton();
-        onClickOfEditButton();
+//        onClickOfEditButton();
         getIntentData();
     }
 
@@ -148,8 +148,8 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         }
 
         if(isEditable!=null && !isEditable.equals("true")){
-            ((LinearLayout)profileTabLayout.getTabAt(0).view).setVisibility(View.GONE);
-            profileTabLayout.getTabAt(1).setText("Profile");
+            ((LinearLayout) Objects.requireNonNull(profileTabLayout.getTabAt(0)).view).setVisibility(View.GONE);
+            Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText("Profile");
             enableTab(2);
             enableTab(3);
             if(registerParticipant!=null){
@@ -182,6 +182,22 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         });
     }
 
+    private void redirectParticipantToTab(){
+        if(trackingParticipantStatus!=null && trackingParticipantStatus.getName()!=null){
+            if(trackingParticipantStatus.getRegistration()==null){
+                setupSelectedTabFragment(1);
+            }else if(trackingParticipantStatus.getSocio_demography()==null){
+                setupSelectedTabFragment(2);
+            }else if(trackingParticipantStatus.getDisease_profile()==null){
+                setupSelectedTabFragment(3);
+            }else{
+                setupSelectedTabFragment(1);
+            }
+        }else{
+            setupSelectedTabFragment(1);
+        }
+    }
+
     public void setupSelectedTabFragment(int position){
         switch (position) {
             case 0:
@@ -192,6 +208,8 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 break;
             case 1:
                 fragment = new RegistrationFragment(trackingParticipantStatus, isEditable, registerParticipant);
+                profileEditButton.setText(R.string.edit);
+                profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData1 = profileTabLayout.getTabAt(position);
                 assert tabData1 != null;
                 tabData1.select();
@@ -199,6 +217,8 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 break;
             case 2:
                 fragment = new SocioDemographyFragment(trackingParticipantStatus, isEditable);
+                profileEditButton.setText(R.string.edit);
+                profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData2 = profileTabLayout.getTabAt(position);
                 assert tabData2 != null;
                 tabData2.select();
@@ -206,6 +226,8 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 break;
             case 3:
                 fragment = new DiseasesProfileFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
+                profileEditButton.setText(R.string.edit);
+                profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData3 = profileTabLayout.getTabAt(position);
                 assert tabData3 != null;
                 tabData3.select();
@@ -213,7 +235,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 enableTab(2);
                 break;
             case 4:
-                fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
+                fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant);
                 profileEditButton.setText(R.string.status);
                 TabLayout.Tab tabData4 = profileTabLayout.getTabAt(position);
                 assert tabData4 != null;
@@ -230,15 +252,15 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         ft.commit();
     }
 
-    private void onClickOfEditButton(){
-        profileEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isEditable = "reEdit";
-                setupSelectedTabFragment(profileTabLayout.getSelectedTabPosition());
-            }
-        });
-    }
+//    private void onClickOfEditButton(){
+//        profileEditButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                isEditable = "reEdit";
+//                setupSelectedTabFragment(profileTabLayout.getSelectedTabPosition());
+//            }
+//        });
+//    }
 
     public void showPopupWindow(final View view) {
 
@@ -384,8 +406,13 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         Type type = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
         try{
-            trackingParticipantStatus = gson.fromJson(jsonObject.get("data"), type);
-            setupSelectedTabFragment(1);
+            ArrayList<TrackingParticipantStatus> trackingParticipantStatusArrayList = gson.fromJson(jsonObject.get("data"), type);
+            if(trackingParticipantStatusArrayList!=null && trackingParticipantStatusArrayList.size()!=0){
+                trackingParticipantStatus = trackingParticipantStatusArrayList.get(0);
+            }else{
+                trackingParticipantStatus = null;
+            }
+            redirectParticipantToTab();
         }catch(Exception e){
             Toast.makeText(ParticipantProfileScreen.this, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
         }
