@@ -66,7 +66,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         onClickOfLanguageButton();
         getCurrentLocale();
         onClickOfDashboardButton();
-//        onClickOfEditButton();
         getIntentData();
     }
 
@@ -130,15 +129,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         }
     }
 
-    private void setStartupTab(){
-        fragment = new ScreeningFragment();
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.profileFrameLayout, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
-    }
-
     private void getIntentData(){
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -146,8 +136,11 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             registerParticipant = (RegisterParticipant) intent.getSerializableExtra("RegisterParticipant Array");
             isEditable = intent.getStringExtra("isEditable");
         }
-
+        if(registerParticipant!=null && registerParticipant.getUser_pri_id()!=null){
+            mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.primaryID), getString(R.string.participantPrimaryID), registerParticipant.getUser_pri_id());
+        }
         if(isEditable!=null && !isEditable.equals("true")){
+            callGetParticipantTrackingDetails();
             ((LinearLayout) Objects.requireNonNull(profileTabLayout.getTabAt(0)).view).setVisibility(View.GONE);
             Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText("Profile");
             enableTab(2);
@@ -157,9 +150,8 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             }
             profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 4);
             setVisibilityForEdit(true);
-            callGetParticipantTrackingDetails();
         }else{
-            setStartupTab();
+            setupSelectedTabFragment(0);
         }
     }
 
@@ -177,7 +169,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
     }
@@ -213,7 +204,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 TabLayout.Tab tabData1 = profileTabLayout.getTabAt(position);
                 assert tabData1 != null;
                 tabData1.select();
-                ((LinearLayout)profileTabLayout.getTabAt(0).view).setVisibility(View.GONE);
+                if(isEditable!=null && isEditable.equals("true")){
+                    disableTab(0);
+                }
                 break;
             case 2:
                 fragment = new SocioDemographyFragment(trackingParticipantStatus, isEditable);
@@ -222,7 +215,13 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 TabLayout.Tab tabData2 = profileTabLayout.getTabAt(position);
                 assert tabData2 != null;
                 tabData2.select();
-                enableTab(1);
+                if(isEditable!=null && isEditable.equals("true")){
+                    disableTab(0);
+                    disableTab(1);
+                }else{
+                    enableTab(1);
+                }
+
                 break;
             case 3:
                 fragment = new DiseasesProfileFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
@@ -231,8 +230,14 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 TabLayout.Tab tabData3 = profileTabLayout.getTabAt(position);
                 assert tabData3 != null;
                 tabData3.select();
-                enableTab(1);
-                enableTab(2);
+                if(isEditable!=null && isEditable.equals("true")){
+                    disableTab(0);
+                    disableTab(1);
+                    disableTab(2);
+                }else{
+                    enableTab(1);
+                    enableTab(2);
+                }
                 break;
             case 4:
                 fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant);
@@ -240,9 +245,16 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 TabLayout.Tab tabData4 = profileTabLayout.getTabAt(position);
                 assert tabData4 != null;
                 tabData4.select();
-                enableTab(1);
-                enableTab(2);
-                enableTab(3);
+                if(isEditable!=null && isEditable.equals("true")){
+                    disableTab(0);
+                    disableTab(1);
+                    disableTab(2);
+                    disableTab(3);
+                }else{
+                    enableTab(1);
+                    enableTab(2);
+                    enableTab(3);
+                }
                 break;
         }
         FragmentManager fm = getSupportFragmentManager();
@@ -252,16 +264,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         ft.commit();
     }
 
-//    private void onClickOfEditButton(){
-//        profileEditButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                isEditable = "reEdit";
-//                setupSelectedTabFragment(profileTabLayout.getSelectedTabPosition());
-//            }
-//        });
-//    }
-
     public void showPopupWindow(final View view) {
 
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
@@ -270,24 +272,17 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.MATCH_PARENT;
 
-        //Make Inactive Items Outside Of PopupWindow
         boolean focusable = false;
 
-        //Create a window with our parameters
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
-        //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.TOP|Gravity.RIGHT, 0, 0);
         popupWindow.setOutsideTouchable(true);
-
-        //Initialize the elements of our window, install the handler
 
         TextView logoutTextView = popupView.findViewById(R.id.logoutTextView);
         logoutTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //As an example, display the message
                 Toast.makeText(view.getContext(), "Logout User", Toast.LENGTH_SHORT).show();
 
             }
@@ -300,7 +295,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             public void onClick(View v) {
                 Intent loginIntent = new Intent(ParticipantProfileScreen.this, DashboardScreen.class);
                 startActivity(loginIntent);
-                finish();
             }
         });
     }
@@ -421,5 +415,10 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     @Override
     public void responseReceivedFailure(String message) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

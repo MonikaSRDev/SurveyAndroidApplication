@@ -222,4 +222,9 @@ public class ParticipantsScreen extends AppCompatActivity{
 
         super.onConfigurationChanged(newConfig);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

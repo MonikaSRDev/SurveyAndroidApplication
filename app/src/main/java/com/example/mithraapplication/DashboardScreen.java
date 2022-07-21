@@ -217,7 +217,6 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
             public void onClick(View v) {
                 Intent loginIntent = new Intent(DashboardScreen.this, ParticipantsScreen.class);
                 startActivity(loginIntent);
-                finish();
             }
         });
     }
@@ -347,7 +346,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
             }
         }else{
             Type typeTrackingDetails = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
-            trackingParticipantStatusArrayList = gson.fromJson(jsonObject.get("data"), type);
+            trackingParticipantStatusArrayList = gson.fromJson(jsonObject.get("data"), typeTrackingDetails);
         }
 
     }
@@ -355,5 +354,10 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     @Override
     public void responseReceivedFailure(String message) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

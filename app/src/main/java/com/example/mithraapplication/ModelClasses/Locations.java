@@ -5,6 +5,9 @@ public class Locations extends JsonServerObject{
     private String panchayat;
     private String village;
     private String shg;
+    private String active = "null";
+    private String created_user = "null";
+    private String modified_user = "null";
 
     public String getName() {
         return name;
@@ -36,5 +39,29 @@ public class Locations extends JsonServerObject{
 
     public void setShg(String shg) {
         this.shg = shg;
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    public String getCreated_user() {
+        return created_user;
+    }
+
+    public void setCreated_user(String created_user) {
+        this.created_user = created_user;
+    }
+
+    public String getModified_user() {
+        return modified_user;
+    }
+
+    public void setModified_user(String modified_user) {
+        this.modified_user = modified_user;
     }
 }

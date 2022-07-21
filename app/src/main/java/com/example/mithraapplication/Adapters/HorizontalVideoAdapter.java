@@ -98,15 +98,20 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
         }else{
             ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
             requestObject.setHandleFileDownloadResponse(this);
-            requestObject.downloadFileRequest(context, "http://192.168.2.120:5000/downloadvideo/file.mp4");
+            requestObject.downloadFileRequest(context, "http://192.168.2.120:5000/downloadfile/Videos/file.mp4");
         }
     }
 
     private Bitmap generateThumbnailForVideo(){
-        Uri uri = Uri.parse(context.getFilesDir().getAbsolutePath() + "/" + "file.mp4");
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(context.getApplicationContext(), uri);
-        Bitmap thumb = retriever.getFrameAtTime(10, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
+        Bitmap thumb = null;
+        String path = context.getFilesDir().getAbsolutePath() + "/" + "file.mp4";
+        File file = new File(path);
+        if(file.exists()){
+            Uri uri = Uri.parse(context.getFilesDir().getAbsolutePath() + "/" + "file.mp4");
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(context.getApplicationContext(), uri);
+            thumb = retriever.getFrameAtTime(10, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
+        }
         return thumb;
     }
 

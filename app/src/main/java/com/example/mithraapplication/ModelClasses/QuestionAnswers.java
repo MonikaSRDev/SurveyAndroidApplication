@@ -19,9 +19,9 @@ public class QuestionAnswers {
     private String option_4_k = "NULL";
     private String type = "NULL";
     private String active = "NULL";
-    private String audio_filename_e = "Kalimba.mp3";
-    private String audio_filename_k = "Kalimba.mp3";
-    private String audio_fileURL = "https://www.learningcontainer.com/wp-content/uploads/2020/02";
+    private String audio_filename_e = "que1eng.ogg";
+    private String audio_filename_k = "que1kan.ogg";
+    private String audio_fileURL = "http://192.168.2.120:5000/downloadfile/Audios";
 
     public String getQn_number() {
         return qn_number;

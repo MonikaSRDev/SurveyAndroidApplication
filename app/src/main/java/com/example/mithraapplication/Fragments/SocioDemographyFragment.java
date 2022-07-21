@@ -109,6 +109,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         nearestPHCTV = view.findViewById(R.id.nearestPHCTV);
 
         nextButton =  view.findViewById(R.id.socioNextButton);
+        nextButton.setEnabled(true);
         nuclearFamilyButton = view.findViewById(R.id.nuclearFamilyButton);
         jointFamilyButton = view.findViewById(R.id.jointFamilyButton);
 
@@ -792,13 +793,15 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
                     moveToDiseaseProfileTab();
                 }
             }else{
+                if(isEditable!=null && isEditable.equals("reEdit")){
+                    Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
+                }
                 Type typeSocioDemography = new TypeToken<SocioDemography>(){}.getType();
                 socioDemographyDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeSocioDemography);
                 trackingParticipantStatus.setUser_pri_id(socioDemographyDetails.getUser_pri_id());
                 editButton.setEnabled(true);
                 isEditable = "false";
                 setEditable();
-                Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
             }
         }else{
             //Do nothing

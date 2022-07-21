@@ -1,7 +1,12 @@
 package com.example.mithraapplication;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.LocaleList;
+import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DashboardParticipantDetailsScreen extends AppCompatActivity implements HandleServerResponse{
 
@@ -40,6 +46,10 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         RegisterViews();
         getIntentData();
         callGetParticipantTrackingDetails();
+        onClickOfDashboard();
+        setOnClickForParticipants();
+        getCurrentLocale();
+        onClickOfLanguageButton();
     }
 
     private void RegisterViews(){
@@ -73,9 +83,9 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         participantVillage = findViewById(R.id.participantVillageDPTV);
 
         preScreeningTV = findViewById(R.id.preScreeningTVDP);
-        registrationTV = findViewById(R.id.preScreeningTVDP);
-        socioDemographyTV = findViewById(R.id.preScreeningTVDP);
-        diseaseProfileTV = findViewById(R.id.preScreeningTVDP);
+        registrationTV = findViewById(R.id.registrationTVDP);
+        socioDemographyTV = findViewById(R.id.socioDemographyTVDP);
+        diseaseProfileTV = findViewById(R.id.diseaseProfileTVDP);
         preScreeningIV = findViewById(R.id.preScreeningIconDP);
         registrationIV = findViewById(R.id.registrationIconDP);
         socioDemographyIV = findViewById(R.id.socioDemographyIconDP);
@@ -124,6 +134,26 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         }
     }
 
+    private void onClickOfDashboard() {
+        dashboardLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardParticipantDetailsScreen.this, DashboardScreen.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setOnClickForParticipants(){
+        participantLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent loginIntent = new Intent(DashboardParticipantDetailsScreen.this, ParticipantsScreen.class);
+                startActivity(loginIntent);
+            }
+        });
+    }
+
     private void callGetParticipantTrackingDetails(){
         String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"user_pri_id\", \"=\", \"" + registerParticipant.getUser_pri_id() + "\"]]";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
@@ -147,5 +177,83 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     @Override
     public void responseReceivedFailure(String message) {
 
+    }
+
+    /**
+     * Description : This method is used to change the language of the screen based on the button clicked
+     */
+    private void onClickOfLanguageButton(){
+        englishButtonDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+                englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+                kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+                changeLocalLanguage("en");
+            }
+        });
+
+        kannadaButtonDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+                kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+                englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
+                englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+                changeLocalLanguage("kn");
+            }
+        });
+    }
+
+    /**
+     * @param selectedLanguage
+     * Description : This method is used to change the content of the screen to user selected language
+     */
+    public void changeLocalLanguage(String selectedLanguage){
+        Locale myLocale = new Locale(selectedLanguage);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(myLocale);
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    public void getCurrentLocale(){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        LocaleList lang = conf.getLocales();
+        if(lang.get(0).getLanguage().equals("kn")){
+            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+        }else{
+            englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+        }
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    /**
+     * @param newConfig
+     * Description : This method is used to update the views on change of language
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        participantTVDashboard.setText(R.string.participants);
+        dashboardTVDashboard.setText(R.string.dashboard);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

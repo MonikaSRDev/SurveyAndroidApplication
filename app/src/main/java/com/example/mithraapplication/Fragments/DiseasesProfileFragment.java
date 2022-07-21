@@ -90,6 +90,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             editButton.setEnabled(false);
             setRecyclerView(isEditable);
         }
+        nextDiseaseProfileButton.setEnabled(isEditable == null || !isEditable.equalsIgnoreCase("false"));
         onClickOfNextButton();
         setOnclickOfEditButton();
 
@@ -134,11 +135,6 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     private void RegisterViews(View view){
         recyclerViewLeft = view.findViewById(R.id.diseasesRecyclerView);
         nextDiseaseProfileButton = view.findViewById(R.id.diseasesNextButton);
-        if(isEditable!=null && isEditable.equalsIgnoreCase("false")){
-           nextDiseaseProfileButton.setEnabled(false);
-        }else{
-            nextDiseaseProfileButton.setEnabled(true);
-        }
 
         diseaseTV = view.findViewById(R.id.diseaseTV);
         diagnosedAgeTV = view.findViewById(R.id.diagnosedAgeTV);
@@ -706,12 +702,15 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                     moveToParticipantsScreen();
                 }
             }else{
+                if(isEditable!=null && isEditable.equals("reEdit")){
+                    Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
+                }
                 Type typeDiseaseProfile = new TypeToken<DiseasesProfilePostRequest>(){}.getType();
                 diseasesProfileDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeDiseaseProfile);
                 trackingParticipantStatus.setUser_pri_id(diseasesProfileDetails.getUser_pri_id());
+                isEditable = "false";
                 editButton.setEnabled(true);
                 getDiseasesProfileArrayList();
-                Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
             }
         }else{
             //Do nothing
@@ -793,12 +792,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context = getActivity();
+        this.context = context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        this.context = null;
     }
 }

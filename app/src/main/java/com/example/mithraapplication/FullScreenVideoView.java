@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.SeekBar;
@@ -123,9 +124,6 @@ public class FullScreenVideoView extends AppCompatActivity{
 
         videoViewFullScreen = findViewById(R.id.fullScreenVideoView);
         String path = getIntent().getStringExtra("VideoPath");
-//        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.mithra_introduction_video);
-//        MediaController mc = new MediaController(this);
-//        videoViewFullScreen.setMediaController(mc);
         Uri uri = Uri.parse(path);
         videoViewFullScreen.setVideoURI(uri);
         videoViewFullScreen.requestFocus();
@@ -145,14 +143,9 @@ public class FullScreenVideoView extends AppCompatActivity{
     }
 
     private String timeConversion(int millis){
-//        String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
-//                TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-//                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-
         String hms = String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
                 TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-
         return hms;
     }
 
@@ -218,8 +211,6 @@ public class FullScreenVideoView extends AppCompatActivity{
 
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-//                int position = videoViewFullScreen.getCurrentPosition();
-//                videoViewFullScreen.seekTo(position - 10000);
                 return false;
             }
 
@@ -246,31 +237,6 @@ public class FullScreenVideoView extends AppCompatActivity{
             }
         });
 
-//        videoViewFullScreen.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_DOWN){
-//                    if(videoPlayButton.getVisibility() == View.VISIBLE){
-//                        videoPauseButton.setVisibility(View.GONE);
-//                        videoBackwardButton.setVisibility(View.GONE);
-//                    } else{
-//                        videoPauseButton.setVisibility(View.VISIBLE);
-//                        videoBackwardButton.setVisibility(View.VISIBLE);
-//                        new Handler().postDelayed(new Runnable() {
-//                            // Using handler with postDelayed called runnable run method
-//                            @Override
-//                            public void run() {
-//                                videoPauseButton.setVisibility(View.GONE);
-//                                videoBackwardButton.setVisibility(View.GONE);
-//                            }
-//                        }, 2*1000);
-//                    }
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-
         videoViewFullScreen.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -280,7 +246,8 @@ public class FullScreenVideoView extends AppCompatActivity{
     }
 
     private Bitmap generateThumbnailForVideo(){
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.mithra_introduction_video);
+        String path = getIntent().getStringExtra("VideoPath");
+        Uri uri = Uri.parse(path);
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(this.getApplicationContext(), uri);
         Bitmap thumb = retriever.getFrameAtTime(10, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
@@ -289,47 +256,47 @@ public class FullScreenVideoView extends AppCompatActivity{
 
     private void showAlertForFeedback(){
 
-            AlertDialog.Builder dialog= new AlertDialog.Builder(FullScreenVideoView.this);
-            View customLayout = getLayoutInflater().inflate(R.layout.feedback_popup, null);
+        View customLayout = getLayoutInflater().inflate(R.layout.feedback_popup, null);
 
-            Button yesFeedbackButton = customLayout.findViewById(R.id.yesFeedbackButton);
-            Button noFeedbackButton = customLayout.findViewById(R.id.noFeedbackButton);
+        Button yesFeedbackButton = customLayout.findViewById(R.id.yesFeedbackButton);
+        Button noFeedbackButton = customLayout.findViewById(R.id.noFeedbackButton);
 
-            ImageView imageViewThumbnail = customLayout.findViewById(R.id.feedbackImageOfVideo);
-            if(imageViewThumbnail!=null){
-                imageViewThumbnail.setBackground(new BitmapDrawable(getResources(), generateThumbnailForVideo()));
-            }
+        ImageView imageViewThumbnail = customLayout.findViewById(R.id.feedbackImageOfVideo);
+        if(imageViewThumbnail!=null){
+            imageViewThumbnail.setBackground(new BitmapDrawable(getResources(), generateThumbnailForVideo()));
+        }
 
-            dialog.setView(customLayout);
-            dialog.setCancelable(false);
+        Dialog dialog  = new Dialog(FullScreenVideoView.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(customLayout);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        wmlp.dimAmount = 0.5f;
+        dialog.getWindow().setAttributes(wmlp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        dialog.show();
 
-            AlertDialog alertDialog = dialog.create();
-            alertDialog.show();
+        yesFeedbackButton.setOnClickListener(v -> {
+            Toast.makeText(FullScreenVideoView.this, getString(R.string.opinion_toast), Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+            moveToVideoScreen();
+        });
 
-            yesFeedbackButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //do something when clicked
-                    Toast.makeText(FullScreenVideoView.this, getString(R.string.opinion_toast), Toast.LENGTH_LONG).show();
-                    alertDialog.dismiss();
-                    Intent loginIntent = new Intent(FullScreenVideoView.this, VideoScreen.class);
-                    loginIntent.putExtra("FromActivity", "FullScreenVideoView");
-                    loginIntent.putExtra("VideoFile", singleVideo);
-                    startActivity(loginIntent);
-                    finish();
-                }});
+        noFeedbackButton.setOnClickListener(v -> {
+            Toast.makeText(FullScreenVideoView.this, getString(R.string.opinion_toast), Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+            moveToVideoScreen();
+        });
+    }
 
-            noFeedbackButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //do something when clicked
-                    Toast.makeText(FullScreenVideoView.this, getString(R.string.opinion_toast), Toast.LENGTH_LONG).show();
-                    alertDialog.dismiss();
-                    Intent loginIntent = new Intent(FullScreenVideoView.this, VideoScreen.class);
-                    loginIntent.putExtra("FromActivity", "FullScreenVideoView");
-                    startActivity(loginIntent);
-                    finish();
-                }});
+    private void moveToVideoScreen(){
+        Intent loginIntent = new Intent(FullScreenVideoView.this, VideoScreen.class);
+        loginIntent.putExtra("FromActivity", "FullScreenVideoView");
+        loginIntent.putExtra("VideoFile", singleVideo);
+        startActivity(loginIntent);
+        finish();
     }
 
     private void onClickOfBackButton(){

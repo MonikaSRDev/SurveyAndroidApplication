@@ -85,7 +85,7 @@ public class ParticipantLandingScreen extends AppCompatActivity {
             params1.height = 340;
             params1.width = 340;
             videoButton.requestLayout();
-            videoButton.setEnabled(false);
+            videoButton.setEnabled(false); //should be false
 
         }else if(fromActivity.equals("SurveyScreen")){
             ViewGroup.LayoutParams params = videoButton.getLayoutParams();

@@ -800,6 +800,8 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 option_twoTV.setText(questionArray.get(questionIndex).getOption_2_e());
                 option_threeTV.setText(questionArray.get(questionIndex).getOption_3_e());
                 option_fourTV.setText(questionArray.get(questionIndex).getOption_4_e());
+                onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
+                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
             }else{
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
                 totalQuestions.setText("of " + questionArray.size() +"");
@@ -808,6 +810,8 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 option_twoTV.setText(questionArray.get(questionIndex).getOption_2_k());
                 option_threeTV.setText(questionArray.get(questionIndex).getOption_3_k());
                 option_fourTV.setText(questionArray.get(questionIndex).getOption_4_k());
+                onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
+                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
             }
         }
     }
