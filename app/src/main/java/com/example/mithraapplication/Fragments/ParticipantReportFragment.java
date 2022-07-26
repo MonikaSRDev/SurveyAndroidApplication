@@ -104,12 +104,9 @@ public class ParticipantReportFragment extends Fragment implements AdapterView.O
     }
 
     private void setOnclickOfStatusButton(){
-        statusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                statusButton.setBackgroundResource(R.drawable.status_button);
-                showPopupToUpdateStatus();
-            }
+        statusButton.setOnClickListener(v -> {
+            statusButton.setBackgroundResource(R.drawable.status_button);
+            showPopupToUpdateStatus();
         });
     }
 
@@ -148,12 +145,10 @@ public class ParticipantReportFragment extends Fragment implements AdapterView.O
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         dialog.show();
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                statusButton.setBackgroundResource(R.drawable.edit_button_background);
-                dialog.dismiss();
-            }});
+        saveButton.setOnClickListener(v -> {
+            statusButton.setBackgroundResource(R.drawable.edit_button_background);
+            dialog.dismiss();
+        });
     }
 
     @Override

@@ -43,12 +43,7 @@ public class DashboardVerticalParticipantsAdapter extends RecyclerView.Adapter<D
         holder.participantAge.setText(participantDetails.getParticipantAge());
         holder.participantVillage.setText(participantDetails.getParticipantVillageName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               itemClickListener.onItemClick(participantDetails);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> itemClickListener.onItemClick(participantDetails));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

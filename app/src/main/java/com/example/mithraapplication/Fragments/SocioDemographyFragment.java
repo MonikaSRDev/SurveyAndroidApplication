@@ -1,6 +1,7 @@
 package com.example.mithraapplication.Fragments;
 
 import static com.example.mithraapplication.Fragments.RegistrationFragment.trackingName;
+import static com.example.mithraapplication.ParticipantProfileScreen.participant_primary_ID;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -74,6 +75,12 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         }else{
             isEditable = "true";
             editButton.setEnabled(false);
+        }
+        if(isEditable!= null && isEditable.equals("false")){
+            nextButton.setEnabled(false);
+            nextButton.setText(R.string.next);
+            nextButton.setBackgroundResource(R.drawable.inputs_background);
+            nextButton.setTextColor(getResources().getColor(R.color.text_color));
         }
         getYearsOfEducation();
         getOccupation();
@@ -181,81 +188,81 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
                 participantFamilyType = socioDemographyDetails.getTypeOfFamily();
             }
 
-            if(participantSchooling!=null && participantSchooling.equals(noSchoolingButton.getText().toString())){
+            if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("No Schooling")){
                 noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equals(lessThanFiveButton.getText().toString())){
+            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("< 5")){
                 lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equals(fiveToSevenButton.getText().toString())){
+            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("5 – 7")){
                 fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equals(eightToNineButton.getText().toString())){
+            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("8 – 9")){
                 eightToNineButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equals(tenToElevenButton.getText().toString())){
+            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("10 – 11")){
                 tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equals(twelveOrMoreButton.getText().toString())){
+            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("12 or more")){
                 twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
-            if(participantOccupation!=null && participantOccupation.equals(professionalButton.getText().toString())){
+            if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Professional")){
                 professionalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantOccupation!=null && participantOccupation.equals(clericalButton.getText().toString())){
+            }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Clerical")){
                 clericalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantOccupation!=null && participantOccupation.equals(salesAndServicesButton.getText().toString())){
+            }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Sales and Services")){
                 salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantOccupation!=null && participantOccupation.equals(skilledManualButton.getText().toString())){
+            }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Skilled Manual")){
                 skilledManualButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantOccupation!=null && participantOccupation.equals(unskilledManualButton.getText().toString())){
+            }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Unskilled Manual")){
                 unskilledManualButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantOccupation!=null && participantOccupation.equals(agricultureButton.getText().toString())){
+            }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Agriculture")){
                 agricultureButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
-            if(participantReligion!=null && participantReligion.equals(hinduButton.getText().toString())){
+            if(participantReligion!=null && participantReligion.equalsIgnoreCase("Hindu")){
                 hinduButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantReligion!=null && participantReligion.equals(muslimButton.getText().toString())){
+            }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Muslim")){
                 muslimButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantReligion!=null && participantReligion.equals(christianButton.getText().toString())){
+            }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Christian")){
                 christianButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantReligion!=null && participantReligion.equals(sikhButton.getText().toString())){
+            }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Sikh")){
                 sikhButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantReligion!=null && participantReligion.equals(buddhistButton.getText().toString())){
+            }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Buddhist/Neo buddhist")){
                 buddhistButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantReligion!=null && participantReligion.equals(jainButton.getText().toString())){
+            }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Jain")){
                 jainButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantReligion!=null && participantReligion.equals(otherReligionButton.getText().toString())){
+            }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Other")){
                 otherReligionButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantReligion!=null && participantReligion.equals(pNAReligionButton.getText().toString())){
+            }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Preferred Not to Answer")){
                 pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
-            if(participantCaste!=null && participantCaste.equals(scheduledCasteButton.getText().toString())){
+            if(participantCaste!=null && participantCaste.equalsIgnoreCase("Scheduled Caste")){
                 scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantCaste!=null && participantCaste.equals(scheduledTribeButton.getText().toString())){
+            }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Scheduled Tribe")){
                 scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantCaste!=null && participantCaste.equals(backwardClassesButton.getText().toString())){
+            }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Other Backward Class")){
                 backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantCaste!=null && participantCaste.equals(doNotKnowCasteButton.getText().toString())){
+            }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Don't Know")){
                 doNotKnowCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantCaste!=null && participantCaste.equals(otherCasteButton.getText().toString())){
+            }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Other")){
                 otherCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantCaste!=null && participantCaste.equals(pNACasteButton.getText().toString())){
+            }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Preferred Not to Answer")){
                 pNACasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
-            if(participantMaritalStatus!=null && participantMaritalStatus.equals(neverMarriedButton.getText().toString())){
+            if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Never Married")){
                 neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantMaritalStatus!=null && participantMaritalStatus.equals(marriedButton.getText().toString())){
+            }else if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Married")){
                 marriedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantMaritalStatus!=null && participantMaritalStatus.equals(divorcedButton.getText().toString())){
+            }else if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Divorced")){
                 divorcedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantMaritalStatus!=null && participantMaritalStatus.equals(separatedButton.getText().toString())){
+            }else if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Separated")){
                 separatedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantMaritalStatus!=null && participantMaritalStatus.equals(widowButton.getText().toString())) {
+            }else if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Widow")) {
                 widowButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
-            if(participantFamilyType != null && participantFamilyType.equals(nuclearFamilyButton.getText().toString())){
+            if(participantFamilyType != null && participantFamilyType.equalsIgnoreCase("Nuclear Family")){
                 nuclearFamilyButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantFamilyType != null && participantFamilyType.equals(jointFamilyButton.getText().toString())){
+            }else if(participantFamilyType != null && participantFamilyType.equalsIgnoreCase("Joint Family")){
                 jointFamilyButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
         }
@@ -729,13 +736,24 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editButton.setBackgroundResource(R.drawable.status_button);
-                isEditable = "reEdit";
-                setEditable();
+                if(isEditable!=null && isEditable.equals("false")){
+                    editButton.setBackgroundResource(R.drawable.status_button);
+                    nextButton.setText(R.string.update);
+                    nextButton.setBackgroundResource(R.drawable.button_background);
+                    nextButton.setTextColor(getResources().getColor(R.color.white));
+                    isEditable = "reEdit";
+                    setEditable();
+                }else if(isEditable!=null && isEditable.equals("reEdit")){
+                    editButton.setBackgroundResource(R.drawable.yes_no_button);
+                    nextButton.setText(R.string.next);
+                    nextButton.setBackgroundResource(R.drawable.inputs_background);
+                    nextButton.setTextColor(getResources().getColor(R.color.text_color));
+                    isEditable = "false";
+                    setEditable();
+                }
             }
         });
     }
-
 
     private void callServerPostSocioDemography(){
         String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography";
@@ -787,13 +805,16 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             if(isEditable!=null && isEditable.equals("true")){
                 if (frappeResponse != null && frappeResponse.getDoctype().equals("demography")) {
                     String registrationName = frappeResponse.getName();
+                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.socio_demography), frappeResponse.getUser_pri_id(), registrationName);
                     callUpdateTrackingDetails(registrationName);
                 } else if (frappeResponse != null && frappeResponse.getDoctype().equals("tracking")) {
                     trackingName = frappeResponse.getName();
+                    participant_primary_ID = frappeResponse.getUser_pri_id();
                     moveToDiseaseProfileTab();
                 }
             }else{
                 if(isEditable!=null && isEditable.equals("reEdit")){
+                    editButton.setBackgroundResource(R.drawable.yes_no_button);
                     Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
                 }
                 Type typeSocioDemography = new TypeToken<SocioDemography>(){}.getType();

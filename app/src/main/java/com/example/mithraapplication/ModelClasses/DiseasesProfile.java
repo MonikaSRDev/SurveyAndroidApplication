@@ -2,7 +2,7 @@ package com.example.mithraapplication.ModelClasses;
 
 import java.io.Serializable;
 
-public class DiseasesProfile extends JsonServerObject {
+public class DiseasesProfile extends JsonServerObject implements Serializable {
     private String diseaseName = "null";
     private String diseaseNameKannada = "null";
     private String specifyDisease = "null";

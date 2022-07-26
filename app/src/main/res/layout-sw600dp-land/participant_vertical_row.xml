@@ -22,7 +22,7 @@
 
         <LinearLayout
             android:id="@+id/detailsParticipantLL"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
@@ -37,7 +37,7 @@
                 android:layout_margin="5dp"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/open_sans"
-                android:gravity="center"
+                android:gravity="start"
                 android:layout_weight="1"/>
 
             <TextView
@@ -49,7 +49,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/open_sans"
-                android:gravity="center"
+                android:gravity="start"
                 android:layout_weight="1"/>
 
             <TextView
@@ -61,14 +61,14 @@
                 android:layout_margin="5dp"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/open_sans"
-                android:gravity="center"
+                android:gravity="start"
                 android:layout_weight="1"/>
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/enrollmentStatusIconPart"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_gravity="center"
@@ -77,7 +77,7 @@
 
         <ImageView
             android:id="@+id/surveyStatusIconPart"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_gravity="center"
@@ -86,7 +86,7 @@
 
         <TextView
             android:id="@+id/moduleStatusDashboardTVPart"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:text="00%"
             android:textSize="14sp"
@@ -98,7 +98,7 @@
 
         <TextView
             android:id="@+id/referralStatusTVPart"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:text=""
             android:textSize="14sp"

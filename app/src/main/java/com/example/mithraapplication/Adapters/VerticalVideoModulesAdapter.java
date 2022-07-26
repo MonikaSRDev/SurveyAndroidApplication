@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class VerticalVideoModulesAdapter extends RecyclerView.Adapter<VerticalVideoModulesAdapter.ViewHolder> {
 
-    private ArrayList<VideoModules> videoModules = new ArrayList<>();
+    private ArrayList<VideoModules> videoModules;
     private Context context;
 
     @NonNull

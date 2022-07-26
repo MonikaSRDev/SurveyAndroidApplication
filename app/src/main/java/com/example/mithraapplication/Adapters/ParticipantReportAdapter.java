@@ -1,7 +1,6 @@
 package com.example.mithraapplication.Adapters;
 
 import android.content.Context;
-import android.provider.Telephony;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 
 public class ParticipantReportAdapter extends RecyclerView.Adapter<ParticipantReportAdapter.ViewHolder> {
 
-    private ArrayList<ParticipantReport> participantReportArrayList = null;
+    private ArrayList<ParticipantReport> participantReportArrayList;
     private Context context;
 
     @NonNull

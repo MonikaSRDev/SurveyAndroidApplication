@@ -1,5 +1,7 @@
 package com.example.mithraapplication;
 
+import static com.example.mithraapplication.Fragments.RegistrationFragment.trackingName;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -56,7 +58,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     public static String isLanguageSelected = "en";
     private RegisterParticipant registerParticipant = new RegisterParticipant();
     private String isEditable = "true";
+    public static String participant_primary_ID = "NULL";
     private TrackingParticipantStatus trackingParticipantStatus = null;
+    private int currentTab, previousTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +142,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         }
         if(registerParticipant!=null && registerParticipant.getUser_pri_id()!=null){
             mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.primaryID), getString(R.string.participantPrimaryID), registerParticipant.getUser_pri_id());
+            participant_primary_ID = registerParticipant.getUser_pri_id();
         }
         if(isEditable!=null && !isEditable.equals("true")){
             callGetParticipantTrackingDetails();
@@ -151,6 +156,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 4);
             setVisibilityForEdit(true);
         }else{
+            trackingParticipantStatus = null;
             setupSelectedTabFragment(0);
         }
     }
@@ -159,18 +165,99 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         profileTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                setupSelectedTabFragment(tab.getPosition());
+                currentTab = tab.getPosition();
+                if((previousTab > currentTab) && trackingParticipantStatus == null){
+                    isEditable = "false";
+                    checkIfEditable(currentTab);
+                    setupSelectedTabFragment(tab.getPosition());
+//                    trackingParticipantStatus = null;
+                }else if (previousTab > currentTab){
+                    checkIfEditable(currentTab);
+                    setupSelectedTabFragment(tab.getPosition());
+                }else if ((currentTab > previousTab)){
+                    checkIfEditable(currentTab);
+                    setupSelectedTabFragment(tab.getPosition());
+                }else{
+                    isEditable = "true";
+                    setupSelectedTabFragment(tab.getPosition());
+                }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                previousTab = tab.getPosition();
+//                checkIfEditable(previousTab);
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+    }
+
+    private void checkIfEditable(int position){
+        trackingParticipantStatus = new TrackingParticipantStatus();
+        String tracking = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.tracking), participant_primary_ID);
+        String screeningName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.userScreeningName), getString(R.string.userScreeningID));
+        String registrationName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration), participant_primary_ID);
+        String socioDemographyName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography), participant_primary_ID);
+        String diseaseProfileName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile), participant_primary_ID);
+
+        switch(position){
+            case 0: enableTab(0);
+                    enableTab(1);
+                    break;
+            case 1: if(registrationName!=null && !registrationName.equals("NULL")){
+                        trackingParticipantStatus.setName(tracking);
+                        trackingParticipantStatus.setRegistration(registrationName);
+                        registerParticipant.setUser_pri_id(participant_primary_ID);
+                        enableTab(0);
+                        enableTab(1);
+                        enableTab(2);
+                        isEditable = "false";
+                    }else{
+                        trackingParticipantStatus = null;
+                        isEditable = "true";
+                        enableTab(0);
+                        enableTab(1);
+                    }
+
+                    break;
+            case 2: if(registrationName!=null && !socioDemographyName.equals("NULL")){
+                        trackingParticipantStatus.setName(tracking);
+                        trackingParticipantStatus.setRegistration(registrationName);
+                        trackingParticipantStatus.setSocio_demography(socioDemographyName);
+                        isEditable = "false";
+                        enableTab(0);
+                        enableTab(1);
+                        enableTab(2);
+                        enableTab(3);
+                    }else{
+                        trackingParticipantStatus = null;
+                        isEditable = "true";
+                        enableTab(0);
+                        enableTab(1);
+                        enableTab(2);
+                    }
+                    break;
+            case 3: if(registrationName!=null && !diseaseProfileName.equals("NULL")){
+                        trackingParticipantStatus.setName(tracking);
+                        trackingParticipantStatus.setRegistration(registrationName);
+                        trackingParticipantStatus.setSocio_demography(socioDemographyName);
+                        trackingParticipantStatus.setDisease_profile(diseaseProfileName);
+                        isEditable = "false";
+                    }else{
+                        trackingParticipantStatus = null;
+                        isEditable = "true";
+                    }
+                    enableTab(0);
+                    enableTab(1);
+                    enableTab(2);
+                    enableTab(3);
+                    break;
+            case 4: break;
+
+        }
     }
 
     private void redirectParticipantToTab(){
@@ -192,7 +279,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     public void setupSelectedTabFragment(int position){
         switch (position) {
             case 0:
-                fragment = new ScreeningFragment();
+                fragment = new ScreeningFragment(isEditable);
                 TabLayout.Tab tabData = profileTabLayout.getTabAt(position);
                 assert tabData != null;
                 tabData.select();
@@ -204,9 +291,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 TabLayout.Tab tabData1 = profileTabLayout.getTabAt(position);
                 assert tabData1 != null;
                 tabData1.select();
-                if(isEditable!=null && isEditable.equals("true")){
-                    disableTab(0);
-                }
+                enableTab(0);
                 break;
             case 2:
                 fragment = new SocioDemographyFragment(trackingParticipantStatus, isEditable);
@@ -215,13 +300,8 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 TabLayout.Tab tabData2 = profileTabLayout.getTabAt(position);
                 assert tabData2 != null;
                 tabData2.select();
-                if(isEditable!=null && isEditable.equals("true")){
-                    disableTab(0);
-                    disableTab(1);
-                }else{
-                    enableTab(1);
-                }
-
+                enableTab(0);
+                enableTab(1);
                 break;
             case 3:
                 fragment = new DiseasesProfileFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
@@ -230,14 +310,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 TabLayout.Tab tabData3 = profileTabLayout.getTabAt(position);
                 assert tabData3 != null;
                 tabData3.select();
-                if(isEditable!=null && isEditable.equals("true")){
-                    disableTab(0);
-                    disableTab(1);
-                    disableTab(2);
-                }else{
-                    enableTab(1);
-                    enableTab(2);
-                }
+                enableTab(0);
+                enableTab(1);
+                enableTab(2);
                 break;
             case 4:
                 fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant);
@@ -245,16 +320,10 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 TabLayout.Tab tabData4 = profileTabLayout.getTabAt(position);
                 assert tabData4 != null;
                 tabData4.select();
-                if(isEditable!=null && isEditable.equals("true")){
-                    disableTab(0);
-                    disableTab(1);
-                    disableTab(2);
-                    disableTab(3);
-                }else{
-                    enableTab(1);
-                    enableTab(2);
-                    enableTab(3);
-                }
+                enableTab(0);
+                enableTab(1);
+                enableTab(2);
+                enableTab(3);
                 break;
         }
         FragmentManager fm = getSupportFragmentManager();
@@ -295,6 +364,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             public void onClick(View v) {
                 Intent loginIntent = new Intent(ParticipantProfileScreen.this, DashboardScreen.class);
                 startActivity(loginIntent);
+                finish();
             }
         });
     }
@@ -403,6 +473,12 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             ArrayList<TrackingParticipantStatus> trackingParticipantStatusArrayList = gson.fromJson(jsonObject.get("data"), type);
             if(trackingParticipantStatusArrayList!=null && trackingParticipantStatusArrayList.size()!=0){
                 trackingParticipantStatus = trackingParticipantStatusArrayList.get(0);
+                trackingName = trackingParticipantStatus.getName();
+                participant_primary_ID = registerParticipant.getUser_pri_id();
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.tracking), participant_primary_ID, trackingParticipantStatus.getName());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration), participant_primary_ID, trackingParticipantStatus.getRegistration());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography), participant_primary_ID, trackingParticipantStatus.getSocio_demography());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile), participant_primary_ID, trackingParticipantStatus.getDisease_profile());
             }else{
                 trackingParticipantStatus = null;
             }

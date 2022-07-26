@@ -131,8 +131,11 @@
     <string name="edit">Edit</string>
     <string name="diffPassword">Your new password must be different from\nprevious used passwords.</string>
     <string name="create_new_password">Create New Password</string>
-    <string name="eight_characters">Must be at least 8 characters.</string>
+    <string name="eight_characters">Must be at least 4 characters.</string>
     <string name="passwords_match">Both passwords must match.</string>
     <string name="reset_password">Reset Password</string>
+    <string name="update">Update</string>
+    <string name="not_eligible_text">Regret to say that you are not eligible for the Survey</string>
+    <string name="ok">Ok</string>
 
 </resources>

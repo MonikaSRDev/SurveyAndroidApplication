@@ -140,6 +140,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
             public void onClick(View v) {
                 Intent intent = new Intent(DashboardParticipantDetailsScreen.this, DashboardScreen.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -150,6 +151,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
             public void onClick(View v) {
                 Intent loginIntent = new Intent(DashboardParticipantDetailsScreen.this, ParticipantsScreen.class);
                 startActivity(loginIntent);
+                finish();
             }
         });
     }

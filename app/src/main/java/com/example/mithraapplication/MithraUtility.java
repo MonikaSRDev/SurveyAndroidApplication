@@ -1,5 +1,6 @@
 package com.example.mithraapplication;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,6 +10,8 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.Date;
 import java.util.Locale;
@@ -101,5 +104,12 @@ public class MithraUtility extends Application {
             ex.printStackTrace();
         }
         return seconds;
+    }
+
+    private void hideKeyboard(Context context, View view){
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

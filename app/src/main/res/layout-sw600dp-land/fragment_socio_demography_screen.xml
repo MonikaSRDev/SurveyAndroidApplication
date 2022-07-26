@@ -1017,7 +1017,7 @@
 
                 <Button
                     android:id="@+id/socioNextButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
                     android:fontFamily="@font/open_sans_semibold"

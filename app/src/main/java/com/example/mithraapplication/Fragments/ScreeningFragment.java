@@ -1,6 +1,9 @@
 package com.example.mithraapplication.Fragments;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,10 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +27,7 @@ import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.ParticipantScreening;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ParticipantProfileScreen;
+import com.example.mithraapplication.ParticipantsScreen;
 import com.example.mithraapplication.R;
 import com.example.mithraapplication.ServerRequestAndResponse;
 import com.google.gson.Gson;
@@ -33,8 +41,9 @@ import java.util.Objects;
 
 public class ScreeningFragment extends Fragment implements HandleServerResponse {
 
-    public ScreeningFragment() {
+    public ScreeningFragment(String isEditable) {
         // Required empty public constructor
+        this.isEditable = isEditable;
     }
 
     private Button inclusionYesButton, inclusionNoButton, ageAboveEighteenYesButton, ageAboveEighteenNoButton,
@@ -48,6 +57,7 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
 
     private String ageAboveEighteen = "NULL", resident = "NULL", CBOMeeting = "NULL", mentalIllness = "NULL", substanceAbuse = "NULL", suicideAttempt = "NULL", participationConsent = "NULL";
     private MithraUtility mithraUtility = new MithraUtility();
+    private String isEditable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +77,11 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         RegisterViews(view);
         getUserEnteredData();
         onClickRegisterButton();
+        if(isEditable!=null && isEditable.equals("true")){
+            setEditable(true);
+        }else{
+            setEditable(false);
+        }
     }
 
     private void RegisterViews(View view){
@@ -111,6 +126,64 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
 
     }
 
+    private void setEditable(boolean editable){
+        inclusionYesButton.setEnabled(editable);
+        inclusionNoButton.setEnabled(editable);
+        ageAboveEighteenYesButton.setEnabled(editable);
+        ageAboveEighteenNoButton.setEnabled(editable);
+        residentYesButton.setEnabled(editable);
+        residentNoButton.setEnabled(editable);
+        CBOMeetingYesButton.setEnabled(editable);
+        CBOMeetingNoButton.setEnabled(editable);
+        exclusionYesButton.setEnabled(editable);
+        exclusionNoButton.setEnabled(editable);
+        mentalIllnessYesButton.setEnabled(editable);
+        mentalIllnessNoButton.setEnabled(editable);
+        substanceAbuseYesButton.setEnabled(editable);
+        substanceAbuseNoButton.setEnabled(editable);
+        suicideAttemptYesButton.setEnabled(editable);
+        suicideAttemptNoButton.setEnabled(editable);
+        participationConsentYesButton.setEnabled(editable);
+        participationConsentNoButton.setEnabled(editable);
+        screeningRegisterButton.setEnabled(editable);
+
+        if(!editable){
+            inclusionYesButton.setBackgroundResource(R.drawable.selected_yes_button);
+            inclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
+            ageAboveEighteenYesButton.setBackgroundResource(R.drawable.selected_yes_button);
+            ageAboveEighteenNoButton.setBackgroundResource(R.drawable.yes_no_button);
+            ageAboveEighteen = "Yes";
+
+            residentYesButton.setBackgroundResource(R.drawable.selected_yes_button);
+            residentNoButton.setBackgroundResource(R.drawable.yes_no_button);
+            resident = "Yes";
+
+            CBOMeetingYesButton.setBackgroundResource(R.drawable.selected_yes_button);
+            CBOMeetingNoButton.setBackgroundResource(R.drawable.yes_no_button);
+            CBOMeeting = "Yes";
+
+            exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+            exclusionNoButton.setBackgroundResource(R.drawable.selected_no_button);
+
+            mentalIllnessYesButton.setBackgroundResource(R.drawable.yes_no_button);
+            mentalIllnessNoButton.setBackgroundResource(R.drawable.selected_no_button);
+            mentalIllness = "No";
+
+            substanceAbuseYesButton.setBackgroundResource(R.drawable.yes_no_button);
+            substanceAbuseNoButton.setBackgroundResource(R.drawable.selected_no_button);
+            substanceAbuse = "No";
+
+            suicideAttemptYesButton.setBackgroundResource(R.drawable.yes_no_button);
+            suicideAttemptNoButton.setBackgroundResource(R.drawable.selected_no_button);
+            suicideAttempt = "No";
+
+            participationConsentYesButton.setBackgroundResource(R.drawable.yes_no_button);
+            participationConsentNoButton.setBackgroundResource(R.drawable.selected_no_button);
+            participationConsent = "No";
+        }
+    }
+
     private void onClickRegisterButton(){
 
         screeningRegisterButton.setOnClickListener(new View.OnClickListener() {
@@ -151,11 +224,6 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
                 }
 
                 participantScreening.setScore(score);
-
-                Log.i("SCREENING SCORE", "Score : "+score);
-
-//                moveToRegistrationFragment();
-
                 callServerPostScreeningDetails(participantScreening);
             }
         });
@@ -217,6 +285,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         ageAboveEighteenYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                inclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 ageAboveEighteenYesButton.setBackgroundResource(R.drawable.selected_yes_button);
                 ageAboveEighteenNoButton.setBackgroundResource(R.drawable.yes_no_button);
                 ageAboveEighteen = "Yes";
@@ -226,6 +297,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         ageAboveEighteenNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                inclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 ageAboveEighteenYesButton.setBackgroundResource(R.drawable.yes_no_button);
                 ageAboveEighteenNoButton.setBackgroundResource(R.drawable.selected_no_button);
                 ageAboveEighteen = "No";
@@ -235,6 +309,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         residentYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                inclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 residentYesButton.setBackgroundResource(R.drawable.selected_yes_button);
                 residentNoButton.setBackgroundResource(R.drawable.yes_no_button);
                 resident = "Yes";
@@ -244,6 +321,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         residentNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                inclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 residentYesButton.setBackgroundResource(R.drawable.yes_no_button);
                 residentNoButton.setBackgroundResource(R.drawable.selected_no_button);
                 resident = "No";
@@ -253,6 +333,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         CBOMeetingYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                inclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 CBOMeetingYesButton.setBackgroundResource(R.drawable.selected_yes_button);
                 CBOMeetingNoButton.setBackgroundResource(R.drawable.yes_no_button);
                 CBOMeeting = "Yes";
@@ -262,6 +345,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         CBOMeetingNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                inclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 CBOMeetingYesButton.setBackgroundResource(R.drawable.yes_no_button);
                 CBOMeetingNoButton.setBackgroundResource(R.drawable.selected_no_button);
                 CBOMeeting = "No";
@@ -320,6 +406,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         mentalIllnessYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                exclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 mentalIllnessYesButton.setBackgroundResource(R.drawable.selected_yes_button);
                 mentalIllnessNoButton.setBackgroundResource(R.drawable.yes_no_button);
                 mentalIllness = "Yes";
@@ -329,6 +418,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         mentalIllnessNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                exclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 mentalIllnessYesButton.setBackgroundResource(R.drawable.yes_no_button);
                 mentalIllnessNoButton.setBackgroundResource(R.drawable.selected_no_button);
                 mentalIllness = "No";
@@ -338,6 +430,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         substanceAbuseYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                exclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 substanceAbuseYesButton.setBackgroundResource(R.drawable.selected_yes_button);
                 substanceAbuseNoButton.setBackgroundResource(R.drawable.yes_no_button);
                 substanceAbuse = "Yes";
@@ -347,6 +442,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         substanceAbuseNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                exclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 substanceAbuseYesButton.setBackgroundResource(R.drawable.yes_no_button);
                 substanceAbuseNoButton.setBackgroundResource(R.drawable.selected_no_button);
                 substanceAbuse = "No";
@@ -356,6 +454,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         suicideAttemptYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                exclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 suicideAttemptYesButton.setBackgroundResource(R.drawable.selected_yes_button);
                 suicideAttemptNoButton.setBackgroundResource(R.drawable.yes_no_button);
                 suicideAttempt = "Yes";
@@ -365,6 +466,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         suicideAttemptNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                exclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 suicideAttemptYesButton.setBackgroundResource(R.drawable.yes_no_button);
                 suicideAttemptNoButton.setBackgroundResource(R.drawable.selected_no_button);
                 suicideAttempt = "No";
@@ -374,6 +478,9 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         participationConsentYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                exclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 participationConsentYesButton.setBackgroundResource(R.drawable.selected_yes_button);
                 participationConsentNoButton.setBackgroundResource(R.drawable.yes_no_button);
                 participationConsent = "Yes";
@@ -383,9 +490,42 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         participationConsentNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exclusionYesButton.setBackgroundResource(R.drawable.yes_no_button);
+                exclusionNoButton.setBackgroundResource(R.drawable.yes_no_button);
+
                 participationConsentYesButton.setBackgroundResource(R.drawable.yes_no_button);
                 participationConsentNoButton.setBackgroundResource(R.drawable.selected_no_button);
                 participationConsent = "No";
+            }
+        });
+    }
+
+    private void showDialogForParticipantNotEligible(){
+        Dialog dialog;
+        View customLayout = getLayoutInflater().inflate(R.layout.activity_participant_not_eligible_popup, null);
+
+        TextView notEligibleTV = customLayout.findViewById(R.id.participantNotEligiblePopup);
+        Button okButton = customLayout.findViewById(R.id.okButtonPopup);
+
+        dialog  = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(customLayout);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        wmlp.dimAmount = 0.5f;
+        dialog.getWindow().setAttributes(wmlp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        dialog.show();
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent(getActivity(), ParticipantsScreen.class);
+                startActivity(intent);
+                requireActivity().finish();
             }
         });
     }
@@ -400,11 +540,11 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
             participantScreening = gson.fromJson(jsonObject.get("data"), type);
             if(participantScreening!=null){
                 if(!participantScreening.getName().equals("NULL")){
-                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.userScreeningName), getString(R.string.userScreeningName), participantScreening.getName());
                     if(participantScreening.getScore() >= 7){
+                        mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.userScreeningName), getString(R.string.userScreeningID), participantScreening.getName());
                         moveToRegistrationFragment();
                     }else{
-                        Toast.makeText(getActivity(), "Regret to say that you are not eligible for the Survey", Toast.LENGTH_LONG).show();
+                        showDialogForParticipantNotEligible();
                     }
                 }
             }

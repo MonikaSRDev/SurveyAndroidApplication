@@ -21,21 +21,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
-import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Locale;
-
-import okhttp3.MultipartBody;
 
 public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfileAdapter.ViewHolder> {
-    private ArrayList<DiseasesProfile>  diseasesProfileArrayList = new ArrayList<>();
+    private ArrayList<DiseasesProfile>  diseasesProfileArrayList;
     private ArrayList<DiseasesProfile>  userEnteredDiseasesProfileArrayList = new ArrayList<>();
-    private DiseasesProfile newDiseaseProfile;
-    private Context context;
-    private String isEditable;
+    private final Context context;
+    private final String isEditable;
 
     @NonNull
     @Override
@@ -96,7 +90,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
 
         holder.setIsRecyclable(false);
 
-        newDiseaseProfile = new DiseasesProfile();
+        DiseasesProfile newDiseaseProfile = new DiseasesProfile();
 
         userEnteredDiseasesProfileArrayList.add(newDiseaseProfile);
 
@@ -111,19 +105,13 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         holder.receivedTreatmentTV.setText(R.string.received_treatment);
         holder.limitActivitiesTV.setText(R.string.limit_activities);
 
-        if(!diseasesProfile.getSpecifyDisease().equals("null")){
+        if(diseasesProfile.getDiseaseName().equals("ANY OTHER DISEASES")){
             holder.specifyDiseaseLinearLayout.setVisibility(View.VISIBLE);
             holder.specifyDiseaseTV.setText(R.string.specify_disease);
         }
 
-        if(isEditable!=null && isEditable.equalsIgnoreCase("false")){
-            enableDisableViews(false, holder);
-        }else{
-            enableDisableViews(true, holder);
-        }
-
+        enableDisableViews(isEditable == null || !isEditable.equalsIgnoreCase("false"), holder);
         displayDiseaseProfileData(holder, diseasesProfile);
-
         onClickOfYesDiseaseButton(holder);
         onClickOfNoDiseaseButton(holder);
         onClickOfYesReceivedTreatmentButton(holder);
@@ -134,6 +122,9 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         getSpecificDiseaseOfParticipant(holder);
     }
 
+    /**
+     * Description : This method is used to display the profile data entered by the user for viewing.
+     */
     private void displayDiseaseProfileData(ViewHolder holder, DiseasesProfile diseasesProfile){
         if(isEditable!=null && !isEditable.equals("true")){
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed(diseasesProfile.getDiagnosed());
@@ -192,6 +183,9 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         }
     }
 
+    /**
+     * Description : This method is used to enable and disable the views based on the isEditable.
+     */
     private void enableDisableViews(boolean isEdit, ViewHolder holder){
         if(isEdit){
             holder.diagnosedAgeET.setFocusable(true);
@@ -222,74 +216,77 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         }
     }
 
+    /**
+     * Description : This method is handles the onclick action on "YesDiseaseButton"
+     */
     private void onClickOfYesDiseaseButton(ViewHolder holder) {
-        holder.yesDiseaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("yes");
-                holder.yesDiseaseButton.setBackgroundResource(R.drawable.selected_yes_button);
-                holder.noDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
-                holder.expandableConstraintLayout.setVisibility(View.VISIBLE);
-            }
+        holder.yesDiseaseButton.setOnClickListener(v -> {
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("yes");
+            holder.yesDiseaseButton.setBackgroundResource(R.drawable.selected_yes_button);
+            holder.noDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
+            holder.expandableConstraintLayout.setVisibility(View.VISIBLE);
         });
     }
 
+    /**
+     * Description : This method is handles the onclick action on "NoDiseaseButton"
+     */
     private void onClickOfNoDiseaseButton(ViewHolder holder) {
-        holder.noDiseaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("no");
-                holder.noDiseaseButton.setBackgroundResource(R.drawable.selected_no_button);
-                holder.yesDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
-                holder.expandableConstraintLayout.setVisibility(View.GONE);
-            }
+        holder.noDiseaseButton.setOnClickListener(v -> {
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("no");
+            holder.noDiseaseButton.setBackgroundResource(R.drawable.selected_no_button);
+            holder.yesDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
+            holder.expandableConstraintLayout.setVisibility(View.GONE);
         });
     }
 
+    /**
+     * Description : This method is handles the onclick action on "YesReceivedTreatmentButton"
+     */
     private void onClickOfYesReceivedTreatmentButton(ViewHolder holder) {
-        holder.yesReceivedTreatmentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("yes");
-                holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_yes_button);
-                holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
-            }
+        holder.yesReceivedTreatmentButton.setOnClickListener(v -> {
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("yes");
+            holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_yes_button);
+            holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
         });
     }
 
+    /**
+     * Description : This method is handles the onclick action on "NoReceivedTreatmentButton"
+     */
     private void onClickOfNoReceivedTreatmentButton(ViewHolder holder) {
-        holder.noReceivedTreatmentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("no");
-                holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
-                holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_no_button);
-            }
+        holder.noReceivedTreatmentButton.setOnClickListener(v -> {
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("no");
+            holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
+            holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_no_button);
         });
     }
 
+    /**
+     * Description : This method is handles the onclick action on "YesLimitActivitiesButton"
+     */
     private void onClickOfYesLimitActivitiesButton(ViewHolder holder) {
-        holder.yesLimitActivities.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("yes");
-                holder.yesLimitActivities.setBackgroundResource(R.drawable.selected_yes_button);
-                holder.noLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
-            }
+        holder.yesLimitActivities.setOnClickListener(v -> {
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("yes");
+            holder.yesLimitActivities.setBackgroundResource(R.drawable.selected_yes_button);
+            holder.noLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
         });
     }
 
+    /**
+     * Description : This method is handles the onclick action on "NoLimitActivitiesButton"
+     */
     private void onClickOfNoLimitActivitiesButton(ViewHolder holder) {
-        holder.noLimitActivities.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("no");
-                holder.yesLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
-                holder.noLimitActivities.setBackgroundResource(R.drawable.selected_no_button);
-            }
+        holder.noLimitActivities.setOnClickListener(v -> {
+            userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("no");
+            holder.yesLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
+            holder.noLimitActivities.setBackgroundResource(R.drawable.selected_no_button);
         });
     }
 
+    /**
+     * Description : This method is used to get the disease diagnosed age of the participant
+     */
     private void getDiagnosedAgeOfParticipant(ViewHolder holder){
         holder.diagnosedAgeET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -312,6 +309,9 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         });
     }
 
+    /**
+     * Description : This method is used to get the specific disease name from the participant if they have any disease other than the listed
+     */
     private void getSpecificDiseaseOfParticipant(ViewHolder holder){
         holder.specifyDiseaseET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -334,10 +334,13 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
         });
     }
 
+    /**
+     * Description : This method is used to get the data entered by the user and send it to main activity on click of the save button
+     */
     public void sendDataToActivity(){
         Intent intent = new Intent("DiseasesProfileData");
         Bundle args = new Bundle();
-        args.putSerializable("ARRAYLIST",(Serializable)userEnteredDiseasesProfileArrayList);
+        args.putSerializable("ARRAYLIST", userEnteredDiseasesProfileArrayList);
         intent.putExtra("ParticipantDiseaseData",args);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

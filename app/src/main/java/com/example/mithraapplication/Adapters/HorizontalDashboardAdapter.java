@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.ModelClasses.ParticipantStatus;
-import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.R;
 
 import java.util.ArrayList;
@@ -19,8 +18,8 @@ import java.util.ArrayList;
 public class HorizontalDashboardAdapter extends RecyclerView.Adapter<HorizontalDashboardAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<ParticipantStatus> participantStatusArrayList = new ArrayList<>();
-    private onItemClickListener itemClickListener;
+    private ArrayList<ParticipantStatus> participantStatusArrayList;
+    private final onItemClickListener itemClickListener;
 
     @NonNull
     @Override
@@ -45,26 +44,11 @@ public class HorizontalDashboardAdapter extends RecyclerView.Adapter<HorizontalD
         holder.pendingValTV.setText(participantStatus.getPending());
         holder.totalValTV.setText(participantStatus.getTotal());
 
-        holder.completedLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClickListener.onItemClick(holder.completeTV.getText().toString());
-            }
-        });
+        holder.completedLinearLayout.setOnClickListener(v -> itemClickListener.onItemClick(holder.completeTV.getText().toString()));
 
-        holder.pendingLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClickListener.onItemClick(holder.pendingTV.getText().toString());
-            }
-        });
+        holder.pendingLinearLayout.setOnClickListener(v -> itemClickListener.onItemClick(holder.pendingTV.getText().toString()));
 
-        holder.totalLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClickListener.onItemClick(holder.totalTV.getText().toString());
-            }
-        });
+        holder.totalLinearLayout.setOnClickListener(v -> itemClickListener.onItemClick(holder.totalTV.getText().toString()));
 
     }
 

@@ -57,7 +57,7 @@
 
                 <Button
                     android:id="@+id/diseasesNextButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="436dp"
                     android:layout_marginEnd="436dp"

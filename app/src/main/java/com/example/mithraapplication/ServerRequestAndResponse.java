@@ -26,6 +26,7 @@ import com.example.mithraapplication.ModelClasses.SurveyPostRequest;
 import com.example.mithraapplication.ModelClasses.SurveyQuestions;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdateDiseaseProfileTracking;
+import com.example.mithraapplication.ModelClasses.UpdatePassword;
 import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
 import com.example.mithraapplication.ModelClasses.UpdateSocioDemographyTracking;
 import com.example.mithraapplication.ModelClasses.UserLogin;
@@ -399,6 +400,10 @@ public class ServerRequestAndResponse extends Application {
 
     public void putDiseaseProfileDetails(Context context, DiseasesProfilePostRequest diseasesProfilePostRequest, String url){
         putJsonRequest(context, diseasesProfilePostRequest.ToJSON(), url);
+    }
+
+    public void putUpdateUserPassword(Context context, UpdatePassword updatePassword, String url){
+        putJsonRequest(context, updatePassword.ToJSON(), url);
     }
 
 }

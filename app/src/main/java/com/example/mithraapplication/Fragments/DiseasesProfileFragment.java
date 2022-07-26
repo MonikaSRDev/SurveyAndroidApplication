@@ -2,21 +2,26 @@ package com.example.mithraapplication.Fragments;
 
 import static com.example.mithraapplication.Fragments.RegistrationFragment.trackingName;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.LocaleList;
-import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +39,8 @@ import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.DiseasesProfilePostRequest;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
-import com.example.mithraapplication.ModelClasses.RegisterParticipant;
-import com.example.mithraapplication.ModelClasses.SocioDemography;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdateDiseaseProfileTracking;
-import com.example.mithraapplication.ModelClasses.UpdateSocioDemographyTracking;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.ParticipantsScreen;
 import com.example.mithraapplication.R;
@@ -59,15 +61,15 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     private DiseasesProfileAdapter diseasesProfileAdapter;
     private Button nextDiseaseProfileButton;
     private ArrayList<DiseasesProfile> diseasesProfile = new ArrayList<>();
-    private MithraUtility mithraUtility = new MithraUtility();
+    private final MithraUtility mithraUtility = new MithraUtility();
     private TextView diseaseTV, diagnosedAgeTV, receivedTreatmentTV, limitActivitiesTV, specifyDiseaseTV;
-    private EditText diagnosedAgeET, specifyDiseaseET;
     private Button yesDiseaseButton, noDiseaseButton, yesReceivedTreatmentButton, noReceivedTreatmentButton, yesLimitActivities,  noLimitActivities, editButton;
     private ParticipantProfileScreen participantsProfileScreen;
-    private TrackingParticipantStatus trackingParticipantStatus = null;
+    private TrackingParticipantStatus trackingParticipantStatus;
     private String isEditable;
     private Context context;
     private DiseasesProfilePostRequest diseasesProfileDetails = null;
+    private Dialog dialog;
 
     @Nullable
     @Override
@@ -81,6 +83,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         super.onViewCreated(view, savedInstanceState);
         initializeData();
         RegisterViews(view);
+        startProgressBar();
         if(trackingParticipantStatus!=null && trackingParticipantStatus.getDisease_profile()!=null) {
             if(isEditable!= null && !isEditable.equals("true")){
                 callGetIndividualDiseaseProfileDetails();
@@ -90,13 +93,16 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             editButton.setEnabled(false);
             setRecyclerView(isEditable);
         }
-        nextDiseaseProfileButton.setEnabled(isEditable == null || !isEditable.equalsIgnoreCase("false"));
+        if(isEditable!= null && isEditable.equals("false")){
+            nextDiseaseProfileButton.setEnabled(false);
+            nextDiseaseProfileButton.setText(R.string.save);
+            nextDiseaseProfileButton.setBackgroundResource(R.drawable.inputs_background);
+            nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.text_color));
+        }
+        nextDiseaseProfileButton.setEnabled(isEditable != null && !isEditable.equalsIgnoreCase("false"));
         onClickOfNextButton();
         setOnclickOfEditButton();
 
-        // Register to receive messages.
-        // We are registering an observer (mMessageReceiver) to receive Intents
-        // with actions named "custom-message".
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
                 new IntentFilter("DiseasesProfileData"));
     }
@@ -107,6 +113,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         this.isEditable = isEditable;
     }
 
+    /**
+     * Description : This broadcast receiver is used get the data from the adapter
+     */
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -132,18 +141,19 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         super.onPause();
     }
 
+    /**
+     * Description : This method is used to register the views to the Fragment
+     */
     private void RegisterViews(View view){
         recyclerViewLeft = view.findViewById(R.id.diseasesRecyclerView);
         nextDiseaseProfileButton = view.findViewById(R.id.diseasesNextButton);
+        nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
 
         diseaseTV = view.findViewById(R.id.diseaseTV);
         diagnosedAgeTV = view.findViewById(R.id.diagnosedAgeTV);
         receivedTreatmentTV = view.findViewById(R.id.treatmentReceivedTV);
         limitActivitiesTV = view.findViewById(R.id.limitActivitiesTV);
         specifyDiseaseTV = view.findViewById(R.id.specifyDiseaseTV);
-
-        diagnosedAgeET = view.findViewById(R.id.diagnosedAgeET);
-        specifyDiseaseET = view.findViewById(R.id.specifyDiseaseET);
 
         yesDiseaseButton = view.findViewById(R.id.yesDiseaseButton);
         noDiseaseButton = view.findViewById(R.id.noDiseaseButton);
@@ -154,6 +164,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         editButton = requireActivity().findViewById(R.id.profileEditButton);
     }
 
+    /**
+     * Description : This method is used to prepare the data to be shown to the user.
+     */
     private void initializeData(){
         DiseasesProfile profile1 = new DiseasesProfile();
         profile1.setDiseaseName("DIABETES MELLITUS");
@@ -269,42 +282,94 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         diseasesProfilesArray.add(profile14);
     }
 
+    /**
+     * Description : Sets the recycler view with the data disease profile array list and the editable parameter
+     */
     private void setRecyclerView(String isEditable){
         diseasesProfileAdapter = new DiseasesProfileAdapter(context, diseasesProfilesArray, isEditable);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
-        recyclerViewLeft.setLayoutManager(staggeredGridLayoutManager);
         recyclerViewLeft.setAdapter(diseasesProfileAdapter);
-    }
-
-    private void onClickOfNextButton(){
-        nextDiseaseProfileButton.setOnClickListener(new View.OnClickListener() {
+        recyclerViewLeft.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL) {
             @Override
-            public void onClick(View v) {
-                if(diseasesProfileAdapter != null){
-                    diseasesProfileAdapter.sendDataToActivity();
-                }else{
-                    Log.d("TESTING", "Adapter is Empty");
-                }
+            public void onLayoutCompleted(final RecyclerView.State state) {
+                super.onLayoutCompleted(state);
+                stopProgressBar();
+                nextDiseaseProfileButton.setVisibility(View.VISIBLE);
             }
         });
     }
 
+    /**
+     * Description : On clicking the button, method in the adapter is triggered and the data from the adapter is fetched and returned to fragment.
+     */
+    private void onClickOfNextButton(){
+        nextDiseaseProfileButton.setOnClickListener(v -> {
+            if(diseasesProfileAdapter != null) {
+                diseasesProfileAdapter.sendDataToActivity();
+            }
+        });
+    }
+
+    /**
+     * Description : Makes the views editable for user to update the disease profile data on clicking the edit button.
+     */
     private void setOnclickOfEditButton(){
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        editButton.setOnClickListener(v -> {
+            if(isEditable!=null && isEditable.equals("false")){
                 editButton.setBackgroundResource(R.drawable.status_button);
                 isEditable = "reEdit";
+                nextDiseaseProfileButton.setEnabled(true);
+                nextDiseaseProfileButton.setText(R.string.update);
+                nextDiseaseProfileButton.setBackgroundResource(R.drawable.button_background);
+                nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.white));
+                setRecyclerView(isEditable);
+            }else if(isEditable!=null && isEditable.equals("reEdit")){
+                editButton.setBackgroundResource(R.drawable.yes_no_button);
+                isEditable = "false";
+                nextDiseaseProfileButton.setEnabled(false);
+                nextDiseaseProfileButton.setText(R.string.save);
+                nextDiseaseProfileButton.setBackgroundResource(R.drawable.inputs_background);
+                nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.text_color));
                 setRecyclerView(isEditable);
             }
         });
     }
 
+    /**
+     * Description : Move from profile screen activity to the ParticipantScreen activity.
+     */
     private void moveToParticipantsScreen(){
         Intent intent = new Intent(getActivity(), ParticipantsScreen.class);
         startActivity(intent);
+        if(getActivity()!=null){
+            getActivity().finish();
+        }
     }
 
+    private void startProgressBar(){
+        View customLayout = getLayoutInflater().inflate(R.layout.activity_progress_bar, null);
+
+        ProgressBar progressbar = customLayout.findViewById(R.id.progressBar);
+
+        dialog  = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(customLayout);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        wmlp.dimAmount = 0.5f;
+        dialog.getWindow().setAttributes(wmlp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        dialog.show();
+    }
+
+    private void stopProgressBar(){
+        dialog.dismiss();
+    }
+
+    /**
+     * Description : Converts the data received from the server to DiseaseProfile type.
+     */
     private void getDiseasesProfileArrayList(){
         diseasesProfilesArray.clear();
 
@@ -322,6 +387,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile1.setDiagnosedAge(arr[1]);
             profile1.setReceivedTreatment(arr[2]);
             profile1.setLimitActivities(arr[3]);
+            profile1.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile1);
 
@@ -338,6 +404,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile2.setDiagnosedAge(arr[1]);
             profile2.setReceivedTreatment(arr[2]);
             profile2.setLimitActivities(arr[3]);
+            profile2.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile2);
 
@@ -354,6 +421,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile3.setDiagnosedAge(arr[1]);
             profile3.setReceivedTreatment(arr[2]);
             profile3.setLimitActivities(arr[3]);
+            profile3.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile3);
 
@@ -370,6 +438,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile4.setDiagnosedAge(arr[1]);
             profile4.setReceivedTreatment(arr[2]);
             profile4.setLimitActivities(arr[3]);
+            profile4.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile4);
 
@@ -386,6 +455,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile5.setDiagnosedAge(arr[1]);
             profile5.setReceivedTreatment(arr[2]);
             profile5.setLimitActivities(arr[3]);
+            profile5.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile5);
 
@@ -402,6 +472,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile6.setDiagnosedAge(arr[1]);
             profile6.setReceivedTreatment(arr[2]);
             profile6.setLimitActivities(arr[3]);
+            profile6.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile6);
 
@@ -418,6 +489,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile7.setDiagnosedAge(arr[1]);
             profile7.setReceivedTreatment(arr[2]);
             profile7.setLimitActivities(arr[3]);
+            profile7.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile7);
 
@@ -434,6 +506,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile8.setDiagnosedAge(arr[1]);
             profile8.setReceivedTreatment(arr[2]);
             profile8.setLimitActivities(arr[3]);
+            profile8.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile8);
 
@@ -450,6 +523,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile9.setDiagnosedAge(arr[1]);
             profile9.setReceivedTreatment(arr[2]);
             profile9.setLimitActivities(arr[3]);
+            profile9.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile9);
 
@@ -466,6 +540,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile10.setDiagnosedAge(arr[1]);
             profile10.setReceivedTreatment(arr[2]);
             profile10.setLimitActivities(arr[3]);
+            profile10.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile10);
 
@@ -482,6 +557,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile11.setDiagnosedAge(arr[1]);
             profile11.setReceivedTreatment(arr[2]);
             profile11.setLimitActivities(arr[3]);
+            profile11.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile11);
 
@@ -498,6 +574,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile12.setDiagnosedAge(arr[1]);
             profile12.setReceivedTreatment(arr[2]);
             profile12.setLimitActivities(arr[3]);
+            profile12.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile12);
 
@@ -514,6 +591,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile13.setDiagnosedAge(arr[1]);
             profile13.setReceivedTreatment(arr[2]);
             profile13.setLimitActivities(arr[3]);
+            profile13.setSpecifyDisease(arr[4]);
         }
         diseasesProfilesArray.add(profile13);
 
@@ -530,14 +608,17 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             profile14.setDiagnosedAge(arr[1]);
             profile14.setReceivedTreatment(arr[2]);
             profile14.setLimitActivities(arr[3]);
+            profile14.setSpecifyDisease(arr[4]);
         }
-//        profile14.setSpecifyDisease(arr[4]);
         diseasesProfilesArray.add(profile14);
 
         setRecyclerView(isEditable);
 
     }
 
+    /**
+     * Description : Converts the Disease Profile object into a single list
+     */
     private String getDiseaseList(int position){
         List<String> disease = new ArrayList<>();
         disease.add(diseasesProfile.get(position).getDiagnosed());
@@ -554,6 +635,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         return diseaseStr;
     }
 
+    /**
+     * Description : Prepare the data in the format to send it to the server.
+     */
     private DiseasesProfilePostRequest getDiseaseProfileData(){
         DiseasesProfilePostRequest diseasesProfilePostRequest = new DiseasesProfilePostRequest();
         diseasesProfilePostRequest.setUser_pri_id(mithraUtility.getSharedPreferencesData(participantsProfileScreen, participantsProfileScreen.getString(R.string.primaryID), participantsProfileScreen.getString(R.string.participantPrimaryID)));
@@ -647,6 +731,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         return diseasesProfilePostRequest;
     }
 
+    /**
+     * Description : Server call to post the disease profile data entered by the user.
+     */
     private void callServerPostDiseasesProfile(){
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile";
         DiseasesProfilePostRequest diseasesProfilePostRequest = getDiseaseProfileData();
@@ -655,6 +742,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         requestObject.postDiseaseProfileDetails(getActivity(), diseasesProfilePostRequest, url);
     }
 
+    /**
+     * Description : Server call to update the tracking details table with the disease profile ID received from server after successfully storing the disease profile data on the database.
+     */
     private void callUpdateTrackingDetails(String diseaseProfileName){
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/tracking/" + trackingName;
         UpdateDiseaseProfileTracking trackingParticipantStatus = new UpdateDiseaseProfileTracking();
@@ -668,6 +758,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         requestObject.putTrackingStatusDiseaseProfile(getActivity(), trackingParticipantStatus, url);
     }
 
+    /**
+     * Description : Server call to get the disease profile data of one participant with Disease Profile ID.
+     */
     private void callGetIndividualDiseaseProfileDetails() {
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile/" + trackingParticipantStatus.getDisease_profile();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
@@ -675,6 +768,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         requestObject.getParticipantDiseaseProfileDetails(getActivity(), url);
     }
 
+    /**
+     * Description : Server call to update the disease profile data after the user edits.
+     */
     private void callServerUpdateDiseaseProfileDetails() {
         String url = "http://"+ participantsProfileScreen.getString(R.string.base_url)+ "/api/resource/disease_profile/" +  trackingParticipantStatus.getDisease_profile();
         DiseasesProfilePostRequest diseasesProfilePostRequest = getDiseaseProfileData();
@@ -696,13 +792,20 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             if(isEditable!=null && isEditable.equals("true")){
                 if (frappeResponse != null && frappeResponse.getDoctype().equals("disease_profile")) {
                     String registrationName = frappeResponse.getName();
+                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.disease_profile), frappeResponse.getUser_pri_id(), registrationName);
                     callUpdateTrackingDetails(registrationName);
                 } else if (frappeResponse != null && frappeResponse.getDoctype().equals("tracking")) {
                     trackingName = frappeResponse.getName();
                     moveToParticipantsScreen();
+                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID));
+                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.tracking), frappeResponse.getUser_pri_id());
+                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.registration), frappeResponse.getUser_pri_id());
+                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.socio_demography), frappeResponse.getUser_pri_id());
+                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.disease_profile), frappeResponse.getUser_pri_id());
                 }
             }else{
                 if(isEditable!=null && isEditable.equals("reEdit")){
+                    editButton.setBackgroundResource(R.drawable.yes_no_button);
                     Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
                 }
                 Type typeDiseaseProfile = new TypeToken<DiseasesProfilePostRequest>(){}.getType();
@@ -713,9 +816,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 getDiseasesProfileArrayList();
             }
         }else{
-            //Do nothing
             Log.i("RegistrationFragment", "JsonObjectRegistration data is Empty");
-        }    }
+        }
+    }
 
     @Override
     public void responseReceivedFailure(String message) {
@@ -731,13 +834,12 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         super.onConfigurationChanged(newConfig);
 
         Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
-            participantsProfileScreen.isLanguageSelected = "kn";
+            ParticipantProfileScreen.isLanguageSelected = "kn";
         }else{
-            participantsProfileScreen.isLanguageSelected = "en";
+            ParticipantProfileScreen.isLanguageSelected = "en";
         }
 
         if(diagnosedAgeTV!=null){

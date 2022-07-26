@@ -67,7 +67,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private HashMap<String, String> surveyPHQ9 = new HashMap<>();
     private ArrayList<ParticipantAnswers> surveyAnswers = new ArrayList<>();
     private final MithraUtility mithraUtility = new MithraUtility();
-    private String selectedLanguage = "1", strSelectedOption = "null", lastAnsweredQuestionNumber;
+    private String selectedLanguage = "1", strSelectedOption = "null";
     private String postAnswers = "";
     private  MediaPlayer mediaPlayerAudio;
 
@@ -96,7 +96,6 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         SurveyPostRequest surveyAnswersPostReq = gson.fromJson(surveyAnswersJson, listType);
         if(surveyAnswersPostReq!=null){
             ArrayList<ParticipantAnswers> answersArrayList = surveyAnswersPostReq.getAnswer();
-            lastAnsweredQuestionNumber = answersArrayList.get(answersArrayList.size()-1).getQuestion_no();
             surveyAnswers = answersArrayList;
             for(int i = 0; i < surveyAnswers.size(); i++){
                 postAnswers += getAnswersList(i, surveyAnswers) + ",";
@@ -104,7 +103,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                     postAnswers = postAnswers.substring(0, postAnswers.length()-1);
                 }
             }
-            questionIndex = Integer.parseInt(lastAnsweredQuestionNumber);
+            questionIndex = answersArrayList.size();
             totalScore = Integer.parseInt(surveyAnswersPostReq.getScore());
             surveyStartDateTime = surveyAnswersPostReq.getSurvey_start(); // should it be updated or same?
         }
@@ -551,7 +550,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             if(selectedLanguage.equals("1")){
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_e());
                 totalQuestions.setText("of " + questionArray.size() +"");
-                questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+                questionNumber.setText(String.valueOf(questionIndex + 1));
                 option_oneTV.setText(questionArray.get(questionIndex).getOption_1_e());
                 option_twoTV.setText(questionArray.get(questionIndex).getOption_2_e());
                 option_threeTV.setText(questionArray.get(questionIndex).getOption_3_e());
@@ -561,7 +560,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             }else{
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
                 totalQuestions.setText("of " + questionArray.size() +"");
-                questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+                questionNumber.setText(String.valueOf(questionIndex + 1));
                 option_oneTV.setText(questionArray.get(questionIndex).getOption_1_k());
                 option_twoTV.setText(questionArray.get(questionIndex).getOption_2_k());
                 option_threeTV.setText(questionArray.get(questionIndex).getOption_3_k());
@@ -795,7 +794,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             if(selectedLanguage.equals("1")){
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_e());
                 totalQuestions.setText("of " + questionArray.size() +"");
-                questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+                questionNumber.setText(String.valueOf(questionIndex + 1));
                 option_oneTV.setText(questionArray.get(questionIndex).getOption_1_e());
                 option_twoTV.setText(questionArray.get(questionIndex).getOption_2_e());
                 option_threeTV.setText(questionArray.get(questionIndex).getOption_3_e());
@@ -805,7 +804,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             }else{
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
                 totalQuestions.setText("of " + questionArray.size() +"");
-                questionNumber.setText(questionArray.get(questionIndex).getQn_number());
+                questionNumber.setText(String.valueOf(questionIndex + 1));
                 option_oneTV.setText(questionArray.get(questionIndex).getOption_1_k());
                 option_twoTV.setText(questionArray.get(questionIndex).getOption_2_k());
                 option_threeTV.setText(questionArray.get(questionIndex).getOption_3_k());

@@ -28,10 +28,8 @@ import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 import com.example.mithraapplication.R;
 import com.example.mithraapplication.ServerRequestAndResponse;
-import com.example.mithraapplication.VideoScreen;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
@@ -40,7 +38,7 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
     private Context context;
     private ArrayList<SingleVideo> singleVideoArrayList;
     private int pos = 0;
-    private MithraUtility mithraUtility = new MithraUtility();
+    private final MithraUtility mithraUtility = new MithraUtility();
 
     @NonNull
     @Override
@@ -75,10 +73,6 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
             holder.videoStatusIcon.setImageDrawable(context.getDrawable(R.drawable.pending_icon));
             holder.videoCardView.setEnabled(false);
             holder.imageOverlayCardView.setVisibility(View.VISIBLE);
-
-//            RenderEffect blurEffect = RenderEffect.createBlurEffect(16, 16, Shader.TileMode.MIRROR);
-//            holder.videoCardView.setRenderEffect(blurEffect);
-//            Blurry.with(context).sampling(2).onto(holder.videoCardView);
         }
 
         if(singleVideoArrayList.get(position).isVideoPlayed()){
@@ -89,6 +83,9 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
 
     }
 
+    /**
+     * Description : This method is used to download video file from the server if it is not already downloaded
+     */
     private void downloadFileFromServer(ViewHolder holder){
         String path = context.getFilesDir().getAbsolutePath() + "/" + "file.mp4";
         File file = new File(path);
@@ -102,6 +99,9 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
         }
     }
 
+    /**
+     * Description : This method is used to generate the thumbnail for the video file
+     */
     private Bitmap generateThumbnailForVideo(){
         Bitmap thumb = null;
         String path = context.getFilesDir().getAbsolutePath() + "/" + "file.mp4";
@@ -115,16 +115,16 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
         return thumb;
     }
 
+    /**
+     * Description : This method is used to move to the FullScreenVideoView activity to play video in full screen.
+     */
     private void onClickOfVideoPlayButton(ViewHolder holder, SingleVideo singleVideo) {
-        holder.videoCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, FullScreenVideoView.class);
-                intent.putExtra("ModulePosition", pos);
-                intent.putExtra("VideoPosition", holder.getAbsoluteAdapterPosition());
-                intent.putExtra("VideoPath", context.getFilesDir().getAbsolutePath() + "/" + "file.mp4");
-                context.startActivity(intent);
-            }
+        holder.videoCardView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, FullScreenVideoView.class);
+            intent.putExtra("ModulePosition", pos);
+            intent.putExtra("VideoPosition", holder.getAbsoluteAdapterPosition());
+            intent.putExtra("VideoPath", context.getFilesDir().getAbsolutePath() + "/" + "file.mp4");
+            context.startActivity(intent);
         });
     }
 

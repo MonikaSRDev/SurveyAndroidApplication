@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class ParticipantScreenAdapter extends RecyclerView.Adapter<ParticipantScreenAdapter.ViewHolder> {
 
-    private ArrayList<RegisterParticipant> participantArrayList = new ArrayList<>();
+    private ArrayList<RegisterParticipant> participantArrayList;
     private Context context;
-    private onItemClickListener itemClickListener;
+    private final onItemClickListener itemClickListener;
 
     @NonNull
     @Override
@@ -42,12 +42,7 @@ public class ParticipantScreenAdapter extends RecyclerView.Adapter<ParticipantSc
         holder.participantDetailsAge.setText(participantDetails.getParticipantAge());
         holder.participantDetailsVillage.setText(participantDetails.getParticipantVillageName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClickListener.onItemClick(participantDetails);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> itemClickListener.onItemClick(participantDetails));
 
     }
 
