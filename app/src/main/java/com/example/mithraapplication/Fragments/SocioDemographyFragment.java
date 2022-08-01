@@ -70,14 +70,18 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         RegisterViews(view);
         if(trackingParticipantStatus!=null && trackingParticipantStatus.getSocio_demography()!=null) {
             if(isEditable!= null && !isEditable.equals("true")){
+                editButton.setEnabled(true);
+                editButton.setVisibility(View.VISIBLE);
                 callGetIndividualSocioDemographyDetails();
             }
         }else{
             isEditable = "true";
             editButton.setEnabled(false);
+            editButton.setVisibility(View.GONE);
         }
         if(isEditable!= null && isEditable.equals("false")){
             nextButton.setEnabled(false);
+            nextButton.setVisibility(View.INVISIBLE);
             nextButton.setText(R.string.next);
             nextButton.setBackgroundResource(R.drawable.inputs_background);
             nextButton.setTextColor(getResources().getColor(R.color.text_color));
@@ -738,13 +742,15 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             public void onClick(View v) {
                 if(isEditable!=null && isEditable.equals("false")){
                     editButton.setBackgroundResource(R.drawable.status_button);
-                    nextButton.setText(R.string.update);
+                    nextButton.setVisibility(View.VISIBLE);
+                    nextButton.setText(R.string.next);
                     nextButton.setBackgroundResource(R.drawable.button_background);
                     nextButton.setTextColor(getResources().getColor(R.color.white));
                     isEditable = "reEdit";
                     setEditable();
                 }else if(isEditable!=null && isEditable.equals("reEdit")){
                     editButton.setBackgroundResource(R.drawable.yes_no_button);
+                    nextButton.setVisibility(View.INVISIBLE);
                     nextButton.setText(R.string.next);
                     nextButton.setBackgroundResource(R.drawable.inputs_background);
                     nextButton.setTextColor(getResources().getColor(R.color.text_color));
@@ -766,6 +772,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking/" + trackingName;
         UpdateSocioDemographyTracking trackingParticipantStatus = new UpdateSocioDemographyTracking();
         trackingParticipantStatus.setSocio_demography(socioDemographyName);
+        trackingParticipantStatus.setEnroll("66");
         trackingParticipantStatus.setModified_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
@@ -821,6 +828,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
                 socioDemographyDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeSocioDemography);
                 trackingParticipantStatus.setUser_pri_id(socioDemographyDetails.getUser_pri_id());
                 editButton.setEnabled(true);
+                nextButton.setVisibility(View.INVISIBLE);
                 isEditable = "false";
                 setEditable();
             }

@@ -31,4 +31,14 @@
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="scrollbar_shape_style">
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadeScrollbars">false</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scroll_bar_thumb</item>
+        <item name="android:scrollbarTrackVertical">@drawable/scroll_bar_track</item>
+        <item name="android:scrollbarSize">10dp</item>
+    </style>
 </resources>

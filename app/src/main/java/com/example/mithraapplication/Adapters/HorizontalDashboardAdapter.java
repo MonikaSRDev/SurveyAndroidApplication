@@ -40,9 +40,9 @@ public class HorizontalDashboardAdapter extends RecyclerView.Adapter<HorizontalD
         ParticipantStatus participantStatus = participantStatusArrayList.get(position);
 
         holder.statusNameTV.setText(participantStatus.getStatusName());
-        holder.completeValTV.setText(participantStatus.getCompleted());
-        holder.pendingValTV.setText(participantStatus.getPending());
-        holder.totalValTV.setText(participantStatus.getTotal());
+        holder.completeValTV.setText(participantStatus.getEnroll_completed());
+        holder.pendingValTV.setText(participantStatus.getEnroll_remaining());
+        holder.totalValTV.setText(participantStatus.getEnroll_total());
 
         holder.completedLinearLayout.setOnClickListener(v -> itemClickListener.onItemClick(holder.completeTV.getText().toString()));
 

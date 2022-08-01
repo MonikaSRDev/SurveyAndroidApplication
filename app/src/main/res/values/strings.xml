@@ -29,7 +29,8 @@
     <string name="diagnosed_age">How old were you when this was diagnosed?</string>
     <string name="specify_disease">Specify other disease</string>
     <string name="kannada">ಕನ್ನಡ</string>
-    <string name="base_url" translatable="false">192.168.2.156</string>
+<!--    <string name="base_url" translatable="false">192.168.2.156</string>-->
+    <string name="base_url" translatable="false">43.205.146.90</string>
     <string name="mp_token" translatable="false">token 2559f591d98ea66:9e2cdc0890cc4eb</string>
     <string name="mc_token" translatable="false">token c043b3fae600f17:b7d57f73ccc6f7e</string>
     <string name="participate_name" translatable="false">Participate 1</string>
@@ -166,5 +167,6 @@
     <string name="update">Update</string>
     <string name="not_eligible_text">Regret to say that you are not eligible for the Survey</string>
     <string name="ok">Ok</string>
+    <string name="phq_screening">PHQ Screening</string>
 
 </resources>

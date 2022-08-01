@@ -1,13 +1,17 @@
 package com.example.mithraapplication;
 
 import android.app.admin.DeviceAdminService;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.LocaleList;
+import android.provider.Telephony;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mithraapplication.Adapters.DashboardVerticalParticipantsAdapter;
 import com.example.mithraapplication.Adapters.HorizontalDashboardAdapter;
 import com.example.mithraapplication.Adapters.VerticalVideoModulesAdapter;
+import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.example.mithraapplication.ModelClasses.ParticipantStatus;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
@@ -43,16 +48,18 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     private Button englishButtonDashboard, kannadaButtonDashboard;
     private RecyclerView horizontalRecyclerView, verticalRecyclerView;
     private TextView dashboardTitleTV, dashboardTVDashboard, participantTVDashboard, coordinatorNameTVDashboard, villageNameDashboardTV,
-            participantIDDashboard, participantDetailsDashboard, participantEnrollmentStatusDashboard, participantSurveyStatusDashboard, participantModuleStatusDashboard, participantReferralStatusDashboard;
-    private LinearLayout dashboardLinearLayout, participantLinearLayout;
-    private ImageView mithraLogoDashboard, coordinatorProfileDashboard, notificationsIconDashboard, dashboardIconDashboard;
+            participantIDDashboard, participantDetailsDashboard, participantEnrollmentStatusDashboard, participantSurveyStatusDashboard,
+            participantModuleStatusDashboard, participantReferralStatusDashboard, addParticipantTV, PHQTextView;
+    private LinearLayout dashboardLinearLayout, participantLinearLayout, PHQLinearLayout;
+    private ImageView mithraLogoDashboard, coordinatorProfileDashboard, notificationsIconDashboard, dashboardIconDashboard, addParticipantIcon, PHQScreeningIcon;
     private MithraUtility mithraUtility = new MithraUtility();
     private ArrayList<ParticipantStatus> participantStatusArrayList = new ArrayList<>();
     private HorizontalDashboardAdapter horizontalDashboardAdapter;
     private DashboardVerticalParticipantsAdapter dashboardVerticalParticipantsAdapter;
-    private FloatingActionButton floatingActionButton;
+//    private FloatingActionButton floatingActionButton;
     private ArrayList<TrackingParticipantStatus> trackingParticipantStatusArrayList = new ArrayList<>();
-    private ArrayList<RegisterParticipant> registerParticipantsArrayList = new ArrayList<>();
+    private ArrayList<ParticipantDetails> registerParticipantsArrayList = new ArrayList<>();
+    private ArrayList<ParticipantDetails> oldParticipantsArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +67,18 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         setContentView(R.layout.activity_dashboard_screen);
         RegisterViews();
         callGetCardDetails();
-        callGetAllParticipantsDetails();
-        callGetFilteredData();
+//        callGetAllParticipantsDetails();
+        callGetParticipantDetails();
         setOnClickForParticipants();
         onClickOfLanguageButton();
         onClickFloatingAddNewParticipantButton();
         getCurrentLocale();
+        onClickOfPHQScreening();
+
+        mithraLogoDashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardScreen.this, QuestionnaireSingleScreen.class);
+            startActivity(intent);
+        });
     }
 
     private void initializeData(ParticipantStatus participantStatus){
@@ -75,27 +88,27 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
 
         ParticipantStatus participantStatus1 = new ParticipantStatus();
         participantStatus1.setStatusName("Survey Status");
-        participantStatus1.setCompleted("90");
-        participantStatus1.setPending("70");
-        participantStatus1.setTotal("160");
+        participantStatus1.setEnroll_completed("90");
+        participantStatus1.setEnroll_remaining("70");
+        participantStatus1.setEnroll_total("160");
 
         ParticipantStatus participantStatus2 = new ParticipantStatus();
         participantStatus2.setStatusName("Priority Status");
-        participantStatus2.setCompleted("90");
-        participantStatus2.setPending("70");
-        participantStatus2.setTotal("160");
+        participantStatus2.setEnroll_completed("90");
+        participantStatus2.setEnroll_remaining("70");
+        participantStatus2.setEnroll_total("160");
 
         ParticipantStatus participantStatus3 = new ParticipantStatus();
         participantStatus3.setStatusName("Module Status");
-        participantStatus3.setCompleted("90");
-        participantStatus3.setPending("70");
-        participantStatus3.setTotal("160");
+        participantStatus3.setEnroll_completed("90");
+        participantStatus3.setEnroll_remaining("70");
+        participantStatus3.setEnroll_total("160");
 
         ParticipantStatus participantStatus4 = new ParticipantStatus();
         participantStatus4.setStatusName("Referral Status");
-        participantStatus4.setCompleted("90");
-        participantStatus4.setPending("70");
-        participantStatus4.setTotal("160");
+        participantStatus4.setEnroll_completed("90");
+        participantStatus4.setEnroll_remaining("70");
+        participantStatus4.setEnroll_total("160");
 
         participantStatusArrayList.add(participantStatus);
         participantStatusArrayList.add(participantStatus1);
@@ -141,7 +154,18 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         dashboardIconDashboard = findViewById(R.id.dashboardIconDashboard);
         dashboardIconDashboard.setImageDrawable(getResources().getDrawable(R.drawable.dashboard_icon_black));
 
-        floatingActionButton = findViewById(R.id.floatingActionButtonDashboard);
+        addParticipantTV = findViewById(R.id.addNewParticipantTVDashboard);
+        addParticipantTV.setVisibility(View.GONE);
+        addParticipantIcon = findViewById(R.id.addParticipantIconDashboard);
+        addParticipantIcon.setVisibility(View.GONE);
+
+        PHQLinearLayout = findViewById(R.id.phqScreeningLLDashboard);
+        PHQTextView = findViewById(R.id.phqScreeningTVDashboard);
+        PHQScreeningIcon = findViewById(R.id.phqScreeningIconDashboard);
+
+//        floatingActionButton = findViewById(R.id.floatingActionButtonDashboard);
+//        floatingActionButton.setEnabled(false);
+//        floatingActionButton.hide();
 
     }
 
@@ -150,14 +174,13 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
             @Override
             public void onItemClick(String participantStatus) {
                 if(participantStatus.equalsIgnoreCase("complete")){
-//                    List<RegisterParticipant> registerParticipants = getCompletedParticipantList(registerParticipantsArrayList, trackingParticipantStatusArrayList);
-//                    setVerticalRecyclerView(new ArrayList<>(registerParticipants));
-                    Toast.makeText(DashboardScreen.this, "Complete Clicked", Toast.LENGTH_LONG).show();
+                    ArrayList<ParticipantDetails> participantDetails = getCompletedParticipantList(registerParticipantsArrayList);
+                    setVerticalRecyclerView(participantDetails);
                 }else if(participantStatus.equalsIgnoreCase("pending")){
-                    Toast.makeText(DashboardScreen.this, "Pending Clicked", Toast.LENGTH_LONG).show();
+                    ArrayList<ParticipantDetails> participantDetails = getPendingParticipantList(registerParticipantsArrayList);
+                    setVerticalRecyclerView(participantDetails);
                 }else{
                     setVerticalRecyclerView(registerParticipantsArrayList);
-                    Toast.makeText(DashboardScreen.this, "Total Clicked", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -167,11 +190,11 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
 
     }
 
-    private void setVerticalRecyclerView(ArrayList<RegisterParticipant> participantArrayList){
+    private void setVerticalRecyclerView(ArrayList<ParticipantDetails> participantArrayList){
         dashboardVerticalParticipantsAdapter = new DashboardVerticalParticipantsAdapter(this, participantArrayList, new DashboardVerticalParticipantsAdapter.onItemClickListener() {
             @Override
-            public void onItemClick(RegisterParticipant registerParticipant) {
-                moveToParticipantDetailsScreen(registerParticipant);
+            public void onItemClick(ParticipantDetails participantDetails) {
+                moveToParticipantDetailsScreen(participantDetails);
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -181,28 +204,41 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     }
 
     @NonNull
-    public static List<RegisterParticipant> getCompletedParticipantList(ArrayList<RegisterParticipant> registerParticipantArrayList, ArrayList<TrackingParticipantStatus> trackingParticipantStatus)
+    public static ArrayList<ParticipantDetails> getCompletedParticipantList(ArrayList<ParticipantDetails> participantDetailsArrayList)
     {
-//        return registerParticipantArrayList.stream()
-//                .filter(one -> trackingParticipantStatus.stream()
-//                        .anyMatch(two -> two.getName().equals(one.getName())))
-//                .collect(Collectors.toList());
-
-        List<RegisterParticipant> listOneList = registerParticipantArrayList.stream()
-                .filter(two -> trackingParticipantStatus.stream()
-                        .anyMatch(one -> one.getRegistration().equals(two.getName())))
-                .collect(Collectors.toList());
-        return listOneList;
+        return participantDetailsArrayList.stream()
+                .filter(participantDetails -> participantDetails.getEnroll().equalsIgnoreCase("yes")).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private void moveToParticipantDetailsScreen(RegisterParticipant registerParticipant){
+    @NonNull
+    public static ArrayList<ParticipantDetails> getPendingParticipantList(ArrayList<ParticipantDetails> participantDetailsArrayList)
+    {
+        return participantDetailsArrayList.stream()
+                .filter(participantDetails -> participantDetails.getEnroll().equalsIgnoreCase("no")).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private void moveToParticipantDetailsScreen(ParticipantDetails participantDetails){
         Intent participantIntent = new Intent(DashboardScreen.this, DashboardParticipantDetailsScreen.class);
-        participantIntent.putExtra("RegisterParticipant Array", (Serializable) registerParticipant);
+        participantIntent.putExtra("RegisterParticipant Array", (Serializable) participantDetails);
         startActivity(participantIntent);
     }
 
+    private void moveToPHQScreeningPage(){
+        Intent participantIntent = new Intent(DashboardScreen.this, PHQ9ScreeningScreen.class);
+        startActivity(participantIntent);
+    }
+
+    private void onClickOfPHQScreening(){
+        PHQLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveToPHQScreeningPage();
+            }
+        });
+    }
+
     private void onClickFloatingAddNewParticipantButton() {
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        addParticipantIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DashboardScreen.this, ParticipantProfileScreen.class);
@@ -310,14 +346,21 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     }
 
     private void callGetCardDetails(){
-        String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.tracking.api.enroll";
+        String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.tracking.api.card_data";
         ServerRequestAndResponse serverRequestAndResponse = new ServerRequestAndResponse();
         serverRequestAndResponse.setHandleServerResponse(this);
         serverRequestAndResponse.getCardDetails(DashboardScreen.this, url);
     }
 
-    private void callGetFilteredData(){
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"enroll\", \"=\", \"" + "yes" + "\"]]";
+//    private void callGetFilteredData(){
+//        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"enroll\", \"=\", \"" + "yes" + "\"]]";
+//        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+//        requestObject.setHandleServerResponse(this);
+//        requestObject.getTrackingDetails(DashboardScreen.this, url);
+//    }
+
+    private void callGetParticipantDetails(){
+        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.tracking.api.enrollstatus";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.getTrackingDetails(DashboardScreen.this, url);
@@ -326,15 +369,20 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     @Override
     public void responseReceivedSuccessfully(String message) {
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
+        Type type = new TypeToken<ArrayList<ParticipantDetails>>(){}.getType();
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
         if(jsonObject.get("message")!=null){
             try{
                 registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
+                oldParticipantsArrayList = registerParticipantsArrayList;
                 if(registerParticipantsArrayList.size() == 0){
-                    floatingActionButton.setVisibility(View.GONE);
+//                    floatingActionButton.setVisibility(View.GONE);
+                    addParticipantTV.setVisibility(View.VISIBLE);
+                    addParticipantIcon.setVisibility(View.VISIBLE);
                 }else{
-                    floatingActionButton.setVisibility(View.VISIBLE);
+//                    floatingActionButton.setVisibility(View.VISIBLE);
+                    addParticipantTV.setVisibility(View.GONE);
+                    addParticipantIcon.setVisibility(View.GONE);
                     setVerticalRecyclerView(registerParticipantsArrayList);
                 }
             }catch(Exception e){
@@ -359,5 +407,14 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

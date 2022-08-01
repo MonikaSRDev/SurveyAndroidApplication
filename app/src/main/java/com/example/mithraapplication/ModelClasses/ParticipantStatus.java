@@ -4,10 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class ParticipantStatus extends JsonServerObject{
     private String statusName = "NULL";
-    private String completed = "NULL";
-    @SerializedName("remaining")
-    private String pending = "NULL";
-    private String total = "NULL";
+    private String enroll_completed = "NULL";
+    private String enroll_remaining = "NULL";
+    private String enroll_total = "NULL";
 
     public String getStatusName() {
         return statusName;
@@ -17,27 +16,27 @@ public class ParticipantStatus extends JsonServerObject{
         this.statusName = statusName;
     }
 
-    public String getCompleted() {
-        return completed;
+    public String getEnroll_completed() {
+        return enroll_completed;
     }
 
-    public void setCompleted(String completed) {
-        this.completed = completed;
+    public void setEnroll_completed(String enroll_completed) {
+        this.enroll_completed = enroll_completed;
     }
 
-    public String getPending() {
-        return pending;
+    public String getEnroll_remaining() {
+        return enroll_remaining;
     }
 
-    public void setPending(String pending) {
-        this.pending = pending;
+    public void setEnroll_remaining(String enroll_remaining) {
+        this.enroll_remaining = enroll_remaining;
     }
 
-    public String getTotal() {
-        return total;
+    public String getEnroll_total() {
+        return enroll_total;
     }
 
-    public void setTotal(String total) {
-        this.total = total;
+    public void setEnroll_total(String enroll_total) {
+        this.enroll_total = enroll_total;
     }
 }

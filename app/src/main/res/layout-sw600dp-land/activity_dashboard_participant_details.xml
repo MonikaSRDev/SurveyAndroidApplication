@@ -506,7 +506,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/survey_high_priority_icon" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -534,7 +534,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/survey_high_priority_icon" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -562,7 +562,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/survey_medium_priority_icon" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -590,7 +590,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/survey_high_priority_icon" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -650,7 +650,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/module_not_completed" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -678,7 +678,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/module_not_completed" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -706,7 +706,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/module_not_completed" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -734,7 +734,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/module_not_completed" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -762,7 +762,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/module_not_completed" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -790,7 +790,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/module_not_completed" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -818,7 +818,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/module_not_completed" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -846,7 +846,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:padding="5dp"
-                            android:src="@drawable/completed_icon" />
+                            android:src="@drawable/module_not_completed" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

@@ -1,12 +1,15 @@
 package com.example.mithraapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.LocaleList;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,12 +18,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,8 +41,8 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     private ImageView preScreeningIV, registrationIV, socioDemographyIV, diseaseProfileIV;
     private ImageView mithraLogoDashboard, coordinatorProfileDashboard, notificationsIconDashboard, dashboardIconDashboard;
     private MithraUtility mithraUtility = new MithraUtility();
-    private RegisterParticipant registerParticipant;
-    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = new ArrayList<>();
+    private ParticipantDetails participantDetails;
+//    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         setContentView(R.layout.activity_dashboard_participant_details);
         RegisterViews();
         getIntentData();
-        callGetParticipantTrackingDetails();
+//        callGetParticipantTrackingDetails();
         onClickOfDashboard();
         setOnClickForParticipants();
         getCurrentLocale();
@@ -96,32 +101,41 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if(extras!=null){
-            registerParticipant = (RegisterParticipant) intent.getSerializableExtra("RegisterParticipant Array");
+            participantDetails = (ParticipantDetails) intent.getSerializableExtra("RegisterParticipant Array");
+            setParticipantDetails();
         }
     }
 
     private void setParticipantDetails(){
-        participantName.setText(registerParticipant.getParticipantName());
-        participantAge.setText(registerParticipant.getParticipantAge());
-        participantPhoneNum.setText(registerParticipant.getParticipantPhoneNumber());
-        participantPanchayat.setText(registerParticipant.getParticipantPanchayat());
-        participantSHG.setText(registerParticipant.getParticipantSHGAssociation());
-        participantVillage.setText(registerParticipant.getParticipantVillageName());
+        participantName.setText(participantDetails.getFull_name());
+        participantAge.setText(participantDetails.getAge());
+        String phoneNum = null;
+        Phonenumber.PhoneNumber phoneNumber = mithraUtility.getCountryCodeAndNumber(participantDetails.getMobile_number());
+        if(phoneNumber!=null){
+            phoneNum = phoneNumber.getCountryCode() + String.valueOf(phoneNumber.getNationalNumber());
+            participantPhoneNum.setText(phoneNum);
+        }else{
+            participantPhoneNum.setText(participantDetails.getMobile_number());
+        }
 
-        if(trackingParticipantStatus!=null && trackingParticipantStatus.size()!=0){
-            if(trackingParticipantStatus.get(0).getRegistration()!=null && !trackingParticipantStatus.get(0).getRegistration().equalsIgnoreCase("null")){
+        participantPanchayat.setText(participantDetails.getPanchayat());
+        participantSHG.setText(participantDetails.getShg_associate());
+        participantVillage.setText(participantDetails.getVillage_name());
+
+        if(participantDetails!=null){
+            if(participantDetails.getRegistration()!=null && !participantDetails.getRegistration().equalsIgnoreCase("null")){
                 preScreeningIV.setImageDrawable(getDrawable(R.drawable.completed_icon));
                 registrationIV.setImageDrawable(getDrawable(R.drawable.completed_icon));
             }else{
                 preScreeningIV.setImageDrawable(getDrawable(R.drawable.error_icon));
                 registrationIV.setImageDrawable(getDrawable(R.drawable.error_icon));
             }
-            if(trackingParticipantStatus.get(0).getSocio_demography()!=null && !trackingParticipantStatus.get(0).getSocio_demography().equalsIgnoreCase("null")){
+            if(participantDetails.getSocio_demography()!=null && !participantDetails.getSocio_demography().equalsIgnoreCase("null")){
                 socioDemographyIV.setImageDrawable(getDrawable(R.drawable.completed_icon));
             }else{
                 socioDemographyIV.setImageDrawable(getDrawable(R.drawable.error_icon));
             }
-            if(trackingParticipantStatus.get(0).getDisease_profile()!=null && !trackingParticipantStatus.get(0).getDisease_profile().equalsIgnoreCase("null")){
+            if(participantDetails.getDisease_profile()!=null && !participantDetails.getDisease_profile().equalsIgnoreCase("null")){
                 diseaseProfileIV.setImageDrawable(getDrawable(R.drawable.completed_icon));
             }else{
                 diseaseProfileIV.setImageDrawable(getDrawable(R.drawable.error_icon));
@@ -157,7 +171,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     }
 
     private void callGetParticipantTrackingDetails(){
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"user_pri_id\", \"=\", \"" + registerParticipant.getUser_pri_id() + "\"]]";
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"user_pri_id\", \"=\", \"" + participantDetails.getUser_pri_id() + "\"]]";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.getTrackingDetails(DashboardParticipantDetailsScreen.this, url);
@@ -169,8 +183,8 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         Type type = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
         try{
-            trackingParticipantStatus = gson.fromJson(jsonObject.get("data"), type);
-            setParticipantDetails();
+//            trackingParticipantStatus = gson.fromJson(jsonObject.get("data"), type);
+//            setParticipantDetails();
         }catch(Exception e){
             Toast.makeText(DashboardParticipantDetailsScreen.this, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
         }
@@ -257,5 +271,14 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

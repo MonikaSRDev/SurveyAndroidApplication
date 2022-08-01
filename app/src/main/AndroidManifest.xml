@@ -63,10 +63,21 @@
         <activity
             android:name=".ParticipantProfileScreen"
             android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:configChanges="locale"/>
 
         <activity
             android:name=".DashboardParticipantDetailsScreen"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="locale"/>
+
+        <activity
+            android:name=".QuestionnaireSingleScreen"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="locale"/>
+
+        <activity
+            android:name=".PHQ9ScreeningScreen"
             android:screenOrientation="sensorLandscape"
             android:configChanges="locale"/>
 

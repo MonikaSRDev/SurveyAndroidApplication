@@ -2,6 +2,8 @@ package com.example.mithraapplication;
 
 import static com.example.mithraapplication.Fragments.RegistrationFragment.trackingName;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -10,9 +12,12 @@ import android.os.LocaleList;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,13 +53,14 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
 
     public Button englishButtonProfile, kannadaButtonProfile, profileEditButton;
     private TextView profileTitleTV, dashboardTVProfile, participantTVProfile, coordinatorNameTVProfile, profileParticipantName;
-    private LinearLayout dashboardLinearLayoutProfile, participantLinearLayoutProfile;
+    private LinearLayout dashboardLinearLayoutProfile, participantLinearLayoutProfile, socioDemographyLinearLayout;
     private ImageView mithraLogoProfile, coordinatorProfile, notificationsIconProfile, participantsIconParticipant;
     private TabLayout profileTabLayout;
     private FrameLayout profileFrameLayout;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private Fragment fragment = null;
+    private ConstraintLayout constraintlayout;
     private MithraUtility mithraUtility = new MithraUtility();
     public static String isLanguageSelected = "en";
     private RegisterParticipant registerParticipant = new RegisterParticipant();
@@ -107,6 +114,28 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         profileParticipantName = findViewById(R.id.profileParticipantName);
         profileEditButton = findViewById(R.id.profileEditButton);
         setVisibilityForEdit(false);
+
+//        constraintlayout = findViewById(R.id.mainConstrainLayoutProfile);
+//        constraintlayout.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(getCurrentFocus()!=null){
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+//                }
+//                return false;
+//            }
+//        });
+//
+//        profileFrameLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(getCurrentFocus()!=null){
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+//                }
+//            }
+//        });
     }
 
     private void disableTab(int tabNumber)
@@ -186,7 +215,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 previousTab = tab.getPosition();
-//                checkIfEditable(previousTab);
             }
 
             @Override
@@ -317,6 +345,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             case 4:
                 fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant);
                 profileEditButton.setText(R.string.status);
+                profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData4 = profileTabLayout.getTabAt(position);
                 assert tabData4 != null;
                 tabData4.select();
@@ -496,5 +525,36 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        if (getCurrentFocus() != null) {
+//            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+//        }
+//        return super.dispatchTouchEvent(ev);
+//    }
+//
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        View view = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (view instanceof EditText) {
+            View w = getCurrentFocus();
+            int scrcoords[] = new int[2];
+            w.getLocationOnScreen(scrcoords);
+            float x = event.getRawX() + w.getLeft() - scrcoords[0];
+            float y = event.getRawY() + w.getTop() - scrcoords[1];
+
+            if (event.getAction() == MotionEvent.ACTION_UP
+                    && (x < w.getLeft() || x >= w.getRight()
+                    || y < w.getTop() || y > w.getBottom()) ) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+        return ret;
     }
 }

@@ -44,6 +44,8 @@
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
+                android:nextFocusDown="@id/participantAgeET"
+                android:imeOptions="actionNext"
                 android:textSize="14sp" />
 
             <TextView
@@ -130,7 +132,9 @@
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/participantPhoneNumberET"/>
 
             <TextView
                 android:id="@+id/phoneNumberTV"
@@ -172,7 +176,9 @@
                     android:padding="10dp"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/hint_text_color"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/participantUserNameET"/>
 
             </LinearLayout>
 
@@ -277,7 +283,10 @@
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@id/participantPasswordET"
+                android:cursorVisible="true"/>
 
             <Button
                 android:id="@+id/createNewPasswordButton"
@@ -316,7 +325,9 @@
                 android:padding="10dp"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/hint_text_color"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@id/participantConfirmPasswordET"/>
 
             <TextView
                 android:id="@+id/confirmPasswordTV"
@@ -335,9 +346,10 @@
                 android:layout_marginTop="2dp"
                 android:background="@drawable/inputs_background"
                 android:ems="10"
-                android:maxLength="12"
                 android:fontFamily="@font/open_sans"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
+                android:maxLength="12"
                 android:minHeight="48dp"
                 android:padding="10dp"
                 android:textColor="@color/text_color"

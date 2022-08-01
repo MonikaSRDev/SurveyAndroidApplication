@@ -2,11 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/socioDemographyFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="500dp"
     android:background="@color/screen_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/socioDemographyConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/screen_background"
@@ -18,14 +20,20 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ScrollView
+            android:id="@+id/socioDemographyscrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            style="@style/scrollbar_shape_style"
+            android:descendantFocusability="beforeDescendants"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
+                android:id="@+id/socioDemographyLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -768,6 +776,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/hint_text_color"
                         android:textSize="12sp"
+                        android:nextFocusDown="@id/familyChildMembersET"
+                        android:imeOptions="actionNext"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/familyAdultMembersTV"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -810,6 +820,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/hint_text_color"
                         android:textSize="12sp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusRight="@id/familyIncomeET"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/familyChildMembersTV"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -847,6 +859,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/hint_text_color"
                         android:textSize="12sp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/earningMemberET"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/familyIncomeTV"
                         app:layout_constraintTop_toTopOf="parent"
@@ -891,6 +905,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/hint_text_color"
                         android:textSize="12sp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusRight="@id/associationDurationET"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/earningMemberTV"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -927,6 +943,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/hint_text_color"
                         android:textSize="12sp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/SHGMeetingsET"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/associationDurationTV"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -971,6 +989,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/hint_text_color"
                         android:textSize="12sp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusRight="@id/nearestPHCET"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/SHGMeetingsTV"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -1009,6 +1029,7 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/hint_text_color"
                         android:textSize="12sp"
+                        android:imeOptions="actionDone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/nearestPHCTV"
                         app:layout_constraintTop_toTopOf="parent" />

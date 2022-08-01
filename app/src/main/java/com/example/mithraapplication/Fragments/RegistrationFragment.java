@@ -88,11 +88,14 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         callGetLocationsForParticipant();
         if(trackingParticipantStatus!=null && trackingParticipantStatus.getRegistration()!=null){
             if(isEditable!= null && !isEditable.equals("true")){
+                editButton.setEnabled(true);
+                editButton.setVisibility(View.VISIBLE);
                 callGetIndividualParticipantDetails();
             }
         }else{
             isEditable = "true";
             editButton.setEnabled(false);
+            editButton.setVisibility(View.GONE);
         }
         onClickRegisterButton();
         getSelectedGender();
@@ -171,6 +174,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             maleButton.setEnabled(true);
             femaleButton.setEnabled(true);
             othersButton.setEnabled(true);
+            createButton.setVisibility(View.VISIBLE);
             createButton.setEnabled(true);
             createButton.setTextColor(getResources().getColor(R.color.white));
             createButton.setBackgroundResource(R.drawable.button_background);
@@ -191,7 +195,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
             participantPhoneNumberET.setFocusable(false);
             participantPhoneNumberET.setClickable(false);
-            Phonenumber.PhoneNumber phoneNumber = getCountryCodeAndNumber(registerParticipantDetails.getParticipantPhoneNumber());
+            Phonenumber.PhoneNumber phoneNumber = mithraUtility.getCountryCodeAndNumber(registerParticipantDetails.getParticipantPhoneNumber());
             if(phoneNumber!=null){
                 participantCountryCode = String.valueOf(phoneNumber.getCountryCode());
                 participantPhoneNum = String.valueOf(phoneNumber.getNationalNumber());
@@ -216,6 +220,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createButton.setTextColor(getResources().getColor(R.color.text_color));
             createButton.setText(R.string.create);
             createButton.setBackgroundResource(R.drawable.inputs_background);
+            createButton.setVisibility(View.INVISIBLE);
             createNewPasswordButton.setVisibility(View.VISIBLE);
             createNewPasswordButton.setEnabled(false);
 
@@ -240,7 +245,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             participantPhoneNumberET.setFocusable(true);
             participantPhoneNumberET.setClickable(true);
             participantPhoneNumberET.setFocusableInTouchMode(true);
-            Phonenumber.PhoneNumber phoneNumber = getCountryCodeAndNumber(registerParticipantDetails.getParticipantPhoneNumber());
+            Phonenumber.PhoneNumber phoneNumber = mithraUtility.getCountryCodeAndNumber(registerParticipantDetails.getParticipantPhoneNumber());
             if(phoneNumber!=null){
                 participantCountryCode = String.valueOf(phoneNumber.getCountryCode());
                 participantPhoneNum = String.valueOf(phoneNumber.getNationalNumber());
@@ -265,8 +270,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             maleButton.setEnabled(true);
             femaleButton.setEnabled(true);
             othersButton.setEnabled(true);
+            createButton.setVisibility(View.VISIBLE);
             createButton.setEnabled(true);
-            createButton.setText(R.string.update);
+            createButton.setText(R.string.create);
             createButton.setTextColor(getResources().getColor(R.color.white));
             createButton.setBackgroundResource(R.drawable.button_background);
             createNewPasswordButton.setVisibility(View.VISIBLE);
@@ -343,17 +349,6 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             }
         });
 
-    }
-
-    private Phonenumber.PhoneNumber getCountryCodeAndNumber(String phoneNumber){
-        PhoneNumberUtil pnu = PhoneNumberUtil.getInstance();
-        Phonenumber.PhoneNumber pn = null;
-        try{
-            pn = pnu.parse(phoneNumber, "IN");
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return pn;
     }
 
     private void onClickOfCreateNewPassword(){
@@ -513,7 +508,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         trackingParticipantStatus.setUser_pri_id(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
         trackingParticipantStatus.setRegistration(registrationName);
         trackingParticipantStatus.setActive("yes");
-        trackingParticipantStatus.setEnroll("no");
+        trackingParticipantStatus.setEnroll("33");
         trackingParticipantStatus.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);

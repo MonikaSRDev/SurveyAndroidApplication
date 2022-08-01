@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -50,6 +53,17 @@ public class MithraUtility extends Application {
     public String getCurrentTime(){
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        String strDate = sdf.format(c.getTime());
+        Log.d("MithraUtility","getCurrentTime : " + strDate);
+        return strDate;
+    }
+
+    /**
+     * Description : Get the current time of the user device for calculation of duration taken to complete the survey
+     */
+    public String getCurrentDate(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = sdf.format(c.getTime());
         Log.d("MithraUtility","getCurrentTime : " + strDate);
         return strDate;
@@ -106,10 +120,21 @@ public class MithraUtility extends Application {
         return seconds;
     }
 
-    private void hideKeyboard(Context context, View view){
+    public void hideKeyboard(Context context, View view){
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public Phonenumber.PhoneNumber getCountryCodeAndNumber(String phoneNumber){
+        PhoneNumberUtil pnu = PhoneNumberUtil.getInstance();
+        Phonenumber.PhoneNumber pn = null;
+        try{
+            pn = pnu.parse(phoneNumber, "IN");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return pn;
     }
 }

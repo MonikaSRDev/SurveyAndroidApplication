@@ -1,16 +1,20 @@
 package com.example.mithraapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.UserLogin;
@@ -28,6 +32,7 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
     private TextView welcomeTV;
     private Button signInButton;
     private MithraUtility mithraUtility = new MithraUtility();
+    private ConstraintLayout constraintlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,18 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
 
         welcomeTV = findViewById(R.id.welcomeTV);
         signInButton = findViewById(R.id.signInButton);
+
+        constraintlayout = findViewById(R.id.constraintLayoutLoginScreen);
+        constraintlayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(getCurrentFocus()!=null){
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -173,3 +190,5 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
 //        signInButton.setText(R.string.sign_in);
 //    }
 }
+
+

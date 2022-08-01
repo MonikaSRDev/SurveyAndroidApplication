@@ -50,7 +50,7 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
             residentYesButton, residentNoButton, CBOMeetingYesButton, CBOMeetingNoButton,
             exclusionYesButton, exclusionNoButton, mentalIllnessYesButton, mentalIllnessNoButton,
             substanceAbuseYesButton, substanceAbuseNoButton, suicideAttemptYesButton, suicideAttemptNoButton,
-            participationConsentYesButton, participationConsentNoButton, screeningRegisterButton;
+            participationConsentYesButton, participationConsentNoButton, screeningRegisterButton, editButton;
 
     private TextView inclusionTV, ageAboveEighteenTV, residentTV, CBOMeetingTV, exclusionTV, mentalIllnessTV,
             substanceAbuseTV, suicideAttemptTV, participationConsentTV;
@@ -78,9 +78,15 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         getUserEnteredData();
         onClickRegisterButton();
         if(isEditable!=null && isEditable.equals("true")){
+            editButton.setEnabled(false);
+            editButton.setVisibility(View.GONE);
             setEditable(true);
+            screeningRegisterButton.setVisibility(View.VISIBLE);
         }else{
+            editButton.setEnabled(true);
+            editButton.setVisibility(View.VISIBLE);
             setEditable(false);
+            screeningRegisterButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -123,6 +129,7 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
         participationConsentNoButton = view.findViewById(R.id.participationConsentNoButton);
 
         screeningRegisterButton = view.findViewById(R.id.screeningRegisterButton);
+        editButton = requireActivity().findViewById(R.id.profileEditButton);
 
     }
 
@@ -557,7 +564,14 @@ public class ScreeningFragment extends Fragment implements HandleServerResponse 
 
     @Override
     public void responseReceivedFailure(String message) {
-
+        Log.i("Message", "Failure");
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        String serverErrorResponse = jsonObject.get("exc_type").toString();
+        if(serverErrorResponse.contains("ValidationError")){
+            Toast.makeText(getActivity(), "Please give all the details.", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getActivity(), "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

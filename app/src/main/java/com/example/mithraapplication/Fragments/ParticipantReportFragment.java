@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -127,11 +128,12 @@ public class ParticipantReportFragment extends Fragment implements AdapterView.O
         EditText userSHGET = customLayout.findViewById(R.id.userSHGETPopup);
         userSHGET.setText(registerParticipant.getParticipantSHGAssociation());
         userCurrentStatusSpinner = customLayout.findViewById(R.id.userCurrentStatusSpinnerPopup);
-        userStatusAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, userStatus);
-        userStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userStatusAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, userStatus);
+//        userStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userCurrentStatusSpinner.setAdapter(userStatusAdapter);
         userCurrentStatusSpinner.setOnItemSelectedListener(this);
         Button saveButton = customLayout.findViewById(R.id.saveCurrentStatusButton);
+        ImageView closeButton = customLayout.findViewById(R.id.closeAlertButtonPopup);
 
         dialog  = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -146,6 +148,11 @@ public class ParticipantReportFragment extends Fragment implements AdapterView.O
         dialog.show();
 
         saveButton.setOnClickListener(v -> {
+            statusButton.setBackgroundResource(R.drawable.edit_button_background);
+            dialog.dismiss();
+        });
+
+        closeButton.setOnClickListener(v -> {
             statusButton.setBackgroundResource(R.drawable.edit_button_background);
             dialog.dismiss();
         });

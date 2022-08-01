@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutQS"
+        android:layout_width="166dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/vertical_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/appLogoQS"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/mithra_logo" />
+
+        <LinearLayout
+            android:id="@+id/dashboardLinearLayoutQS"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="80dp"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.686"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appLogoQS">
+
+            <ImageView
+                android:id="@+id/dashboardIconQS"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
+                app:srcCompat="@drawable/dashboard_icon" />
+
+            <TextView
+                android:id="@+id/dashboardTVQS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
+                android:text="@string/dashboard"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/participantLinearLayoutQS"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.627"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dashboardLinearLayoutQS"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/participantsIconQS"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
+                app:srcCompat="@drawable/participants_icon" />
+
+            <TextView
+                android:id="@+id/participantsTVQS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
+                android:text="@string/participants"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <!--        <Button-->
+        <!--            android:id="@+id/logoutButtonDashboard"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="28dp"-->
+        <!--            android:textAllCaps="false"-->
+        <!--            android:text="Logout"-->
+        <!--            android:elevation="10dp"-->
+        <!--            android:background="@drawable/rounded_corners"-->
+        <!--            android:textColor="@color/text_color"-->
+        <!--            android:fontFamily="@font/open_sans_semibold"-->
+        <!--            android:drawableLeft="@drawable/logout_icon"-->
+        <!--            android:paddingStart="5dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="0.205"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutQS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="40dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/languageLinearLayoutQS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="30dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/englishButtonQS"
+                android:layout_width="93dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/left_english_toggle_selected_button"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:text="@string/english"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/kannadaButtonQS"
+                android:layout_width="93dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/right_kannada_toggle_button"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:text="@string/kannada"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/notificationsLogoQS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:padding="10dp"
+            app:srcCompat="@drawable/notification_icon" />
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/coordinatorProfileQS"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/coordinator_profile" />
+
+        <TextView
+            android:id="@+id/coordinatorNameTVQS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Jessica Jones"
+            android:textColor="@color/text_color"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/questionnaireCV"
+        android:layout_width="1060dp"
+        android:layout_height="630dp"
+        app:cardBackgroundColor="@color/screen_background"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutQS"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutQS">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/questionnaireRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

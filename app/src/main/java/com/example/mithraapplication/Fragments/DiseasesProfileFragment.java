@@ -86,20 +86,24 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         startProgressBar();
         if(trackingParticipantStatus!=null && trackingParticipantStatus.getDisease_profile()!=null) {
             if(isEditable!= null && !isEditable.equals("true")){
+                editButton.setEnabled(true);
+                editButton.setVisibility(View.VISIBLE);
                 callGetIndividualDiseaseProfileDetails();
             }
         }else{
             isEditable = "true";
             editButton.setEnabled(false);
+            editButton.setVisibility(View.GONE);
             setRecyclerView(isEditable);
         }
         if(isEditable!= null && isEditable.equals("false")){
-            nextDiseaseProfileButton.setEnabled(false);
-            nextDiseaseProfileButton.setText(R.string.save);
-            nextDiseaseProfileButton.setBackgroundResource(R.drawable.inputs_background);
-            nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.text_color));
+            nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
+//            nextDiseaseProfileButton.setEnabled(false);
+//            nextDiseaseProfileButton.setText(R.string.save);
+//            nextDiseaseProfileButton.setBackgroundResource(R.drawable.inputs_background);
+//            nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.text_color));
         }
-        nextDiseaseProfileButton.setEnabled(isEditable != null && !isEditable.equalsIgnoreCase("false"));
+//        nextDiseaseProfileButton.setEnabled(isEditable != null && !isEditable.equalsIgnoreCase("false"));
         onClickOfNextButton();
         setOnclickOfEditButton();
 
@@ -293,7 +297,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             public void onLayoutCompleted(final RecyclerView.State state) {
                 super.onLayoutCompleted(state);
                 stopProgressBar();
-                nextDiseaseProfileButton.setVisibility(View.VISIBLE);
+                if(isEditable!=null && isEditable.equals("true")){
+                    nextDiseaseProfileButton.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -317,14 +323,16 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             if(isEditable!=null && isEditable.equals("false")){
                 editButton.setBackgroundResource(R.drawable.status_button);
                 isEditable = "reEdit";
+                nextDiseaseProfileButton.setVisibility(View.VISIBLE);
                 nextDiseaseProfileButton.setEnabled(true);
-                nextDiseaseProfileButton.setText(R.string.update);
+                nextDiseaseProfileButton.setText(R.string.save);
                 nextDiseaseProfileButton.setBackgroundResource(R.drawable.button_background);
                 nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.white));
                 setRecyclerView(isEditable);
             }else if(isEditable!=null && isEditable.equals("reEdit")){
                 editButton.setBackgroundResource(R.drawable.yes_no_button);
                 isEditable = "false";
+                nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
                 nextDiseaseProfileButton.setEnabled(false);
                 nextDiseaseProfileButton.setText(R.string.save);
                 nextDiseaseProfileButton.setBackgroundResource(R.drawable.inputs_background);
@@ -812,6 +820,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 diseasesProfileDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeDiseaseProfile);
                 trackingParticipantStatus.setUser_pri_id(diseasesProfileDetails.getUser_pri_id());
                 isEditable = "false";
+                nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
                 editButton.setEnabled(true);
                 getDiseasesProfileArrayList();
             }

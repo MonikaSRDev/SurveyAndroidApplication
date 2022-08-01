@@ -15,5 +15,7 @@
     <color name="activity_text_color">#85CA53</color>
     <color name="video_duration">#A0A0A0</color>
     <color name="colorAccent">#FF9F00</color>
+    <color name="enrollmentStatusColor">#F9582D</color>
+    <color name="surveyStatusColor">#51459E</color>
 
 </resources>

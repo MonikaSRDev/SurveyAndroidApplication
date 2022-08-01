@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/linear_gradient_color">
@@ -62,7 +63,6 @@
             android:layout_height="48dp"
             android:orientation="horizontal"
             android:gravity="start"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.627"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +84,38 @@
                 android:layout_marginStart="13dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/participants"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/phqScreeningLLDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.627"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/participantLinearLayoutDashboard"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/phqScreeningIconDashboard"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="18dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/participants_icon" />
+
+            <TextView
+                android:id="@+id/phqScreeningTVDashboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/phq_screening"
                 android:textColor="@color/white" />
 
         </LinearLayout>
@@ -367,6 +399,35 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <ImageView
+                    android:id="@+id/addParticipantIconDashboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:foregroundGravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.499"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/dashboardVerticalRV"
+                    app:srcCompat="@drawable/add_participant_icon" />
+
+                <TextView
+                    android:id="@+id/addNewParticipantTVDashboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:text="@string/add_new_participant_text"
+                    android:textColor="@color/text_color"
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/dashboardVerticalRV"
+                    app:layout_constraintEnd_toEndOf="@+id/dashboardVerticalRV"
+                    app:layout_constraintHorizontal_bias="0.499"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/addParticipantIconDashboard"
+                    app:layout_constraintVertical_bias="0.018" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/dashboardVerticalRV"
                     android:layout_width="match_parent"
@@ -379,7 +440,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/columnLLDashboardCV"
-                    app:layout_constraintVertical_bias="0.03" />
+                    app:layout_constraintVertical_bias="0.163" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -400,22 +461,23 @@
         app:layout_constraintStart_toEndOf="@+id/constraintLayoutDashboard"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButtonDashboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:clickable="true"
-        android:contentDescription="FAB"
-        android:elevation="0dp"
-        android:focusable="true"
-        android:scaleType="fitCenter"
-        app:backgroundTint="@android:color/holo_blue_light"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.946"
-        app:srcCompat="@drawable/plus_button" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/floatingActionButtonDashboard"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        android:clickable="true"-->
+<!--        android:contentDescription="FAB"-->
+<!--        android:elevation="0dp"-->
+<!--        android:focusable="true"-->
+<!--        android:scaleType="fitCenter"-->
+<!--        app:backgroundTint="@android:color/holo_blue_light"-->
+<!--        android:visibility="invisible"-->
+<!--        app:fabSize="normal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.946"-->
+<!--        app:srcCompat="@drawable/plus_button" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
