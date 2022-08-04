@@ -1,5 +1,6 @@
 package com.example.mithraapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -53,25 +54,19 @@ public class VideoFeedbackScreen extends AppCompatActivity {
     }
 
     private void onClickOfBackButton(){
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VideoFeedbackScreen.this, VideoScreen.class);
-                intent.putExtra("FromActivity", "VideoFeedbackScreen");
-                startActivity(intent);
-                finish();
-            }
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(VideoFeedbackScreen.this, VideoScreen.class);
+            intent.putExtra("FromActivity", "VideoFeedbackScreen");
+            startActivity(intent);
+            finish();
         });
     }
 
     private void onClickOfLogoutButton(){
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VideoFeedbackScreen.this, LoginScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        logoutButton.setOnClickListener(v -> {
+            Intent intent = new Intent(VideoFeedbackScreen.this, LoginScreen.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -79,26 +74,20 @@ public class VideoFeedbackScreen extends AppCompatActivity {
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
+        englishButton.setOnClickListener(v -> {
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("en");
         });
 
-        kannadaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
+        kannadaButton.setOnClickListener(v -> {
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("kn");
         });
     }
 
@@ -141,7 +130,7 @@ public class VideoFeedbackScreen extends AppCompatActivity {
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         logoutTV.setText(R.string.logout);
         backTV.setText(R.string.back);

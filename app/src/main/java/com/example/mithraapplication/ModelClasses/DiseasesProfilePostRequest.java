@@ -1,7 +1,5 @@
 package com.example.mithraapplication.ModelClasses;
 
-import java.util.List;
-
 public class DiseasesProfilePostRequest extends  JsonServerObject{
     private String user_pri_id = "NULL";
     private String diabetes_mellitus;

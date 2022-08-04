@@ -63,7 +63,6 @@
             android:layout_height="48dp"
             android:gravity="start"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.627"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +87,39 @@
                 android:textColor="@color/white" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/phqScreeningLLDP"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.627"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/participantLinearLayoutDP"
+            app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/phqScreeningIconDP"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="18dp"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/participants_icon" />
+
+        <TextView
+            android:id="@+id/phqScreeningTVDP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/phq_screening"
+            android:textColor="@color/white" />
+
+        </LinearLayout>
+
 
         <!--        <Button-->
         <!--            android:id="@+id/logoutButtonDashboard"-->
@@ -499,14 +531,42 @@
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:id="@+id/phq9IconDP"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_margin="5dp"
-                            android:padding="5dp"
-                            android:src="@drawable/survey_high_priority_icon" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp">
+
+                            <ImageView
+                                android:id="@+id/phq9IconDP"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/survey_high_priority_icon"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/PHQ9DaysTVDP"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/open_sans_semibold"
+                                android:gravity="center"
+                                android:text="3"
+                                android:layout_marginStart="5dp"
+                                android:textColor="#F44336"
+                                android:textSize="12sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/phq9IconDP"
+                                app:layout_constraintEnd_toEndOf="@+id/phq9IconDP"
+                                app:layout_constraintHorizontal_bias="0.194"
+                                app:layout_constraintStart_toStartOf="@+id/phq9IconDP"
+                                app:layout_constraintTop_toTopOf="@+id/phq9IconDP"
+                                app:layout_constraintVertical_bias="0.47" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -527,14 +587,41 @@
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:id="@+id/badsIconDP"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_margin="5dp"
-                            android:padding="5dp"
-                            android:src="@drawable/survey_high_priority_icon" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp">
+
+                            <ImageView
+                                android:id="@+id/badsIconDP"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/survey_high_priority_icon"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/BADSDaysTVDP"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/open_sans_semibold"
+                                android:gravity="center"
+                                android:text="3"
+                                android:layout_marginStart="5dp"
+                                android:textColor="#F44336"
+                                android:textSize="12sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/badsIconDP"
+                                app:layout_constraintEnd_toEndOf="@+id/badsIconDP"
+                                app:layout_constraintHorizontal_bias="0.194"
+                                app:layout_constraintStart_toStartOf="@+id/badsIconDP"
+                                app:layout_constraintTop_toTopOf="@+id/badsIconDP"
+                                app:layout_constraintVertical_bias="0.47" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -555,14 +642,42 @@
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:id="@+id/quidsIconDP"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_margin="5dp"
-                            android:padding="5dp"
-                            android:src="@drawable/survey_medium_priority_icon" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp">
+
+                            <ImageView
+                                android:id="@+id/quidsIconDP"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/survey_medium_priority_icon"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/QUIDSDaysTVDP"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/open_sans_semibold"
+                                android:gravity="center"
+                                android:text="12"
+                                android:layout_marginStart="3dp"
+                                android:textColor="#FFC107"
+                                android:textSize="12sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/quidsIconDP"
+                                app:layout_constraintEnd_toEndOf="@+id/quidsIconDP"
+                                app:layout_constraintHorizontal_bias="0.194"
+                                app:layout_constraintStart_toStartOf="@+id/quidsIconDP"
+                                app:layout_constraintTop_toTopOf="@+id/quidsIconDP"
+                                app:layout_constraintVertical_bias="0.47" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -583,14 +698,43 @@
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:id="@+id/whodasIconDP"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_margin="5dp"
-                            android:padding="5dp"
-                            android:src="@drawable/survey_high_priority_icon" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp">
+
+                            <ImageView
+                                android:id="@+id/whodasIconDP"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/survey_low_priority_icon"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/WHODASDaysTVDP"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/open_sans_semibold"
+                                android:gravity="center"
+                                android:text="18"
+                                android:layout_marginStart="3dp"
+                                android:textColor="#8BC34A"
+                                android:textSize="12sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/whodasIconDP"
+                                app:layout_constraintEnd_toEndOf="@+id/whodasIconDP"
+                                app:layout_constraintHorizontal_bias="0.194"
+                                app:layout_constraintStart_toStartOf="@+id/whodasIconDP"
+                                app:layout_constraintTop_toTopOf="@+id/whodasIconDP"
+                                app:layout_constraintVertical_bias="0.47" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                     </LinearLayout>
                 </LinearLayout>
 

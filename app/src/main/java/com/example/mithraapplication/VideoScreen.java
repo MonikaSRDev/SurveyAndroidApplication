@@ -1,5 +1,6 @@
 package com.example.mithraapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,11 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.LocaleList;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +21,6 @@ import com.example.mithraapplication.Adapters.VerticalVideoModulesAdapter;
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 import com.example.mithraapplication.ModelClasses.VideoModules;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -164,26 +161,20 @@ public class VideoScreen extends AppCompatActivity implements HandleServerRespon
     }
 
     private void onClickOfBackButton(){
-        backButtonVP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VideoScreen.this, ParticipantLandingScreen.class);
-                intent.putExtra("FromActivity", "VideoScreen");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
+        backButtonVP.setOnClickListener(v -> {
+            Intent intent = new Intent(VideoScreen.this, ParticipantLandingScreen.class);
+            intent.putExtra("FromActivity", "VideoScreen");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
     }
 
     private void onClickOfLogoutButton(){
-        logoutButtonVP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VideoScreen.this, LoginScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        logoutButtonVP.setOnClickListener(v -> {
+            Intent intent = new Intent(VideoScreen.this, LoginScreen.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -191,28 +182,22 @@ public class VideoScreen extends AppCompatActivity implements HandleServerRespon
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-                verticalVideoModulesAdapter.notifyDataSetChanged();
-            }
+        englishButton.setOnClickListener(v -> {
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("en");
+            verticalVideoModulesAdapter.notifyDataSetChanged();
         });
 
-        kannadaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-                verticalVideoModulesAdapter.notifyDataSetChanged();
-            }
+        kannadaButton.setOnClickListener(v -> {
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("kn");
+            verticalVideoModulesAdapter.notifyDataSetChanged();
         });
     }
 
@@ -255,7 +240,7 @@ public class VideoScreen extends AppCompatActivity implements HandleServerRespon
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         logoutTV.setText(R.string.logout);
         backTV.setText(R.string.back);

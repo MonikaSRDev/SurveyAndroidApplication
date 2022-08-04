@@ -5,7 +5,6 @@ import static com.example.mithraapplication.ParticipantProfileScreen.participant
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +21,8 @@ import androidx.fragment.app.Fragment;
 import com.example.mithraapplication.HandleServerResponse;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
-import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.SocioDemography;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
-import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
 import com.example.mithraapplication.ModelClasses.UpdateSocioDemographyTracking;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
@@ -36,7 +33,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 public class SocioDemographyFragment extends Fragment implements HandleServerResponse {
 
@@ -335,7 +331,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
 
     private void getYearsOfEducation(){
         noSchoolingButton.setOnClickListener(v -> {
-            participantSchooling = noSchoolingButton.getText().toString();
+            participantSchooling = "No Schooling";
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -345,7 +341,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         lessThanFiveButton.setOnClickListener(v -> {
-            participantSchooling = lessThanFiveButton.getText().toString();
+            participantSchooling = "<5";
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -355,7 +351,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         fiveToSevenButton.setOnClickListener(v -> {
-            participantSchooling = fiveToSevenButton.getText().toString();
+            participantSchooling = "5-7";
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -365,7 +361,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         eightToNineButton.setOnClickListener(v -> {
-            participantSchooling = eightToNineButton.getText().toString();
+            participantSchooling = "8-9";
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -375,7 +371,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         tenToElevenButton.setOnClickListener(v -> {
-            participantSchooling = tenToElevenButton.getText().toString();
+            participantSchooling = "10-11";
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -385,7 +381,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         twelveOrMoreButton.setOnClickListener(v -> {
-            participantSchooling = twelveOrMoreButton.getText().toString();
+            participantSchooling = "12 or more";
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -397,7 +393,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
 
     private void getOccupation(){
         professionalButton.setOnClickListener(v -> {
-            participantOccupation = professionalButton.getText().toString();
+            participantOccupation = "Professional";
             professionalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -407,7 +403,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         clericalButton.setOnClickListener(v -> {
-            participantOccupation = clericalButton.getText().toString();
+            participantOccupation = "Clerical";
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -417,7 +413,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         salesAndServicesButton.setOnClickListener(v -> {
-            participantOccupation = salesAndServicesButton.getText().toString();
+            participantOccupation = "Sales and Services";
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -427,7 +423,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         skilledManualButton.setOnClickListener(v -> {
-            participantOccupation = skilledManualButton.getText().toString();
+            participantOccupation = "Skilled Manual";
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -437,7 +433,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         unskilledManualButton.setOnClickListener(v -> {
-            participantOccupation = unskilledManualButton.getText().toString();
+            participantOccupation = "Unskilled Manual";
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -447,7 +443,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         agricultureButton.setOnClickListener(v -> {
-            participantOccupation = agricultureButton.getText().toString();
+            participantOccupation = "Agriculture";
             professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -459,7 +455,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
 
     private void getReligion(){
         hinduButton.setOnClickListener(v -> {
-            participantReligion = hinduButton.getText().toString();
+            participantReligion = "Hindu";
             hinduButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -471,7 +467,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         muslimButton.setOnClickListener(v -> {
-            participantReligion = muslimButton.getText().toString();
+            participantReligion = "Muslim";
             hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             muslimButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -483,7 +479,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         christianButton.setOnClickListener(v -> {
-            participantReligion = christianButton.getText().toString();
+            participantReligion = "Christian";
             hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             christianButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -495,7 +491,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         sikhButton.setOnClickListener(v -> {
-            participantReligion = sikhButton.getText().toString();
+            participantReligion = "Sikh";
             hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -507,7 +503,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         buddhistButton.setOnClickListener(v -> {
-            participantReligion = buddhistButton.getText().toString();
+            participantReligion = "Buddhist/Neo buddhist";
             hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -519,7 +515,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         jainButton.setOnClickListener(v -> {
-            participantReligion = jainButton.getText().toString();
+            participantReligion = "Jain";
             hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -531,7 +527,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         otherReligionButton.setOnClickListener(v -> {
-            participantReligion = otherReligionButton.getText().toString();
+            participantReligion = "Other";
             hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -543,7 +539,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         pNAReligionButton.setOnClickListener(v -> {
-            participantReligion = pNAReligionButton.getText().toString();
+            participantReligion = "Preferred Not to Answer";
             hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -557,7 +553,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
 
     private void getCaste(){
         scheduledCasteButton.setOnClickListener(v -> {
-            participantCaste = scheduledCasteButton.getText().toString();
+            participantCaste = "Scheduled Caste";
             scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -567,7 +563,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         scheduledTribeButton.setOnClickListener(v -> {
-            participantCaste = scheduledTribeButton.getText().toString();
+            participantCaste = "Scheduled Tribe";
             scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -577,7 +573,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         backwardClassesButton.setOnClickListener(v -> {
-            participantCaste = backwardClassesButton.getText().toString();
+            participantCaste = "Other Backward Classes" ;
             scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -587,7 +583,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         doNotKnowCasteButton.setOnClickListener(v -> {
-            participantCaste = doNotKnowCasteButton.getText().toString();
+            participantCaste = "Don't Know";
             scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -597,7 +593,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         otherCasteButton.setOnClickListener(v -> {
-            participantCaste = otherCasteButton.getText().toString();
+            participantCaste = "Other";
             scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -607,7 +603,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         pNACasteButton.setOnClickListener(v -> {
-            participantCaste = pNACasteButton.getText().toString();
+            participantCaste = "Preferred Not to Answer";
             scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -622,7 +618,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
      */
     private void getSelectedMaritalStatus(){
         neverMarriedButton.setOnClickListener(v -> {
-            participantMaritalStatus = neverMarriedButton.getText().toString();
+            participantMaritalStatus = "Never Married";
             neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             marriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             divorcedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -631,7 +627,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         marriedButton.setOnClickListener(v -> {
-            participantMaritalStatus = marriedButton.getText().toString();
+            participantMaritalStatus = "Married";
             neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             marriedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             divorcedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -640,7 +636,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         divorcedButton.setOnClickListener(v -> {
-            participantMaritalStatus = divorcedButton.getText().toString();
+            participantMaritalStatus = "Divorced";
             neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             marriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             divorcedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
@@ -650,7 +646,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         separatedButton.setOnClickListener(v -> {
-            participantMaritalStatus = separatedButton.getText().toString();
+            participantMaritalStatus = "Separated";
             neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             marriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             divorcedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -659,7 +655,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         widowButton.setOnClickListener(v -> {
-            participantMaritalStatus = widowButton.getText().toString();
+            participantMaritalStatus = "Widow";
             neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             marriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             divorcedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -673,13 +669,13 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
      */
     private void getSelectedFamilyType(){
         nuclearFamilyButton.setOnClickListener(v -> {
-            participantFamilyType = nuclearFamilyButton.getText().toString();
+            participantFamilyType = "Nuclear Family";
             nuclearFamilyButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             jointFamilyButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
         });
 
         jointFamilyButton.setOnClickListener(v -> {
-            participantFamilyType = jointFamilyButton.getText().toString();
+            participantFamilyType = "Joint Family";
             nuclearFamilyButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             jointFamilyButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
         });
@@ -737,26 +733,23 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     }
 
     private void setOnclickOfEditButton(){
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isEditable!=null && isEditable.equals("false")){
-                    editButton.setBackgroundResource(R.drawable.status_button);
-                    nextButton.setVisibility(View.VISIBLE);
-                    nextButton.setText(R.string.next);
-                    nextButton.setBackgroundResource(R.drawable.button_background);
-                    nextButton.setTextColor(getResources().getColor(R.color.white));
-                    isEditable = "reEdit";
-                    setEditable();
-                }else if(isEditable!=null && isEditable.equals("reEdit")){
-                    editButton.setBackgroundResource(R.drawable.yes_no_button);
-                    nextButton.setVisibility(View.INVISIBLE);
-                    nextButton.setText(R.string.next);
-                    nextButton.setBackgroundResource(R.drawable.inputs_background);
-                    nextButton.setTextColor(getResources().getColor(R.color.text_color));
-                    isEditable = "false";
-                    setEditable();
-                }
+        editButton.setOnClickListener(v -> {
+            if(isEditable!=null && isEditable.equals("false")){
+                editButton.setBackgroundResource(R.drawable.status_button);
+                nextButton.setVisibility(View.VISIBLE);
+                nextButton.setText(R.string.next);
+                nextButton.setBackgroundResource(R.drawable.button_background);
+                nextButton.setTextColor(getResources().getColor(R.color.white));
+                isEditable = "reEdit";
+                setEditable();
+            }else if(isEditable!=null && isEditable.equals("reEdit")){
+                editButton.setBackgroundResource(R.drawable.yes_no_button);
+                nextButton.setVisibility(View.INVISIBLE);
+                nextButton.setText(R.string.next);
+                nextButton.setBackgroundResource(R.drawable.inputs_background);
+                nextButton.setTextColor(getResources().getColor(R.color.text_color));
+                isEditable = "false";
+                setEditable();
             }
         });
     }

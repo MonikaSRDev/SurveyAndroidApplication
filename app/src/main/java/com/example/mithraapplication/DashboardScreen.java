@@ -1,13 +1,11 @@
 package com.example.mithraapplication;
 
-import android.app.admin.DeviceAdminService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.LocaleList;
-import android.provider.Telephony;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,12 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.Adapters.DashboardVerticalParticipantsAdapter;
 import com.example.mithraapplication.Adapters.HorizontalDashboardAdapter;
-import com.example.mithraapplication.Adapters.VerticalVideoModulesAdapter;
 import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.example.mithraapplication.ModelClasses.ParticipantStatus;
-import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -39,7 +33,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -52,7 +45,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
             participantModuleStatusDashboard, participantReferralStatusDashboard, addParticipantTV, PHQTextView;
     private LinearLayout dashboardLinearLayout, participantLinearLayout, PHQLinearLayout;
     private ImageView mithraLogoDashboard, coordinatorProfileDashboard, notificationsIconDashboard, dashboardIconDashboard, addParticipantIcon, PHQScreeningIcon;
-    private MithraUtility mithraUtility = new MithraUtility();
+    private final MithraUtility mithraUtility = new MithraUtility();
     private ArrayList<ParticipantStatus> participantStatusArrayList = new ArrayList<>();
     private HorizontalDashboardAdapter horizontalDashboardAdapter;
     private DashboardVerticalParticipantsAdapter dashboardVerticalParticipantsAdapter;
@@ -131,7 +124,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
 
         dashboardTitleTV = findViewById(R.id.dashboardTitleTV);
         dashboardTVDashboard = findViewById(R.id.dashboardTVDashboard);
-        dashboardTVDashboard.setTextColor(getResources().getColor(R.color.text_color));
+        dashboardTVDashboard.setTextColor(getResources().getColor(R.color.text_color, DashboardScreen.this.getTheme()));
         participantTVDashboard = findViewById(R.id.participantsTVDashboard);
         coordinatorNameTVDashboard = findViewById(R.id.coordinatorNameTVDashboard);
         String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator));
@@ -152,7 +145,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         coordinatorProfileDashboard = findViewById(R.id.coordinatorProfileDashboard);
         notificationsIconDashboard = findViewById(R.id.notificationsLogoDashboard);
         dashboardIconDashboard = findViewById(R.id.dashboardIconDashboard);
-        dashboardIconDashboard.setImageDrawable(getResources().getDrawable(R.drawable.dashboard_icon_black));
+        dashboardIconDashboard.setImageDrawable(getResources().getDrawable(R.drawable.dashboard_icon_black, DashboardScreen.this.getTheme()));
 
         addParticipantTV = findViewById(R.id.addNewParticipantTVDashboard);
         addParticipantTV.setVisibility(View.GONE);
@@ -170,18 +163,15 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     }
 
     private void setRecyclerView(){
-        horizontalDashboardAdapter = new HorizontalDashboardAdapter(this, participantStatusArrayList, new HorizontalDashboardAdapter.onItemClickListener() {
-            @Override
-            public void onItemClick(String participantStatus) {
-                if(participantStatus.equalsIgnoreCase("complete")){
-                    ArrayList<ParticipantDetails> participantDetails = getCompletedParticipantList(registerParticipantsArrayList);
-                    setVerticalRecyclerView(participantDetails);
-                }else if(participantStatus.equalsIgnoreCase("pending")){
-                    ArrayList<ParticipantDetails> participantDetails = getPendingParticipantList(registerParticipantsArrayList);
-                    setVerticalRecyclerView(participantDetails);
-                }else{
-                    setVerticalRecyclerView(registerParticipantsArrayList);
-                }
+        horizontalDashboardAdapter = new HorizontalDashboardAdapter(this, participantStatusArrayList, participantStatus -> {
+            if(participantStatus.equalsIgnoreCase("complete")){
+                ArrayList<ParticipantDetails> participantDetails = getCompletedParticipantList(registerParticipantsArrayList);
+                setVerticalRecyclerView(participantDetails);
+            }else if(participantStatus.equalsIgnoreCase("pending")){
+                ArrayList<ParticipantDetails> participantDetails = getPendingParticipantList(registerParticipantsArrayList);
+                setVerticalRecyclerView(participantDetails);
+            }else{
+                setVerticalRecyclerView(registerParticipantsArrayList);
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -191,12 +181,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     }
 
     private void setVerticalRecyclerView(ArrayList<ParticipantDetails> participantArrayList){
-        dashboardVerticalParticipantsAdapter = new DashboardVerticalParticipantsAdapter(this, participantArrayList, new DashboardVerticalParticipantsAdapter.onItemClickListener() {
-            @Override
-            public void onItemClick(ParticipantDetails participantDetails) {
-                moveToParticipantDetailsScreen(participantDetails);
-            }
-        });
+        dashboardVerticalParticipantsAdapter = new DashboardVerticalParticipantsAdapter(this, participantArrayList, this::moveToParticipantDetailsScreen);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         verticalRecyclerView.setAdapter(dashboardVerticalParticipantsAdapter);
         verticalRecyclerView.setLayoutManager(linearLayoutManager);
@@ -214,46 +199,37 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
     public static ArrayList<ParticipantDetails> getPendingParticipantList(ArrayList<ParticipantDetails> participantDetailsArrayList)
     {
         return participantDetailsArrayList.stream()
-                .filter(participantDetails -> participantDetails.getEnroll().equalsIgnoreCase("no")).collect(Collectors.toCollection(ArrayList::new));
+                .filter(participantDetails -> !participantDetails.getEnroll().equalsIgnoreCase("yes")).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private void moveToParticipantDetailsScreen(ParticipantDetails participantDetails){
         Intent participantIntent = new Intent(DashboardScreen.this, DashboardParticipantDetailsScreen.class);
         participantIntent.putExtra("RegisterParticipant Array", (Serializable) participantDetails);
         startActivity(participantIntent);
+        finish();
     }
 
     private void moveToPHQScreeningPage(){
-        Intent participantIntent = new Intent(DashboardScreen.this, PHQ9ScreeningScreen.class);
+        Intent participantIntent = new Intent(DashboardScreen.this, PHQ9SHGListScreen.class);
         startActivity(participantIntent);
     }
 
     private void onClickOfPHQScreening(){
-        PHQLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moveToPHQScreeningPage();
-            }
+        PHQLinearLayout.setOnClickListener(v -> moveToPHQScreeningPage());
+    }
+
+    private void setOnClickForParticipants(){
+        participantLinearLayout.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(DashboardScreen.this, CoordinatorSHGList.class);
+            startActivity(loginIntent);
+            finish();
         });
     }
 
     private void onClickFloatingAddNewParticipantButton() {
-        addParticipantIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DashboardScreen.this, ParticipantProfileScreen.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setOnClickForParticipants(){
-        participantLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent loginIntent = new Intent(DashboardScreen.this, ParticipantsScreen.class);
-                startActivity(loginIntent);
-            }
+        addParticipantIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardScreen.this, ParticipantProfileScreen.class);
+            startActivity(intent);
         });
     }
 
@@ -261,26 +237,20 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButtonDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
+        englishButtonDashboard.setOnClickListener(v -> {
+            englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardScreen.this.getTheme()));
+            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardScreen.this.getTheme()));
+            changeLocalLanguage("en");
         });
 
-        kannadaButtonDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
+        kannadaButtonDashboard.setOnClickListener(v -> {
+            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardScreen.this.getTheme()));
+            englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardScreen.this.getTheme()));
+            changeLocalLanguage("kn");
         });
     }
 
@@ -305,14 +275,14 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
             kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardScreen.this.getTheme()));
             englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
-            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardScreen.this.getTheme()));
         }else{
             englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardScreen.this.getTheme()));
             kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardScreen.this.getTheme()));
         }
         res.updateConfiguration(conf, dm);
         onConfigurationChanged(conf);
@@ -323,7 +293,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         dashboardTitleTV.setText(R.string.dashboard);
         participantTVDashboard.setText(R.string.participants);

@@ -1,14 +1,10 @@
 package com.example.mithraapplication;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,7 +13,6 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.Date;
-import java.util.Locale;
 
 public class MithraUtility extends Application {
 

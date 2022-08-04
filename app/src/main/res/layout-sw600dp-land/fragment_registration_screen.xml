@@ -183,17 +183,17 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/panchayatNameTV"
+                android:id="@+id/SHGNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/open_sans_semibold"
-                android:text="@string/panchayat"
+                android:text="@string/shg_association"
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
             <Spinner
-                android:id="@+id/spinnerPanchayat"
+                android:id="@+id/spinnerSHG"
                 android:layout_width="318dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="2dp"
@@ -220,16 +220,16 @@
 
 
             <TextView
-                android:id="@+id/villageNameTV"
+                android:id="@+id/PHQScreeningId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_semibold"
-                android:text="@string/village_name"
+                android:text="@string/phq_screening_id"
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
             <Spinner
-                android:id="@+id/villageNameSpinner"
+                android:id="@+id/PHQScreeningIDSpinner"
                 android:layout_width="318dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="2dp"
@@ -240,17 +240,17 @@
                 android:spinnerMode="dropdown" />
 
             <TextView
-                android:id="@+id/SHGNameTV"
+                android:id="@+id/ManualIDTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/open_sans_semibold"
-                android:text="@string/shg_association"
+                android:text="@string/manual_id"
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
             <Spinner
-                android:id="@+id/spinnerSHG"
+                android:id="@+id/spinnerManualID"
                 android:layout_width="318dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="2dp"

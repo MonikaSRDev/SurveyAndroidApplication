@@ -63,7 +63,6 @@
             android:layout_height="48dp"
             android:gravity="start"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.627"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,6 +84,38 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="13dp"
                 android:text="@string/participants"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/PHQScreeningLinearLayoutParticipant"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.627"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/participantLinearLayoutParticipant"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/PHQScreeningIconParticipant"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="18dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/participants_icon" />
+
+            <TextView
+                android:id="@+id/PHQScreeningTVParticipant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
+                android:text="@string/phq_screening"
                 android:textColor="@color/white" />
 
         </LinearLayout>

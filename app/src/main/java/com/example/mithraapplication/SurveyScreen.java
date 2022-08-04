@@ -5,16 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.LocaleList;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,9 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.mithraapplication.Adapters.HorizontalVideoAdapter;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
 import com.example.mithraapplication.ModelClasses.ParticipantAnswers;
 import com.example.mithraapplication.ModelClasses.PostSurveyQuestions;
@@ -49,8 +46,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import retrofit2.http.Part;
 
 public class SurveyScreen extends AppCompatActivity implements HandleServerResponse, HandleFileDownloadResponse {
 
@@ -300,61 +295,21 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      * Description : Get the option selected by the participant and assign weightage to it.
      */
     private void getSelectedOption(){
-        option1LinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickOfOptionOne();
-            }
-        });
+        option1LinearLayout.setOnClickListener(v -> onClickOfOptionOne());
 
-        option2LinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               onClickOfOptionTwo();
-            }
-        });
+        option2LinearLayout.setOnClickListener(v -> onClickOfOptionTwo());
 
-        option3LinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickOfOptionThree();
-            }
-        });
+        option3LinearLayout.setOnClickListener(v -> onClickOfOptionThree());
 
-        option4LinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickOfOptionFour();
-            }
-        });
+        option4LinearLayout.setOnClickListener(v -> onClickOfOptionFour());
 
-        optionImageButtonOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickOfOptionOne();
-            }
-        });
+        optionImageButtonOne.setOnClickListener(v -> onClickOfOptionOne());
 
-        optionImageButtonTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickOfOptionTwo();
-            }
-        });
+        optionImageButtonTwo.setOnClickListener(v -> onClickOfOptionTwo());
 
-        optionImageButtonThree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickOfOptionThree();
-            }
-        });
+        optionImageButtonThree.setOnClickListener(v -> onClickOfOptionThree());
 
-        optionImageButtonFour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickOfOptionFour();
-            }
-        });
+        optionImageButtonFour.setOnClickListener(v -> onClickOfOptionFour());
     }
 
     private void onClickOfOptionOne() {
@@ -433,45 +388,42 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      * Description : Move to the next question on clicking the next button
      */
     private void onClickNextButton() {
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                surveyPHQ9.put(questionArray.get(questionIndex).getQn_number(), String.valueOf(selectedOptionValue));
-                totalQuestionTime = mithraUtility.getTimeDifferenceSeconds(questionStartTime, questionEndTime);
-                totalScore += selectedOptionValue;
-                ParticipantAnswers participantAnswers = new ParticipantAnswers();
-                participantAnswers.setQuestion_id(questionArray.get(questionIndex).getName());
-                participantAnswers.setQuestion_no(questionArray.get(questionIndex).getQn_number());
-                participantAnswers.setQuestion(questionArray.get(questionIndex).getQuestion_e());
-                participantAnswers.setSelected_answer(strSelectedOption);
-                participantAnswers.setSelected_answer_weightage(String.valueOf(selectedOptionValue));
-                participantAnswers.setQuestion_start_time(questionStartTime);
-                participantAnswers.setQuestion_stop_time(questionEndTime);
-                participantAnswers.setSeconds_taken(totalQuestionTime);
-                surveyAnswers.add(participantAnswers);
-                if(questionIndex < questionArray.size()){
-                    postAnswers = postAnswers + getAnswersList(questionIndex, surveyAnswers) + ",";
-                }else{
-                    postAnswers = postAnswers.substring(0, postAnswers.length()-1);
-                }
-
-                String user_primary_id = mithraUtility.getSharedPreferencesData(SurveyScreen.this, getString(R.string.primaryID), getString(R.string.participantPrimaryID));
-                Gson gson = new Gson();
-                String surveyAnswersJson = gson.toJson(getPostSurveyAnswers());
-                mithraUtility.putSharedPreferencesData(SurveyScreen.this, getString(R.string.survey_answers), user_primary_id, surveyAnswersJson);
-                questionIndex++;
-                setCardData();
-                enableDisableButton(false);
-                option_view_one.setVisibility(View.INVISIBLE);
-                option_view_two.setVisibility(View.INVISIBLE);
-                option_view_three.setVisibility(View.INVISIBLE);
-                option_view_four.setVisibility(View.INVISIBLE);
-
-                option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
-                option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
+        nextButton.setOnClickListener(v -> {
+            surveyPHQ9.put(questionArray.get(questionIndex).getQn_number(), String.valueOf(selectedOptionValue));
+            totalQuestionTime = mithraUtility.getTimeDifferenceSeconds(questionStartTime, questionEndTime);
+            totalScore += selectedOptionValue;
+            ParticipantAnswers participantAnswers = new ParticipantAnswers();
+            participantAnswers.setQuestion_id(questionArray.get(questionIndex).getName());
+            participantAnswers.setQuestion_no(questionArray.get(questionIndex).getQn_number());
+            participantAnswers.setQuestion(questionArray.get(questionIndex).getQuestion_e());
+            participantAnswers.setSelected_answer(strSelectedOption);
+            participantAnswers.setSelected_answer_weightage(String.valueOf(selectedOptionValue));
+            participantAnswers.setQuestion_start_time(questionStartTime);
+            participantAnswers.setQuestion_stop_time(questionEndTime);
+            participantAnswers.setSeconds_taken(totalQuestionTime);
+            surveyAnswers.add(participantAnswers);
+            if(questionIndex < questionArray.size()){
+                postAnswers = postAnswers + getAnswersList(questionIndex, surveyAnswers) + ",";
+            }else{
+                postAnswers = postAnswers.substring(0, postAnswers.length()-1);
             }
+
+            String user_primary_id = mithraUtility.getSharedPreferencesData(SurveyScreen.this, getString(R.string.primaryID), getString(R.string.participantPrimaryID));
+            Gson gson = new Gson();
+            String surveyAnswersJson = gson.toJson(getPostSurveyAnswers());
+            mithraUtility.putSharedPreferencesData(SurveyScreen.this, getString(R.string.survey_answers), user_primary_id, surveyAnswersJson);
+            questionIndex++;
+            setCardData();
+            enableDisableButton(false);
+            option_view_one.setVisibility(View.INVISIBLE);
+            option_view_two.setVisibility(View.INVISIBLE);
+            option_view_three.setVisibility(View.INVISIBLE);
+            option_view_four.setVisibility(View.INVISIBLE);
+
+            option_oneTV.setTextColor(getResources().getColor(R.color.text_color));
+            option_twoTV.setTextColor(getResources().getColor(R.color.text_color));
+            option_threeTV.setTextColor(getResources().getColor(R.color.text_color));
+            option_fourTV.setTextColor(getResources().getColor(R.color.text_color));
         });
     }
 
@@ -511,19 +463,16 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private void onClickOfSpeakerButton(String filepath, String filename){
         String path = getFilesDir().getAbsolutePath() + "/" + filename;
         File file = new File(path);
-        speakerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(file.exists()){
-                    mediaPlayerAudio = MediaPlayer.create(SurveyScreen.this, Uri.parse(path));
-                    if(mediaPlayerAudio.isPlaying()){
-                        mediaPlayerAudio.stop();
-                    }else{
-                        mediaPlayerAudio.start();
-                    }
+        speakerButton.setOnClickListener(v -> {
+            if(file.exists()){
+                mediaPlayerAudio = MediaPlayer.create(SurveyScreen.this, Uri.parse(path));
+                if(mediaPlayerAudio.isPlaying()){
+                    mediaPlayerAudio.stop();
                 }else{
-                    downloadFileFromServer(filepath, filename);
+                    mediaPlayerAudio.start();
                 }
+            }else{
+                downloadFileFromServer(filepath, filename);
             }
         });
     }
@@ -582,17 +531,14 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      * Description : This method is used to wait for few seconds when the alert is showing and the  move to the participant landing screen.
      */
     private void waitAndMoveToAnotherActivity() {
-        new Handler().postDelayed(new Runnable() {
-            // Using handler with postDelayed called runnable run method
-            @Override
-            public void run() {
-                if(dialog.isShowing()){
-                    dialog.dismiss();
-                    Intent loginIntent = new Intent(SurveyScreen.this, ParticipantLandingScreen.class);
-                    loginIntent.putExtra("FromActivity", "SurveyScreen");
-                    startActivity(loginIntent);
-                    finish();
-                }
+        // Using handler with postDelayed called runnable run method
+        new Handler().postDelayed(() -> {
+            if(dialog.isShowing()){
+                dialog.dismiss();
+                Intent loginIntent = new Intent(SurveyScreen.this, ParticipantLandingScreen.class);
+                loginIntent.putExtra("FromActivity", "SurveyScreen");
+                startActivity(loginIntent);
+                finish();
             }
         }, 3*1000);
     }
@@ -718,28 +664,22 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedLanguage = "1";
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
+        englishButton.setOnClickListener(v -> {
+            selectedLanguage = "1";
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("en");
         });
 
-        kannadaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedLanguage = "2";
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
+        kannadaButton.setOnClickListener(v -> {
+            selectedLanguage = "2";
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("kn");
         });
     }
 
@@ -784,7 +724,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         nextButton.setText(R.string.next_question);
         if(congratulationTV!=null){

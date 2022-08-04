@@ -3,22 +3,17 @@ package com.example.mithraapplication.Fragments;
 import static com.example.mithraapplication.ParticipantProfileScreen.participant_primary_ID;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,11 +31,14 @@ import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
 import com.example.mithraapplication.ModelClasses.GetParticipantDetails;
 import com.example.mithraapplication.ModelClasses.Locations;
+import com.example.mithraapplication.ModelClasses.PHQLocations;
+import com.example.mithraapplication.ModelClasses.PHQParticipantDetails;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdatePassword;
 import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
 import com.example.mithraapplication.ModelClasses.UserLogin;
+import com.example.mithraapplication.PHQParticipantsScreen;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
 import com.example.mithraapplication.ServerRequestAndResponse;
@@ -48,7 +46,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.lang.reflect.Type;
@@ -60,20 +57,22 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
     private EditText participantNameET, participantAgeET, participantPhoneNumberET, participantUserNameET, participantPasswordET, participantConfirmPasswordET;
     private Button createButton, maleButton, femaleButton, othersButton, editButton, createNewPasswordButton;
-    private TextView participantAgeTV, participantPhoneNumberTV, participantUserNameTV, participantPasswordTV, participantConfirmPasswordTV, VillageNameTV, PanchayatTV, SHGAssociationTV, participantNameTV, genderTV;
-    private Spinner VillageNameSpinner, SHGSpinner, PanchayatSpinner, CountryCodeSpinner;
+    private TextView participantAgeTV, participantPhoneNumberTV, participantUserNameTV, participantPasswordTV, participantConfirmPasswordTV, PHQScreeningIDTV, ManualIDTV, SHGAssociationTV, participantNameTV, genderTV;
+    private Spinner PHQScreeningSpinner, ManualIDSpinner, SHGSpinner, CountryCodeSpinner;
     private String participantName, participantUserName, participantPassword;
     private String participantVillageName, participantSHGAssociation, participantPanchayat, participantGender, participantPhoneNum, participantCountryCode;
     private int participantAge;
-    private List<String> PanchayatNamesList, VillageNamesList, SHGNamesList, CountryCodeList = new ArrayList<>();
-    private List<Locations> locationsArrayList, filteredVillageList, filteredSHGList, locationsList;
-    private ArrayAdapter adapterForVillageNames, SHGSpinnerAdapter, panchayatSpinnerAdapter, countryCodeAdapter;
+    private List<String> PHQScreeningNamesList, ManualNamesList, SHGNamesList, CountryCodeList = new ArrayList<>();
+    private List<PHQParticipantDetails> locationsArrayList, filteredPHQScreeningList, filteredSHGList, locationsList;
+    private ArrayAdapter PHQScreeningSpinnerAdapter, SHGSpinnerAdapter, ManualIDSpinnerAdapter;
+    private ArrayAdapter countryCodeAdapter;
     private MithraUtility mithraUtility = new MithraUtility();
     public static String trackingName = "NULL";
     private TrackingParticipantStatus trackingParticipantStatus = null;
     private RegisterParticipant registerParticipantDetails = null;
     private String isEditable;
     private Dialog dialog;
+    private PHQLocations phqLocations;
 
     @Nullable
     @Override
@@ -85,7 +84,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RegisterViews(view);
-        callGetLocationsForParticipant();
+//        callGetLocationsForParticipant();
+        callGetAllPHQParticipantsData();
         if(trackingParticipantStatus!=null && trackingParticipantStatus.getRegistration()!=null){
             if(isEditable!= null && !isEditable.equals("true")){
                 editButton.setEnabled(true);
@@ -102,10 +102,11 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         setOnclickOfEditButton();
     }
 
-    public RegistrationFragment(TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant){
+    public RegistrationFragment(TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant, PHQLocations phqLocations){
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
         this.registerParticipantDetails = registerParticipant;
+        this.phqLocations = phqLocations;
     }
 
     /**
@@ -124,9 +125,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         participantUserNameTV = view.findViewById(R.id.participantUserName);
         participantPasswordTV = view.findViewById(R.id.passwordTV);
         participantConfirmPasswordTV = view.findViewById(R.id.confirmPasswordTV);
-        VillageNameTV = view.findViewById(R.id.villageNameTV);
+        PHQScreeningIDTV = view.findViewById(R.id.PHQScreeningIDTV);
         SHGAssociationTV = view.findViewById(R.id.SHGNameTV);
-        PanchayatTV = view.findViewById(R.id.panchayatNameTV);
+        ManualIDTV = view.findViewById(R.id.ManualIDTV);
         participantNameTV = view.findViewById(R.id.participantName);
         genderTV = view.findViewById(R.id.genderTV);
 
@@ -140,9 +141,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         createNewPasswordButton = view.findViewById(R.id.createNewPasswordButton);
         createNewPasswordButton.setVisibility(View.GONE);
 
-        VillageNameSpinner = view.findViewById(R.id.villageNameSpinner);
+        PHQScreeningSpinner = view.findViewById(R.id.PHQScreeningIDSpinner);
         SHGSpinner = view.findViewById(R.id.spinnerSHG);
-        PanchayatSpinner = view.findViewById(R.id.spinnerPanchayat);
+        ManualIDSpinner = view.findViewById(R.id.spinnerManualID);
 
         CountryCodeSpinner = view.findViewById(R.id.spinnerCountryCode);
         CountryCodeSpinner.setOnItemSelectedListener(this);
@@ -151,8 +152,6 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         countryCodeAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, CountryCodeList);
         CountryCodeSpinner.setAdapter(countryCodeAdapter);
         CountryCodeSpinner.setSelection(0, true);
-//        View viewSpinner = CountryCodeSpinner.getSelectedView();
-//        ((TextView)viewSpinner).setTextColor(getResources().getColor(R.color.text_color));
     }
 
     private void setEditable(){
@@ -179,9 +178,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createButton.setTextColor(getResources().getColor(R.color.white));
             createButton.setBackgroundResource(R.drawable.button_background);
 
-            VillageNameSpinner.setEnabled(true);
+            PHQScreeningSpinner.setEnabled(true);
             SHGSpinner.setEnabled(true);
-            PanchayatSpinner.setEnabled(true);
+            ManualIDSpinner.setEnabled(true);
             CountryCodeSpinner.setEnabled(true);
 
         }else if(isEditable!=null && isEditable.equals("false")){
@@ -223,13 +222,13 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createButton.setVisibility(View.INVISIBLE);
             createNewPasswordButton.setVisibility(View.VISIBLE);
             createNewPasswordButton.setEnabled(false);
-
-            VillageNameSpinner.setSelection(((ArrayAdapter<String>)VillageNameSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantVillageName()));
-            VillageNameSpinner.setEnabled(false);
+//
+            PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantVillageName()));
+            PHQScreeningSpinner.setEnabled(false);
             SHGSpinner.setSelection(((ArrayAdapter<String>)SHGSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantSHGAssociation()));
             SHGSpinner.setEnabled(false);
-            PanchayatSpinner.setSelection(((ArrayAdapter<String>)PanchayatSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantPanchayat()));
-            PanchayatSpinner.setEnabled(false);
+            ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantPanchayat()));
+            ManualIDSpinner.setEnabled(false);
             CountryCodeSpinner.setEnabled(false);
         }else{
             participantNameET.setText(registerParticipantDetails.getParticipantName());
@@ -279,12 +278,12 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createNewPasswordButton.setEnabled(true);
             onClickOfCreateNewPassword();
 
-            VillageNameSpinner.setSelection(((ArrayAdapter)VillageNameSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantVillageName()));
-            VillageNameSpinner.setEnabled(true);
+            PHQScreeningSpinner.setSelection(((ArrayAdapter)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantVillageName()));
+            PHQScreeningSpinner.setEnabled(true);
             SHGSpinner.setSelection(((ArrayAdapter)SHGSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantSHGAssociation()));
             SHGSpinner.setEnabled(true);
-            PanchayatSpinner.setSelection(((ArrayAdapter)PanchayatSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantPanchayat()));
-            PanchayatSpinner.setEnabled(true);
+            ManualIDSpinner.setSelection(((ArrayAdapter)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantPanchayat()));
+            ManualIDSpinner.setEnabled(true);
             CountryCodeSpinner.setEnabled(true);
         }
     }
@@ -316,48 +315,34 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void getSelectedGender(){
-        maleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                maleButton.setBackgroundResource(R.drawable.selected_button);
-                participantGender = "Male";
+        maleButton.setOnClickListener(v -> {
+            maleButton.setBackgroundResource(R.drawable.selected_button);
+            participantGender = "Male";
 
-                femaleButton.setBackgroundResource(R.drawable.yes_no_button);
-                othersButton.setBackgroundResource(R.drawable.yes_no_button);
-            }
+            femaleButton.setBackgroundResource(R.drawable.yes_no_button);
+            othersButton.setBackgroundResource(R.drawable.yes_no_button);
         });
 
-        femaleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                femaleButton.setBackgroundResource(R.drawable.selected_button);
-                participantGender = "Female";
+        femaleButton.setOnClickListener(v -> {
+            femaleButton.setBackgroundResource(R.drawable.selected_button);
+            participantGender = "Female";
 
-                othersButton.setBackgroundResource(R.drawable.yes_no_button);
-                maleButton.setBackgroundResource(R.drawable.yes_no_button);
-            }
+            othersButton.setBackgroundResource(R.drawable.yes_no_button);
+            maleButton.setBackgroundResource(R.drawable.yes_no_button);
         });
 
-        othersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                othersButton.setBackgroundResource(R.drawable.selected_button);
-                participantGender = "Other";
+        othersButton.setOnClickListener(v -> {
+            othersButton.setBackgroundResource(R.drawable.selected_button);
+            participantGender = "Other";
 
-                femaleButton.setBackgroundResource(R.drawable.yes_no_button);
-                maleButton.setBackgroundResource(R.drawable.yes_no_button);
-            }
+            femaleButton.setBackgroundResource(R.drawable.yes_no_button);
+            maleButton.setBackgroundResource(R.drawable.yes_no_button);
         });
 
     }
 
     private void onClickOfCreateNewPassword(){
-        createNewPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogToCreatePassword();
-            }
-        });
+        createNewPasswordButton.setOnClickListener(v -> showDialogToCreatePassword());
     }
 
     private void showDialogToCreatePassword(){
@@ -385,24 +370,22 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         dialog.show();
 
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String password = passwordET.getText().toString();
-                if(password.isEmpty()){
-                    passwordET.setError("Please enter the password");
-                }else if(password.length() < 4){
-                    passwordET.setError("Password must be minimum of 4 characters.");
-                }
-                boolean matches = checkIfPasswordMatches(password, confirmPasswordET.getText().toString());
-                if(matches){
-                    participantUserName = participantUserNameET.getText().toString();
-                    callUpdateParticipantPassword(password);
-                    dialog.dismiss();
-                }else{
-                    confirmPasswordET.setError("Password does not match. Please check and re-enter the password.");
-                }
-            }});
+        resetButton.setOnClickListener(v -> {
+            String password = passwordET.getText().toString();
+            if(password.isEmpty()){
+                passwordET.setError("Please enter the password");
+            }else if(password.length() < 4){
+                passwordET.setError("Password must be minimum of 4 characters.");
+            }
+            boolean matches = checkIfPasswordMatches(password, confirmPasswordET.getText().toString());
+            if(matches){
+                participantUserName = participantUserNameET.getText().toString();
+                callUpdateParticipantPassword(password);
+                dialog.dismiss();
+            }else{
+                confirmPasswordET.setError("Password does not match. Please check and re-enter the password.");
+            }
+        });
     }
 
     /**
@@ -421,37 +404,31 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
      * Description : This method is used to register the participant
      */
     private void onClickRegisterButton(){
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isvalid = getUserEnteredData();
+        createButton.setOnClickListener(v -> {
+            boolean isvalid = getUserEnteredData();
+            if(isEditable!=null && isEditable.equals("reEdit")){
+                callServerUpdateParticipantDetails();
+            }
+            if(isvalid) {
                 if(isEditable!=null && isEditable.equals("reEdit")){
                     callServerUpdateParticipantDetails();
-                }
-                if(isvalid) {
-                    if(isEditable!=null && isEditable.equals("reEdit")){
-                        callServerUpdateParticipantDetails();
-                    }else{
-                        callServerLoginForParticipant();
-                    }
+                }else{
+                    callServerLoginForParticipant();
                 }
             }
         });
     }
 
     private void setOnclickOfEditButton(){
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isEditable!=null && isEditable.equals("false")){
-                    editButton.setBackgroundResource(R.drawable.status_button);
-                    isEditable = "reEdit";
-                    setEditable();
-                }else if(isEditable!=null && isEditable.equals("reEdit")){
-                    editButton.setBackgroundResource(R.drawable.yes_no_button);
-                    isEditable = "false";
-                    setEditable();
-                }
+        editButton.setOnClickListener(v -> {
+            if(isEditable!=null && isEditable.equals("false")){
+                editButton.setBackgroundResource(R.drawable.status_button);
+                isEditable = "reEdit";
+                setEditable();
+            }else if(isEditable!=null && isEditable.equals("reEdit")){
+                editButton.setBackgroundResource(R.drawable.yes_no_button);
+                isEditable = "false";
+                setEditable();
             }
         });
     }
@@ -463,9 +440,11 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         registerParticipant.setParticipantGender(participantGender);
         registerParticipant.setParticipantAge(String.valueOf(participantAge));
         registerParticipant.setParticipantPhoneNumber(participantPhoneNum);
-        registerParticipant.setParticipantVillageName(participantVillageName);
-        registerParticipant.setParticipantSHGAssociation(participantSHGAssociation);
-        registerParticipant.setParticipantPanchayat(participantPanchayat);
+        registerParticipant.setParticipantVillageName(phqLocations.getVillageName());
+        registerParticipant.setParticipantSHGAssociation(phqLocations.getSHGName());
+        registerParticipant.setParticipantPanchayat(phqLocations.getPanchayatName());
+        registerParticipant.setPhq_scr_id(registerParticipant.getPhq_scr_id());
+        registerParticipant.setMan_id(registerParticipant.getMan_id());
         String screeningID = mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.userScreeningName), getString(R.string.userScreeningID));
         registerParticipant.setScreeningid(screeningID);
         registerParticipant.setCreated_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
@@ -480,6 +459,13 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.getParticipantLocations(getActivity(), url);
+    }
+
+    private void callGetAllPHQParticipantsData(){
+        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_scr_sub.api.pre_screenings";
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.getPHQParticipantDetails(getActivity(), url);
     }
 
     private void callServerLoginForParticipant() {
@@ -574,40 +560,41 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             participantSHGAssociation = SHGNamesList.get(position);
             SHGSpinner.setSelection(position, false);
 
-        }else if(parent.getId() == R.id.villageNameSpinner){
-
-            participantVillageName = VillageNamesList.get(position);
-            VillageNameSpinner.setSelection(position, false);
-
-            if(filteredVillageList != null && filteredVillageList.size()!=0){
-                filteredSHGList = filteredVillageList.stream().filter(location -> location.getVillage().contains(participantVillageName)).distinct().collect(Collectors.toList());
-                SHGNamesList.clear();
-                SHGNamesList = filteredSHGList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
-                SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
-                SHGSpinner.setAdapter(SHGSpinnerAdapter);
-            }
-        }else if(parent.getId() == R.id.spinnerPanchayat){
-            participantPanchayat = PanchayatNamesList.get(position);
-            PanchayatSpinner.setSelection(position, false);
-
-            if(locationsList!=null && locationsList.size()!=0) {
-                filteredVillageList = locationsArrayList.stream().filter(location -> location.getPanchayat().contains(participantPanchayat)).distinct().collect(Collectors.toList());
-                VillageNamesList.clear();
-                VillageNamesList = filteredVillageList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
-                adapterForVillageNames = new ArrayAdapter(getActivity(), R.layout.spinner_item, VillageNamesList);
-                VillageNameSpinner.setAdapter(adapterForVillageNames);
-            }else{
-                locationsList = locationsArrayList;
-            }
-
-            if(locationsList != null && locationsList.size()!=0){
-                filteredSHGList = locationsArrayList.stream().filter(location -> location.getPanchayat().contains(participantPanchayat)).distinct().collect(Collectors.toList());
-                SHGNamesList.clear();
-                SHGNamesList = filteredSHGList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
-                SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
-                SHGSpinner.setAdapter(SHGSpinnerAdapter);
-            }
         }
+//        else if(parent.getId() == R.id.villageNameSpinner){
+//
+//            participantVillageName = VillageNamesList.get(position);
+//            VillageNameSpinner.setSelection(position, false);
+//
+//            if(filteredVillageList != null && filteredVillageList.size()!=0){
+//                filteredSHGList = filteredVillageList.stream().filter(location -> location.getVillage().contains(participantVillageName)).distinct().collect(Collectors.toList());
+//                SHGNamesList.clear();
+//                SHGNamesList = filteredSHGList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
+//                SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
+//                SHGSpinner.setAdapter(SHGSpinnerAdapter);
+//            }
+//        }else if(parent.getId() == R.id.spinnerPanchayat){
+//            participantPanchayat = PanchayatNamesList.get(position);
+//            PanchayatSpinner.setSelection(position, false);
+//
+//            if(locationsList!=null && locationsList.size()!=0) {
+//                filteredVillageList = locationsArrayList.stream().filter(location -> location.getPanchayat().contains(participantPanchayat)).distinct().collect(Collectors.toList());
+//                VillageNamesList.clear();
+//                VillageNamesList = filteredVillageList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
+//                adapterForVillageNames = new ArrayAdapter(getActivity(), R.layout.spinner_item, VillageNamesList);
+//                VillageNameSpinner.setAdapter(adapterForVillageNames);
+//            }else{
+//                locationsList = locationsArrayList;
+//            }
+//
+//            if(locationsList != null && locationsList.size()!=0){
+//                filteredSHGList = locationsArrayList.stream().filter(location -> location.getPanchayat().contains(participantPanchayat)).distinct().collect(Collectors.toList());
+//                SHGNamesList.clear();
+//                SHGNamesList = filteredSHGList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
+//                SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
+//                SHGSpinner.setAdapter(SHGSpinnerAdapter);
+//            }
+//        }
     }
 
     @Override
@@ -615,27 +602,27 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void prepareSpinnerData(){
-        PanchayatNamesList = locationsArrayList.stream().map(Locations::getPanchayat).distinct().collect(Collectors.toList());
-        VillageNamesList = locationsArrayList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
-        SHGNamesList = locationsArrayList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
-
-        adapterForVillageNames = new ArrayAdapter(getActivity(), R.layout.spinner_item, VillageNamesList);
-        VillageNameSpinner.setAdapter(adapterForVillageNames);
-        participantVillageName = VillageNamesList.get(0);
-        VillageNameSpinner.setSelection(0,false);
-        VillageNameSpinner.setOnItemSelectedListener(this);
-
-        SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
-        SHGSpinner.setAdapter(SHGSpinnerAdapter);
-        participantSHGAssociation = SHGNamesList.get(0);
-        SHGSpinner.setSelection(0,false);
-        SHGSpinner.setOnItemSelectedListener(this);
-
-        panchayatSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, PanchayatNamesList);
-        PanchayatSpinner.setAdapter(panchayatSpinnerAdapter);
-        participantPanchayat = PanchayatNamesList.get(0);
-        PanchayatSpinner.setSelection(0,false);
-        PanchayatSpinner.setOnItemSelectedListener(this);
+//        PanchayatNamesList = locationsArrayList.stream().map(Locations::getPanchayat).distinct().collect(Collectors.toList());
+//        VillageNamesList = locationsArrayList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
+//        SHGNamesList = locationsArrayList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
+//
+//        adapterForVillageNames = new ArrayAdapter(getActivity(), R.layout.spinner_item, VillageNamesList);
+//        VillageNameSpinner.setAdapter(adapterForVillageNames);
+//        participantVillageName = VillageNamesList.get(0);
+//        VillageNameSpinner.setSelection(0,false);
+//        VillageNameSpinner.setOnItemSelectedListener(this);
+//
+//        SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
+//        SHGSpinner.setAdapter(SHGSpinnerAdapter);
+//        participantSHGAssociation = SHGNamesList.get(0);
+//        SHGSpinner.setSelection(0,false);
+//        SHGSpinner.setOnItemSelectedListener(this);
+//
+//        panchayatSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, PanchayatNamesList);
+//        PanchayatSpinner.setAdapter(panchayatSpinnerAdapter);
+//        participantPanchayat = PanchayatNamesList.get(0);
+//        PanchayatSpinner.setSelection(0,false);
+//        PanchayatSpinner.setOnItemSelectedListener(this);
     }
 
     /**
@@ -645,12 +632,12 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     public void responseReceivedSuccessfully(String message) {
 
         Gson gson = new Gson();
-        Type typeLocation = new TypeToken<ArrayList<Locations>>(){}.getType();
+        Type typeLocation = new TypeToken<ArrayList<PHQParticipantDetails>>(){}.getType();
         JsonObject jsonObjectLocation = JsonParser.parseString(message).getAsJsonObject();
 
         if(jsonObjectLocation.get("message")!=null){
             try{
-                ArrayList<Locations> locationsArrayListObj = gson.fromJson(jsonObjectLocation.get("message"), typeLocation);
+                ArrayList<PHQParticipantDetails> locationsArrayListObj = gson.fromJson(jsonObjectLocation.get("message"), typeLocation);
                 if(locationsArrayListObj.size() > 1) {
                     locationsArrayList = locationsArrayListObj;
                     prepareSpinnerData();
@@ -745,8 +732,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         participantUserNameTV.setText(R.string.user_name);
         participantPasswordTV.setText(R.string.password);
         participantConfirmPasswordTV.setText(R.string.confirm_password);
-        VillageNameTV.setText(R.string.village_name);
-        PanchayatTV.setText(R.string.panchayat);
+        PHQScreeningIDTV.setText(R.string.village_name);
+        ManualIDTV.setText(R.string.panchayat);
         SHGAssociationTV.setText(R.string.shg_association);
         participantNameTV.setText(R.string.name_small_case);
         genderTV.setText(R.string.gender);

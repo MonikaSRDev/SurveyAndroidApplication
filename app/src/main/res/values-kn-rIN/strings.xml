@@ -138,5 +138,6 @@
     <string name="not_eligible_text">Regret to say that you are not eligible for the Survey</string>
     <string name="ok">Ok</string>
     <string name="phq_screening">PHQ Screening</string>
+    <string name="manual_id">Manual ID</string>
 
 </resources>

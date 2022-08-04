@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="350dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/screen_background"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="36dp"
+        android:paddingEnd="36dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/PHQScreeningIDTVPopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your PHQ Screening Id"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans"
+            android:textSize="22sp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:id="@+id/PHQScreeningIDPopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans_semibold"
+            android:textSize="26sp"
+            android:text="PHQ234358765"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"/>
+
+        <Button
+            android:id="@+id/OKScreeningIDButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ok"
+            android:background="@drawable/yes_no_button"
+            android:textColor="@color/text_color"
+            android:layout_gravity="center"
+            android:fontFamily="@font/open_sans_semibold"
+            android:textSize="22sp"
+            android:textAllCaps="true"
+            android:padding="5dp"
+            android:layout_margin="20dp"/>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

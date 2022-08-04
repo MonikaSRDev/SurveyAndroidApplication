@@ -62,14 +62,14 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
         if(singleVideoArrayList.get(position).getVideoStatus().equals("Completed")){
             downloadFileFromServer(holder);
             holder.videoStatusTV.setText(R.string.completed);
-            holder.videoStatusTV.setTextColor(context.getResources().getColor(R.color.completed_color));
+            holder.videoStatusTV.setTextColor(context.getResources().getColor(R.color.completed_color, context.getTheme()));
             holder.videoStatusIcon.setImageDrawable(context.getDrawable(R.drawable.completed_icon));
             onClickOfVideoPlayButton(holder, singleVideoArrayList.get(position));
             holder.videoCardView.setEnabled(true);
             holder.imageOverlayCardView.setVisibility(View.GONE);
         }else{
             holder.videoStatusTV.setText(R.string.pending);
-            holder.videoStatusTV.setTextColor(context.getResources().getColor(R.color.pending_color));
+            holder.videoStatusTV.setTextColor(context.getResources().getColor(R.color.pending_color, context.getTheme()));
             holder.videoStatusIcon.setImageDrawable(context.getDrawable(R.drawable.pending_icon));
             holder.videoCardView.setEnabled(false);
             holder.imageOverlayCardView.setVisibility(View.VISIBLE);

@@ -7,7 +7,7 @@
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutPHQ"
+        android:id="@+id/constraintLayoutPHQScreening"
         android:layout_width="166dp"
         android:layout_height="match_parent"
         android:background="@drawable/vertical_background"
@@ -17,7 +17,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
-            android:id="@+id/appLogoPHQ"
+            android:id="@+id/appLogoPHQScreening"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="18dp"
@@ -27,7 +27,7 @@
             app:srcCompat="@drawable/mithra_logo" />
 
         <LinearLayout
-            android:id="@+id/dashboardLinearLayoutPHQ"
+            android:id="@+id/dashboardLinearLayoutPHQScreening"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="80dp"
@@ -36,85 +36,85 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.686"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appLogoPHQ">
+            app:layout_constraintTop_toBottomOf="@+id/appLogoPHQScreening">
 
             <ImageView
-                android:id="@+id/dashboardIconPHQ"
+                android:id="@+id/dashboardIconPHQScreening"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_marginStart="18dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
                 app:srcCompat="@drawable/dashboard_icon" />
 
             <TextView
-                android:id="@+id/dashboardTVPHQ"
+                android:id="@+id/dashboardTVPHQScreening"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="13dp"
                 android:text="@string/dashboard"
-                android:layout_gravity="center_vertical"
                 android:textColor="@color/white" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/participantLinearLayoutPHQ"
+            android:id="@+id/participantLinearLayoutPHQScreening"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
             android:gravity="start"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.627"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dashboardLinearLayoutPHQ"
+            app:layout_constraintTop_toBottomOf="@+id/dashboardLinearLayoutPHQScreening"
             app:layout_constraintVertical_bias="0.0">
 
             <ImageView
-                android:id="@+id/participantsIconPHQ"
+                android:id="@+id/participantsIconPHQScreening"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_marginStart="18dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
                 app:srcCompat="@drawable/participants_icon" />
 
             <TextView
-                android:id="@+id/participantsTVPHQ"
+                android:id="@+id/participantsTVPHQScreening"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
                 android:text="@string/participants"
                 android:textColor="@color/white" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/phqScreeningLL"
+            android:id="@+id/phqScreeningLLScreening"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
             android:gravity="start"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.627"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/participantLinearLayoutPHQ"
+            app:layout_constraintTop_toBottomOf="@+id/participantLinearLayoutPHQScreening"
             app:layout_constraintVertical_bias="0.0">
 
             <ImageView
-                android:id="@+id/phqScreeningIcon"
+                android:id="@+id/phqScreeningIconScreening"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_marginStart="18dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
                 app:srcCompat="@drawable/participants_icon" />
 
             <TextView
-                android:id="@+id/phqScreeningTV"
+                android:id="@+id/phqScreeningTVScreening"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
                 android:text="@string/phq_screening"
                 android:textColor="@color/white" />
 
@@ -123,7 +123,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/dashboardTitleTVPHQ"
+        android:id="@+id/dashboardTitleTVPHQScreening"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -135,33 +135,33 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayoutPHQ"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutPHQScreening"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayoutPHQ"
+        android:id="@+id/linearLayoutPHQScreening"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="40dp"
-        android:orientation="horizontal"
         android:baselineAligned="false"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.973"
-        app:layout_constraintStart_toEndOf="@+id/dashboardTitleTVPHQ"
+        app:layout_constraintStart_toEndOf="@+id/dashboardTitleTVPHQScreening"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/languageLinearLayoutPHQ"
+            android:id="@+id/languageLinearLayoutPHQScreening"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
-            android:baselineAligned="false">
+            android:layout_marginEnd="30dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/englishButtonPHQ"
+                android:id="@+id/englishButtonPHQScreening"
                 android:layout_width="93dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -173,7 +173,7 @@
                 android:textSize="16sp" />
 
             <Button
-                android:id="@+id/kannadaButtonPHQ"
+                android:id="@+id/kannadaButtonPHQScreening"
                 android:layout_width="93dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
@@ -188,59 +188,96 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/notificationsLogoPHQ"
+            android:id="@+id/notificationsLogoPHQScreening"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            app:srcCompat="@drawable/notification_icon"
             android:padding="10dp"
-            android:layout_gravity="center"/>
+            app:srcCompat="@drawable/notification_icon" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/coordinatorProfilePHQ"
+            android:id="@+id/coordinatorProfilePHQScreening"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_weight="1"
-            android:src="@drawable/coordinator_profile"
             android:layout_gravity="center"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/coordinator_profile" />
 
         <TextView
-            android:id="@+id/coordinatorNameTVPHQ"
+            android:id="@+id/coordinatorNameTVPHQScreening"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Jessica Jones"
-            android:fontFamily="@font/open_sans_semibold"
             android:layout_gravity="center"
-            android:textSize="12sp"
-            android:textColor="@color/text_color" />
+            android:layout_weight="1"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Jessica Jones"
+            android:textColor="@color/text_color"
+            android:textSize="12sp" />
     </LinearLayout>
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardViewPHQQuesionnaire"
         android:layout_width="1053dp"
-        android:layout_height="580dp"
-        app:cardBackgroundColor="@color/screen_background"
-        app:cardCornerRadius="10dp"
-        android:layout_margin="10dp"
+        android:layout_height="620dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/curved_corners"
+        android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.475"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayoutPHQ"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutPHQScreening"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.627">
+        app:layout_constraintVertical_bias="0.663">
 
-        <GridView
-            android:id="@+id/SHGListPHQScreening"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutPHQScreening"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="3"
-            android:verticalSpacing="20dp"
-            android:layout_gravity="center"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp"
-            android:gravity="center"/>
+            android:layout_gravity="top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:tabBackground="@drawable/top_curved_corners"
+            app:tabGravity="fill"
+            app:tabIndicator="@drawable/selected_shape_tab_indicator"
+            app:tabIndicatorColor="@android:color/transparent"
+            app:tabIndicatorFullWidth="true"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed"
+            app:tabPaddingEnd="20dp"
+            app:tabPaddingStart="20dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@style/custom_tab_text_appearance_profile"
+            app:tabTextColor="@color/text_color">
 
-    </androidx.cardview.widget.CardView>
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/phqScreeningQuestionnaireTabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/phq_screening" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/phqScreeningTabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/screening" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <FrameLayout
+            android:id="@+id/phqScreeningFrameLayout"
+            android:layout_width="1053dp"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayoutPHQScreening" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

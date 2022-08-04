@@ -16,10 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mithraapplication.ModelClasses.ParticipantDetails;
-import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -34,13 +34,13 @@ import java.util.Locale;
 public class DashboardParticipantDetailsScreen extends AppCompatActivity implements HandleServerResponse{
 
     private Button englishButtonDashboard, kannadaButtonDashboard;
-    private LinearLayout dashboardLinearLayout, participantLinearLayout;
+    private LinearLayout dashboardLinearLayout, participantLinearLayout, PHQLinearLayout;
     private TextView dashboardTVDashboard, participantTVDashboard, coordinatorNameTVDashboard, participantName,
             participantAge, participantPhoneNum, participantPanchayat, participantSHG, participantVillage;
     private TextView preScreeningTV, registrationTV, socioDemographyTV, diseaseProfileTV;
     private ImageView preScreeningIV, registrationIV, socioDemographyIV, diseaseProfileIV;
     private ImageView mithraLogoDashboard, coordinatorProfileDashboard, notificationsIconDashboard, dashboardIconDashboard;
-    private MithraUtility mithraUtility = new MithraUtility();
+    private final MithraUtility mithraUtility = new MithraUtility();
     private ParticipantDetails participantDetails;
 //    private ArrayList<TrackingParticipantStatus> trackingParticipantStatus = new ArrayList<>();
 
@@ -53,6 +53,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
 //        callGetParticipantTrackingDetails();
         onClickOfDashboard();
         setOnClickForParticipants();
+        onClickOfPHQScreening();
         getCurrentLocale();
         onClickOfLanguageButton();
     }
@@ -65,8 +66,10 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         dashboardLinearLayout.setBackgroundResource(R.drawable.selected_page);
         participantLinearLayout = findViewById(R.id.participantLinearLayoutDP);
 
+        PHQLinearLayout = findViewById(R.id.phqScreeningLLDP);
+
         dashboardTVDashboard = findViewById(R.id.dashboardTVDP);
-        dashboardTVDashboard.setTextColor(getResources().getColor(R.color.text_color));
+        dashboardTVDashboard.setTextColor(getResources().getColor(R.color.text_color, this.getTheme()));
         participantTVDashboard = findViewById(R.id.participantsTVDP);
         coordinatorNameTVDashboard = findViewById(R.id.coordinatorNameTVDP);
         String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator));
@@ -78,7 +81,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         coordinatorProfileDashboard = findViewById(R.id.coordinatorProfileDP);
         notificationsIconDashboard = findViewById(R.id.notificationsLogoDP);
         dashboardIconDashboard = findViewById(R.id.dashboardIconDP);
-        dashboardIconDashboard.setImageDrawable(getResources().getDrawable(R.drawable.dashboard_icon_black));
+        dashboardIconDashboard.setImageDrawable(getResources().getDrawable(R.drawable.dashboard_icon_black, this.getTheme()));
 
         participantName = findViewById(R.id.participantNameDPTV);
         participantAge = findViewById(R.id.participantAgeDPTV);
@@ -149,24 +152,27 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     }
 
     private void onClickOfDashboard() {
-        dashboardLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DashboardParticipantDetailsScreen.this, DashboardScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        dashboardLinearLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardParticipantDetailsScreen.this, DashboardScreen.class);
+            startActivity(intent);
+            finish();
         });
     }
 
+    private void moveToPHQScreeningPage(){
+        Intent participantIntent = new Intent(DashboardParticipantDetailsScreen.this, PHQ9SHGListScreen.class);
+        startActivity(participantIntent);
+    }
+
+    private void onClickOfPHQScreening(){
+        PHQLinearLayout.setOnClickListener(v -> moveToPHQScreeningPage());
+    }
+
     private void setOnClickForParticipants(){
-        participantLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent loginIntent = new Intent(DashboardParticipantDetailsScreen.this, ParticipantsScreen.class);
-                startActivity(loginIntent);
-                finish();
-            }
+        participantLinearLayout.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(DashboardParticipantDetailsScreen.this, ParticipantsScreen.class);
+            startActivity(loginIntent);
+            finish();
         });
     }
 
@@ -182,12 +188,12 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        try{
-//            trackingParticipantStatus = gson.fromJson(jsonObject.get("data"), type);
-//            setParticipantDetails();
-        }catch(Exception e){
-            Toast.makeText(DashboardParticipantDetailsScreen.this, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
-        }
+//        try{
+////            trackingParticipantStatus = gson.fromJson(jsonObject.get("data"), type);
+////            setParticipantDetails();
+//        }catch(Exception e){
+//            Toast.makeText(DashboardParticipantDetailsScreen.this, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
+//        }
     }
 
     @Override
@@ -199,26 +205,20 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButtonDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
+        englishButtonDashboard.setOnClickListener(v -> {
+            englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardParticipantDetailsScreen.this.getTheme()));
+            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardParticipantDetailsScreen.this.getTheme()));
+            changeLocalLanguage("en");
         });
 
-        kannadaButtonDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
+        kannadaButtonDashboard.setOnClickListener(v -> {
+            kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardParticipantDetailsScreen.this.getTheme()));
+            englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardParticipantDetailsScreen.this.getTheme()));
+            changeLocalLanguage("kn");
         });
     }
 
@@ -243,14 +243,14 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
             kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardParticipantDetailsScreen.this.getTheme()));
             englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_button);
-            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardParticipantDetailsScreen.this.getTheme()));
         }else{
             englishButtonDashboard.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            englishButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardParticipantDetailsScreen.this.getTheme()));
             kannadaButtonDashboard.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black));
+            kannadaButtonDashboard.setTextColor(getResources().getColor(R.color.black, DashboardParticipantDetailsScreen.this.getTheme()));
         }
         res.updateConfiguration(conf, dm);
         onConfigurationChanged(conf);
@@ -261,7 +261,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         participantTVDashboard.setText(R.string.participants);
         dashboardTVDashboard.setText(R.string.dashboard);
@@ -271,6 +271,9 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(DashboardParticipantDetailsScreen.this, DashboardScreen.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

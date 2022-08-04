@@ -11,13 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.mithraapplication.ModelClasses.PHQLocations;
+import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.example.mithraapplication.R;
 
 import java.util.ArrayList;
 
-public class PHQScreeningAdapter extends ArrayAdapter<PHQLocations> {
+public class PHQSHGListAdapter extends ArrayAdapter<PHQLocations> {
 
-    public PHQScreeningAdapter(@NonNull Context context, int resource, ArrayList<PHQLocations> phqLocationsArrayList) {
+    public PHQSHGListAdapter(@NonNull Context context, int resource, ArrayList<PHQLocations> phqLocationsArrayList) {
         super(context, resource, phqLocationsArrayList);
     }
 

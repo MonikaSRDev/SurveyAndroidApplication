@@ -1,8 +1,6 @@
 package com.example.mithraapplication;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.UserLogin;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -53,15 +50,12 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         signInButton = findViewById(R.id.signInButton);
 
         constraintlayout = findViewById(R.id.constraintLayoutLoginScreen);
-        constraintlayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(getCurrentFocus()!=null){
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                }
-                return false;
+        constraintlayout.setOnTouchListener((v, event) -> {
+            if(getCurrentFocus()!=null){
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
+            return false;
         });
     }
 
@@ -69,28 +63,25 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
      * Description : This method is called when the user clicks on the sign-in button
      */
     private void onClickSignInButton() {
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String userName = !userNameET.getText().toString().equals("") ? userNameET.getText().toString().replace(" ", "") : "NULL";
-                String password = !userPasswordET.getText().toString().equals("") ? userPasswordET.getText().toString().replace(" ", "") : "NULL";
+        signInButton.setOnClickListener(v -> {
+            String userName = !userNameET.getText().toString().equals("") ? userNameET.getText().toString().replace(" ", "") : "NULL";
+            String password = !userPasswordET.getText().toString().equals("") ? userPasswordET.getText().toString().replace(" ", "") : "NULL";
 
 
-                if(!userName.equals("NULL") && !password.equals("NULL")){
-                    callServerForUserLogin(userName, password);
+            if(!userName.equals("NULL") && !password.equals("NULL")){
+                callServerForUserLogin(userName, password);
 //                    moveToParticipantLandingPage(userName);
 //                    moveToCoordinatorDashboard();
-                    mithraUtility.putSharedPreferencesData(LoginScreen.this, getString(R.string.userName), getString(R.string.user_name_participant), userName);
-                }else if(userName.equals("NULL") && !password.equals("NULL")){
-                    userNameET.setError("Please enter username.");
-                }else if(!userName.equals("NULL") && password.equals("NULL")){
-                    userPasswordET.setError("Please enter the password.");
-                }else{
-                    userNameET.setError("Please enter username.");
-                    userPasswordET.setError("Please enter the password.");
-                }
-
+                mithraUtility.putSharedPreferencesData(LoginScreen.this, getString(R.string.userName), getString(R.string.user_name_participant), userName);
+            }else if(userName.equals("NULL") && !password.equals("NULL")){
+                userNameET.setError("Please enter username.");
+            }else if(!userName.equals("NULL") && password.equals("NULL")){
+                userPasswordET.setError("Please enter the password.");
+            }else{
+                userNameET.setError("Please enter username.");
+                userPasswordET.setError("Please enter the password.");
             }
+
         });
     }
 

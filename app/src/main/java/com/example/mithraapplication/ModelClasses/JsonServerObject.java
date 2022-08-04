@@ -7,14 +7,7 @@ public class JsonServerObject {
     public String ToJSON(){
         Gson gson = new Gson();
         String jsonData = gson.toJson(this).replace("\\\"","");
-        String json = jsonData.replaceAll(" ", " ");
-//        int maxLogSize = 1000;
-//        for(int i = 0; i<= json.length()/maxLogSize; i++ ){
-//            int start = i * maxLogSize;
-//            int end = (i+1) * maxLogSize;
-//            end = Math.min(end, json.length());
-//        }
-        return json;
+        return jsonData.replaceAll(" ", " ");
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){return JsonServerObject.this;}

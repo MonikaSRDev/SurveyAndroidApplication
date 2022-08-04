@@ -1,7 +1,5 @@
 package com.example.mithraapplication.ModelClasses;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 public class ParticipantDetails extends JsonServerObject implements Serializable {

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -42,13 +43,10 @@ public class ParticipantLandingScreen extends AppCompatActivity {
     }
 
     private void onClickOfLogoutButton(){
-        logoutLayoutLP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ParticipantLandingScreen.this, LoginScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        logoutLayoutLP.setOnClickListener(v -> {
+            Intent intent = new Intent(ParticipantLandingScreen.this, LoginScreen.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -122,13 +120,10 @@ public class ParticipantLandingScreen extends AppCompatActivity {
      * Description : This method is used to move to the survey screen on clicking the survey logo
      */
     private void onClickOfSurveyButton() {
-        surveyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ParticipantLandingScreen.this, SurveyScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        surveyButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ParticipantLandingScreen.this, SurveyScreen.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -136,13 +131,10 @@ public class ParticipantLandingScreen extends AppCompatActivity {
      * Description : This method is used to move to the video screen on clicking the video logo
      */
     private void onClickOfVideoButton() {
-        videoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ParticipantLandingScreen.this, VideoScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        videoButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ParticipantLandingScreen.this, VideoScreen.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -150,13 +142,10 @@ public class ParticipantLandingScreen extends AppCompatActivity {
      * Description : This method is used to move to the activity screen on clicking the activity logo
      */
     private void onClickOfActivityButton() {
-        activityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        activityButton.setOnClickListener(v -> {
 //                Intent intent = new Intent(ParticipantLandingScreen.this, ActivitiesScreen.class);
 //                startActivity(intent);
 //                finish();
-            }
         });
     }
 
@@ -164,26 +153,20 @@ public class ParticipantLandingScreen extends AppCompatActivity {
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
+        englishButton.setOnClickListener(v -> {
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("en");
         });
 
-        kannadaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
+        kannadaButton.setOnClickListener(v -> {
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("kn");
         });
     }
 
@@ -227,7 +210,7 @@ public class ParticipantLandingScreen extends AppCompatActivity {
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         logoutTV.setText(R.string.logout);
         surveyTV.setText(R.string.survey);

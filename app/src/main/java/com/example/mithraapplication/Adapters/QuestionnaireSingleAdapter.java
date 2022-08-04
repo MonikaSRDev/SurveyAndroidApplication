@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.SurveyQuestionAnswers;
 import com.example.mithraapplication.R;
 

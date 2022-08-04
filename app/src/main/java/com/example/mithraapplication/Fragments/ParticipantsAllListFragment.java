@@ -1,5 +1,6 @@
 package com.example.mithraapplication.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.mithraapplication.Adapters.ParticipantScreenAdapter;
 import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
@@ -33,6 +35,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ParticipantsAllListFragment extends Fragment implements HandleServerResponse {
 
@@ -41,9 +44,13 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     private FloatingActionButton floatingAddButton;
     private RecyclerView participantListRecyclerView;
     private ParticipantScreenAdapter participantScreenAdapter;
+    private Context context;
+    private PHQLocations phqLocations;
 
-    public ParticipantsAllListFragment() {
+    public ParticipantsAllListFragment(Context context, PHQLocations phqLocations) {
         // Required empty public constructor
+        this.context = context;
+        this.phqLocations = phqLocations;
     }
 
     @Override
@@ -76,32 +83,23 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     }
 
     private void onClickAddNewParticipantIcon() {
-        addNewParticipantIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ParticipantProfileScreen.class);
-                startActivity(intent);
-            }
+        addNewParticipantIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ParticipantProfileScreen.class);
+            startActivity(intent);
+            requireActivity().finish();
         });
     }
 
     private void onClickFloatingAddNewParticipantButton() {
-        floatingAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ParticipantProfileScreen.class);
-                startActivity(intent);
-            }
+        floatingAddButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ParticipantProfileScreen.class);
+            startActivity(intent);
+            requireActivity().finish();
         });
     }
 
     private void setRecyclerView(ArrayList<RegisterParticipant> registerParticipants){
-        participantScreenAdapter = new ParticipantScreenAdapter(getActivity(), registerParticipants, new ParticipantScreenAdapter.onItemClickListener() {
-            @Override
-            public void onItemClick(RegisterParticipant registerparticipant) {
-                moveToParticipantProfileScreen(registerparticipant);
-            }
-        });
+        participantScreenAdapter = new ParticipantScreenAdapter(getActivity(), registerParticipants, this::moveToParticipantProfileScreen);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         participantListRecyclerView.setLayoutManager(linearLayoutManager);
         participantListRecyclerView.setAdapter(participantScreenAdapter);
@@ -113,6 +111,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         participantIntent.putExtra("RegisterParticipant Array", (Serializable) registerParticipant);
         participantIntent.putExtra("isEditable", "false");
         startActivity(participantIntent);
+        requireActivity().finish();
     }
 
     private void callGetAllParticipantsDetails(){
@@ -139,7 +138,11 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
                 addNewParticipantIcon.setVisibility(View.GONE);
                 addNewParticipantTV.setVisibility(View.GONE);
                 floatingAddButton.setVisibility(View.VISIBLE);
-                setRecyclerView(registerParticipantsArrayList);
+                ArrayList<RegisterParticipant> registerParticipantsList = registerParticipantsArrayList;
+//                ArrayList<RegisterParticipant> registerParticipantsList = registerParticipantsArrayList.stream()
+//                        .filter(RegisterParticipant -> RegisterParticipant.getParticipantSHGAssociation().equalsIgnoreCase(phqLocations.getSHGName()))
+//                        .collect(Collectors.toCollection(ArrayList::new));
+                setRecyclerView(registerParticipantsList);
             }
         }catch(Exception e){
             Toast.makeText(getActivity(), jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
@@ -156,7 +159,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if(addNewParticipantTV!=null){

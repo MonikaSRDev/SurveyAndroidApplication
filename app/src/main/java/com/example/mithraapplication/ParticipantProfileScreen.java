@@ -2,7 +2,6 @@ package com.example.mithraapplication;
 
 import static com.example.mithraapplication.Fragments.RegistrationFragment.trackingName;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -25,6 +24,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -34,8 +34,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.mithraapplication.Fragments.DiseasesProfileFragment;
 import com.example.mithraapplication.Fragments.ParticipantReportFragment;
 import com.example.mithraapplication.Fragments.RegistrationFragment;
-import com.example.mithraapplication.Fragments.ScreeningFragment;
+import com.example.mithraapplication.Fragments.PHQScreeningFragment;
 import com.example.mithraapplication.Fragments.SocioDemographyFragment;
+import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.google.android.material.tabs.TabLayout;
@@ -53,7 +54,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
 
     public Button englishButtonProfile, kannadaButtonProfile, profileEditButton;
     private TextView profileTitleTV, dashboardTVProfile, participantTVProfile, coordinatorNameTVProfile, profileParticipantName;
-    private LinearLayout dashboardLinearLayoutProfile, participantLinearLayoutProfile, socioDemographyLinearLayout;
+    private LinearLayout dashboardLinearLayoutProfile, participantLinearLayoutProfile, socioDemographyLinearLayout, PHQLinearLayout;
     private ImageView mithraLogoProfile, coordinatorProfile, notificationsIconProfile, participantsIconParticipant;
     private TabLayout profileTabLayout;
     private FrameLayout profileFrameLayout;
@@ -68,6 +69,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     public static String participant_primary_ID = "NULL";
     private TrackingParticipantStatus trackingParticipantStatus = null;
     private int currentTab, previousTab;
+    private PHQLocations phqLocations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         onClickOfLanguageButton();
         getCurrentLocale();
         onClickOfDashboardButton();
+        onClickOfPHQScreening();
         getIntentData();
     }
 
@@ -87,6 +90,8 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         dashboardLinearLayoutProfile = findViewById(R.id.dashboardLinearLayoutProfile);
         participantLinearLayoutProfile = findViewById(R.id.participantLinearLayoutProfile);
         participantLinearLayoutProfile.setBackgroundResource(R.drawable.selected_page);
+
+        PHQLinearLayout = findViewById(R.id.PHQScreeningLinearLayoutProfile);
 
         profileTitleTV = findViewById(R.id.profileTitleTV);
         dashboardTVProfile = findViewById(R.id.dashboardTVProfile);
@@ -108,7 +113,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         profileFrameLayout = findViewById(R.id.profileFrameLayout);
         disableTab(1);
         disableTab(2);
-        disableTab(3);
         setTabSelectedListener();
 
         profileParticipantName = findViewById(R.id.profileParticipantName);
@@ -168,6 +172,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         if(extras!=null){
             registerParticipant = (RegisterParticipant) intent.getSerializableExtra("RegisterParticipant Array");
             isEditable = intent.getStringExtra("isEditable");
+            phqLocations = (PHQLocations) intent.getSerializableExtra("PHQLocations");
         }
         if(registerParticipant!=null && registerParticipant.getUser_pri_id()!=null){
             mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.primaryID), getString(R.string.participantPrimaryID), registerParticipant.getUser_pri_id());
@@ -175,14 +180,14 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         }
         if(isEditable!=null && !isEditable.equals("true")){
             callGetParticipantTrackingDetails();
-            ((LinearLayout) Objects.requireNonNull(profileTabLayout.getTabAt(0)).view).setVisibility(View.GONE);
-            Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText("Profile");
+//            ((LinearLayout) Objects.requireNonNull(profileTabLayout.getTabAt(0)).view).setVisibility(View.GONE);
+            Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText("Profile");
+            enableTab(1);
             enableTab(2);
-            enableTab(3);
             if(registerParticipant!=null){
                 profileParticipantName.setText(registerParticipant.getParticipantName());
             }
-            profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 4);
+            profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 3);
             setVisibilityForEdit(true);
         }else{
             trackingParticipantStatus = null;
@@ -291,37 +296,37 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     private void redirectParticipantToTab(){
         if(trackingParticipantStatus!=null && trackingParticipantStatus.getName()!=null){
             if(trackingParticipantStatus.getRegistration()==null){
-                setupSelectedTabFragment(1);
+                setupSelectedTabFragment(0);
             }else if(trackingParticipantStatus.getSocio_demography()==null){
-                setupSelectedTabFragment(2);
-            }else if(trackingParticipantStatus.getDisease_profile()==null){
-                setupSelectedTabFragment(3);
-            }else{
                 setupSelectedTabFragment(1);
+            }else if(trackingParticipantStatus.getDisease_profile()==null){
+                setupSelectedTabFragment(2);
+            }else{
+                setupSelectedTabFragment(0);
             }
         }else{
-            setupSelectedTabFragment(1);
+            setupSelectedTabFragment(0);
         }
     }
 
     public void setupSelectedTabFragment(int position){
         switch (position) {
+//            case 0:
+//                fragment = new PHQScreeningFragment(isEditable);
+//                TabLayout.Tab tabData = profileTabLayout.getTabAt(position);
+//                assert tabData != null;
+//                tabData.select();
+//                break;
             case 0:
-                fragment = new ScreeningFragment(isEditable);
-                TabLayout.Tab tabData = profileTabLayout.getTabAt(position);
-                assert tabData != null;
-                tabData.select();
-                break;
-            case 1:
-                fragment = new RegistrationFragment(trackingParticipantStatus, isEditable, registerParticipant);
+                fragment = new RegistrationFragment(trackingParticipantStatus, isEditable, registerParticipant, phqLocations);
                 profileEditButton.setText(R.string.edit);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData1 = profileTabLayout.getTabAt(position);
                 assert tabData1 != null;
                 tabData1.select();
-                enableTab(0);
+//                enableTab(0);
                 break;
-            case 2:
+            case 1:
                 fragment = new SocioDemographyFragment(trackingParticipantStatus, isEditable);
                 profileEditButton.setText(R.string.edit);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
@@ -329,9 +334,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 assert tabData2 != null;
                 tabData2.select();
                 enableTab(0);
-                enableTab(1);
+//                enableTab(1);
                 break;
-            case 3:
+            case 2:
                 fragment = new DiseasesProfileFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
                 profileEditButton.setText(R.string.edit);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
@@ -340,9 +345,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 tabData3.select();
                 enableTab(0);
                 enableTab(1);
-                enableTab(2);
+//                enableTab(2);
                 break;
-            case 4:
+            case 3:
                 fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant);
                 profileEditButton.setText(R.string.status);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
@@ -352,7 +357,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 enableTab(0);
                 enableTab(1);
                 enableTab(2);
-                enableTab(3);
+//                enableTab(3);
                 break;
         }
         FragmentManager fm = getSupportFragmentManager();
@@ -364,7 +369,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
 
     public void showPopupWindow(final View view) {
 
-        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.custom_popup_window, null);
 
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -378,52 +383,46 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         popupWindow.setOutsideTouchable(true);
 
         TextView logoutTextView = popupView.findViewById(R.id.logoutTextView);
-        logoutTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(view.getContext(), "Logout User", Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        logoutTextView.setOnClickListener(v -> Toast.makeText(view.getContext(), "Logout User", Toast.LENGTH_SHORT).show());
     }
 
     private void onClickOfDashboardButton(){
-        dashboardLinearLayoutProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent loginIntent = new Intent(ParticipantProfileScreen.this, DashboardScreen.class);
-                startActivity(loginIntent);
-                finish();
-            }
+        dashboardLinearLayoutProfile.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(ParticipantProfileScreen.this, DashboardScreen.class);
+            startActivity(loginIntent);
+            finish();
         });
+    }
+
+    private void moveToPHQScreeningPage(){
+        Intent participantIntent = new Intent(ParticipantProfileScreen.this, PHQ9SHGListScreen.class);
+        startActivity(participantIntent);
+    }
+
+    private void onClickOfPHQScreening(){
+        PHQLinearLayout.setOnClickListener(v -> moveToPHQScreeningPage());
     }
 
     /**
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButtonProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isLanguageSelected = "en";
-                englishButtonProfile.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButtonProfile.setTextColor(getResources().getColor(R.color.black));
-                kannadaButtonProfile.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButtonProfile.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
+        englishButtonProfile.setOnClickListener(v -> {
+            isLanguageSelected = "en";
+            englishButtonProfile.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButtonProfile.setTextColor(getResources().getColor(R.color.black));
+            kannadaButtonProfile.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButtonProfile.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("en");
         });
 
-        kannadaButtonProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isLanguageSelected = "kn";
-                kannadaButtonProfile.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButtonProfile.setTextColor(getResources().getColor(R.color.black));
-                englishButtonProfile.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButtonProfile.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
+        kannadaButtonProfile.setOnClickListener(v -> {
+            isLanguageSelected = "kn";
+            kannadaButtonProfile.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButtonProfile.setTextColor(getResources().getColor(R.color.black));
+            englishButtonProfile.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButtonProfile.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("kn");
         });
     }
 
@@ -473,18 +472,15 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
 
         profileTitleTV.setText(R.string.profile);
         dashboardTVProfile.setText(R.string.dashboard);
         participantTVProfile.setText(R.string.participants);
-        if(profileTabLayout.getTabAt(0)!= null && ((LinearLayout)profileTabLayout.getTabAt(0).view).getVisibility()!=View.GONE){
-            Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.screening);
-        }
-        Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText(R.string.registration);
-        Objects.requireNonNull(profileTabLayout.getTabAt(2)).setText(R.string.socio_demography);
-        Objects.requireNonNull(profileTabLayout.getTabAt(3)).setText(R.string.disease_profile);
-//        Objects.requireNonNull(profileTabLayout.getTabAt(4)).setText(R.string.red_tab);
+        Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.registration);
+        Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText(R.string.socio_demography);
+        Objects.requireNonNull(profileTabLayout.getTabAt(2)).setText(R.string.disease_profile);
+//        Objects.requireNonNull(profileTabLayout.getTabAt(3)).setText(R.string.red_tab);
 
         super.onConfigurationChanged(newConfig);
     }
@@ -525,6 +521,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent loginIntent = new Intent(ParticipantProfileScreen.this, ParticipantsScreen.class);
+        startActivity(loginIntent);
+        finish();
     }
 
 //    @Override
@@ -543,10 +542,10 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
 
         if (view instanceof EditText) {
             View w = getCurrentFocus();
-            int scrcoords[] = new int[2];
-            w.getLocationOnScreen(scrcoords);
-            float x = event.getRawX() + w.getLeft() - scrcoords[0];
-            float y = event.getRawY() + w.getTop() - scrcoords[1];
+            int[] source_coordinates = new int[2];
+            w.getLocationOnScreen(source_coordinates);
+            float x = event.getRawX() + w.getLeft() - source_coordinates[0];
+            float y = event.getRawY() + w.getTop() - source_coordinates[1];
 
             if (event.getAction() == MotionEvent.ACTION_UP
                     && (x < w.getLeft() || x >= w.getRight()

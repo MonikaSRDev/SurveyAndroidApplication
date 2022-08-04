@@ -21,14 +21,11 @@ public class SplashScreen extends AppCompatActivity {
      * Description : This method is used to display the SplashScreen to the user
      */
     private void loadSplashScreen() {
-        new Handler().postDelayed(new Runnable() {
-            // Using handler with postDelayed called runnable run method
-            @Override
-            public void run() {
-                Intent i = new Intent(SplashScreen.this, LoginScreen.class);
-                startActivity(i);
-                finish();
-            }
+        // Using handler with postDelayed called runnable run method
+        new Handler().postDelayed(() -> {
+            Intent i = new Intent(SplashScreen.this, LoginScreen.class);
+            startActivity(i);
+            finish();
         }, 3*1000);
     }
 }

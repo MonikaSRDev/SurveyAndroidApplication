@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.ModelClasses.ParticipantDetails;
-import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.R;
 
 import java.util.ArrayList;

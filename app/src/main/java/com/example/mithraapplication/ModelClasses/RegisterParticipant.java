@@ -29,6 +29,8 @@ public class RegisterParticipant extends JsonServerObject implements Serializabl
     private String screeningid = "NULL";
     private String user_pri_id = "NULL";
     private String created_user = "NULL";
+    private String phq_scr_id = "null";
+    private String man_id = "null";
     private String modified_user = "UT-9-2022-07-11-08:19:58-no_one_modified";
 
     public String getParticipantName() {
@@ -133,6 +135,22 @@ public class RegisterParticipant extends JsonServerObject implements Serializabl
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhq_scr_id() {
+        return phq_scr_id;
+    }
+
+    public void setPhq_scr_id(String phq_scr_id) {
+        this.phq_scr_id = phq_scr_id;
+    }
+
+    public String getMan_id() {
+        return man_id;
+    }
+
+    public void setMan_id(String man_id) {
+        this.man_id = man_id;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

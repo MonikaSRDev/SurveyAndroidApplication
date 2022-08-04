@@ -3,7 +3,6 @@ package com.example.mithraapplication.Fragments;
 import static com.example.mithraapplication.Fragments.RegistrationFragment.trackingName;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.mithraapplication.Adapters.DiseasesProfileAdapter;
+import com.example.mithraapplication.DashboardScreen;
 import com.example.mithraapplication.HandleServerResponse;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
@@ -327,7 +327,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 nextDiseaseProfileButton.setEnabled(true);
                 nextDiseaseProfileButton.setText(R.string.save);
                 nextDiseaseProfileButton.setBackgroundResource(R.drawable.button_background);
-                nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.white));
+                nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.white, context.getTheme()));
                 setRecyclerView(isEditable);
             }else if(isEditable!=null && isEditable.equals("reEdit")){
                 editButton.setBackgroundResource(R.drawable.yes_no_button);
@@ -336,7 +336,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 nextDiseaseProfileButton.setEnabled(false);
                 nextDiseaseProfileButton.setText(R.string.save);
                 nextDiseaseProfileButton.setBackgroundResource(R.drawable.inputs_background);
-                nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.text_color));
+                nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
                 setRecyclerView(isEditable);
             }
         });

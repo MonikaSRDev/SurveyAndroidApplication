@@ -16,13 +16,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mithraapplication.Fragments.ParticipantsAllListFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.mithraapplication.ModelClasses.PHQLocations;
+import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
@@ -33,7 +35,7 @@ public class ParticipantsScreen extends AppCompatActivity{
 
     private Button englishButtonParticipant, kannadaButtonParticipant;
     private TextView participantTitleTV, dashboardTVParticipant, participantTVParticipant, coordinatorNameTVParticipant;
-    private LinearLayout dashboardLinearLayoutParticipant, participantLinearLayoutParticipant;
+    private LinearLayout dashboardLinearLayoutParticipant, participantLinearLayoutParticipant, PHQLinearLayout;
     private ImageView mithraLogoParticipant, coordinatorParticipant, notificationsIconParticipant, participantIcon;
     private TabLayout participantTabLayout;
     private FrameLayout participantFrameLayout;
@@ -42,6 +44,7 @@ public class ParticipantsScreen extends AppCompatActivity{
     private Fragment fragmentParticipant = null;
     private MithraUtility mithraUtility = new MithraUtility();
     private TabItem participantTabItem1, participantTabItem2, participantTabItem3, participantTabItem4, participantTabItem5;
+    private PHQLocations phqLocations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,9 @@ public class ParticipantsScreen extends AppCompatActivity{
         RegisterViews();
         onClickOfLanguageButton();
         getCurrentLocale();
+        getIntentData();
         onClickOfDashboardButton();
+        onClickOfPHQScreening();
     }
 
     /**
@@ -63,6 +68,8 @@ public class ParticipantsScreen extends AppCompatActivity{
         dashboardLinearLayoutParticipant = findViewById(R.id.dashboardLinearLayoutParticipant);
         participantLinearLayoutParticipant = findViewById(R.id.participantLinearLayoutParticipant);
         participantLinearLayoutParticipant.setBackgroundResource(R.drawable.selected_page);
+
+        PHQLinearLayout = findViewById(R.id.PHQScreeningLinearLayoutParticipant);
 
         participantTitleTV = findViewById(R.id.participantsTitleTV);
         dashboardTVParticipant = findViewById(R.id.dashboardTVParticipant);
@@ -93,7 +100,7 @@ public class ParticipantsScreen extends AppCompatActivity{
     }
 
     private void setStartupTab(){
-        fragmentParticipant = new ParticipantsAllListFragment();
+        fragmentParticipant = new ParticipantsAllListFragment(ParticipantsScreen.this, phqLocations);
         fragmentManagerParticipant = getSupportFragmentManager();
         fragmentTransactionParticipant = fragmentManagerParticipant.beginTransaction();
         fragmentTransactionParticipant.replace(R.id.frameLayoutParticipant, fragmentParticipant);
@@ -123,7 +130,7 @@ public class ParticipantsScreen extends AppCompatActivity{
     public void setupSelectedTabFragment(int position){
         switch (position) {
             default:
-                fragmentParticipant = new ParticipantsAllListFragment();
+                fragmentParticipant = new ParticipantsAllListFragment(ParticipantsScreen.this, phqLocations);
                 TabLayout.Tab tabdata2 = participantTabLayout.getTabAt(position);
                 assert tabdata2 != null;
                 tabdata2.select();
@@ -136,40 +143,49 @@ public class ParticipantsScreen extends AppCompatActivity{
         ft.commit();
     }
 
+    private void getIntentData(){
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if(extras!=null){
+            phqLocations = (PHQLocations) intent.getSerializableExtra("PHQLocations");
+        }
+    }
+
     private void onClickOfDashboardButton(){
-        dashboardLinearLayoutParticipant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ParticipantsScreen.this, DashboardScreen.class);
-                startActivity(intent);
-            }
+        dashboardLinearLayoutParticipant.setOnClickListener(v -> {
+            Intent intent = new Intent(ParticipantsScreen.this, DashboardScreen.class);
+            startActivity(intent);
+            finish();
         });
+    }
+
+    private void moveToPHQScreeningPage(){
+        Intent participantIntent = new Intent(ParticipantsScreen.this, PHQ9SHGListScreen.class);
+        startActivity(participantIntent);
+    }
+
+    private void onClickOfPHQScreening(){
+        PHQLinearLayout.setOnClickListener(v -> moveToPHQScreeningPage());
     }
 
     /**
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButtonParticipant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                englishButtonParticipant.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
-                kannadaButtonParticipant.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
+        englishButtonParticipant.setOnClickListener(v -> {
+            englishButtonParticipant.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+            kannadaButtonParticipant.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("en");
         });
 
-        kannadaButtonParticipant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kannadaButtonParticipant.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
-                englishButtonParticipant.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
+        kannadaButtonParticipant.setOnClickListener(v -> {
+            kannadaButtonParticipant.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+            englishButtonParticipant.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButtonParticipant.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("kn");
         });
     }
 
@@ -212,7 +228,7 @@ public class ParticipantsScreen extends AppCompatActivity{
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
 
         participantTitleTV.setText(R.string.participants);
         dashboardTVParticipant.setText(R.string.dashboard);
@@ -229,6 +245,9 @@ public class ParticipantsScreen extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(ParticipantsScreen.this, DashboardScreen.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -2,25 +2,20 @@ package com.example.mithraapplication;
 
 import static com.example.mithraapplication.VideoScreen.videoModulesArrayList;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.LocaleList;
-import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -30,14 +25,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mithraapplication.ModelClasses.SingleVideo;
@@ -117,50 +111,37 @@ public class FullScreenVideoView extends AppCompatActivity{
                 }
             }
         });
-        fullScreenVideoSeekBar.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
+        fullScreenVideoSeekBar.setOnTouchListener((v, event) -> true);
 
         videoViewFullScreen = findViewById(R.id.fullScreenVideoView);
         String path = getIntent().getStringExtra("VideoPath");
         Uri uri = Uri.parse(path);
         videoViewFullScreen.setVideoURI(uri);
         videoViewFullScreen.requestFocus();
-        videoViewFullScreen.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                videoViewFullScreen.stopPlayback();
-                showAlertForFeedback();
-                if(!(position + 1 >= videoModulesArrayList.get(pos).getSingleVideoArrayList().size())){
-                    videoModulesArrayList.get(pos).getSingleVideoArrayList().get(position + 1).setVideoPlayed(true);
-                    videoModulesArrayList.get(pos).getSingleVideoArrayList().get(position).setVideoStatus("Completed");
-                }
+        videoViewFullScreen.setOnCompletionListener(mp -> {
+            videoViewFullScreen.stopPlayback();
+            showAlertForFeedback();
+            if(!(position + 1 >= videoModulesArrayList.get(pos).getSingleVideoArrayList().size())){
+                videoModulesArrayList.get(pos).getSingleVideoArrayList().get(position + 1).setVideoPlayed(true);
+                videoModulesArrayList.get(pos).getSingleVideoArrayList().get(position).setVideoStatus("Completed");
             }
         });
 
     }
 
     private String timeConversion(int millis){
-        String hms = String.format("%02d:%02d",
+        return String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
                 TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-        return hms;
     }
 
     private void onClickOfVideoPlayButton(){
-        videoPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                videoViewFullScreen.start();
-                totalDuration = timeConversion(videoViewFullScreen.getDuration());
-                fullScreenVideoSeekBar.setMax(videoViewFullScreen.getDuration());
-                fullScreenVideoSeekBar.postDelayed(onEverySecond, 1000);
-                videoPlayButton.setVisibility(View.GONE);
-            }
+        videoPlayButton.setOnClickListener(v -> {
+            videoViewFullScreen.start();
+            totalDuration = timeConversion(videoViewFullScreen.getDuration());
+            fullScreenVideoSeekBar.setMax(videoViewFullScreen.getDuration());
+            fullScreenVideoSeekBar.postDelayed(onEverySecond, 1000);
+            videoPlayButton.setVisibility(View.GONE);
         });
     }
 
@@ -183,24 +164,18 @@ public class FullScreenVideoView extends AppCompatActivity{
     };
 
     private void onClickOfVideoPauseButton(){
-        videoPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                videoViewFullScreen.pause();
-                videoPauseButton.setVisibility(View.GONE);
-                videoBackwardButton.setVisibility(View.GONE);
-                videoPlayButton.setVisibility(View.VISIBLE);
-            }
+        videoPauseButton.setOnClickListener(v -> {
+            videoViewFullScreen.pause();
+            videoPauseButton.setVisibility(View.GONE);
+            videoBackwardButton.setVisibility(View.GONE);
+            videoPlayButton.setVisibility(View.VISIBLE);
         });
     }
 
     private void onClickOfBackwardButton(){
-        videoBackwardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = videoViewFullScreen.getCurrentPosition();
-                videoViewFullScreen.seekTo(position - (10 * 1000));
-            }
+        videoBackwardButton.setOnClickListener(v -> {
+            int position = videoViewFullScreen.getCurrentPosition();
+            videoViewFullScreen.seekTo(position - (10 * 1000));
         });
     }
 
@@ -224,13 +199,10 @@ public class FullScreenVideoView extends AppCompatActivity{
                     } else{
                         videoPauseButton.setVisibility(View.VISIBLE);
                         videoBackwardButton.setVisibility(View.VISIBLE);
-                        new Handler().postDelayed(new Runnable() {
-                            // Using handler with postDelayed called runnable run method
-                            @Override
-                            public void run() {
-                                videoPauseButton.setVisibility(View.GONE);
-                                videoBackwardButton.setVisibility(View.GONE);
-                            }
+                        // Using handler with postDelayed called runnable run method
+                        new Handler().postDelayed(() -> {
+                            videoPauseButton.setVisibility(View.GONE);
+                            videoBackwardButton.setVisibility(View.GONE);
                         }, 2*1000);
                     }
                     return true;
@@ -239,12 +211,7 @@ public class FullScreenVideoView extends AppCompatActivity{
             }
         });
 
-        videoViewFullScreen.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
+        videoViewFullScreen.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
     }
 
     private Bitmap generateThumbnailForVideo(){
@@ -252,8 +219,7 @@ public class FullScreenVideoView extends AppCompatActivity{
         Uri uri = Uri.parse(path);
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(this.getApplicationContext(), uri);
-        Bitmap thumb = retriever.getFrameAtTime(10, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
-        return thumb;
+        return retriever.getFrameAtTime(10, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
     }
 
     private void showAlertForFeedback(){
@@ -302,44 +268,32 @@ public class FullScreenVideoView extends AppCompatActivity{
     }
 
     private void onClickOfBackButton(){
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FullScreenVideoView.this, VideoScreen.class);
-                intent.putExtra("FromActivity", "FullScreenVideoView");
-                startActivity(intent);
-                finish();
-            }
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(FullScreenVideoView.this, VideoScreen.class);
+            intent.putExtra("FromActivity", "FullScreenVideoView");
+            startActivity(intent);
+            finish();
         });
 
-        backTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FullScreenVideoView.this, VideoScreen.class);
-                intent.putExtra("FromActivity", "FullScreenVideoView");
-                startActivity(intent);
-                finish();
-            }
+        backTV.setOnClickListener(v -> {
+            Intent intent = new Intent(FullScreenVideoView.this, VideoScreen.class);
+            intent.putExtra("FromActivity", "FullScreenVideoView");
+            startActivity(intent);
+            finish();
         });
     }
 
     private void onClickOfLogoutButton(){
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FullScreenVideoView.this, LoginScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        logoutButton.setOnClickListener(v -> {
+            Intent intent = new Intent(FullScreenVideoView.this, LoginScreen.class);
+            startActivity(intent);
+            finish();
         });
 
-        logoutTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FullScreenVideoView.this, LoginScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        logoutTV.setOnClickListener(v -> {
+            Intent intent = new Intent(FullScreenVideoView.this, LoginScreen.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -347,26 +301,20 @@ public class FullScreenVideoView extends AppCompatActivity{
      * Description : This method is used to change the language of the screen based on the button clicked
      */
     private void onClickOfLanguageButton(){
-        englishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("en");
-            }
+        englishButton.setOnClickListener(v -> {
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black, FullScreenVideoView.this.getTheme()));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, FullScreenVideoView.this.getTheme()));
+            changeLocalLanguage("en");
         });
 
-        kannadaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-                kannadaButton.setTextColor(getResources().getColor(R.color.black));
-                englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
-                englishButton.setTextColor(getResources().getColor(R.color.black));
-                changeLocalLanguage("kn");
-            }
+        kannadaButton.setOnClickListener(v -> {
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, FullScreenVideoView.this.getTheme()));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black, FullScreenVideoView.this.getTheme()));
+            changeLocalLanguage("kn");
         });
     }
 
@@ -391,14 +339,14 @@ public class FullScreenVideoView extends AppCompatActivity{
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
             kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, FullScreenVideoView.this.getTheme()));
             englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
-            englishButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setTextColor(getResources().getColor(R.color.black, FullScreenVideoView.this.getTheme()));
         }else{
             englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-            englishButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setTextColor(getResources().getColor(R.color.black, FullScreenVideoView.this.getTheme()));
             kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, FullScreenVideoView.this.getTheme()));
         }
         res.updateConfiguration(conf, dm);
         onConfigurationChanged(conf);
@@ -409,7 +357,7 @@ public class FullScreenVideoView extends AppCompatActivity{
      * Description : This method is used to update the views on change of language
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         logoutTV.setText(R.string.logout);
         backTV.setText(R.string.back);

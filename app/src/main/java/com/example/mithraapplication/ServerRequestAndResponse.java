@@ -3,36 +3,32 @@ package com.example.mithraapplication;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.DiseasesProfilePostRequest;
 import com.example.mithraapplication.ModelClasses.GetParticipantDetails;
+import com.example.mithraapplication.ModelClasses.PHQLocations;
+import com.example.mithraapplication.ModelClasses.PHQSurveyPostAnswers;
 import com.example.mithraapplication.ModelClasses.ParticipantScreening;
 import com.example.mithraapplication.ModelClasses.PostSurveyQuestions;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.SocioDemography;
-import com.example.mithraapplication.ModelClasses.SurveyPostRequest;
 import com.example.mithraapplication.ModelClasses.SurveyQuestions;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdateDiseaseProfileTracking;
 import com.example.mithraapplication.ModelClasses.UpdatePassword;
 import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
+import com.example.mithraapplication.ModelClasses.UpdateScreeningStatus;
 import com.example.mithraapplication.ModelClasses.UpdateSocioDemographyTracking;
 import com.example.mithraapplication.ModelClasses.UserLogin;
 
-import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,30 +49,22 @@ public class ServerRequestAndResponse extends Application {
     public void getJsonRequest(Context context, String url){
 
         StringRequest jsonObjectRequest = new StringRequest
-                (Request.Method.GET, url, new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        handleServerResponse.responseReceivedSuccessfully(response);
-                        Log.i("JSONGETREQUEST","Success");
+                (Request.Method.GET, url, response -> {
+                    handleServerResponse.responseReceivedSuccessfully(response);
+                    Log.i("JSONGETREQUEST","Success");
+                }, error -> {
+                    String json = null;
+                    NetworkResponse response = error.networkResponse;
+                    if(response != null && response.data != null){
+                        json = new String(response.data);
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        String json = null;
-                        NetworkResponse response = error.networkResponse;
-                        if(response != null && response.data != null){
-                            json = new String(response.data);
-                        }
-                        handleServerResponse.responseReceivedFailure(json);
-                        Log.i("JSONGETREQUEST","Failure");
-                    }
+                    handleServerResponse.responseReceivedFailure(json);
+                    Log.i("JSONGETREQUEST","Failure");
                 }){
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
                 String userRole = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.user_role), context.getString(R.string.user_role));
@@ -104,29 +92,21 @@ public class ServerRequestAndResponse extends Application {
     public void getJsonRequestWithParameters(Context context, String url, String fields, String filter){
 
         StringRequest jsonObjectRequest = new StringRequest
-                (Request.Method.GET, url, new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        handleServerResponse.responseReceivedSuccessfully(response);
-                        Log.i("JSONGETREQUEST","Success");
+                (Request.Method.GET, url, response -> {
+                    handleServerResponse.responseReceivedSuccessfully(response);
+                    Log.i("JSONGETREQUEST","Success");
+                }, error -> {
+                    String json = null;
+                    NetworkResponse response = error.networkResponse;
+                    if(response != null && response.data != null){
+                        json = new String(response.data);
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        String json = null;
-                        NetworkResponse response = error.networkResponse;
-                        if(response != null && response.data != null){
-                            json = new String(response.data);
-                        }
-                        handleServerResponse.responseReceivedFailure(json);                        Log.i("JSONGETREQUEST","Failure");
-                    }
+                    handleServerResponse.responseReceivedFailure(json);                        Log.i("JSONGETREQUEST","Failure");
                 }){
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
                 String userRole = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.user_role), context.getString(R.string.user_role));
@@ -143,8 +123,8 @@ public class ServerRequestAndResponse extends Application {
             }
 
             @Override
-            public Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
                 params.put("fields", fields);
                 params.put("or_filters", filter);
                 return params;
@@ -162,30 +142,22 @@ public class ServerRequestAndResponse extends Application {
     public void postJsonRequest(Context context, String json, String url){
 
         StringRequest newRequest = new StringRequest(Request.Method.POST,
-                url, new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        handleServerResponse.responseReceivedSuccessfully(response);
-                        Log.i("JSONPOSTREQUEST","Success");
+                url, response -> {
+                    handleServerResponse.responseReceivedSuccessfully(response);
+                    Log.i("JSONPOSTREQUEST","Success");
+                }, error -> {
+                    String json1 = null;
+                    NetworkResponse response = error.networkResponse;
+                    if(response != null && response.data != null){
+                        json1 = new String(response.data);
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        String json = null;
-                        NetworkResponse response = error.networkResponse;
-                        if(response != null && response.data != null){
-                            json = new String(response.data);
-                        }
-                        handleServerResponse.responseReceivedFailure(json);
-                        Log.i("JSONPOSTREQUEST","Failure");
-                    }
+                    handleServerResponse.responseReceivedFailure(json1);
+                    Log.i("JSONPOSTREQUEST","Failure");
                 }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
                 String userRole = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.user_role), context.getString(R.string.user_role));
@@ -202,13 +174,8 @@ public class ServerRequestAndResponse extends Application {
             }
 
             @Override
-            public byte[] getBody() throws AuthFailureError {
-                try {
-                    return json == null ? null : json.getBytes("utf-8");
-                } catch (UnsupportedEncodingException uee) {
-                    Log.i("utf-8","Unsupported Encoding while trying to get the bytes of %s using %s" + json );
-                    return null;
-                }
+            public byte[] getBody() {
+                return json == null ? null : json.getBytes(StandardCharsets.UTF_8);
             }
         };
 
@@ -222,30 +189,22 @@ public class ServerRequestAndResponse extends Application {
     public void putJsonRequest(Context context, String json, String url){
 
         StringRequest newRequest = new StringRequest(Request.Method.PUT,
-                url, new Response.Listener<String>() {
+                url, response -> {
+                    handleServerResponse.responseReceivedSuccessfully(response);
+                    Log.i("JSONPOSTREQUEST","Success");
+                }, error -> {
+                    String json1 = null;
+                    NetworkResponse response = error.networkResponse;
+                    if(response != null && response.data != null){
+                        json1 = new String(response.data);
+                    }
+                    handleServerResponse.responseReceivedFailure(json1);
+                    Log.i("JSONPOSTREQUEST","Failure");
+                }) {
 
             @Override
-            public void onResponse(String response) {
-                handleServerResponse.responseReceivedSuccessfully(response);
-                Log.i("JSONPOSTREQUEST","Success");
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                String json = null;
-                NetworkResponse response = error.networkResponse;
-                if(response != null && response.data != null){
-                    json = new String(response.data);
-                }
-                handleServerResponse.responseReceivedFailure(json);
-                Log.i("JSONPOSTREQUEST","Failure");
-            }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
                 String userRole = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.user_role), context.getString(R.string.user_role));
@@ -262,13 +221,8 @@ public class ServerRequestAndResponse extends Application {
             }
 
             @Override
-            public byte[] getBody() throws AuthFailureError {
-                try {
-                    return json == null ? null : json.getBytes("utf-8");
-                } catch (UnsupportedEncodingException uee) {
-                    Log.i("utf-8","Unsupported Encoding while trying to get the bytes of %s using %s" + json );
-                    return null;
-                }
+            public byte[] getBody() {
+                return json == null ? null : json.getBytes(StandardCharsets.UTF_8);
             }
         };
 
@@ -281,34 +235,27 @@ public class ServerRequestAndResponse extends Application {
      */
     public void downloadFileRequest(Context context, String url){
         DownloadFileVolleyRequest request = new DownloadFileVolleyRequest(Request.Method.GET, url,
-                new Response.Listener<byte[]>() {
-                    @Override
-                    public void onResponse(byte[] response) {
-                        // TODO handle the response
-                        try {
-                            if (response!=null) {
-                                handleFileDownloadResponse.fileDownloadedSuccessfully(response);
-                            }
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                            Log.d("KEY_ERROR", "UNABLE TO DOWNLOAD FILE");
-                            e.printStackTrace();
+                response -> {
+                    // TODO handle the response
+                    try {
+                        if (response!=null) {
+                            handleFileDownloadResponse.fileDownloadedSuccessfully(response);
                         }
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        Log.d("KEY_ERROR", "UNABLE TO DOWNLOAD FILE");
+                        e.printStackTrace();
                     }
-                } ,new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO handle the error
-                error.printStackTrace();
-                String json = null;
-                NetworkResponse response = error.networkResponse;
-                if(response != null && response.data != null){
-                    json = new String(response.data);
-                }
-                handleFileDownloadResponse.fileDownloadFailure(json);
-            }
-        }, context);
+                }, error -> {
+                    // TODO handle the error
+                    error.printStackTrace();
+                    String json = null;
+                    NetworkResponse response = error.networkResponse;
+                    if(response != null && response.data != null){
+                        json = new String(response.data);
+                    }
+                    handleFileDownloadResponse.fileDownloadFailure(json);
+                }, context);
         // Access the RequestQueue through your singleton class.
         VolleySingletonRequestQueue.getInstance(context).addToRequestQueue(request);
         Log.i("VIDEODownload", "started time :" + mithraUtility.getCurrentTime());
@@ -354,6 +301,14 @@ public class ServerRequestAndResponse extends Application {
         getJsonRequest(context, url);
     }
 
+    public void getPHQParticipantDetails(Context context, String url){
+        getJsonRequest(context, url);
+    }
+
+    public void getCoordinatorLocations(Context context, PHQLocations phqLocations, String url){
+        postJsonRequest(context, phqLocations.ToJSON(), url);
+    }
+
     public void postUserLogin(Context context, UserLogin userLoginObject, String url){
         postJsonRequest(context, userLoginObject.ToJSON(), url);
     }
@@ -376,6 +331,10 @@ public class ServerRequestAndResponse extends Application {
 
     public void postSurveyAnswers(Context context, PostSurveyQuestions surveyPostRequest, String url){
         postJsonRequest(context, surveyPostRequest.ToJSON(), url);
+    }
+
+    public void postPHQScreeningAnswers(Context context, PHQSurveyPostAnswers phqSurveyPostAnswers, String url){
+        postJsonRequest(context, phqSurveyPostAnswers.ToJSON(), url);
     }
 
     public void postTrackingStatus(Context context, TrackingParticipantStatus trackingParticipantStatus, String url){
@@ -404,6 +363,10 @@ public class ServerRequestAndResponse extends Application {
 
     public void putUpdateUserPassword(Context context, UpdatePassword updatePassword, String url){
         putJsonRequest(context, updatePassword.ToJSON(), url);
+    }
+
+    public void putUpdateScreeningStatus(Context context, UpdateScreeningStatus updateScreeningStatus, String url){
+        putJsonRequest(context, updateScreeningStatus.ToJSON(), url);
     }
 
 }
