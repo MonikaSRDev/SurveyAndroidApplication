@@ -1,16 +1,22 @@
 package com.example.mithraapplication;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.LocaleList;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mithraapplication.Adapters.PHQSHGListAdapter;
@@ -24,15 +30,17 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class CoordinatorSHGList extends AppCompatActivity implements HandleServerResponse{
     private GridView phqGridView;
     private LinearLayout phqScreeningLinearlayout, dashboardLinearLayout, participantLinearLayout;
-    private TextView phqScreeningTV, dashboardTV, participantTV, coordinatorSHGTV;
+    private TextView phqScreeningTV, dashboardTV, participantTV, coordinatorSHGTV, phqScreenTitle;
     private ImageView phqScreeningIcon, dashboardIcon, participantIcon;
     private final MithraUtility mithraUtility = new MithraUtility();
-    ArrayList<PHQLocations> phqLocations = new ArrayList<>();
+    private ArrayList<PHQLocations> phqLocations = new ArrayList<>();
+    private Button englishButton, kannadaButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,8 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         moveToPHQScreening();
         moveToDashboardScreen();
         callGetCoordinatorSHGList();
+        onClickOfLanguageButton();
+        getCurrentLocale();
     }
 
     private void RegisterViews() {
@@ -66,14 +76,12 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         coordinatorSHGTV = findViewById(R.id.dashboardTitleTVPHQ);
         coordinatorSHGTV.setText("Coordinator SHG List");
 
-    }
+        englishButton = findViewById(R.id.englishButtonPHQ);
+        kannadaButton = findViewById(R.id.kannadaButtonPHQ);
 
-//    private void moveToParticipantsScreen(){
-//        participantLinearLayout.setOnClickListener(v -> {
-//            Intent participantIntent = new Intent(CoordinatorSHGList.this, ParticipantsScreen.class);
-//            startActivity(participantIntent);
-//        });
-//    }
+        phqScreenTitle = findViewById(R.id.dashboardTitleTVPHQ);
+        phqScreenTitle.setText(R.string.coordinator_shg);
+    }
 
     private void moveToDashboardScreen(){
         dashboardLinearLayout.setOnClickListener(v -> {
@@ -105,8 +113,6 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
     }
 
     private void setGridViewAdapter(){
-//        phqLocations.add(new PHQLocations("SHG1", "Village1", "Panchayat1"));
-//        phqLocations.add(new PHQLocations("SHG2", "Village2", "Panchayat2"));
         setOnClickGridItemListener();
         PHQSHGListAdapter adapter = new PHQSHGListAdapter(this, 0, phqLocations);
         phqGridView.setAdapter(adapter);
@@ -164,5 +170,73 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         Intent intent = new Intent(CoordinatorSHGList.this, DashboardScreen.class);
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * Description : This method is used to change the language of the screen based on the button clicked
+     */
+    private void onClickOfLanguageButton(){
+        englishButton.setOnClickListener(v -> {
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            changeLocalLanguage("en");
+        });
+
+        kannadaButton.setOnClickListener(v -> {
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            changeLocalLanguage("kn");
+        });
+    }
+
+    /**
+     * @param selectedLanguage
+     * Description : This method is used to change the content of the screen to user selected language
+     */
+    public void changeLocalLanguage(String selectedLanguage){
+        Locale myLocale = new Locale(selectedLanguage);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(myLocale);
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    public void getCurrentLocale(){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        LocaleList lang = conf.getLocales();
+        if(lang.get(0).getLanguage().equals("kn")){
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+        }else{
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+        }
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    /**
+     * @param newConfig
+     * Description : This method is used to update the views on change of language
+     */
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        participantTV.setText(R.string.participants);
+        dashboardTV.setText(R.string.dashboard);
+        phqScreeningTV.setText(R.string.phq_screening);
+        phqScreenTitle.setText(R.string.coordinator_shg);
     }
 }

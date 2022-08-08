@@ -379,7 +379,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Pre screening"
+                            android:text="@string/pre_screening"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -527,7 +527,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="PHQ9"
+                            android:text="@string/phq9"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -583,7 +583,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="BADS"
+                            android:text="@string/bads"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -638,7 +638,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="QUIDS SR"
+                            android:text="@string/quids_sr"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -694,7 +694,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="WHODAS"
+                            android:text="@string/whodas"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -783,7 +783,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Module 0"
+                            android:text="@string/module_0"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -811,7 +811,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Module 1"
+                            android:text="@string/module_1"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -839,7 +839,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Module 2"
+                            android:text="@string/module_2"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -867,7 +867,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Module 3"
+                            android:text="@string/module_3"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -895,7 +895,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Module 4"
+                            android:text="@string/module_4"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -923,7 +923,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Module 5"
+                            android:text="@string/module_5"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -951,7 +951,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Module 6"
+                            android:text="@string/module_6"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
@@ -979,7 +979,7 @@
                             android:layout_margin="5dp"
                             android:fontFamily="@font/open_sans_semibold"
                             android:padding="5dp"
-                            android:text="Module 7"
+                            android:text="@string/module_7"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 

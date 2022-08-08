@@ -49,6 +49,7 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
 //    }
 
     public PHQScreeningFragment(Context context, PHQParticipantDetails phqParticipantDetails, PHQLocations phqLocations) {
+        this.context = context;
         this.phqParticipantDetails = phqParticipantDetails;
         this.phqLocations = phqLocations;
     }
@@ -134,7 +135,9 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
         participantName = view.findViewById(R.id.PHQScreeningNameTV);
         PHQScreeningID = view.findViewById(R.id.PHQScreeningID);
 
-        SHGName.setText(phqLocations.getSHGName());
+        if(phqLocations!=null){
+            SHGName.setText(phqLocations.getSHGName());
+        }
         participantName.setText(phqParticipantDetails.getPHQParticipantName());
         PHQScreeningID.setText(phqParticipantDetails.getPHQScreeningID());
 
@@ -405,7 +408,7 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
         TextView notEligibleTV = customLayout.findViewById(R.id.participantNotEligiblePopup);
         Button okButton = customLayout.findViewById(R.id.okButtonPopup);
 
-        dialog  = new Dialog(getActivity());
+        dialog  = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
@@ -419,7 +422,7 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
 
         okButton.setOnClickListener(v -> {
             dialog.dismiss();
-            Intent intent = new Intent(getActivity(), ParticipantsScreen.class);
+            Intent intent = new Intent(context, ParticipantsScreen.class);
             startActivity(intent);
             requireActivity().finish();
         });
@@ -429,7 +432,7 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/screening";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.postScreeningDetails(getActivity(), participantScreening, url);
+        requestObject.postScreeningDetails(context, participantScreening, url);
     }
     private void callUpdatePHQEligibilityStatus(String ScreeningID) {
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/phq9_scr_sub/" + phqParticipantDetails.getPHQScreeningID();
@@ -437,7 +440,7 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
         updateScreeningStatus.setScreening_id(ScreeningID);
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.putUpdateScreeningStatus(getActivity(), updateScreeningStatus, url);
+        requestObject.putUpdateScreeningStatus(context, updateScreeningStatus, url);
     }
 
     @Override
@@ -471,9 +474,9 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
         String serverErrorResponse = jsonObject.get("exc_type").toString();
         if(serverErrorResponse.contains("ValidationError")){
-            Toast.makeText(getActivity(), "Please give all the details.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please give all the details.", Toast.LENGTH_LONG).show();
         }else{
-            Toast.makeText(getActivity(), "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
         }
     }
 

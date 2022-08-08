@@ -28,9 +28,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
+import com.example.mithraapplication.ModelClasses.OptionsRequest;
 import com.example.mithraapplication.ModelClasses.ParticipantAnswers;
 import com.example.mithraapplication.ModelClasses.PostSurveyQuestions;
 import com.example.mithraapplication.ModelClasses.QuestionAnswers;
+import com.example.mithraapplication.ModelClasses.QuestionOptions;
 import com.example.mithraapplication.ModelClasses.SurveyPostRequest;
 import com.example.mithraapplication.ModelClasses.SurveyQuestions;
 import com.google.gson.Gson;
@@ -46,6 +48,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class SurveyScreen extends AppCompatActivity implements HandleServerResponse, HandleFileDownloadResponse {
 
@@ -57,6 +60,8 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private LinearLayout option1LinearLayout, option2LinearLayout, option3LinearLayout, option4LinearLayout;
     private int questionIndex = 0, selectedOptionValue = 0, totalScore = 0;
     private ArrayList<QuestionAnswers> questionArray = new ArrayList<>();
+    private ArrayList<QuestionOptions> optionsArray = new ArrayList<>();
+    private ArrayList<QuestionOptions> filteredOptionsArray = new ArrayList<>();
     private String surveyStartDateTime, surveyEndDateTime, totalSurveyTime, questionStartTime, questionEndTime, totalQuestionTime;
     private Dialog dialog;
     private HashMap<String, String> surveyPHQ9 = new HashMap<>();
@@ -81,6 +86,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         onClickOfLanguageButton();
         getCurrentLocale();
         callServerToGetPHQ9Questions();
+        callServerToGetPHQ9Options();
     }
 
     private void getDataStoredFromSharedPreferences(){
@@ -313,8 +319,8 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     private void onClickOfOptionOne() {
-        selectedOptionValue = questionArray.get(questionIndex).getOption_1_weightage();
-        strSelectedOption = questionArray.get(questionIndex).getOption_1_e();
+        selectedOptionValue = Integer.parseInt(filteredOptionsArray.get(0).getOption_w());
+        strSelectedOption = filteredOptionsArray.get(0).getOption_e();;
         questionEndTime = mithraUtility.getCurrentTime();//here or on click of next button??
 
         option_view_one.setVisibility(View.VISIBLE);
@@ -331,8 +337,8 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     private void onClickOfOptionTwo() {
-        selectedOptionValue = questionArray.get(questionIndex).getOption_2_weightage();
-        strSelectedOption = questionArray.get(questionIndex).getOption_2_e();
+        selectedOptionValue = Integer.parseInt(filteredOptionsArray.get(1).getOption_w());
+        strSelectedOption = filteredOptionsArray.get(1).getOption_e();
         questionEndTime = mithraUtility.getCurrentTime();
 
         option_view_one.setVisibility(View.INVISIBLE);
@@ -349,8 +355,8 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     private void onClickOfOptionThree() {
-        selectedOptionValue = questionArray.get(questionIndex).getOption_3_weightage();
-        strSelectedOption = questionArray.get(questionIndex).getOption_3_e();
+        selectedOptionValue = Integer.parseInt(filteredOptionsArray.get(2).getOption_w());
+        strSelectedOption = filteredOptionsArray.get(2).getOption_e();
         questionEndTime = mithraUtility.getCurrentTime();
 
         option_view_one.setVisibility(View.INVISIBLE);
@@ -367,8 +373,8 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     private void onClickOfOptionFour() {
-        selectedOptionValue = questionArray.get(questionIndex).getOption_4_weightage();
-        strSelectedOption = questionArray.get(questionIndex).getOption_4_e();
+        selectedOptionValue = Integer.parseInt(filteredOptionsArray.get(3).getOption_w());
+        strSelectedOption = filteredOptionsArray.get(3).getOption_e();
         questionEndTime = mithraUtility.getCurrentTime();
 
         option_view_one.setVisibility(View.INVISIBLE);
@@ -496,24 +502,26 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
             mediaPlayerAudio.stop();
         }
         if(questionIndex < questionArray.size()){
+            filteredOptionsArray = optionsArray.stream()
+                    .filter(questionOptions -> !questionOptions.getQuestion_id().equalsIgnoreCase(questionArray.get(questionIndex).getName())).collect(Collectors.toCollection(ArrayList::new));
             if(selectedLanguage.equals("1")){
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_e());
                 totalQuestions.setText("of " + questionArray.size() +"");
                 questionNumber.setText(String.valueOf(questionIndex + 1));
-                option_oneTV.setText(questionArray.get(questionIndex).getOption_1_e());
-                option_twoTV.setText(questionArray.get(questionIndex).getOption_2_e());
-                option_threeTV.setText(questionArray.get(questionIndex).getOption_3_e());
-                option_fourTV.setText(questionArray.get(questionIndex).getOption_4_e());
+                option_oneTV.setText(filteredOptionsArray.get(0).getOption_e());
+                option_twoTV.setText(filteredOptionsArray.get(1).getOption_e());
+                option_threeTV.setText(filteredOptionsArray.get(2).getOption_e());
+                option_fourTV.setText(filteredOptionsArray.get(3).getOption_e());
                 onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
                 downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
             }else{
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
                 totalQuestions.setText("of " + questionArray.size() +"");
                 questionNumber.setText(String.valueOf(questionIndex + 1));
-                option_oneTV.setText(questionArray.get(questionIndex).getOption_1_k());
-                option_twoTV.setText(questionArray.get(questionIndex).getOption_2_k());
-                option_threeTV.setText(questionArray.get(questionIndex).getOption_3_k());
-                option_fourTV.setText(questionArray.get(questionIndex).getOption_4_k());
+                option_oneTV.setText(filteredOptionsArray.get(0).getOption_k());
+                option_twoTV.setText(filteredOptionsArray.get(1).getOption_k());
+                option_threeTV.setText(filteredOptionsArray.get(2).getOption_k());
+                option_fourTV.setText(filteredOptionsArray.get(3).getOption_k());
                 onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
                 downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
             }
@@ -588,6 +596,19 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     }
 
     /**
+     * Description : Call the server to get the PHQ9 questions for the participant
+     */
+    private void callServerToGetPHQ9Options(){
+        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.survey_question_options.api.options";
+        OptionsRequest optionsRequest = new OptionsRequest();
+        optionsRequest.setFilter_data("{'sur_pri_id':'SUR0001'}");
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.getPHQ9Options(SurveyScreen.this, optionsRequest, url);
+    }
+
+
+    /**
      * Description : Update the server with the data entered by the user
      */
     private void callServerForPostSurveyAnswers(){
@@ -626,12 +647,26 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                     questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
                     Log.i("SurveyScreen", "responseReceivedSuccessfully : " + questionAnswersArrayList);
                     questionArray = questionAnswersArrayList;
-                    surveyStartDateTime = mithraUtility.getCurrentTime();
-                    setCardData();
+//                    surveyStartDateTime = mithraUtility.getCurrentTime();
+//                    setCardData();
                 }
             } catch (Exception e) {
                 removeDataStoredSharedPreferences();
 //                Toast.makeText(this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                Type typeOptions = new TypeToken<ArrayList<QuestionOptions>>(){}.getType();
+                if(jsonObject.get("message")!=null) {
+                    ArrayList<QuestionOptions> questionOptionsArrayList = new ArrayList<>();
+                    try {
+                        questionOptionsArrayList = gson.fromJson(jsonObject.get("message"), typeOptions);
+                        if (questionOptionsArrayList.size() > 0) {
+                            optionsArray = questionOptionsArrayList;
+                            surveyStartDateTime = mithraUtility.getCurrentTime();
+                            setCardData();
+                        }
+                    } catch (Exception ex) {
+                        Toast.makeText(this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         }else{
             JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
@@ -735,20 +770,20 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_e());
                 totalQuestions.setText("of " + questionArray.size() +"");
                 questionNumber.setText(String.valueOf(questionIndex + 1));
-                option_oneTV.setText(questionArray.get(questionIndex).getOption_1_e());
-                option_twoTV.setText(questionArray.get(questionIndex).getOption_2_e());
-                option_threeTV.setText(questionArray.get(questionIndex).getOption_3_e());
-                option_fourTV.setText(questionArray.get(questionIndex).getOption_4_e());
+                option_oneTV.setText(filteredOptionsArray.get(0).getOption_e());
+                option_twoTV.setText(filteredOptionsArray.get(1).getOption_e());
+                option_threeTV.setText(filteredOptionsArray.get(2).getOption_e());
+                option_fourTV.setText(filteredOptionsArray.get(3).getOption_e());
                 onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
                 downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
             }else{
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
                 totalQuestions.setText("of " + questionArray.size() +"");
                 questionNumber.setText(String.valueOf(questionIndex + 1));
-                option_oneTV.setText(questionArray.get(questionIndex).getOption_1_k());
-                option_twoTV.setText(questionArray.get(questionIndex).getOption_2_k());
-                option_threeTV.setText(questionArray.get(questionIndex).getOption_3_k());
-                option_fourTV.setText(questionArray.get(questionIndex).getOption_4_k());
+                option_oneTV.setText(filteredOptionsArray.get(0).getOption_k());
+                option_twoTV.setText(filteredOptionsArray.get(1).getOption_k());
+                option_threeTV.setText(filteredOptionsArray.get(2).getOption_k());
+                option_fourTV.setText(filteredOptionsArray.get(3).getOption_k());
                 onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
                 downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
             }

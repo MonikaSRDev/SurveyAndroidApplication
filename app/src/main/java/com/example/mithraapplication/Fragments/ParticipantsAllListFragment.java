@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 public class ParticipantsAllListFragment extends Fragment implements HandleServerResponse {
 
-    private TextView addNewParticipantTV;
+    private TextView addNewParticipantTV, participantDetailsAllList, participantEnrollmentStatusAllList, participantSurveyStatusAllList, participantModuleStatusAllList, participantReferralStatusAllList;
     private ImageView addNewParticipantIcon;
     private FloatingActionButton floatingAddButton;
     private RecyclerView participantListRecyclerView;
@@ -48,7 +48,6 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     private PHQLocations phqLocations;
 
     public ParticipantsAllListFragment(Context context, PHQLocations phqLocations) {
-        // Required empty public constructor
         this.context = context;
         this.phqLocations = phqLocations;
     }
@@ -61,7 +60,6 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_participants_all_list_screen, container, false);
     }
 
@@ -80,45 +78,54 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         participantListRecyclerView = view.findViewById(R.id.participantDetailsRecyclerView);
         floatingAddButton = view.findViewById(R.id.floatingActionButton);
         floatingAddButton.setVisibility(View.GONE);
+        participantDetailsAllList = view.findViewById(R.id.participantDetailsAllList);
+        participantEnrollmentStatusAllList = view.findViewById(R.id.participantEnrollmentStatusAllList);
+        participantSurveyStatusAllList = view.findViewById(R.id.participantSurveyStatusAllList);
+        participantModuleStatusAllList = view.findViewById(R.id.participantModuleStatusAllList);
+        participantReferralStatusAllList = view.findViewById(R.id.participantReferralStatusAllList);
     }
 
     private void onClickAddNewParticipantIcon() {
         addNewParticipantIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ParticipantProfileScreen.class);
+            Intent intent = new Intent(context, ParticipantProfileScreen.class);
+            intent.putExtra("RegisterParticipant Array", (Serializable) new RegisterParticipant());
+            intent.putExtra("PHQLocations", (Serializable) phqLocations);
+            intent.putExtra("isEditable", "true");
             startActivity(intent);
-            requireActivity().finish();
         });
     }
 
     private void onClickFloatingAddNewParticipantButton() {
         floatingAddButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ParticipantProfileScreen.class);
+            Intent intent = new Intent(context, ParticipantProfileScreen.class);
+            intent.putExtra("RegisterParticipant Array", (Serializable) new RegisterParticipant());
+            intent.putExtra("PHQLocations", (Serializable) phqLocations);
+            intent.putExtra("isEditable", "true");
             startActivity(intent);
-            requireActivity().finish();
         });
     }
 
     private void setRecyclerView(ArrayList<RegisterParticipant> registerParticipants){
-        participantScreenAdapter = new ParticipantScreenAdapter(getActivity(), registerParticipants, this::moveToParticipantProfileScreen);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        participantScreenAdapter = new ParticipantScreenAdapter(context, registerParticipants, this::moveToParticipantProfileScreen);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         participantListRecyclerView.setLayoutManager(linearLayoutManager);
         participantListRecyclerView.setAdapter(participantScreenAdapter);
 
     }
 
     private void moveToParticipantProfileScreen(RegisterParticipant registerParticipant){
-        Intent participantIntent = new Intent(getActivity(), ParticipantProfileScreen.class);
+        Intent participantIntent = new Intent(context, ParticipantProfileScreen.class);
         participantIntent.putExtra("RegisterParticipant Array", (Serializable) registerParticipant);
+        participantIntent.putExtra("PHQLocations", (Serializable) phqLocations);
         participantIntent.putExtra("isEditable", "false");
         startActivity(participantIntent);
-        requireActivity().finish();
     }
 
     private void callGetAllParticipantsDetails(){
         String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.participant.api.participants";
         ServerRequestAndResponse serverRequestAndResponse = new ServerRequestAndResponse();
         serverRequestAndResponse.setHandleServerResponse(this);
-        serverRequestAndResponse.getAllParticipantsDetails(getActivity(), url);
+        serverRequestAndResponse.getAllParticipantsDetails(context, url);
     }
 
     @Override
@@ -130,6 +137,9 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
 
         try{
             registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
+            registerParticipantsArrayList = registerParticipantsArrayList.stream()
+                        .filter(RegisterParticipant -> RegisterParticipant.getParticipantSHGAssociation().equalsIgnoreCase(phqLocations.getSHGName()))
+                        .collect(Collectors.toCollection(ArrayList::new));
             if(registerParticipantsArrayList.size() == 0){
                 addNewParticipantIcon.setVisibility(View.VISIBLE);
                 addNewParticipantTV.setVisibility(View.VISIBLE);
@@ -138,14 +148,10 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
                 addNewParticipantIcon.setVisibility(View.GONE);
                 addNewParticipantTV.setVisibility(View.GONE);
                 floatingAddButton.setVisibility(View.VISIBLE);
-                ArrayList<RegisterParticipant> registerParticipantsList = registerParticipantsArrayList;
-//                ArrayList<RegisterParticipant> registerParticipantsList = registerParticipantsArrayList.stream()
-//                        .filter(RegisterParticipant -> RegisterParticipant.getParticipantSHGAssociation().equalsIgnoreCase(phqLocations.getSHGName()))
-//                        .collect(Collectors.toCollection(ArrayList::new));
-                setRecyclerView(registerParticipantsList);
+                setRecyclerView(registerParticipantsArrayList);
             }
         }catch(Exception e){
-            Toast.makeText(getActivity(), jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -165,5 +171,22 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         if(addNewParticipantTV!=null){
             addNewParticipantTV.setText(R.string.add_new_participant_text);
         }
+
+        participantDetailsAllList.setText(R.string.details);
+        participantEnrollmentStatusAllList.setText(R.string.enrollment_status);
+        participantSurveyStatusAllList.setText(R.string.survey_status);
+        participantModuleStatusAllList.setText(R.string.module_status);
+        participantReferralStatusAllList.setText(R.string.referral_status);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

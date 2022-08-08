@@ -37,7 +37,7 @@
             android:gravity="top"
             android:orientation="horizontal">
 
-            <EditText
+            <TextView
                 android:id="@+id/PHQQuestionnaireSHGTV"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
@@ -46,8 +46,6 @@
                 android:background="@drawable/inputs_background"
                 android:fontFamily="@font/open_sans"
                 android:gravity="center_vertical"
-                android:imeOptions="actionNext"
-                android:inputType="text"
                 android:nextFocusRight="@id/PHQQuestionnaireID"
                 android:padding="10dp"
                 android:text="SHG Name"
@@ -68,7 +66,8 @@
                 android:inputType="text"
                 android:nextFocusRight="@id/PHQQuestionnaireName"
                 android:padding="10dp"
-                android:text="ID"
+                android:hint="ID"
+                android:textColorHint="@color/hint_text_color"
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
@@ -85,7 +84,8 @@
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:padding="10dp"
-                android:text="Name"
+                android:hint="Name"
+                android:textColorHint="@color/hint_text_color"
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 

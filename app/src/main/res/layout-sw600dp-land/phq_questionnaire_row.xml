@@ -79,14 +79,14 @@
                     android:background="@color/screen_background"
                     android:contentDescription="option1"
                     android:gravity="center"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
                     android:paddingBottom="20dp"
                     android:src="@drawable/phq_option_one" />
 
                 <TextView
                     android:id="@+id/PHQ_option_oneTV"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/open_sans_semibold"
@@ -121,14 +121,14 @@
                     android:background="@color/screen_background"
                     android:contentDescription="option2"
                     android:gravity="center"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
                     android:paddingBottom="20dp"
                     android:src="@drawable/phq_option_two" />
 
                 <TextView
                     android:id="@+id/PHQ_option_twoTV"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/open_sans_semibold"
@@ -163,14 +163,14 @@
                     android:background="@color/screen_background"
                     android:contentDescription="option3"
                     android:gravity="center"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
                     android:paddingBottom="20dp"
                     android:src="@drawable/phq_option_three" />
 
                 <TextView
                     android:id="@+id/PHQ_option_threeTV"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/open_sans_semibold"
@@ -205,14 +205,14 @@
                     android:background="@color/screen_background"
                     android:contentDescription="option4"
                     android:gravity="center"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
                     android:paddingBottom="20dp"
                     android:src="@drawable/phq_option_four" />
 
                 <TextView
                     android:id="@+id/PHQ_option_fourTV"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:autoSizeMaxTextSize="14sp"

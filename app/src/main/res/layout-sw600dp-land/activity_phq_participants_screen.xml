@@ -283,7 +283,7 @@
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="PHQ ID"
+                    android:text="@string/phq_id"
                     android:textColor="@color/text_color"
                     android:textSize="14sp" />
 
@@ -296,7 +296,7 @@
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="Screening ID"
+                    android:text="@string/screening_id"
                     android:textColor="@color/text_color"
                     android:textSize="14sp" />
 
@@ -309,7 +309,7 @@
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="Name"
+                    android:text="@string/name"
                     android:textColor="@color/text_color"
                     android:textSize="14sp" />
 
@@ -322,7 +322,7 @@
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="PHQ-9 Score"
+                    android:text="@string/phq_9_score"
                     android:textColor="@color/text_color"
                     android:textSize="14sp" />
 
@@ -335,7 +335,7 @@
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="Eligibility"
+                    android:text="@string/eligibility"
                     android:textColor="@color/text_color"
                     android:textSize="14sp" />
 

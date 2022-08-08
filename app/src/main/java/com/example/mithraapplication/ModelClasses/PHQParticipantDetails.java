@@ -15,6 +15,10 @@ public class PHQParticipantDetails extends JsonServerObject implements Serializa
     private int PHQScreeningScore = 0;
     @SerializedName("screening_id")
     private String Screening_ID = "null";
+    @SerializedName("shg")
+    private String SHGName = "null";
+    @SerializedName("screen_score")
+    private String ScreeningConsentScore = "null";
 
     public String getPHQScreeningID() {
         return PHQScreeningID;
@@ -54,5 +58,21 @@ public class PHQParticipantDetails extends JsonServerObject implements Serializa
 
     public void setScreening_ID(String screening_ID) {
         Screening_ID = screening_ID;
+    }
+
+    public String getSHGName() {
+        return SHGName;
+    }
+
+    public void setSHGName(String SHGName) {
+        this.SHGName = SHGName;
+    }
+
+    public String getScreeningConsentScore() {
+        return ScreeningConsentScore;
+    }
+
+    public void setScreeningConsentScore(String screeningConsentScore) {
+        ScreeningConsentScore = screeningConsentScore;
     }
 }

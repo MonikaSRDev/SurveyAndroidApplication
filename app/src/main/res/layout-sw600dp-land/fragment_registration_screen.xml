@@ -32,8 +32,8 @@
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/participantNameET"
+            <AutoCompleteTextView
+                android:id="@+id/participantNameAutoComplete"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginTop="2dp"
@@ -46,7 +46,7 @@
                 android:textColorHint="@color/hint_text_color"
                 android:nextFocusDown="@id/participantAgeET"
                 android:imeOptions="actionNext"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/genderTV"
@@ -192,16 +192,18 @@
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
-            <Spinner
-                android:id="@+id/spinnerSHG"
+            <TextView
+                android:id="@+id/SHGParticipantTV"
                 android:layout_width="318dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/dropdown_with_arrow"
-                android:dropDownVerticalOffset="48dp"
-                android:padding="5dp"
-                android:popupBackground="@color/white"
-                android:spinnerMode="dropdown" />
+                android:background="@drawable/inputs_background"
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="14sp"/>
 
 
         </LinearLayout>

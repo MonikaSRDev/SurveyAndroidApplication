@@ -11,6 +11,7 @@ public class ParticipantAnswers implements Serializable {
     private String question_no = "null";
     @SerializedName("question")
     private String question = "null";
+    private String option_id = "null";
     @SerializedName("ans")
     private String selected_answer = "null";
     @SerializedName("w")
@@ -84,5 +85,13 @@ public class ParticipantAnswers implements Serializable {
 
     public void setSeconds_taken(String seconds_taken) {
         this.seconds_taken = seconds_taken;
+    }
+
+    public String getOption_id() {
+        return option_id;
+    }
+
+    public void setOption_id(String option_id) {
+        this.option_id = option_id;
     }
 }

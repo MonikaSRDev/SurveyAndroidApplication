@@ -98,8 +98,8 @@ public class ParticipantReportFragment extends Fragment implements AdapterView.O
     }
 
     private void setRecyclerView(){
-        participantReportAdapter = new ParticipantReportAdapter(getActivity(), participantReportArrayList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        participantReportAdapter = new ParticipantReportAdapter(context, participantReportArrayList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         participantStatusRecyclerView.setLayoutManager(linearLayoutManager);
         participantStatusRecyclerView.setAdapter(participantReportAdapter);
     }
@@ -128,14 +128,14 @@ public class ParticipantReportFragment extends Fragment implements AdapterView.O
         EditText userSHGET = customLayout.findViewById(R.id.userSHGETPopup);
         userSHGET.setText(registerParticipant.getParticipantSHGAssociation());
         userCurrentStatusSpinner = customLayout.findViewById(R.id.userCurrentStatusSpinnerPopup);
-        userStatusAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, userStatus);
+        userStatusAdapter = new ArrayAdapter(context, R.layout.spinner_item, userStatus);
 //        userStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userCurrentStatusSpinner.setAdapter(userStatusAdapter);
         userCurrentStatusSpinner.setOnItemSelectedListener(this);
         Button saveButton = customLayout.findViewById(R.id.saveCurrentStatusButton);
         ImageView closeButton = customLayout.findViewById(R.id.closeAlertButtonPopup);
 
-        dialog  = new Dialog(getActivity());
+        dialog  = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
@@ -170,5 +170,16 @@ public class ParticipantReportFragment extends Fragment implements AdapterView.O
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

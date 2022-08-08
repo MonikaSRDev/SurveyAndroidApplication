@@ -3,6 +3,7 @@ package com.example.mithraapplication.Fragments;
 import static com.example.mithraapplication.Fragments.RegistrationFragment.trackingName;
 import static com.example.mithraapplication.ParticipantProfileScreen.participant_primary_ID;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,6 +53,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     private TrackingParticipantStatus trackingParticipantStatus = null;
     private String isEditable = "true";
     private SocioDemography socioDemographyDetails = null;
+    private Context context;
 
 
     @Nullable
@@ -92,7 +94,8 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         setOnclickOfEditButton();
     }
 
-    public SocioDemographyFragment(TrackingParticipantStatus trackingParticipantStatus, String isEditable){
+    public SocioDemographyFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable){
+        this.context = context;
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
     }
@@ -694,7 +697,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         nearestPHC = !nearestPHCET.getText().toString().isEmpty() ? nearestPHCET.getText().toString(): "NULL";
 
         SocioDemography socioDemographyObject = new SocioDemography();
-        socioDemographyObject.setUser_pri_id(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
+        socioDemographyObject.setUser_pri_id(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID)));
         socioDemographyObject.setYearsOfEducation(participantSchooling);
         socioDemographyObject.setMaritalStatus(participantMaritalStatus);
         socioDemographyObject.setNumFamilyAdultMembers(numAdultFamily);
@@ -709,7 +712,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         socioDemographyObject.setCBOMeetings(SHGMeetings);
         socioDemographyObject.setNearestPHC(nearestPHC);
         socioDemographyObject.setActive("yes");
-        socioDemographyObject.setCreated_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        socioDemographyObject.setCreated_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
 
         return socioDemographyObject;
     }
@@ -755,42 +758,42 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     }
 
     private void callServerPostSocioDemography(){
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/demography";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.postSocioDemographyDetails(getActivity(), getUserEnteredData(), url);
+        requestObject.postSocioDemographyDetails(context, getUserEnteredData(), url);
     }
 
     private void callUpdateTrackingDetails(String socioDemographyName){
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking/" + trackingName;
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/tracking/" + trackingName;
         UpdateSocioDemographyTracking trackingParticipantStatus = new UpdateSocioDemographyTracking();
         trackingParticipantStatus.setSocio_demography(socioDemographyName);
         trackingParticipantStatus.setEnroll("66");
-        trackingParticipantStatus.setModified_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        trackingParticipantStatus.setModified_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.putTrackingStatusSocioDemography(getActivity(), trackingParticipantStatus, url);
+        requestObject.putTrackingStatusSocioDemography(context, trackingParticipantStatus, url);
     }
 
     private void callGetIndividualSocioDemographyDetails() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography/" + trackingParticipantStatus.getSocio_demography();
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/demography/" + trackingParticipantStatus.getSocio_demography();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getParticipantSocioDemographyDetails(getActivity(), url);
+        requestObject.getParticipantSocioDemographyDetails(context, url);
     }
 
     private void callServerUpdateSocioDemographyDetails() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/demography/" +  trackingParticipantStatus.getSocio_demography();
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/demography/" +  trackingParticipantStatus.getSocio_demography();
         SocioDemography socioDemographyObject = getUserEnteredData();
         socioDemographyObject.setUser_pri_id(trackingParticipantStatus.getUser_pri_id());
-        socioDemographyObject.setModified_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        socioDemographyObject.setModified_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.putSocioDemographyDetails(getActivity(), socioDemographyObject, url);
+        requestObject.putSocioDemographyDetails(context, socioDemographyObject, url);
     }
 
     private void moveToDiseaseProfileTab(){
-        ((ParticipantProfileScreen)getActivity()).setupSelectedTabFragment(3);
+        ((ParticipantProfileScreen)context).setupSelectedTabFragment(2);
     }
 
 
@@ -805,7 +808,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             if(isEditable!=null && isEditable.equals("true")){
                 if (frappeResponse != null && frappeResponse.getDoctype().equals("demography")) {
                     String registrationName = frappeResponse.getName();
-                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.socio_demography), frappeResponse.getUser_pri_id(), registrationName);
+                    mithraUtility.putSharedPreferencesData(context, context.getString(R.string.socio_demography), frappeResponse.getUser_pri_id(), registrationName);
                     callUpdateTrackingDetails(registrationName);
                 } else if (frappeResponse != null && frappeResponse.getDoctype().equals("tracking")) {
                     trackingName = frappeResponse.getName();
@@ -815,7 +818,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             }else{
                 if(isEditable!=null && isEditable.equals("reEdit")){
                     editButton.setBackgroundResource(R.drawable.yes_no_button);
-                    Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
                 }
                 Type typeSocioDemography = new TypeToken<SocioDemography>(){}.getType();
                 socioDemographyDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeSocioDemography);
@@ -892,5 +895,16 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         eightToNineButton.setText(R.string.eight_to_nine);
         tenToElevenButton.setText(R.string.ten_to_eleven);
         twelveOrMoreButton.setText(R.string.twelve_or_more);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

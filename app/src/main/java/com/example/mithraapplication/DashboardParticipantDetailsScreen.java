@@ -36,8 +36,9 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     private Button englishButtonDashboard, kannadaButtonDashboard;
     private LinearLayout dashboardLinearLayout, participantLinearLayout, PHQLinearLayout;
     private TextView dashboardTVDashboard, participantTVDashboard, coordinatorNameTVDashboard, participantName,
-            participantAge, participantPhoneNum, participantPanchayat, participantSHG, participantVillage;
-    private TextView preScreeningTV, registrationTV, socioDemographyTV, diseaseProfileTV;
+            participantAge, participantPhoneNum, participantPanchayat, participantSHG, participantVillage, phqScreeningDashboardTV;
+    private TextView preScreeningTV, registrationTV, socioDemographyTV, diseaseProfileTV, enrolmentStatusTV, surveyStatusTV, moduleStatusTV, referralStatusTV,
+            PHQ9TV, badsTV, quidsTV, whodasTV, module0TV, module1TV, module2TV, module3TV, module4TV, module5TV, module6TV, module7TV;
     private ImageView preScreeningIV, registrationIV, socioDemographyIV, diseaseProfileIV;
     private ImageView mithraLogoDashboard, coordinatorProfileDashboard, notificationsIconDashboard, dashboardIconDashboard;
     private final MithraUtility mithraUtility = new MithraUtility();
@@ -71,6 +72,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         dashboardTVDashboard = findViewById(R.id.dashboardTVDP);
         dashboardTVDashboard.setTextColor(getResources().getColor(R.color.text_color, this.getTheme()));
         participantTVDashboard = findViewById(R.id.participantsTVDP);
+        phqScreeningDashboardTV = findViewById(R.id.phqScreeningTVDP);
         coordinatorNameTVDashboard = findViewById(R.id.coordinatorNameTVDP);
         String coordinatorUserName = mithraUtility.getSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator));
         if(!coordinatorUserName.equals("NULL")){
@@ -98,6 +100,25 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         registrationIV = findViewById(R.id.registrationIconDP);
         socioDemographyIV = findViewById(R.id.socioDemographyIconDP);
         diseaseProfileIV = findViewById(R.id.diseaseProfileIconDP);
+
+        enrolmentStatusTV = findViewById(R.id.enrollmentStatusDP);
+        surveyStatusTV = findViewById(R.id.surveyStatusDP);
+        moduleStatusTV = findViewById(R.id.moduleStatusDP);
+        referralStatusTV = findViewById(R.id.referralStatusTVDP);
+        PHQ9TV = findViewById(R.id.phq9TVDP);
+        badsTV = findViewById(R.id.badsTVDP);
+        quidsTV = findViewById(R.id.quidsTVDP);
+        whodasTV = findViewById(R.id.whodasTVDP);
+        module0TV = findViewById(R.id.module0TVDP);
+        module1TV = findViewById(R.id.module1TVDP);
+        module2TV = findViewById(R.id.module2TVDP);
+        module3TV = findViewById(R.id.module3TVDP);
+        module4TV = findViewById(R.id.module4TVDP);
+        module5TV = findViewById(R.id.module5TVDP);
+        module6TV = findViewById(R.id.module6TVDP);
+        module7TV = findViewById(R.id.module7TVDP);
+
+
     }
 
     private void getIntentData(){
@@ -162,6 +183,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     private void moveToPHQScreeningPage(){
         Intent participantIntent = new Intent(DashboardParticipantDetailsScreen.this, PHQ9SHGListScreen.class);
         startActivity(participantIntent);
+        finish();
     }
 
     private void onClickOfPHQScreening(){
@@ -170,7 +192,7 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
 
     private void setOnClickForParticipants(){
         participantLinearLayout.setOnClickListener(v -> {
-            Intent loginIntent = new Intent(DashboardParticipantDetailsScreen.this, ParticipantsScreen.class);
+            Intent loginIntent = new Intent(DashboardParticipantDetailsScreen.this, CoordinatorSHGList.class);
             startActivity(loginIntent);
             finish();
         });
@@ -265,6 +287,29 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
         super.onConfigurationChanged(newConfig);
         participantTVDashboard.setText(R.string.participants);
         dashboardTVDashboard.setText(R.string.dashboard);
+        phqScreeningDashboardTV.setText(R.string.phq_screening);
+
+        preScreeningTV.setText(R.string.pre_screening);
+        registrationTV.setText(R.string.registration);
+        socioDemographyTV.setText(R.string.socio_demography);
+        diseaseProfileTV.setText(R.string.disease_profile);
+
+        enrolmentStatusTV.setText(R.string.enrollment_status);
+        surveyStatusTV.setText(R.string.survey_status);
+        moduleStatusTV.setText(R.string.module_status);
+        referralStatusTV.setText(R.string.referral_status);
+        PHQ9TV.setText(R.string.phq9);
+        badsTV.setText(R.string.bads);
+        quidsTV.setText(R.string.quids_sr);
+        whodasTV.setText(R.string.whodas);
+        module0TV.setText(R.string.module_0);
+        module1TV.setText(R.string.module_1);
+        module2TV.setText(R.string.module_2);
+        module3TV.setText(R.string.module_3);
+        module4TV.setText(R.string.module_4);
+        module5TV.setText(R.string.module_5);
+        module6TV.setText(R.string.module_6);
+        module7TV.setText(R.string.module_7);
     }
 
 

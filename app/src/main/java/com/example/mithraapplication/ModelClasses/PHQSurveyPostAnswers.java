@@ -16,6 +16,7 @@ public class PHQSurveyPostAnswers extends JsonServerObject{
     private String ParticipantName = "null";
     private String screening_id = "null";
     private String shg="null";
+    private String register = "no";
 
     public String getMan_id() {
         return man_id;
@@ -103,5 +104,13 @@ public class PHQSurveyPostAnswers extends JsonServerObject{
 
     public void setShg(String shg) {
         this.shg = shg;
+    }
+
+    public String getRegister() {
+        return register;
+    }
+
+    public void setRegister(String register) {
+        this.register = register;
     }
 }

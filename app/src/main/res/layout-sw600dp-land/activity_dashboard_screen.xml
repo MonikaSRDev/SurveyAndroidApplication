@@ -325,7 +325,7 @@
 
                         <TextView
                             android:id="@+id/participantIDDashboard"
-                            android:layout_width="wrap_content"
+                            android:layout_width="120dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
@@ -337,19 +337,20 @@
 
                         <TextView
                             android:id="@+id/participantDetailsDashboard"
-                            android:layout_width="wrap_content"
+                            android:layout_width="90dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
-                            android:gravity="center"
+                            android:gravity="start"
                             android:text="@string/details"
+                            android:paddingStart="30dp"
                             android:textAllCaps="true"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/participantEnrollmentStatusDashboard"
-                            android:layout_width="wrap_content"
+                            android:layout_width="120dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
@@ -361,7 +362,7 @@
 
                         <TextView
                             android:id="@+id/participantSurveyStatusDashboard"
-                            android:layout_width="wrap_content"
+                            android:layout_width="120dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
@@ -373,7 +374,7 @@
 
                         <TextView
                             android:id="@+id/participantModuleStatusDashboard"
-                            android:layout_width="wrap_content"
+                            android:layout_width="120dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"
@@ -385,7 +386,7 @@
 
                         <TextView
                             android:id="@+id/participantReferralStatusDashboard"
-                            android:layout_width="wrap_content"
+                            android:layout_width="120dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:fontFamily="@font/open_sans"

@@ -17,5 +17,6 @@
     <color name="colorAccent">#FF9F00</color>
     <color name="enrollmentStatusColor">#F9582D</color>
     <color name="surveyStatusColor">#51459E</color>
+    <color name="notEligibleColor">#F4375C</color>
 
 </resources>

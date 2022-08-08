@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,10 +33,12 @@ import com.example.mithraapplication.LoginScreen;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
+import com.example.mithraapplication.ModelClasses.OptionsRequest;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.PHQSurveyPostAnswers;
 import com.example.mithraapplication.ModelClasses.PostSurveyQuestions;
 import com.example.mithraapplication.ModelClasses.QuestionAnswers;
+import com.example.mithraapplication.ModelClasses.QuestionOptions;
 import com.example.mithraapplication.ModelClasses.SurveyQuestions;
 import com.example.mithraapplication.PHQParticipantsScreen;
 import com.example.mithraapplication.ParticipantLandingScreen;
@@ -47,15 +50,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class PHQQuestionnaireFragment extends Fragment implements HandleServerResponse {
 
-    private EditText phqSHGName, phqID, phqParticipantName;
+    private EditText phqID, phqParticipantName;
+    private TextView phqSHGName;
     private Button saveButton;
     private ArrayList<QuestionAnswers> questionArray = new ArrayList<>();
+    private ArrayList<QuestionOptions> optionsArray = new ArrayList<>();
     private final MithraUtility mithraUtility = new MithraUtility();
     private String surveyStartDateTime, surveyEndDateTime, totalSurveyTime, questionStartTime, questionEndTime, totalQuestionTime;
     private int questionIndex = 0, selectedOptionValue = 0, totalScore = 0;
@@ -93,8 +100,9 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
 //        initializeData();
         setOnClickForSaveButton();
         callServerToGetPHQ9Questions();
+        callServerToGetPHQ9Options();
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
                 new IntentFilter("PHQQuestionnaire"));
     }
 
@@ -232,7 +240,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
                     setRecyclerView();
                 }
             }catch(Exception e){
-                Toast.makeText(getActivity(), jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
             }
     }
 
@@ -270,6 +278,18 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         }
     };
 
+    @Override
+    public void onResume() {
+        context.registerReceiver(mMessageReceiver, new IntentFilter("PHQScreeningSurveyData"));
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        context.unregisterReceiver(mMessageReceiver);
+        super.onPause();
+    }
+
     private void showDialogForPHQScreeningID(String PHQID){
         View customLayout = getLayoutInflater().inflate(R.layout.activity_phq_screening_popup, null);
 
@@ -278,7 +298,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         phqScreeningID.setText(PHQID);
         Button okButton = customLayout.findViewById(R.id.OKScreeningIDButton);
 
-        dialog  = new Dialog(getActivity());
+        dialog  = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
@@ -291,15 +311,15 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         dialog.show();
 
         okButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), PHQParticipantsScreen.class);
+            Intent intent = new Intent(context, PHQParticipantsScreen.class);
+            intent.putExtra("PHQLocations", (Serializable) phqLocations);
             startActivity(intent);
-            getActivity().finish();
         });
     }
 
     private void setRecyclerView(){
-        phqQuestionnaireAdapter = new PHQQuestionnaireAdapter(getActivity(), questionArray);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        phqQuestionnaireAdapter = new PHQQuestionnaireAdapter(context, questionArray, optionsArray);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         questionsRecyclerView.setLayoutManager(linearLayoutManager);
         questionsRecyclerView.setAdapter(phqQuestionnaireAdapter);
     }
@@ -314,6 +334,18 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.getPHQ9Questions(context, surveyQuestions, url);
+    }
+
+    /**
+     * Description : Call the server to get the PHQ9 questions for the participant
+     */
+    private void callServerToGetPHQ9Options(){
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.survey_question_options.api.options";
+        OptionsRequest optionsRequest = new OptionsRequest();
+        optionsRequest.setFilter_data("{'sur_pri_id':'SUR0001'}");
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.getPHQ9Options(context, optionsRequest, url);
     }
 
     /**
@@ -332,8 +364,9 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         phqSurveyPostAnswers.setSurvey_end_time(surveyEndDateTime);
         phqSurveyPostAnswers.setMan_id(phqID.getText().toString());
         phqSurveyPostAnswers.setParticipantName(phqParticipantName.getText().toString());
-        phqSurveyPostAnswers.setScreening_id("Pending");
+        phqSurveyPostAnswers.setScreening_id("S0068");
         phqSurveyPostAnswers.setShg(phqLocations.getName());
+        phqSurveyPostAnswers.setRegister("no");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.postPHQScreeningAnswers(context, phqSurveyPostAnswers, url);
@@ -349,18 +382,30 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
         if(jsonObject.get("message")!=null) {
             ArrayList<QuestionAnswers> questionAnswersArrayList = new ArrayList<>();
-
             try {
                 questionAnswersArrayList = gson.fromJson(jsonObject.get("message"), type);
-                if (questionAnswersArrayList.size() > 1) {
+                if (questionAnswersArrayList.size() > 0) {
                     questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
                     Log.i("SurveyScreen", "responseReceivedSuccessfully : " + questionAnswersArrayList);
                     questionArray = questionAnswersArrayList;
-                    surveyStartDateTime = mithraUtility.getCurrentTime();
-                    setRecyclerView();
+//                    surveyStartDateTime = mithraUtility.getCurrentTime();
+//                    setRecyclerView();
                 }
             } catch (Exception e) {
-                Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                Type typeOptions = new TypeToken<ArrayList<QuestionOptions>>(){}.getType();
+                if(jsonObject.get("message")!=null) {
+                    ArrayList<QuestionOptions> questionOptionsArrayList = new ArrayList<>();
+                    try {
+                        questionOptionsArrayList = gson.fromJson(jsonObject.get("message"), typeOptions);
+                        if (questionOptionsArrayList.size() > 0) {
+                            optionsArray = questionOptionsArrayList;
+                            surveyStartDateTime = mithraUtility.getCurrentTime();
+                            setRecyclerView();
+                        }
+                    } catch (Exception ex) {
+                        Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         }else{
             JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
@@ -387,5 +432,16 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    /**
+     * @param newConfig
+     * Description : This method is used to update the views on change of language
+     */
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+
+        saveButton.setText(R.string.save);
+        super.onConfigurationChanged(newConfig);
     }
 }

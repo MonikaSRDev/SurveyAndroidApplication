@@ -43,9 +43,16 @@ public class PHQParticipantsAdapter extends RecyclerView.Adapter<PHQParticipants
         holder.phqScreeningID.setText(participantDetails.getManualID());
         holder.phqParticipantName.setText(participantDetails.getPHQParticipantName());
         holder.phqScoreVal.setText(String.valueOf(participantDetails.getPHQScreeningScore()));
-        holder.phqEligibility.setText(participantDetails.getScreening_ID());
 
-        if(!participantDetails.getScreening_ID().equalsIgnoreCase("null") && participantDetails.getScreening_ID().equalsIgnoreCase("pending")){
+        if(participantDetails.getScreeningConsentScore().equals("pending")){
+            holder.phqEligibility.setText("Pending");
+            holder.eligibilityStatus.setBackgroundColor(context.getResources().getColor(R.color.notEligibleColor, context.getTheme()));
+        }else{
+            holder.phqEligibility.setText(participantDetails.getScreening_ID());
+            holder.eligibilityStatus.setBackgroundColor(context.getResources().getColor(R.color.completed_color, context.getTheme()));
+        }
+
+        if(!participantDetails.getScreening_ID().equalsIgnoreCase("null") && participantDetails.getScreening_ID().equalsIgnoreCase("S0068")){
             holder.itemView.setOnClickListener(v -> itemClickListener.onItemClick(participantDetails));
         }
     }
@@ -53,6 +60,7 @@ public class PHQParticipantsAdapter extends RecyclerView.Adapter<PHQParticipants
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView phqParticipantID, phqScreeningID, phqParticipantName, phqScoreVal, phqEligibility;
+        View eligibilityStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,6 +70,7 @@ public class PHQParticipantsAdapter extends RecyclerView.Adapter<PHQParticipants
             phqParticipantName = itemView.findViewById(R.id.PHQParticipantNameVal);
             phqScoreVal = itemView.findViewById(R.id.PHQScoreVal);
             phqEligibility = itemView.findViewById(R.id.PHQEligibilityVal);
+            eligibilityStatus = itemView.findViewById(R.id.PHQEligibilityView);
         }
     }
 

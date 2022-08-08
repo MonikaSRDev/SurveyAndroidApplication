@@ -298,6 +298,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         dashboardTitleTV.setText(R.string.dashboard);
         participantTVDashboard.setText(R.string.participants);
         dashboardTVDashboard.setText(R.string.dashboard);
+        PHQTextView.setText(R.string.phq_screening);
         villageNameDashboardTV.setText(R.string.village);
         participantIDDashboard.setText(R.string.part_id);
         participantEnrollmentStatusDashboard.setText(R.string.enrollment_status);
@@ -347,8 +348,8 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
                 oldParticipantsArrayList = registerParticipantsArrayList;
                 if(registerParticipantsArrayList.size() == 0){
 //                    floatingActionButton.setVisibility(View.GONE);
-                    addParticipantTV.setVisibility(View.VISIBLE);
-                    addParticipantIcon.setVisibility(View.VISIBLE);
+                    addParticipantTV.setVisibility(View.GONE);
+                    addParticipantIcon.setVisibility(View.GONE);
                 }else{
 //                    floatingActionButton.setVisibility(View.VISIBLE);
                     addParticipantTV.setVisibility(View.GONE);

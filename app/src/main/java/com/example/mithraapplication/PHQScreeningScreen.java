@@ -1,13 +1,19 @@
 package com.example.mithraapplication;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.LocaleList;
+import android.util.DisplayMetrics;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,11 +27,13 @@ import com.example.mithraapplication.ModelClasses.QuestionAnswers;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Objects;
 
 public class PHQScreeningScreen extends AppCompatActivity {
 
     private LinearLayout phqScreeningLinearlayout, dashboardLinearLayout, participantLinearLayout;
-    private TextView phqScreeningTV, dashboardTV, participantTV;
+    private TextView phqScreeningTV, dashboardTV, participantTV, phqScreenTitle;
     private ImageView phqScreeningIcon, dashboardIcon, participantIcon;
     private ArrayList<QuestionAnswers> questionAnswersArrayList = new ArrayList<>();
     private TabLayout phqScreeningTabLayout;
@@ -35,6 +43,8 @@ public class PHQScreeningScreen extends AppCompatActivity {
     private Fragment fragment = null;
     private PHQLocations phqLocations;
     private PHQParticipantDetails phqParticipantDetails;
+    private Button englishButton, kannadaButton;
+    public static String isLanguageSelected = "en";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +54,7 @@ public class PHQScreeningScreen extends AppCompatActivity {
         getIntentData();
         moveToDashboardScreen();
         moveToParticipantsScreen();
+        onClickOfLanguageButton();
     }
 
     private void RegisterViews() {
@@ -65,6 +76,11 @@ public class PHQScreeningScreen extends AppCompatActivity {
         phqScreeningTabLayout = findViewById(R.id.tabLayoutPHQScreening);
         phqScreeningFrameLayout = findViewById(R.id.phqScreeningFrameLayout);
         setTabSelectedListener();
+
+        englishButton = findViewById(R.id.englishButtonPHQScreening);
+        kannadaButton = findViewById(R.id.kannadaButtonPHQScreening);
+
+        phqScreenTitle = findViewById(R.id.dashboardTitleTVPHQScreening);
     }
 
     private void getIntentData(){
@@ -151,5 +167,81 @@ public class PHQScreeningScreen extends AppCompatActivity {
             Intent participantIntent = new Intent(PHQScreeningScreen.this, DashboardScreen.class);
             startActivity(participantIntent);
         });
+    }
+
+    /**
+     * Description : This method is used to change the language of the screen based on the button clicked
+     */
+    private void onClickOfLanguageButton(){
+        englishButton.setOnClickListener(v -> {
+            isLanguageSelected = "en";
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("en");
+        });
+
+        kannadaButton.setOnClickListener(v -> {
+            isLanguageSelected = "kn";
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            changeLocalLanguage("kn");
+        });
+    }
+
+    /**
+     * @param selectedLanguage
+     * Description : This method is used to change the content of the screen to user selected language
+     */
+    public void changeLocalLanguage(String selectedLanguage){
+        Locale myLocale = new Locale(selectedLanguage);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(myLocale);
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    public void getCurrentLocale(){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        LocaleList lang = conf.getLocales();
+        if(lang.get(0).getLanguage().equals("kn")){
+            isLanguageSelected = "kn";
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+        }else{
+            isLanguageSelected = "en";
+            englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
+            englishButton.setTextColor(getResources().getColor(R.color.black));
+            kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
+            kannadaButton.setTextColor(getResources().getColor(R.color.black));
+        }
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    /**
+     * @param newConfig
+     * Description : This method is used to update the views on change of language
+     */
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+
+        participantTV.setText(R.string.participants);
+        dashboardTV.setText(R.string.dashboard);
+        phqScreenTitle.setText(R.string.phq_screening);
+        phqScreeningTV.setText(R.string.phq_screening);
+        Objects.requireNonNull(phqScreeningTabLayout.getTabAt(0)).setText(R.string.phq_screening);
+        Objects.requireNonNull(phqScreeningTabLayout.getTabAt(1)).setText(R.string.screening);
+
+        super.onConfigurationChanged(newConfig);
     }
 }

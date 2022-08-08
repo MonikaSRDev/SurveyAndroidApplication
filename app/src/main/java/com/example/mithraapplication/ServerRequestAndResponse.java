@@ -12,10 +12,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.mithraapplication.ModelClasses.DiseasesProfilePostRequest;
 import com.example.mithraapplication.ModelClasses.GetParticipantDetails;
+import com.example.mithraapplication.ModelClasses.OptionsRequest;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.PHQSurveyPostAnswers;
 import com.example.mithraapplication.ModelClasses.ParticipantScreening;
 import com.example.mithraapplication.ModelClasses.PostSurveyQuestions;
+import com.example.mithraapplication.ModelClasses.QuestionOptions;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.SocioDemography;
 import com.example.mithraapplication.ModelClasses.SurveyQuestions;
@@ -23,6 +25,7 @@ import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdateDiseaseProfileTracking;
 import com.example.mithraapplication.ModelClasses.UpdatePassword;
 import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
+import com.example.mithraapplication.ModelClasses.UpdateRegisterStatus;
 import com.example.mithraapplication.ModelClasses.UpdateScreeningStatus;
 import com.example.mithraapplication.ModelClasses.UpdateSocioDemographyTracking;
 import com.example.mithraapplication.ModelClasses.UserLogin;
@@ -285,6 +288,10 @@ public class ServerRequestAndResponse extends Application {
         postJsonRequest(context, surveyQuestions.ToJSON(), url);
     }
 
+    public void getPHQ9Options(Context context, OptionsRequest optionsRequest, String url){
+        postJsonRequest(context, optionsRequest.ToJSON(), url);
+    }
+
     public void getTrackingDetails(Context context, String url){
         getJsonRequest(context, url);
     }
@@ -367,6 +374,10 @@ public class ServerRequestAndResponse extends Application {
 
     public void putUpdateScreeningStatus(Context context, UpdateScreeningStatus updateScreeningStatus, String url){
         putJsonRequest(context, updateScreeningStatus.ToJSON(), url);
+    }
+
+    public void putUpdateRegisterStatus(Context context, UpdateRegisterStatus updateRegisterStatus, String url){
+        putJsonRequest(context, updateRegisterStatus.ToJSON(), url);
     }
 
 }

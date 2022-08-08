@@ -11,27 +11,28 @@ import java.io.Serializable;
 public class RegisterParticipant extends JsonServerObject implements Serializable {
     private String name = "null";
     @SerializedName("user_name")
-    private String participantUserName = "NULL";
+    private String participantUserName = "null";
     @SerializedName("full_name")
-    private String participantName = "NULL";
+    private String participantName = "null";
     @SerializedName("gender")
-    private String participantGender = "NULL";
+    private String participantGender = "null";
     @SerializedName("age")
-    private String participantAge = "NULL";
+    private String participantAge = "null";
     @SerializedName("mobile_number")
-    private String participantPhoneNumber = "NULL";
+    private String participantPhoneNumber = "null";
     @SerializedName("panchayat")
-    private String participantPanchayat = "NULL";
+    private String participantPanchayat = "null";
     @SerializedName("village_name")
-    private String participantVillageName = "NULL";
-    @SerializedName("shg_associate")
-    private String participantSHGAssociation = "NULL";
-    private String screeningid = "NULL";
-    private String user_pri_id = "NULL";
-    private String created_user = "NULL";
+    private String participantVillageName = "null";
+    @SerializedName("shg")
+    private String participantSHGAssociation = "null";
+    private String user_pri_id = "null";
+    private String created_user = "null";
     private String phq_scr_id = "null";
     private String man_id = "null";
     private String modified_user = "UT-9-2022-07-11-08:19:58-no_one_modified";
+    private String active = "yes";
+    private String location = "null";
 
     public String getParticipantName() {
         return participantName;
@@ -97,14 +98,6 @@ public class RegisterParticipant extends JsonServerObject implements Serializabl
         this.participantPanchayat = participantPanchayat;
     }
 
-    public String getScreeningid() {
-        return screeningid;
-    }
-
-    public void setScreeningid(String screeningid) {
-        this.screeningid = screeningid;
-    }
-
     public String getUser_pri_id() {
         return user_pri_id;
     }
@@ -151,6 +144,22 @@ public class RegisterParticipant extends JsonServerObject implements Serializabl
 
     public void setMan_id(String man_id) {
         this.man_id = man_id;
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){

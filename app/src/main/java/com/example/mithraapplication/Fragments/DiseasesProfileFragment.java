@@ -64,7 +64,6 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     private final MithraUtility mithraUtility = new MithraUtility();
     private TextView diseaseTV, diagnosedAgeTV, receivedTreatmentTV, limitActivitiesTV, specifyDiseaseTV;
     private Button yesDiseaseButton, noDiseaseButton, yesReceivedTreatmentButton, noReceivedTreatmentButton, yesLimitActivities,  noLimitActivities, editButton;
-    private ParticipantProfileScreen participantsProfileScreen;
     private TrackingParticipantStatus trackingParticipantStatus;
     private String isEditable;
     private Context context;
@@ -74,7 +73,6 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        participantsProfileScreen = (ParticipantProfileScreen) getActivity();
         return inflater.inflate(R.layout.fragment_disease_profile_screen, container, false);
     }
 
@@ -98,12 +96,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         }
         if(isEditable!= null && isEditable.equals("false")){
             nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
-//            nextDiseaseProfileButton.setEnabled(false);
-//            nextDiseaseProfileButton.setText(R.string.save);
-//            nextDiseaseProfileButton.setBackgroundResource(R.drawable.inputs_background);
-//            nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.text_color));
         }
-//        nextDiseaseProfileButton.setEnabled(isEditable != null && !isEditable.equalsIgnoreCase("false"));
         onClickOfNextButton();
         setOnclickOfEditButton();
 
@@ -135,13 +128,13 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
 
     @Override
     public void onResume() {
-        participantsProfileScreen.registerReceiver(mMessageReceiver, new IntentFilter("ParticipantDiseaseData"));
+        context.registerReceiver(mMessageReceiver, new IntentFilter("ParticipantDiseaseData"));
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        participantsProfileScreen.unregisterReceiver(mMessageReceiver);
+        context.unregisterReceiver(mMessageReceiver);
         super.onPause();
     }
 
@@ -346,11 +339,8 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
      * Description : Move from profile screen activity to the ParticipantScreen activity.
      */
     private void moveToParticipantsScreen(){
-        Intent intent = new Intent(getActivity(), ParticipantsScreen.class);
+        Intent intent = new Intent(context, ParticipantsScreen.class);
         startActivity(intent);
-        if(getActivity()!=null){
-            getActivity().finish();
-        }
     }
 
     private void startProgressBar(){
@@ -358,7 +348,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
 
         ProgressBar progressbar = customLayout.findViewById(R.id.progressBar);
 
-        dialog  = new Dialog(getActivity());
+        dialog  = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
@@ -648,7 +638,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
      */
     private DiseasesProfilePostRequest getDiseaseProfileData(){
         DiseasesProfilePostRequest diseasesProfilePostRequest = new DiseasesProfilePostRequest();
-        diseasesProfilePostRequest.setUser_pri_id(mithraUtility.getSharedPreferencesData(participantsProfileScreen, participantsProfileScreen.getString(R.string.primaryID), participantsProfileScreen.getString(R.string.participantPrimaryID)));
+        diseasesProfilePostRequest.setUser_pri_id(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID)));
         if(diseasesProfile.get(0).getDiagnosed().equals("yes")){
             diseasesProfilePostRequest.setDiabetes_mellitus(getDiseaseList(0));
         }else{
@@ -734,7 +724,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         }
 
         diseasesProfilePostRequest.setActive("yes");
-        diseasesProfilePostRequest.setCreated_user(mithraUtility.getSharedPreferencesData(participantsProfileScreen, participantsProfileScreen.getString(R.string.primaryID), participantsProfileScreen.getString(R.string.coordinatorPrimaryID)));
+        diseasesProfilePostRequest.setCreated_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
 
         return diseasesProfilePostRequest;
     }
@@ -747,7 +737,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfilePostRequest diseasesProfilePostRequest = getDiseaseProfileData();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.postDiseaseProfileDetails(getActivity(), diseasesProfilePostRequest, url);
+        requestObject.postDiseaseProfileDetails(context, diseasesProfilePostRequest, url);
     }
 
     /**
@@ -763,7 +753,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         trackingParticipantStatus.setRegistrationCompleteTime(participantBaseTime);
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.putTrackingStatusDiseaseProfile(getActivity(), trackingParticipantStatus, url);
+        requestObject.putTrackingStatusDiseaseProfile(context, trackingParticipantStatus, url);
     }
 
     /**
@@ -773,20 +763,20 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile/" + trackingParticipantStatus.getDisease_profile();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getParticipantDiseaseProfileDetails(getActivity(), url);
+        requestObject.getParticipantDiseaseProfileDetails(context, url);
     }
 
     /**
      * Description : Server call to update the disease profile data after the user edits.
      */
     private void callServerUpdateDiseaseProfileDetails() {
-        String url = "http://"+ participantsProfileScreen.getString(R.string.base_url)+ "/api/resource/disease_profile/" +  trackingParticipantStatus.getDisease_profile();
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile/" +  trackingParticipantStatus.getDisease_profile();
         DiseasesProfilePostRequest diseasesProfilePostRequest = getDiseaseProfileData();
         diseasesProfilePostRequest.setUser_pri_id(trackingParticipantStatus.getUser_pri_id());
-        diseasesProfilePostRequest.setModified_user(mithraUtility.getSharedPreferencesData(participantsProfileScreen, participantsProfileScreen.getString(R.string.primaryID), participantsProfileScreen.getString(R.string.coordinatorPrimaryID)));
+        diseasesProfilePostRequest.setModified_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.putDiseaseProfileDetails(participantsProfileScreen, diseasesProfilePostRequest, url);
+        requestObject.putDiseaseProfileDetails(context, diseasesProfilePostRequest, url);
     }
 
     @Override
@@ -800,7 +790,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             if(isEditable!=null && isEditable.equals("true")){
                 if (frappeResponse != null && frappeResponse.getDoctype().equals("disease_profile")) {
                     String registrationName = frappeResponse.getName();
-                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.disease_profile), frappeResponse.getUser_pri_id(), registrationName);
+                    mithraUtility.putSharedPreferencesData(context, context.getString(R.string.disease_profile), frappeResponse.getUser_pri_id(), registrationName);
                     callUpdateTrackingDetails(registrationName);
                 } else if (frappeResponse != null && frappeResponse.getDoctype().equals("tracking")) {
                     trackingName = frappeResponse.getName();
@@ -814,7 +804,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             }else{
                 if(isEditable!=null && isEditable.equals("reEdit")){
                     editButton.setBackgroundResource(R.drawable.yes_no_button);
-                    Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
                 }
                 Type typeDiseaseProfile = new TypeToken<DiseasesProfilePostRequest>(){}.getType();
                 diseasesProfileDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeDiseaseProfile);

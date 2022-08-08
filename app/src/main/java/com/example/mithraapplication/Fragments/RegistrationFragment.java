@@ -3,6 +3,7 @@ package com.example.mithraapplication.Fragments;
 import static com.example.mithraapplication.ParticipantProfileScreen.participant_primary_ID;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,12 +11,14 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -37,6 +40,8 @@ import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdatePassword;
 import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
+import com.example.mithraapplication.ModelClasses.UpdateRegisterStatus;
+import com.example.mithraapplication.ModelClasses.UpdateScreeningStatus;
 import com.example.mithraapplication.ModelClasses.UserLogin;
 import com.example.mithraapplication.PHQParticipantsScreen;
 import com.example.mithraapplication.ParticipantProfileScreen;
@@ -55,16 +60,19 @@ import java.util.stream.Collectors;
 
 public class RegistrationFragment extends Fragment implements AdapterView.OnItemSelectedListener, HandleServerResponse {
 
-    private EditText participantNameET, participantAgeET, participantPhoneNumberET, participantUserNameET, participantPasswordET, participantConfirmPasswordET;
+    private EditText participantAgeET, participantPhoneNumberET, participantUserNameET, participantPasswordET, participantConfirmPasswordET;
     private Button createButton, maleButton, femaleButton, othersButton, editButton, createNewPasswordButton;
-    private TextView participantAgeTV, participantPhoneNumberTV, participantUserNameTV, participantPasswordTV, participantConfirmPasswordTV, PHQScreeningIDTV, ManualIDTV, SHGAssociationTV, participantNameTV, genderTV;
-    private Spinner PHQScreeningSpinner, ManualIDSpinner, SHGSpinner, CountryCodeSpinner;
+    private TextView participantAgeTV, participantPhoneNumberTV, participantUserNameTV, participantPasswordTV,
+            participantConfirmPasswordTV, ManualIDTV, SHGAssociationTV, participantNameTV, PHQScreeningIDTV,
+            genderTV, participantSHGNameTV;
+    private AutoCompleteTextView participantNameAutoCompleteTV;
+    private Spinner PHQScreeningSpinner, ManualIDSpinner, CountryCodeSpinner;
     private String participantName, participantUserName, participantPassword;
-    private String participantVillageName, participantSHGAssociation, participantPanchayat, participantGender, participantPhoneNum, participantCountryCode;
+    private String participantVillageName, participantSHGAssociation, participantPanchayat, participantGender, participantPhoneNum, participantCountryCode, participantManualID, participantPHQScreeningID;
     private int participantAge;
-    private List<String> PHQScreeningNamesList, ManualNamesList, SHGNamesList, CountryCodeList = new ArrayList<>();
-    private List<PHQParticipantDetails> locationsArrayList, filteredPHQScreeningList, filteredSHGList, locationsList;
-    private ArrayAdapter PHQScreeningSpinnerAdapter, SHGSpinnerAdapter, ManualIDSpinnerAdapter;
+    private List<String> PHQScreeningNamesList, ManualNamesList, ParticipantNamesList, CountryCodeList = new ArrayList<>();
+    private List<PHQParticipantDetails> locationsArrayList, filteredPHQScreeningList, filteredManualIDList, temporaryList;
+    private ArrayAdapter PHQScreeningSpinnerAdapter, ParticipantNameAdapter, ManualIDSpinnerAdapter;
     private ArrayAdapter countryCodeAdapter;
     private MithraUtility mithraUtility = new MithraUtility();
     public static String trackingName = "NULL";
@@ -73,6 +81,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     private String isEditable;
     private Dialog dialog;
     private PHQLocations phqLocations;
+    private Context context;
 
     @Nullable
     @Override
@@ -102,7 +111,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         setOnclickOfEditButton();
     }
 
-    public RegistrationFragment(TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant, PHQLocations phqLocations){
+    public RegistrationFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant, PHQLocations phqLocations){
+        this.context = context;
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
         this.registerParticipantDetails = registerParticipant;
@@ -113,7 +123,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
      * Description : This method is used to register the views
      */
     private void RegisterViews(View view){
-        participantNameET = view.findViewById(R.id.participantNameET);
+        participantNameAutoCompleteTV = view.findViewById(R.id.participantNameAutoComplete);
+        participantNameAutoCompleteTV.setDropDownBackgroundResource(R.color.white);
+        participantNameAutoCompleteTV.setThreshold(0);
         participantAgeET = view.findViewById(R.id.participantAgeET);
         participantPhoneNumberET = view.findViewById(R.id.participantPhoneNumberET);
         participantUserNameET = view.findViewById(R.id.participantUserNameET);
@@ -125,11 +137,15 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         participantUserNameTV = view.findViewById(R.id.participantUserName);
         participantPasswordTV = view.findViewById(R.id.passwordTV);
         participantConfirmPasswordTV = view.findViewById(R.id.confirmPasswordTV);
-        PHQScreeningIDTV = view.findViewById(R.id.PHQScreeningIDTV);
+        PHQScreeningIDTV = view.findViewById(R.id.PHQScreeningId);
         SHGAssociationTV = view.findViewById(R.id.SHGNameTV);
         ManualIDTV = view.findViewById(R.id.ManualIDTV);
         participantNameTV = view.findViewById(R.id.participantName);
         genderTV = view.findViewById(R.id.genderTV);
+        participantSHGNameTV = view.findViewById(R.id.SHGParticipantTV);
+        if(phqLocations!=null){
+            participantSHGNameTV.setText(phqLocations.getSHGName());
+        }
 
         createButton = view.findViewById(R.id.registerButton);
         maleButton = view.findViewById(R.id.maleOption);
@@ -142,28 +158,29 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         createNewPasswordButton.setVisibility(View.GONE);
 
         PHQScreeningSpinner = view.findViewById(R.id.PHQScreeningIDSpinner);
-        SHGSpinner = view.findViewById(R.id.spinnerSHG);
         ManualIDSpinner = view.findViewById(R.id.spinnerManualID);
 
         CountryCodeSpinner = view.findViewById(R.id.spinnerCountryCode);
         CountryCodeSpinner.setOnItemSelectedListener(this);
 
         CountryCodeList.add("+91");
-        countryCodeAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, CountryCodeList);
+        countryCodeAdapter = new ArrayAdapter(context, R.layout.spinner_item, CountryCodeList);
         CountryCodeSpinner.setAdapter(countryCodeAdapter);
         CountryCodeSpinner.setSelection(0, true);
     }
 
     private void setEditable(){
         if(isEditable!=null && isEditable.equals("true")){
-            participantNameET.setFocusable(true);
+            participantNameAutoCompleteTV.setFocusable(true);
+            participantNameAutoCompleteTV.setEnabled(true);
             participantAgeET.setFocusable(true);
             participantPhoneNumberET.setFocusable(true);
             participantUserNameET.setFocusable(true);
             participantPasswordET.setFocusable(true);
             participantConfirmPasswordET.setFocusable(true);
+            participantSHGNameTV.setText(phqLocations.getSHGName());
 
-            participantNameET.setClickable(true);
+            participantNameAutoCompleteTV.setClickable(true);
             participantAgeET.setClickable(true);
             participantPhoneNumberET.setClickable(true);
             participantUserNameET.setClickable(true);
@@ -179,14 +196,14 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createButton.setBackgroundResource(R.drawable.button_background);
 
             PHQScreeningSpinner.setEnabled(true);
-            SHGSpinner.setEnabled(true);
             ManualIDSpinner.setEnabled(true);
             CountryCodeSpinner.setEnabled(true);
 
         }else if(isEditable!=null && isEditable.equals("false")){
-            participantNameET.setFocusable(false);
-            participantNameET.setClickable(false);
-            participantNameET.setText(registerParticipantDetails.getParticipantName());
+            participantNameAutoCompleteTV.setFocusable(false);
+            participantNameAutoCompleteTV.setClickable(false);
+            participantNameAutoCompleteTV.setEnabled(false);
+            participantNameAutoCompleteTV.setText(registerParticipantDetails.getParticipantName());
 
             participantAgeET.setFocusable(false);
             participantAgeET.setClickable(false);
@@ -206,6 +223,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             participantUserNameET.setFocusable(false);
             participantUserNameET.setClickable(false);
             participantUserNameET.setText(registerParticipantDetails.getParticipantUserName());
+            participantSHGNameTV.setText(phqLocations.getSHGName());
 
             participantPasswordTV.setVisibility(View.INVISIBLE);
             participantPasswordET.setVisibility(View.GONE);
@@ -225,16 +243,15 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 //
             PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantVillageName()));
             PHQScreeningSpinner.setEnabled(false);
-            SHGSpinner.setSelection(((ArrayAdapter<String>)SHGSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantSHGAssociation()));
-            SHGSpinner.setEnabled(false);
             ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantPanchayat()));
             ManualIDSpinner.setEnabled(false);
             CountryCodeSpinner.setEnabled(false);
         }else{
-            participantNameET.setText(registerParticipantDetails.getParticipantName());
-            participantNameET.setFocusable(true);
-            participantNameET.setClickable(true);
-            participantNameET.setFocusableInTouchMode(true);
+            participantNameAutoCompleteTV.setText(registerParticipantDetails.getParticipantName());
+            participantNameAutoCompleteTV.setFocusable(true);
+            participantNameAutoCompleteTV.setClickable(true);
+            participantNameAutoCompleteTV.setEnabled(true);
+            participantNameAutoCompleteTV.setFocusableInTouchMode(true);
 
             participantAgeET.setFocusable(true);
             participantAgeET.setClickable(true);
@@ -280,8 +297,6 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
             PHQScreeningSpinner.setSelection(((ArrayAdapter)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantVillageName()));
             PHQScreeningSpinner.setEnabled(true);
-            SHGSpinner.setSelection(((ArrayAdapter)SHGSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantSHGAssociation()));
-            SHGSpinner.setEnabled(true);
             ManualIDSpinner.setSelection(((ArrayAdapter)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantPanchayat()));
             ManualIDSpinner.setEnabled(true);
             CountryCodeSpinner.setEnabled(true);
@@ -292,7 +307,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
      * Description : This method is used to get the data entered by the user
      */
     private boolean getUserEnteredData(){
-        participantName = participantNameET.getText().toString();
+        participantName = participantNameAutoCompleteTV.getText().toString();
         participantAge = !participantAgeET.getText().toString().isEmpty() ? Integer.parseInt(participantAgeET.getText().toString()): 0;
         participantPhoneNum = participantCountryCode + participantPhoneNumberET.getText().toString();
         participantUserName = participantUserNameET.getText().toString();
@@ -358,7 +373,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         EditText confirmPasswordET = customLayout.findViewById(R.id.confirmPasswordETPopup);
         Button resetButton = customLayout.findViewById(R.id.resetPasswordButtonPopup);
 
-        dialog  = new Dialog(getActivity());
+        dialog  = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
@@ -440,78 +455,76 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         registerParticipant.setParticipantGender(participantGender);
         registerParticipant.setParticipantAge(String.valueOf(participantAge));
         registerParticipant.setParticipantPhoneNumber(participantPhoneNum);
-        registerParticipant.setParticipantVillageName(phqLocations.getVillageName());
-        registerParticipant.setParticipantSHGAssociation(phqLocations.getSHGName());
-        registerParticipant.setParticipantPanchayat(phqLocations.getPanchayatName());
-        registerParticipant.setPhq_scr_id(registerParticipant.getPhq_scr_id());
-        registerParticipant.setMan_id(registerParticipant.getMan_id());
-        String screeningID = mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.userScreeningName), getString(R.string.userScreeningID));
-        registerParticipant.setScreeningid(screeningID);
-        registerParticipant.setCreated_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
-        registerParticipant.setUser_pri_id(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
+        registerParticipant.setLocation(phqLocations.getName());
+        registerParticipant.setPhq_scr_id(participantPHQScreeningID);
+        registerParticipant.setMan_id(participantManualID);
+        registerParticipant.setActive("yes");
+        registerParticipant.setName("null");
+        registerParticipant.setCreated_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
+        registerParticipant.setUser_pri_id(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID)));
 
         return registerParticipant;
     }
 
 
     private void callGetLocationsForParticipant() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.location.api.locations";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.location.api.locations";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getParticipantLocations(getActivity(), url);
+        requestObject.getParticipantLocations(context, url);
     }
 
     private void callGetAllPHQParticipantsData(){
-        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_scr_sub.api.pre_screenings";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_scr_sub.api.pre_screenings";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getPHQParticipantDetails(getActivity(), url);
+        requestObject.getPHQParticipantDetails(context, url);
     }
 
     private void callServerLoginForParticipant() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.user_table.login.useradd";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.user_table.login.useradd";
         UserLogin userLogin = new UserLogin();
         userLogin.setUserName(participantUserName);
         userLogin.setUserPassword(participantPassword);
         userLogin.setUserRole("participant");
         userLogin.setActive("yes");
-        userLogin.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        userLogin.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.postUserLogin(getActivity(), userLogin, url);
+        requestObject.postUserLogin(context, userLogin, url);
     }
 
     private void callServerRegisterParticipant() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/participant";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/participant";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.postRegisterUser(getActivity(), getRegisterParticipantData(), url);
+        requestObject.postRegisterUser(context, getRegisterParticipantData(), url);
     }
 
     private void callCreateTrackingStatus(String registrationName) {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/tracking";
         TrackingParticipantStatus trackingParticipantStatus = new TrackingParticipantStatus();
-        trackingParticipantStatus.setUser_pri_id(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.participantPrimaryID)));
+        trackingParticipantStatus.setUser_pri_id(mithraUtility.getSharedPreferencesData(requireActivity(), context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID)));
         trackingParticipantStatus.setRegistration(registrationName);
         trackingParticipantStatus.setActive("yes");
         trackingParticipantStatus.setEnroll("33");
-        trackingParticipantStatus.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        trackingParticipantStatus.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.postTrackingStatus(getActivity(), trackingParticipantStatus, url);
+        requestObject.postTrackingStatus(context, trackingParticipantStatus, url);
     }
 
     private void callGetIndividualParticipantDetails() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.participant.api.one_participant";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.participant.api.one_participant";
         GetParticipantDetails participantDetails = new GetParticipantDetails();
         participantDetails.setUser_pri_id(registerParticipantDetails.getUser_pri_id());
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getParticipantRegistrationDetails(getActivity(), participantDetails, url);
+        requestObject.getParticipantRegistrationDetails(context, participantDetails, url);
     }
 
     private void callServerUpdateParticipantDetails() {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/participant/" +  trackingParticipantStatus.getRegistration();
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/participant/" +  trackingParticipantStatus.getRegistration();
         UpdateRegisterParticipant registerParticipant = new UpdateRegisterParticipant();
         registerParticipant.setParticipantUserName(participantUserName);
         registerParticipant.setParticipantName(participantName);
@@ -521,30 +534,39 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         registerParticipant.setParticipantVillageName(participantVillageName);
         registerParticipant.setParticipantSHGAssociation(participantSHGAssociation);
         registerParticipant.setParticipantPanchayat(participantPanchayat);
-        registerParticipant.setCreated_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
-        registerParticipant.setModified_user(mithraUtility.getSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        registerParticipant.setCreated_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
+        registerParticipant.setModified_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         registerParticipant.setUser_pri_id(registerParticipantDetails.getUser_pri_id());
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.putRegisterUser(getActivity(), registerParticipant, url);
+        requestObject.putRegisterUser(context, registerParticipant, url);
     }
 
     private void callUpdateParticipantPassword(String password) {
-        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.user_table.login.changepassword";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.user_table.login.changepassword";
         UpdatePassword updatePassword = new UpdatePassword();
         updatePassword.setName(registerParticipantDetails.getUser_pri_id());
         updatePassword.setPassword(password);
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.putUpdateUserPassword(getActivity(), updatePassword, url);
+        requestObject.putUpdateUserPassword(context, updatePassword, url);
+    }
+
+    private void callUpdateRegisterStatus() {
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/phq9_scr_sub/" + participantPHQScreeningID;
+        UpdateRegisterStatus updateRegisterStatus = new UpdateRegisterStatus();
+        updateRegisterStatus.setRegister("yes");
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.putUpdateRegisterStatus(context, updateRegisterStatus, url);
     }
 
     /**
      * Description : This method is used to move from the Registration tab to SocioDemography tab
      */
-    private void moveToSocioDemographyTab(String trackingName){
+    private void moveToSocioDemographyTab(){
         Log.i("RegistrationFragment", "moveToSocioDemographyTab");
-        ((ParticipantProfileScreen) requireActivity()).setupSelectedTabFragment(2);
+        ((ParticipantProfileScreen) requireActivity()).setupSelectedTabFragment(1);
     }
 
     /**
@@ -556,45 +578,33 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             participantCountryCode = CountryCodeList.get(position);
             CountryCodeSpinner.setSelection(position);
         }
-        else if(parent.getId() == R.id.spinnerSHG){
-            participantSHGAssociation = SHGNamesList.get(position);
-            SHGSpinner.setSelection(position, false);
+        else if(parent.getId() == R.id.spinnerManualID){
 
+            participantManualID = ManualNamesList.get(position);
+            ManualIDSpinner.setSelection(position, false);
+            if(temporaryList != null && temporaryList.size()!=0){
+                filteredManualIDList = temporaryList.stream().filter(PHQParticipantDetails -> PHQParticipantDetails.getManualID().contains(participantManualID)).distinct().collect(Collectors.toList());
+                PHQScreeningNamesList.clear();
+                PHQScreeningNamesList = filteredManualIDList.stream().map(PHQParticipantDetails::getPHQScreeningID).distinct().collect(Collectors.toList());
+                PHQScreeningSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, PHQScreeningNamesList);
+                PHQScreeningSpinner.setAdapter(PHQScreeningSpinnerAdapter);
+            }else{
+                temporaryList = locationsArrayList;
+            }
+        }else if(parent.getId() == R.id.PHQScreeningIDSpinner){
+            participantPHQScreeningID = PHQScreeningNamesList.get(position);
+            PHQScreeningSpinner.setSelection(position, false);
+
+            if(temporaryList!=null && temporaryList.size()!=0) {
+                filteredPHQScreeningList = temporaryList.stream().filter(PHQParticipantDetails -> PHQParticipantDetails.getPHQScreeningID().contains(participantPHQScreeningID)).distinct().collect(Collectors.toList());
+                ManualNamesList.clear();
+                ManualNamesList = filteredPHQScreeningList.stream().map(PHQParticipantDetails::getManualID).distinct().collect(Collectors.toList());
+                ManualIDSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, ManualNamesList);
+                ManualIDSpinner.setAdapter(ManualIDSpinnerAdapter);
+            }else{
+                temporaryList = locationsArrayList;
+            }
         }
-//        else if(parent.getId() == R.id.villageNameSpinner){
-//
-//            participantVillageName = VillageNamesList.get(position);
-//            VillageNameSpinner.setSelection(position, false);
-//
-//            if(filteredVillageList != null && filteredVillageList.size()!=0){
-//                filteredSHGList = filteredVillageList.stream().filter(location -> location.getVillage().contains(participantVillageName)).distinct().collect(Collectors.toList());
-//                SHGNamesList.clear();
-//                SHGNamesList = filteredSHGList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
-//                SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
-//                SHGSpinner.setAdapter(SHGSpinnerAdapter);
-//            }
-//        }else if(parent.getId() == R.id.spinnerPanchayat){
-//            participantPanchayat = PanchayatNamesList.get(position);
-//            PanchayatSpinner.setSelection(position, false);
-//
-//            if(locationsList!=null && locationsList.size()!=0) {
-//                filteredVillageList = locationsArrayList.stream().filter(location -> location.getPanchayat().contains(participantPanchayat)).distinct().collect(Collectors.toList());
-//                VillageNamesList.clear();
-//                VillageNamesList = filteredVillageList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
-//                adapterForVillageNames = new ArrayAdapter(getActivity(), R.layout.spinner_item, VillageNamesList);
-//                VillageNameSpinner.setAdapter(adapterForVillageNames);
-//            }else{
-//                locationsList = locationsArrayList;
-//            }
-//
-//            if(locationsList != null && locationsList.size()!=0){
-//                filteredSHGList = locationsArrayList.stream().filter(location -> location.getPanchayat().contains(participantPanchayat)).distinct().collect(Collectors.toList());
-//                SHGNamesList.clear();
-//                SHGNamesList = filteredSHGList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
-//                SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
-//                SHGSpinner.setAdapter(SHGSpinnerAdapter);
-//            }
-//        }
     }
 
     @Override
@@ -602,27 +612,33 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void prepareSpinnerData(){
-//        PanchayatNamesList = locationsArrayList.stream().map(Locations::getPanchayat).distinct().collect(Collectors.toList());
-//        VillageNamesList = locationsArrayList.stream().map(Locations::getVillage).distinct().collect(Collectors.toList());
-//        SHGNamesList = locationsArrayList.stream().map(Locations::getShg).distinct().collect(Collectors.toList());
-//
-//        adapterForVillageNames = new ArrayAdapter(getActivity(), R.layout.spinner_item, VillageNamesList);
-//        VillageNameSpinner.setAdapter(adapterForVillageNames);
-//        participantVillageName = VillageNamesList.get(0);
-//        VillageNameSpinner.setSelection(0,false);
-//        VillageNameSpinner.setOnItemSelectedListener(this);
-//
-//        SHGSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, SHGNamesList);
-//        SHGSpinner.setAdapter(SHGSpinnerAdapter);
-//        participantSHGAssociation = SHGNamesList.get(0);
-//        SHGSpinner.setSelection(0,false);
-//        SHGSpinner.setOnItemSelectedListener(this);
-//
-//        panchayatSpinnerAdapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, PanchayatNamesList);
-//        PanchayatSpinner.setAdapter(panchayatSpinnerAdapter);
-//        participantPanchayat = PanchayatNamesList.get(0);
-//        PanchayatSpinner.setSelection(0,false);
-//        PanchayatSpinner.setOnItemSelectedListener(this);
+        ManualNamesList = locationsArrayList.stream().map(PHQParticipantDetails::getManualID).distinct().collect(Collectors.toList());
+        PHQScreeningNamesList = locationsArrayList.stream().map(PHQParticipantDetails::getPHQScreeningID).distinct().collect(Collectors.toList());
+        ParticipantNamesList = locationsArrayList.stream().map(PHQParticipantDetails::getPHQParticipantName).distinct().collect(Collectors.toList());
+
+        ManualIDSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, ManualNamesList);
+        ManualIDSpinner.setAdapter(ManualIDSpinnerAdapter);
+        participantManualID = ManualNamesList.get(0);
+        ManualIDSpinner.setSelection(0,false);
+        ManualIDSpinner.setOnItemSelectedListener(this);
+
+        PHQScreeningSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, PHQScreeningNamesList);
+        PHQScreeningSpinner.setAdapter(PHQScreeningSpinnerAdapter);
+        participantPHQScreeningID = PHQScreeningNamesList.get(0);
+        PHQScreeningSpinner.setSelection(0,false);
+        PHQScreeningSpinner.setOnItemSelectedListener(this);
+
+        ParticipantNameAdapter = new ArrayAdapter(context, R.layout.spinner_item, ParticipantNamesList);
+        participantNameAutoCompleteTV.setAdapter(ParticipantNameAdapter);
+        participantNameAutoCompleteTV.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus)
+                participantNameAutoCompleteTV.showDropDown();
+        });
+        participantNameAutoCompleteTV.setOnTouchListener((v, event) -> {
+            participantNameAutoCompleteTV.showDropDown();
+            return false;
+        });
+        participantName = PHQScreeningNamesList.get(0);
     }
 
     /**
@@ -640,6 +656,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 ArrayList<PHQParticipantDetails> locationsArrayListObj = gson.fromJson(jsonObjectLocation.get("message"), typeLocation);
                 if(locationsArrayListObj.size() > 1) {
                     locationsArrayList = locationsArrayListObj;
+                    temporaryList = locationsArrayList;
                     prepareSpinnerData();
                 }
                 else{
@@ -659,8 +676,8 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                             userLogins = gson.fromJson(jsonObject.get("message"), type);
                             if(userLogins!=null){
                                 if(!userLogins.get(0).getUserName().equals("NULL")){
-                                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.userName), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
-                                    mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.primaryID), getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
+                                    mithraUtility.putSharedPreferencesData(context, context.getString(R.string.userName), context.getString(R.string.user_name_participant), userLogins.get(0).getUserName());
+                                    mithraUtility.putSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
                                     callServerRegisterParticipant();
                                 }
                             }
@@ -673,7 +690,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 }
             }catch(Exception e){
                 if(jsonObjectLocation.get("message")!=null && jsonObjectLocation.get("message").toString().equals("\"updated\"")) {
-                    Toast.makeText(getActivity(), "Your password has been updated.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Your password has been updated.", Toast.LENGTH_LONG).show();
 //                    Toast.makeText(getActivity(), jsonObjectLocation.get("message").toString(), Toast.LENGTH_LONG).show();
                 }
             }
@@ -686,14 +703,15 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 if(isEditable!=null && isEditable.equals("true")){
                     if(frappeResponse!=null && frappeResponse.getDoctype().equals("participant")){
                         String registrationName = frappeResponse.getName();
-                        mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.registration), frappeResponse.getUser_pri_id(), registrationName);
+                        mithraUtility.putSharedPreferencesData(context, context.getString(R.string.registration), frappeResponse.getUser_pri_id(), registrationName);
+//                        callUpdateRegisterStatus();
                         callCreateTrackingStatus(registrationName);
                     }else if(frappeResponse!=null && frappeResponse.getDoctype().equals("tracking")){
                         trackingName = frappeResponse.getName();
-                        mithraUtility.putSharedPreferencesData(getActivity(), getString(R.string.tracking), frappeResponse.getUser_pri_id(), trackingName);
-                        mithraUtility.removeSharedPreferencesData(getActivity(), getString(R.string.userScreeningName), getString(R.string.userScreeningID));
+                        mithraUtility.putSharedPreferencesData(context, context.getString(R.string.tracking), frappeResponse.getUser_pri_id(), trackingName);
+                        mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID));
                         participant_primary_ID = frappeResponse.getUser_pri_id();
-                        moveToSocioDemographyTab(trackingName);
+                        moveToSocioDemographyTab();
                     }
                 }else{
                     registerParticipantDetails = getRegisterParticipantData();
@@ -701,7 +719,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                     editButton.setBackgroundResource(R.drawable.yes_no_button);
                     isEditable = "false";
                     setEditable();
-                    Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
                 }
 
             }else{
@@ -719,7 +737,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         if(serverErrorResponse.contains("frappe.exceptions.DuplicateEntryError")){
             participantUserNameET.setError("User Name already exits. Please give other user name.");
         }else{
-            Toast.makeText(getActivity(), "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -732,16 +750,30 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         participantUserNameTV.setText(R.string.user_name);
         participantPasswordTV.setText(R.string.password);
         participantConfirmPasswordTV.setText(R.string.confirm_password);
-        PHQScreeningIDTV.setText(R.string.village_name);
-        ManualIDTV.setText(R.string.panchayat);
+        PHQScreeningIDTV.setText(R.string.phq_screening_id);
+        ManualIDTV.setText(R.string.manual_id);
         SHGAssociationTV.setText(R.string.shg_association);
         participantNameTV.setText(R.string.name_small_case);
         genderTV.setText(R.string.gender);
 
+        if(createNewPasswordButton!=null){
+            createNewPasswordButton.setText(R.string.create_new_password);
+        }
 
         maleButton.setText(R.string.male);
         femaleButton.setText(R.string.female);
         othersButton.setText(R.string.others);
         createButton.setText(R.string.create);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

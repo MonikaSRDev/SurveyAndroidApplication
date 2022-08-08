@@ -29,8 +29,8 @@
     <string name="diagnosed_age">How old were you when this was diagnosed?</string>
     <string name="specify_disease">Specify other disease</string>
     <string name="kannada">ಕನ್ನಡ</string>
-    <string name="base_url" translatable="false">192.168.2.156</string>
-<!--    <string name="base_url" translatable="false">43.205.146.90</string>-->
+<!--    <string name="base_url" translatable="false">192.168.2.156</string>-->
+    <string name="base_url" translatable="false">43.205.146.90</string>
     <string name="mp_token" translatable="false">token 2559f591d98ea66:9e2cdc0890cc4eb</string>
     <string name="mc_token" translatable="false">token c043b3fae600f17:b7d57f73ccc6f7e</string>
     <string name="participate_name" translatable="false">Participate 1</string>
@@ -170,5 +170,23 @@
     <string name="phq_screening">PHQ Screening</string>
     <string name="phq_screening_id">PHQ Screening ID</string>
     <string name="manual_id">Manual ID</string>
+    <string name="coordinator_shg">Coordinator SHG</string>
+    <string name="pre_screening">Pre screening</string>
+    <string name="phq9">PHQ9</string>
+    <string name="bads">BADS</string>
+    <string name="quids_sr">QUIDS SR</string>
+    <string name="whodas">WHODAS</string>
+    <string name="module_0">Module 0</string>
+    <string name="module_1">Module 1</string>
+    <string name="module_2">Module 2</string>
+    <string name="module_3">Module 3</string>
+    <string name="module_4">Module 4</string>
+    <string name="module_5">Module 5</string>
+    <string name="module_6">Module 6</string>
+    <string name="module_7">Module 7</string>
+    <string name="eligibility">Eligibility</string>
+    <string name="phq_9_score">PHQ-9 Score</string>
+    <string name="screening_id">Screening ID</string>
+    <string name="phq_id">PHQ ID</string>
 
 </resources>

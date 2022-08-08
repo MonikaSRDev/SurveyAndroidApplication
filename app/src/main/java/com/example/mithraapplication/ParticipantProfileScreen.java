@@ -76,11 +76,16 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_screen);
         RegisterViews();
+        getIntentData();
         onClickOfLanguageButton();
         getCurrentLocale();
         onClickOfDashboardButton();
         onClickOfPHQScreening();
-        getIntentData();
+        if(isEditable!=null && isEditable.equals("true")){
+            disableTab(1);
+            disableTab(2);
+        }
+        setTabSelectedListener();
     }
 
     private void RegisterViews() {
@@ -111,9 +116,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
 
         profileTabLayout = findViewById(R.id.profileTabLayout);
         profileFrameLayout = findViewById(R.id.profileFrameLayout);
-        disableTab(1);
-        disableTab(2);
-        setTabSelectedListener();
 
         profileParticipantName = findViewById(R.id.profileParticipantName);
         profileEditButton = findViewById(R.id.profileEditButton);
@@ -187,7 +189,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             if(registerParticipant!=null){
                 profileParticipantName.setText(registerParticipant.getParticipantName());
             }
-            profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 3);
+//            profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 3);  // as of now not required
             setVisibilityForEdit(true);
         }else{
             trackingParticipantStatus = null;
@@ -237,10 +239,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         String diseaseProfileName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile), participant_primary_ID);
 
         switch(position){
-            case 0: enableTab(0);
-                    enableTab(1);
-                    break;
-            case 1: if(registrationName!=null && !registrationName.equals("NULL")){
+            case 0: if(registrationName!=null && !registrationName.equals("NULL")){
                         trackingParticipantStatus.setName(tracking);
                         trackingParticipantStatus.setRegistration(registrationName);
                         registerParticipant.setUser_pri_id(participant_primary_ID);
@@ -256,7 +255,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                     }
 
                     break;
-            case 2: if(registrationName!=null && !socioDemographyName.equals("NULL")){
+            case 1: if(registrationName!=null && !socioDemographyName.equals("NULL")){
                         trackingParticipantStatus.setName(tracking);
                         trackingParticipantStatus.setRegistration(registrationName);
                         trackingParticipantStatus.setSocio_demography(socioDemographyName);
@@ -264,7 +263,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                         enableTab(0);
                         enableTab(1);
                         enableTab(2);
-                        enableTab(3);
                     }else{
                         trackingParticipantStatus = null;
                         isEditable = "true";
@@ -273,7 +271,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                         enableTab(2);
                     }
                     break;
-            case 3: if(registrationName!=null && !diseaseProfileName.equals("NULL")){
+            case 2: if(registrationName!=null && !diseaseProfileName.equals("NULL")){
                         trackingParticipantStatus.setName(tracking);
                         trackingParticipantStatus.setRegistration(registrationName);
                         trackingParticipantStatus.setSocio_demography(socioDemographyName);
@@ -286,9 +284,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                     enableTab(0);
                     enableTab(1);
                     enableTab(2);
-                    enableTab(3);
+//                    enableTab(3);
                     break;
-            case 4: break;
+            case 3: break;
 
         }
     }
@@ -311,30 +309,22 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
 
     public void setupSelectedTabFragment(int position){
         switch (position) {
-//            case 0:
-//                fragment = new PHQScreeningFragment(isEditable);
-//                TabLayout.Tab tabData = profileTabLayout.getTabAt(position);
-//                assert tabData != null;
-//                tabData.select();
-//                break;
             case 0:
-                fragment = new RegistrationFragment(trackingParticipantStatus, isEditable, registerParticipant, phqLocations);
+                fragment = new RegistrationFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant, phqLocations);
                 profileEditButton.setText(R.string.edit);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData1 = profileTabLayout.getTabAt(position);
                 assert tabData1 != null;
                 tabData1.select();
-//                enableTab(0);
                 break;
             case 1:
-                fragment = new SocioDemographyFragment(trackingParticipantStatus, isEditable);
+                fragment = new SocioDemographyFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
                 profileEditButton.setText(R.string.edit);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData2 = profileTabLayout.getTabAt(position);
                 assert tabData2 != null;
                 tabData2.select();
                 enableTab(0);
-//                enableTab(1);
                 break;
             case 2:
                 fragment = new DiseasesProfileFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
@@ -345,7 +335,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 tabData3.select();
                 enableTab(0);
                 enableTab(1);
-//                enableTab(2);
                 break;
             case 3:
                 fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant);
@@ -357,7 +346,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 enableTab(0);
                 enableTab(1);
                 enableTab(2);
-//                enableTab(3);
                 break;
         }
         FragmentManager fm = getSupportFragmentManager();
@@ -477,11 +465,10 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         profileTitleTV.setText(R.string.profile);
         dashboardTVProfile.setText(R.string.dashboard);
         participantTVProfile.setText(R.string.participants);
+        profileEditButton.setText(R.string.edit);
         Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.registration);
         Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText(R.string.socio_demography);
         Objects.requireNonNull(profileTabLayout.getTabAt(2)).setText(R.string.disease_profile);
-//        Objects.requireNonNull(profileTabLayout.getTabAt(3)).setText(R.string.red_tab);
-
         super.onConfigurationChanged(newConfig);
     }
 
@@ -522,6 +509,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     public void onBackPressed() {
         super.onBackPressed();
         Intent loginIntent = new Intent(ParticipantProfileScreen.this, ParticipantsScreen.class);
+        loginIntent.putExtra("PHQLocations", phqLocations);
         startActivity(loginIntent);
         finish();
     }

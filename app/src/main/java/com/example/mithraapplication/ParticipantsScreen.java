@@ -34,7 +34,7 @@ import java.util.Objects;
 public class ParticipantsScreen extends AppCompatActivity{
 
     private Button englishButtonParticipant, kannadaButtonParticipant;
-    private TextView participantTitleTV, dashboardTVParticipant, participantTVParticipant, coordinatorNameTVParticipant;
+    private TextView participantTitleTV, dashboardTVParticipant, participantTVParticipant, coordinatorNameTVParticipant, phqScreeningTV;
     private LinearLayout dashboardLinearLayoutParticipant, participantLinearLayoutParticipant, PHQLinearLayout;
     private ImageView mithraLogoParticipant, coordinatorParticipant, notificationsIconParticipant, participantIcon;
     private TabLayout participantTabLayout;
@@ -56,6 +56,8 @@ public class ParticipantsScreen extends AppCompatActivity{
         getIntentData();
         onClickOfDashboardButton();
         onClickOfPHQScreening();
+        setStartupTab();
+        setTabSelectedListener();
     }
 
     /**
@@ -80,6 +82,7 @@ public class ParticipantsScreen extends AppCompatActivity{
         if(!coordinatorUserName.equals("NULL")){
             coordinatorNameTVParticipant.setText(coordinatorUserName);
         }
+        phqScreeningTV = findViewById(R.id.PHQScreeningTVParticipant);
 
         mithraLogoParticipant = findViewById(R.id.appLogoParticipants);
         coordinatorParticipant = findViewById(R.id.coordinatorProfileParticipant);
@@ -89,8 +92,6 @@ public class ParticipantsScreen extends AppCompatActivity{
 
         participantTabLayout = findViewById(R.id.tabLayoutParticipant);
         participantFrameLayout = findViewById(R.id.frameLayoutParticipant);
-        setStartupTab();
-        setTabSelectedListener();
 
         participantTabItem1 = findViewById(R.id.participantTabItem1);
         participantTabItem2 = findViewById(R.id.participantTabItem2);
@@ -233,6 +234,7 @@ public class ParticipantsScreen extends AppCompatActivity{
         participantTitleTV.setText(R.string.participants);
         dashboardTVParticipant.setText(R.string.dashboard);
         participantTVParticipant.setText(R.string.participants);
+        phqScreeningTV.setText(R.string.phq_screening);
         Objects.requireNonNull(participantTabLayout.getTabAt(0)).setText(R.string.all_list);
         Objects.requireNonNull(participantTabLayout.getTabAt(1)).setText(R.string.new_tab);
         Objects.requireNonNull(participantTabLayout.getTabAt(2)).setText(R.string.green_tab);
@@ -245,7 +247,7 @@ public class ParticipantsScreen extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(ParticipantsScreen.this, DashboardScreen.class);
+        Intent intent = new Intent(ParticipantsScreen.this, CoordinatorSHGList.class);
         startActivity(intent);
         finish();
     }
