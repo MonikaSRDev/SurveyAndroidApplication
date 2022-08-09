@@ -34,6 +34,7 @@ public class VideoFeedbackScreen extends AppCompatActivity {
         RegisterViews();
         onClickOfBackButton();
         onClickOfLogoutButton();
+        getCurrentLocale();
     }
 
     private void RegisterViews(){

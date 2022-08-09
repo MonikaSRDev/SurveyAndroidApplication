@@ -1,8 +1,10 @@
 package com.example.mithraapplication.Fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,10 +13,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +54,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     private Context context;
     private PHQLocations phqLocations;
     private final MithraUtility mithraUtility = new MithraUtility();
+    private Dialog dialog;
 
     public ParticipantsAllListFragment(Context context, PHQLocations phqLocations) {
         this.context = context;
@@ -68,6 +75,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        startProgressBar();
         RegisterViews(view);
         callGetAllParticipantsDetails();
         onClickAddNewParticipantIcon();
@@ -109,8 +117,13 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
 
     private void setRecyclerView(ArrayList<RegisterParticipant> registerParticipants){
         participantScreenAdapter = new ParticipantScreenAdapter(context, registerParticipants, this::moveToParticipantProfileScreen);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-        participantListRecyclerView.setLayoutManager(linearLayoutManager);
+        participantListRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false){
+            @Override
+            public void onLayoutCompleted(final RecyclerView.State state) {
+                super.onLayoutCompleted(state);
+                stopProgressBar();
+            }
+        });
         participantListRecyclerView.setAdapter(participantScreenAdapter);
 
     }
@@ -121,6 +134,28 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         participantIntent.putExtra("PHQLocations", (Serializable) phqLocations);
         participantIntent.putExtra("isEditable", "false");
         startActivity(participantIntent);
+    }
+
+    private void startProgressBar(){
+        View customLayout = getLayoutInflater().inflate(R.layout.activity_progress_bar, null);
+
+        ProgressBar progressbar = customLayout.findViewById(R.id.progressBar);
+
+        dialog  = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(customLayout);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        wmlp.dimAmount = 0.5f;
+        dialog.getWindow().setAttributes(wmlp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        dialog.show();
+    }
+
+    private void stopProgressBar(){
+        dialog.dismiss();
     }
 
     private void callGetAllParticipantsDetails(){

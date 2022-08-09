@@ -65,6 +65,7 @@ public class PHQParticipantsScreen extends AppCompatActivity implements HandleSe
         setFloatingActionButton();
         callGetAllPHQParticipantsData();
         onClickOfLanguageButton();
+        getCurrentLocale();
     }
 
     private void initializeData() {

@@ -63,7 +63,7 @@
                 android:fontFamily="@font/open_sans"
                 android:gravity="center_vertical"
                 android:imeOptions="actionNext"
-                android:inputType="text"
+                android:inputType="number"
                 android:nextFocusRight="@id/PHQQuestionnaireName"
                 android:padding="10dp"
                 android:hint="ID"

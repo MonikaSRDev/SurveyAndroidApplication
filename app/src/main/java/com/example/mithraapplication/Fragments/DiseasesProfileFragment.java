@@ -122,12 +122,8 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle args = intent.getBundleExtra("ParticipantDiseaseData");
+            diseasesProfile.clear();
             diseasesProfile = (ArrayList<DiseasesProfile>) args.getSerializable("ARRAYLIST");
-            if(isEditable!=null && !isEditable.equals("true")){
-                callServerUpdateDiseaseProfileDetails();
-            }else{
-                callServerPostDiseasesProfile();
-            }
         }
     };
 
@@ -309,6 +305,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         nextDiseaseProfileButton.setOnClickListener(v -> {
             if(diseasesProfileAdapter != null) {
                 diseasesProfileAdapter.sendDataToActivity();
+                if(isEditable!=null && !isEditable.equals("true")){
+                    callServerUpdateDiseaseProfileDetails();
+                }else{
+                    callServerPostDiseasesProfile();
+                }
             }
         });
     }
@@ -806,6 +807,10 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             ParticipantProfileScreen.isLanguageSelected = "en";
         }
 
+        if(diseasesProfileAdapter!=null){
+            diseasesProfileAdapter.sendDataToActivity();
+        }
+
         if(diagnosedAgeTV!=null){
             diagnosedAgeTV.setText(R.string.diagnosed_age);
         }
@@ -851,6 +856,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         }
 
         if(diseasesProfileAdapter!=null){
+            diseasesProfilesArray = diseasesProfile;
             diseasesProfileAdapter.notifyDataSetChanged();
         }
     }

@@ -598,7 +598,8 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
     private void callServerToGetPHQ9Questions() {
         String url = "http://" + getString(R.string.base_url) + "/api/method/mithra.mithra.doctype.survey_questions.api.questions";
         SurveyQuestions surveyQuestions = new SurveyQuestions();
-        surveyQuestions.setType("SUR0001");
+        surveyQuestions.setFilter_data("{'sur_pri_id':'SUR0001'}");
+//        surveyQuestions.setFilter_data("SUR0001");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.setSurveyServerEvents(this);

@@ -239,11 +239,20 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createNewPasswordButton.setVisibility(View.VISIBLE);
             createNewPasswordButton.setEnabled(false);
 //
-            PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getPhq_scr_id()));
-            PHQScreeningSpinner.setEnabled(false);
-            ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getMan_id()));
-            ManualIDSpinner.setEnabled(false);
+            if(PHQScreeningSpinner!=null){
+                PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getPhq_scr_id()));
+                PHQScreeningSpinner.setEnabled(false);
+                PHQScreeningSpinner.setBackgroundResource(R.drawable.inputs_background);
+            }
+
+            if(ManualIDSpinner!=null){
+                ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getMan_id()));
+                ManualIDSpinner.setEnabled(false);
+                ManualIDSpinner.setBackgroundResource(R.drawable.inputs_background);
+            }
+
             CountryCodeSpinner.setEnabled(false);
+
         }else{
             participantNameAutoCompleteTV.setText(registerParticipantDetails.getParticipantName());
             participantNameAutoCompleteTV.setFocusable(true);
@@ -293,10 +302,17 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createNewPasswordButton.setEnabled(true);
             onClickOfCreateNewPassword();
 
-            PHQScreeningSpinner.setSelection(((ArrayAdapter)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getPhq_scr_id()));
-            PHQScreeningSpinner.setEnabled(true);
-            ManualIDSpinner.setSelection(((ArrayAdapter)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getMan_id()));
-            ManualIDSpinner.setEnabled(true);
+            if(PHQScreeningSpinner!=null){
+                PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getPhq_scr_id()));
+                PHQScreeningSpinner.setEnabled(false);
+                PHQScreeningSpinner.setBackgroundResource(R.drawable.inputs_background);
+            }
+
+            if(ManualIDSpinner!=null){
+                ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getMan_id()));
+                ManualIDSpinner.setEnabled(false);
+                ManualIDSpinner.setBackgroundResource(R.drawable.inputs_background);
+            }
             CountryCodeSpinner.setEnabled(true);
         }
     }
@@ -310,6 +326,10 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         participantPhoneNum = participantCountryCode + participantPhoneNumberET.getText().toString();
         participantUserName = participantUserNameET.getText().toString();
         participantPassword = participantPasswordET.getText().toString();
+
+        if(participantUserName.isEmpty() || participantUserName.length() < 6){
+            participantUserNameET.setError("Username must be atleast 6 characters");
+        }
         boolean valid = false;
         if(participantPassword.isEmpty()){
             participantPasswordET.setError("Please enter a password.");
@@ -389,14 +409,15 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 passwordET.setError("Please enter the password");
             }else if(password.length() < 4){
                 passwordET.setError("Password must be minimum of 4 characters.");
-            }
-            boolean matches = checkIfPasswordMatches(password, confirmPasswordET.getText().toString());
-            if(matches){
-                participantUserName = participantUserNameET.getText().toString();
-                callUpdateParticipantPassword(password);
-                dialog.dismiss();
             }else{
-                confirmPasswordET.setError("Password does not match. Please check and re-enter the password.");
+                boolean matches = checkIfPasswordMatches(password, confirmPasswordET.getText().toString());
+                if(matches){
+                    participantUserName = participantUserNameET.getText().toString();
+                    callUpdateParticipantPassword(password);
+                    dialog.dismiss();
+                }else{
+                    confirmPasswordET.setError("Password does not match. Please check and re-enter the password.");
+                }
             }
         });
     }
@@ -622,6 +643,12 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         if(isEditable!=null && isEditable.equals("true")){
             locationsArrayList = locationsArrayList.stream()
                     .filter(phqParticipantDetails -> phqParticipantDetails.getRegister().equalsIgnoreCase("no")).collect(Collectors.toCollection(ArrayList::new));
+
+            locationsArrayList = locationsArrayList.stream()
+                    .filter(phqParticipantDetails -> phqParticipantDetails.getSHGName().equalsIgnoreCase(phqLocations.getName())).collect(Collectors.toCollection(ArrayList::new));
+
+            locationsArrayList = locationsArrayList.stream()
+                    .filter(phqParticipantDetails -> Integer.parseInt(phqParticipantDetails.getScreeningConsentScore()) >= 7).collect(Collectors.toCollection(ArrayList::new));
         }
         temporaryList = locationsArrayList;
 

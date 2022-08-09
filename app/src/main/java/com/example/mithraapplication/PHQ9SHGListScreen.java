@@ -55,6 +55,7 @@ public class PHQ9SHGListScreen extends AppCompatActivity implements HandleServer
         moveToParticipantsScreen();
         moveToDashboardScreen();
         callGetCoordinatorSHGList();
+        getCurrentLocale();
         onClickOfLanguageButton();
     }
 

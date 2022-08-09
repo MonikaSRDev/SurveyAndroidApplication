@@ -96,8 +96,6 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         setOnClickForSaveButton();
         setOnClickForSaveButton();
         callServerToGetPHQ9Questions();
-        callServerToGetPHQ9Options();
-
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
                 new IntentFilter("PHQQuestionnaire"));
     }
@@ -326,7 +324,8 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
     private void callServerToGetPHQ9Questions(){
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.survey_questions.api.questions";
         SurveyQuestions surveyQuestions = new SurveyQuestions();
-        surveyQuestions.setType("SUR0001");
+        surveyQuestions.setFilter_data("{'sur_pri_id':'SUR0001'}");
+//        surveyQuestions.setFilter_data("SUR0001");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.setPhqQuestionnaireServerEvents(this);
@@ -419,6 +418,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
                     questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
                     Log.i("SurveyScreen", "responseReceivedSuccessfully : " + questionAnswersArrayList);
                     questionArray = questionAnswersArrayList;
+                    callServerToGetPHQ9Options();
                 }
             } catch (Exception e) {
                 Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
@@ -458,10 +458,12 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         Type typeFrappe = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
         if(jsonObjectRegistration.get("message")!=null) {
             ArrayList<RegisterParticipant> frappeResponse;
-            frappeResponse = gson.fromJson(jsonObjectRegistration.get("message"), typeFrappe);
-            showDialogForPHQScreeningID(frappeResponse.get(0).getPhq_scr_id());
-        } else{
-            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+            try{
+                frappeResponse = gson.fromJson(jsonObjectRegistration.get("message"), typeFrappe);
+                showDialogForPHQScreeningID(frappeResponse.get(0).getPhq_scr_id());
+            }catch(Exception e){
+                Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 

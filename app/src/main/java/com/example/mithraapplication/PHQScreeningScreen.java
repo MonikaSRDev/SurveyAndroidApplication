@@ -55,6 +55,7 @@ public class PHQScreeningScreen extends AppCompatActivity {
         moveToDashboardScreen();
         moveToParticipantsScreen();
         onClickOfLanguageButton();
+        getCurrentLocale();
     }
 
     private void RegisterViews() {

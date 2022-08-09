@@ -3,14 +3,14 @@ package com.example.mithraapplication.ModelClasses;
 import com.google.gson.annotations.SerializedName;
 
 public class SurveyQuestions extends JsonServerObject{
-    @SerializedName("survey_pri_id")
-    String type = "NULL";
+//    @SerializedName("type")
+    private String filter_data = "null";
 
-    public String getType() {
-        return type;
+    public String getFilter_data() {
+        return filter_data;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFilter_data(String filter_data) {
+        this.filter_data = filter_data;
     }
 }
