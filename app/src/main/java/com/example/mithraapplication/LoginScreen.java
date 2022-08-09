@@ -3,8 +3,6 @@ package com.example.mithraapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.LoginScreenServerEvents;
 import com.example.mithraapplication.ModelClasses.UserLogin;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -23,7 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class LoginScreen extends AppCompatActivity implements HandleServerResponse {
+public class LoginScreen extends AppCompatActivity implements HandleServerResponse, LoginScreenServerEvents {
 
     private EditText userNameET, userPasswordET;
     private TextView welcomeTV;
@@ -114,16 +115,26 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         userLogin.setUserPassword(password);
         userLogin.setActive("Yes");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
-        requestObject.setHandleServerResponse(this);
+        requestObject.setLoginServerEvents(this);
         requestObject.postUserLogin(LoginScreen.this, userLogin, url);
     }
 
     /**
-     * Handle the success server response
+     * Description : Handles the failure server response
      */
     @Override
-    public void responseReceivedSuccessfully(String message) {
-        Log.i("Message", "Success");
+    public void responseReceivedFailure(String message) {
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(this, serverErrorResponse);
+        }else{
+            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void loginResponse(String message) {
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<UserLogin>>(){}.getType();
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
@@ -151,35 +162,6 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         mithraUtility.putSharedPreferencesData(this, getString(R.string.authorization_tokens), getString(R.string.coordinator), getString(R.string.mc_token));
         mithraUtility.putSharedPreferencesData(this, getString(R.string.authorization_tokens), getString(R.string.researcher), "");
     }
-
-    /**
-     * Description : Handles the failure server response
-     */
-    @Override
-    public void responseReceivedFailure(String message) {
-        Log.i("Message", "Failure");
-
-        if(message!=null){
-            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-            String serverErrorResponse = jsonObject.get("exception").toString();
-            Toast.makeText(this, serverErrorResponse, Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
-        }
-    }
-
-//    /**
-//     * @param newConfig
-//     * Description : This method is used to update the views on change of language
-//     */
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        userNameET.setText(R.string.userid);
-//        userPasswordET.setText(R.string.password);
-//        welcomeTV.setText(R.string.welcome);
-//        signInButton.setText(R.string.sign_in);
-//    }
 }
 
 

@@ -167,7 +167,8 @@
     <string name="update">Update</string>
     <string name="not_eligible_text">Regret to say that you are not eligible for the Survey</string>
     <string name="ok">Ok</string>
-    <string name="phq_screening">PHQ Screening</string>
+    <string name="phq_screening">SHG Screening</string>
+    <string name="phq_screen">PHQ Screening</string>
     <string name="phq_screening_id">PHQ Screening ID</string>
     <string name="manual_id">Manual ID</string>
     <string name="coordinator_shg">Coordinator SHG</string>

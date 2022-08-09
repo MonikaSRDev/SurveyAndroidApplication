@@ -142,11 +142,11 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     }
 
     private void onClickOfOptionOne(ViewHolder holder, QuestionAnswers questionAnswers) {
+        phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getName());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion(questionAnswers.getQuestion_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer(filteredQuestionOptionsArrayList.get(0).getOption_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer_weightage(String.valueOf(filteredQuestionOptionsArrayList.get(0).getOption_w()));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_no(questionAnswers.getQn_number());
-        phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getType());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setOption_id(filteredQuestionOptionsArrayList.get(0).getId());
 
         totalScore +=  Integer.parseInt(filteredQuestionOptionsArrayList.get(0).getOption_w());
@@ -166,11 +166,11 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     }
 
     private void onClickOfOptionTwo(ViewHolder holder, QuestionAnswers questionAnswers) {
+        phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getName());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion(questionAnswers.getQuestion_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer(filteredQuestionOptionsArrayList.get(1).getOption_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer_weightage(String.valueOf(filteredQuestionOptionsArrayList.get(1).getOption_w()));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_no(questionAnswers.getQn_number());
-        phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getType());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setOption_id(filteredQuestionOptionsArrayList.get(1).getId());
 
 
@@ -190,12 +190,11 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     }
 
     private void onClickOfOptionThree(ViewHolder holder, QuestionAnswers questionAnswers) {
-
+        phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getName());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion(questionAnswers.getQuestion_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer(filteredQuestionOptionsArrayList.get(2).getOption_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer_weightage(String.valueOf(filteredQuestionOptionsArrayList.get(2).getOption_w()));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_no(questionAnswers.getQn_number());
-        phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getType());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setOption_id(filteredQuestionOptionsArrayList.get(2).getId());
 
 
@@ -215,12 +214,11 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     }
 
     private void onClickOfOptionFour(ViewHolder holder, QuestionAnswers questionAnswers) {
-
+        phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getName());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion(questionAnswers.getQuestion_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer(filteredQuestionOptionsArrayList.get(3).getOption_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer_weightage(String.valueOf(filteredQuestionOptionsArrayList.get(3).getOption_w()));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_no(questionAnswers.getQn_number());
-        phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getType());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setOption_id(filteredQuestionOptionsArrayList.get(3).getId());
 
 

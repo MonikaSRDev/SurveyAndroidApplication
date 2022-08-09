@@ -34,8 +34,10 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.mithraapplication.Fragments.DiseasesProfileFragment;
 import com.example.mithraapplication.Fragments.ParticipantReportFragment;
 import com.example.mithraapplication.Fragments.RegistrationFragment;
-import com.example.mithraapplication.Fragments.PHQScreeningFragment;
 import com.example.mithraapplication.Fragments.SocioDemographyFragment;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.ParticipantProfileServerEvents;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
@@ -50,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
-public class ParticipantProfileScreen extends AppCompatActivity implements HandleServerResponse{
+public class ParticipantProfileScreen extends AppCompatActivity implements HandleServerResponse, ParticipantProfileServerEvents {
 
     public Button englishButtonProfile, kannadaButtonProfile, profileEditButton;
     private TextView profileTitleTV, dashboardTVProfile, participantTVProfile, coordinatorNameTVProfile, profileParticipantName;
@@ -318,7 +320,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 tabData1.select();
                 break;
             case 1:
-                fragment = new SocioDemographyFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
+                fragment = new SocioDemographyFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, phqLocations);
                 profileEditButton.setText(R.string.edit);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData2 = profileTabLayout.getTabAt(position);
@@ -327,7 +329,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 enableTab(0);
                 break;
             case 2:
-                fragment = new DiseasesProfileFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable);
+                fragment = new DiseasesProfileFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, phqLocations);
                 profileEditButton.setText(R.string.edit);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData3 = profileTabLayout.getTabAt(position);
@@ -337,7 +339,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 enableTab(1);
                 break;
             case 3:
-                fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant);
+                fragment = new ParticipantReportFragment(ParticipantProfileScreen.this, trackingParticipantStatus, isEditable, registerParticipant, phqLocations);
                 profileEditButton.setText(R.string.status);
                 profileEditButton.setBackgroundResource(R.drawable.edit_button_background);
                 TabLayout.Tab tabData4 = profileTabLayout.getTabAt(position);
@@ -418,6 +420,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"user_pri_id\", \"=\", \"" + registerParticipant.getUser_pri_id() + "\"]]";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setParticipantProfileServerEvents(this);
         requestObject.getTrackingDetails(ParticipantProfileScreen.this, url);
     }
 
@@ -477,35 +480,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     }
 
     @Override
-    public void responseReceivedSuccessfully(String message) {
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        try{
-            ArrayList<TrackingParticipantStatus> trackingParticipantStatusArrayList = gson.fromJson(jsonObject.get("data"), type);
-            if(trackingParticipantStatusArrayList!=null && trackingParticipantStatusArrayList.size()!=0){
-                trackingParticipantStatus = trackingParticipantStatusArrayList.get(0);
-                trackingName = trackingParticipantStatus.getName();
-                participant_primary_ID = registerParticipant.getUser_pri_id();
-                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.tracking), participant_primary_ID, trackingParticipantStatus.getName());
-                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration), participant_primary_ID, trackingParticipantStatus.getRegistration());
-                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography), participant_primary_ID, trackingParticipantStatus.getSocio_demography());
-                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile), participant_primary_ID, trackingParticipantStatus.getDisease_profile());
-            }else{
-                trackingParticipantStatus = null;
-            }
-            redirectParticipantToTab();
-        }catch(Exception e){
-            Toast.makeText(ParticipantProfileScreen.this, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void responseReceivedFailure(String message) {
-
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent loginIntent = new Intent(ParticipantProfileScreen.this, ParticipantsScreen.class);
@@ -543,5 +517,40 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
             }
         }
         return ret;
+    }
+
+    @Override
+    public void getParticipantTrackingDetails(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        try{
+            ArrayList<TrackingParticipantStatus> trackingParticipantStatusArrayList = gson.fromJson(jsonObject.get("data"), type);
+            if(trackingParticipantStatusArrayList!=null && trackingParticipantStatusArrayList.size()!=0){
+                trackingParticipantStatus = trackingParticipantStatusArrayList.get(0);
+                trackingName = trackingParticipantStatus.getName();
+                participant_primary_ID = registerParticipant.getUser_pri_id();
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.tracking), participant_primary_ID, trackingParticipantStatus.getName());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration), participant_primary_ID, trackingParticipantStatus.getRegistration());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography), participant_primary_ID, trackingParticipantStatus.getSocio_demography());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile), participant_primary_ID, trackingParticipantStatus.getDisease_profile());
+            }else{
+                trackingParticipantStatus = null;
+            }
+            redirectParticipantToTab();
+        }catch(Exception e){
+            Toast.makeText(ParticipantProfileScreen.this, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(this, serverErrorResponse);
+        }else{
+            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

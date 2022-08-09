@@ -296,7 +296,7 @@
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="@string/screening_id"
+                    android:text="@string/manual_id"
                     android:textColor="@color/text_color"
                     android:textSize="14sp" />
 

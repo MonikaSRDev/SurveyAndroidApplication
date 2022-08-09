@@ -33,28 +33,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.mithraapplication.Adapters.DiseasesProfileAdapter;
-import com.example.mithraapplication.DashboardScreen;
-import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.DiseaseProfileServerEvents;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.DiseasesProfilePostRequest;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
+import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdateDiseaseProfileTracking;
+import com.example.mithraapplication.PHQ9SHGListScreen;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.ParticipantsScreen;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiseasesProfileFragment extends Fragment implements HandleServerResponse {
+public class DiseasesProfileFragment extends Fragment implements HandleServerResponse, DiseaseProfileServerEvents {
 
     private ArrayList<DiseasesProfile> diseasesProfilesArray = new ArrayList<>();
     private RecyclerView recyclerViewLeft;
@@ -69,6 +72,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     private Context context;
     private DiseasesProfilePostRequest diseasesProfileDetails = null;
     private Dialog dialog;
+    private PHQLocations phqLocations;
 
     @Nullable
     @Override
@@ -104,10 +108,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 new IntentFilter("DiseasesProfileData"));
     }
 
-    public DiseasesProfileFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable){
+    public DiseasesProfileFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable, PHQLocations phqLocations){
         this.context = context;
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
+        this.phqLocations = phqLocations;
     }
 
     /**
@@ -340,6 +345,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
      */
     private void moveToParticipantsScreen(){
         Intent intent = new Intent(context, ParticipantsScreen.class);
+        intent.putExtra("PHQLocations", (Serializable) phqLocations);
         startActivity(intent);
     }
 
@@ -737,6 +743,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         DiseasesProfilePostRequest diseasesProfilePostRequest = getDiseaseProfileData();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setDiseaseProfileServerEvents(this);
         requestObject.postDiseaseProfileDetails(context, diseasesProfilePostRequest, url);
     }
 
@@ -753,6 +760,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         trackingParticipantStatus.setRegistrationCompleteTime(participantBaseTime);
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setDiseaseProfileServerEvents(this);
         requestObject.putTrackingStatusDiseaseProfile(context, trackingParticipantStatus, url);
     }
 
@@ -763,6 +771,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile/" + trackingParticipantStatus.getDisease_profile();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setDiseaseProfileServerEvents(this);
         requestObject.getParticipantDiseaseProfileDetails(context, url);
     }
 
@@ -776,52 +785,8 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         diseasesProfilePostRequest.setModified_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setDiseaseProfileServerEvents(this);
         requestObject.putDiseaseProfileDetails(context, diseasesProfilePostRequest, url);
-    }
-
-    @Override
-    public void responseReceivedSuccessfully(String message) {
-        Gson gson = new Gson();
-        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
-        Type type = new TypeToken<FrappeResponse>(){}.getType();
-        if(jsonObjectRegistration.get("data")!=null){
-            FrappeResponse frappeResponse;
-            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
-            if(isEditable!=null && isEditable.equals("true")){
-                if (frappeResponse != null && frappeResponse.getDoctype().equals("disease_profile")) {
-                    String registrationName = frappeResponse.getName();
-                    mithraUtility.putSharedPreferencesData(context, context.getString(R.string.disease_profile), frappeResponse.getUser_pri_id(), registrationName);
-                    callUpdateTrackingDetails(registrationName);
-                } else if (frappeResponse != null && frappeResponse.getDoctype().equals("tracking")) {
-                    trackingName = frappeResponse.getName();
-                    moveToParticipantsScreen();
-                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID));
-                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.tracking), frappeResponse.getUser_pri_id());
-                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.registration), frappeResponse.getUser_pri_id());
-                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.socio_demography), frappeResponse.getUser_pri_id());
-                    mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.disease_profile), frappeResponse.getUser_pri_id());
-                }
-            }else{
-                if(isEditable!=null && isEditable.equals("reEdit")){
-                    editButton.setBackgroundResource(R.drawable.yes_no_button);
-                    Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
-                }
-                Type typeDiseaseProfile = new TypeToken<DiseasesProfilePostRequest>(){}.getType();
-                diseasesProfileDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeDiseaseProfile);
-                trackingParticipantStatus.setUser_pri_id(diseasesProfileDetails.getUser_pri_id());
-                isEditable = "false";
-                nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
-                editButton.setEnabled(true);
-                getDiseasesProfileArrayList();
-            }
-        }else{
-            Log.i("RegistrationFragment", "JsonObjectRegistration data is Empty");
-        }
-    }
-
-    @Override
-    public void responseReceivedFailure(String message) {
-
     }
 
     /**
@@ -899,5 +864,92 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void postDiseasesProfile(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        Type type = new TypeToken<FrappeResponse>(){}.getType();
+        if(jsonObjectRegistration.get("data")!=null){
+            FrappeResponse frappeResponse;
+            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
+            if (frappeResponse != null && frappeResponse.getDoctype().equals("disease_profile")) {
+                String registrationName = frappeResponse.getName();
+                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.disease_profile), frappeResponse.getUser_pri_id(), registrationName);
+                callUpdateTrackingDetails(registrationName);
+            }
+        }else{
+            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void updateDiseaseTrackingDetails(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        Type type = new TypeToken<FrappeResponse>(){}.getType();
+        if(jsonObjectRegistration.get("data")!=null){
+            FrappeResponse frappeResponse;
+            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
+            trackingName = frappeResponse.getName();
+            moveToParticipantsScreen();
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID));
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.tracking), frappeResponse.getUser_pri_id());
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.registration), frappeResponse.getUser_pri_id());
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.socio_demography), frappeResponse.getUser_pri_id());
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.disease_profile), frappeResponse.getUser_pri_id());
+        }else{
+            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void individualDiseaseProfileDetails(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObjectRegistration.get("data")!=null){
+            Type typeDiseaseProfile = new TypeToken<DiseasesProfilePostRequest>(){}.getType();
+            diseasesProfileDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeDiseaseProfile);
+            trackingParticipantStatus.setUser_pri_id(diseasesProfileDetails.getUser_pri_id());
+            isEditable = "false";
+            nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
+            editButton.setEnabled(true);
+            getDiseasesProfileArrayList();
+        }else{
+            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void updateDiseaseProfileDetails(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObjectRegistration.get("data")!=null){
+            if(isEditable!=null && isEditable.equals("reEdit")){
+                editButton.setBackgroundResource(R.drawable.yes_no_button);
+                Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
+            }
+            Type typeDiseaseProfile = new TypeToken<DiseasesProfilePostRequest>(){}.getType();
+            diseasesProfileDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeDiseaseProfile);
+            trackingParticipantStatus.setUser_pri_id(diseasesProfileDetails.getUser_pri_id());
+            isEditable = "false";
+            nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
+            editButton.setEnabled(true);
+            getDiseasesProfileArrayList();
+        }else{
+            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(context, serverErrorResponse);
+        }else{
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -11,20 +11,23 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.LocaleList;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mithraapplication.Adapters.VerticalVideoModulesAdapter;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 import com.example.mithraapplication.ModelClasses.VideoModules;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class VideoScreen extends AppCompatActivity implements HandleServerResponse{
+public class VideoScreen extends AppCompatActivity implements HandleServerResponse {
 
     public static ArrayList<VideoModules> videoModulesArrayList = new ArrayList<>();
     private RecyclerView verticalRecyclerView;
@@ -260,12 +263,13 @@ public class VideoScreen extends AppCompatActivity implements HandleServerRespon
     }
 
     @Override
-    public void responseReceivedSuccessfully(String message) {
-
-    }
-
-    @Override
     public void responseReceivedFailure(String message) {
-
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(this, serverErrorResponse);
+        }else{
+            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -5,8 +5,10 @@ import com.google.gson.annotations.SerializedName;
 public class PostSurveyQuestions extends JsonServerObject{
     private String user_pri_id = "null";
     private String created_user = "null";
-    @SerializedName("type0")
-    private String type = "null";
+    @SerializedName("sur_pri_id")
+    private String survey_primary_id = "SUR0001";
+    @SerializedName("sur_ins_id")
+    private String survey_instance_id = "SIID1";
     private String answer = "null";
     private String survey_start = "null";
     private String survey_stop = "null";
@@ -27,14 +29,6 @@ public class PostSurveyQuestions extends JsonServerObject{
 
     public void setCreated_user(String created_user) {
         this.created_user = created_user;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getAnswer() {
@@ -75,5 +69,21 @@ public class PostSurveyQuestions extends JsonServerObject{
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public String getSurvey_instance_id() {
+        return survey_instance_id;
+    }
+
+    public void setSurvey_instance_id(String survey_instance_id) {
+        this.survey_instance_id = survey_instance_id;
+    }
+
+    public String getSurvey_primary_id() {
+        return survey_primary_id;
+    }
+
+    public void setSurvey_primary_id(String survey_primary_id) {
+        this.survey_primary_id = survey_primary_id;
     }
 }

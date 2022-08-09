@@ -8,6 +8,7 @@ import android.icu.util.Calendar;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -131,5 +132,23 @@ public class MithraUtility extends Application {
             e.printStackTrace();
         }
         return pn;
+    }
+
+    public void showAppropriateMessages(Context context, String serverResponse){
+        if(serverResponse!=null && serverResponse.contains("frappe.exceptions.DuplicateEntryError")){
+            Toast.makeText(context, "Name already exists. Please enter other name.", Toast.LENGTH_LONG).show();
+        }else if(serverResponse!=null && serverResponse.contains("frappe.exceptions.LinkValidationError")){
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }else if(serverResponse!=null && serverResponse.contains("frappe.exceptions.MandatoryError")){
+            Toast.makeText(context, "Please fill all the details.", Toast.LENGTH_LONG).show();
+        }else if(serverResponse!=null && serverResponse.contains("frappe.exceptions.ValidationError")){
+            Toast.makeText(context, "Data with the same ID already exists.", Toast.LENGTH_LONG).show();
+        }else if(serverResponse!=null && serverResponse.contains("frappe.exceptions.PermissionError")){
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }else if(serverResponse!=null && serverResponse.contains("frappe.exceptions.IntegrityError")){
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

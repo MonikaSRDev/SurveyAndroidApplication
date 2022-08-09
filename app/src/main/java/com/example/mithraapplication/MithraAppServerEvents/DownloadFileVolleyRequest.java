@@ -1,4 +1,4 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.MithraAppServerEvents;
 
 import android.content.Context;
 
@@ -7,6 +7,8 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.example.mithraapplication.MithraUtility;
+import com.example.mithraapplication.R;
 
 import java.util.HashMap;
 import java.util.Map;

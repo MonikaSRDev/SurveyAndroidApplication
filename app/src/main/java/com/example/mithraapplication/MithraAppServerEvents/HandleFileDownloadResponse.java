@@ -1,4 +1,4 @@
-package com.example.mithraapplication;
+package com.example.mithraapplication.MithraAppServerEvents;
 
 public interface HandleFileDownloadResponse {
 

@@ -11,7 +11,6 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -29,11 +28,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.RegistrationServerEvents;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
 import com.example.mithraapplication.ModelClasses.GetParticipantDetails;
-import com.example.mithraapplication.ModelClasses.Locations;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.PHQParticipantDetails;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
@@ -41,12 +40,10 @@ import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdatePassword;
 import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
 import com.example.mithraapplication.ModelClasses.UpdateRegisterStatus;
-import com.example.mithraapplication.ModelClasses.UpdateScreeningStatus;
 import com.example.mithraapplication.ModelClasses.UserLogin;
-import com.example.mithraapplication.PHQParticipantsScreen;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -58,7 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RegistrationFragment extends Fragment implements AdapterView.OnItemSelectedListener, HandleServerResponse {
+public class RegistrationFragment extends Fragment implements AdapterView.OnItemSelectedListener, HandleServerResponse, RegistrationServerEvents {
 
     private EditText participantAgeET, participantPhoneNumberET, participantUserNameET, participantPasswordET, participantConfirmPasswordET;
     private Button createButton, maleButton, femaleButton, othersButton, editButton, createNewPasswordButton;
@@ -109,6 +106,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         onClickRegisterButton();
         getSelectedGender();
         setOnclickOfEditButton();
+        setOnClickNameSelected();
     }
 
     public RegistrationFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant, PHQLocations phqLocations){
@@ -241,9 +239,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createNewPasswordButton.setVisibility(View.VISIBLE);
             createNewPasswordButton.setEnabled(false);
 //
-            PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantVillageName()));
+            PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getPhq_scr_id()));
             PHQScreeningSpinner.setEnabled(false);
-            ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantPanchayat()));
+            ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getMan_id()));
             ManualIDSpinner.setEnabled(false);
             CountryCodeSpinner.setEnabled(false);
         }else{
@@ -295,9 +293,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createNewPasswordButton.setEnabled(true);
             onClickOfCreateNewPassword();
 
-            PHQScreeningSpinner.setSelection(((ArrayAdapter)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantVillageName()));
+            PHQScreeningSpinner.setSelection(((ArrayAdapter)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getPhq_scr_id()));
             PHQScreeningSpinner.setEnabled(true);
-            ManualIDSpinner.setSelection(((ArrayAdapter)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getParticipantPanchayat()));
+            ManualIDSpinner.setSelection(((ArrayAdapter)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getMan_id()));
             ManualIDSpinner.setEnabled(true);
             CountryCodeSpinner.setEnabled(true);
         }
@@ -466,19 +464,12 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         return registerParticipant;
     }
 
-
-    private void callGetLocationsForParticipant() {
-        String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.location.api.locations";
-        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
-        requestObject.setHandleServerResponse(this);
-        requestObject.getParticipantLocations(context, url);
-    }
-
     private void callGetAllPHQParticipantsData(){
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_scr_sub.api.pre_screenings";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getPHQParticipantDetails(context, url);
+        requestObject.setRegistrationServerEvents(this);
+        requestObject.getParticipantsScreening(context, url);
     }
 
     private void callServerLoginForParticipant() {
@@ -491,13 +482,15 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         userLogin.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.postUserLogin(context, userLogin, url);
+        requestObject.setRegistrationServerEvents(this);
+        requestObject.createUserLogin(context, userLogin, url);
     }
 
     private void callServerRegisterParticipant() {
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/participant";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setRegistrationServerEvents(this);
         requestObject.postRegisterUser(context, getRegisterParticipantData(), url);
     }
 
@@ -511,6 +504,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         trackingParticipantStatus.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setRegistrationServerEvents(this);
         requestObject.postTrackingStatus(context, trackingParticipantStatus, url);
     }
 
@@ -520,6 +514,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         participantDetails.setUser_pri_id(registerParticipantDetails.getUser_pri_id());
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setRegistrationServerEvents(this);
         requestObject.getParticipantRegistrationDetails(context, participantDetails, url);
     }
 
@@ -539,6 +534,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         registerParticipant.setUser_pri_id(registerParticipantDetails.getUser_pri_id());
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setRegistrationServerEvents(this);
         requestObject.putRegisterUser(context, registerParticipant, url);
     }
 
@@ -549,6 +545,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         updatePassword.setPassword(password);
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setRegistrationServerEvents(this);
         requestObject.putUpdateUserPassword(context, updatePassword, url);
     }
 
@@ -558,6 +555,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         updateRegisterStatus.setRegister("yes");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setRegistrationServerEvents(this);
         requestObject.putUpdateRegisterStatus(context, updateRegisterStatus, url);
     }
 
@@ -582,28 +580,22 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
             participantManualID = ManualNamesList.get(position);
             ManualIDSpinner.setSelection(position, false);
-            if(temporaryList != null && temporaryList.size()!=0){
-                filteredManualIDList = temporaryList.stream().filter(PHQParticipantDetails -> PHQParticipantDetails.getManualID().contains(participantManualID)).distinct().collect(Collectors.toList());
-                PHQScreeningNamesList.clear();
-                PHQScreeningNamesList = filteredManualIDList.stream().map(PHQParticipantDetails::getPHQScreeningID).distinct().collect(Collectors.toList());
-                PHQScreeningSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, PHQScreeningNamesList);
-                PHQScreeningSpinner.setAdapter(PHQScreeningSpinnerAdapter);
-            }else{
-                temporaryList = locationsArrayList;
-            }
+
+            PHQScreeningSpinner.setSelection(position, false);
+            participantPHQScreeningID = PHQScreeningNamesList.get(position);
+
+            participantNameAutoCompleteTV.setText(ParticipantNamesList.get(position));
+            participantName = ParticipantNamesList.get(position);
+
         }else if(parent.getId() == R.id.PHQScreeningIDSpinner){
             participantPHQScreeningID = PHQScreeningNamesList.get(position);
             PHQScreeningSpinner.setSelection(position, false);
 
-            if(temporaryList!=null && temporaryList.size()!=0) {
-                filteredPHQScreeningList = temporaryList.stream().filter(PHQParticipantDetails -> PHQParticipantDetails.getPHQScreeningID().contains(participantPHQScreeningID)).distinct().collect(Collectors.toList());
-                ManualNamesList.clear();
-                ManualNamesList = filteredPHQScreeningList.stream().map(PHQParticipantDetails::getManualID).distinct().collect(Collectors.toList());
-                ManualIDSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, ManualNamesList);
-                ManualIDSpinner.setAdapter(ManualIDSpinnerAdapter);
-            }else{
-                temporaryList = locationsArrayList;
-            }
+            participantManualID = ManualNamesList.get(position);
+            ManualIDSpinner.setSelection(position, false);
+
+            participantNameAutoCompleteTV.setText(ParticipantNamesList.get(position));
+            participantName = ParticipantNamesList.get(position);
         }
     }
 
@@ -611,7 +603,28 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    private void setOnClickNameSelected(){
+        participantNameAutoCompleteTV.setOnItemClickListener((parent, arg1, pos, id) -> {
+            int position = ParticipantNamesList.indexOf(participantNameAutoCompleteTV.getText().toString());
+            participantNameAutoCompleteTV.setText(ParticipantNamesList.get(position));
+            participantName = ParticipantNamesList.get(position);
+
+            participantPHQScreeningID = PHQScreeningNamesList.get(position);
+            PHQScreeningSpinner.setSelection(position, false);
+
+            participantManualID = ManualNamesList.get(position);
+            ManualIDSpinner.setSelection(position, false);
+        });
+    }
+
     private void prepareSpinnerData(){
+
+        if(isEditable!=null && isEditable.equals("true")){
+            locationsArrayList = locationsArrayList.stream()
+                    .filter(phqParticipantDetails -> phqParticipantDetails.getRegister().equalsIgnoreCase("no")).collect(Collectors.toCollection(ArrayList::new));
+        }
+        temporaryList = locationsArrayList;
+
         ManualNamesList = locationsArrayList.stream().map(PHQParticipantDetails::getManualID).distinct().collect(Collectors.toList());
         PHQScreeningNamesList = locationsArrayList.stream().map(PHQParticipantDetails::getPHQScreeningID).distinct().collect(Collectors.toList());
         ParticipantNamesList = locationsArrayList.stream().map(PHQParticipantDetails::getPHQParticipantName).distinct().collect(Collectors.toList());
@@ -619,13 +632,11 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         ManualIDSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, ManualNamesList);
         ManualIDSpinner.setAdapter(ManualIDSpinnerAdapter);
         participantManualID = ManualNamesList.get(0);
-        ManualIDSpinner.setSelection(0,false);
         ManualIDSpinner.setOnItemSelectedListener(this);
 
         PHQScreeningSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, PHQScreeningNamesList);
         PHQScreeningSpinner.setAdapter(PHQScreeningSpinnerAdapter);
         participantPHQScreeningID = PHQScreeningNamesList.get(0);
-        PHQScreeningSpinner.setSelection(0,false);
         PHQScreeningSpinner.setOnItemSelectedListener(this);
 
         ParticipantNameAdapter = new ArrayAdapter(context, R.layout.spinner_item, ParticipantNamesList);
@@ -639,106 +650,6 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             return false;
         });
         participantName = PHQScreeningNamesList.get(0);
-    }
-
-    /**
-     * Handle the server response
-     */
-    @Override
-    public void responseReceivedSuccessfully(String message) {
-
-        Gson gson = new Gson();
-        Type typeLocation = new TypeToken<ArrayList<PHQParticipantDetails>>(){}.getType();
-        JsonObject jsonObjectLocation = JsonParser.parseString(message).getAsJsonObject();
-
-        if(jsonObjectLocation.get("message")!=null){
-            try{
-                ArrayList<PHQParticipantDetails> locationsArrayListObj = gson.fromJson(jsonObjectLocation.get("message"), typeLocation);
-                if(locationsArrayListObj.size() > 1) {
-                    locationsArrayList = locationsArrayListObj;
-                    temporaryList = locationsArrayList;
-                    prepareSpinnerData();
-                }
-                else{
-                    if(trackingParticipantStatus!=null){
-                        if(isEditable!= null && !isEditable.equals("true")){
-                            Type typeParticipant = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
-                            ArrayList<RegisterParticipant> registerParticipantArrayList = gson.fromJson(jsonObjectLocation.get("message"), typeParticipant);
-                            registerParticipantDetails = registerParticipantArrayList.get(0);
-                            editButton.setEnabled(true);
-                            setEditable();
-                        }
-                    }else{
-                        Type type = new TypeToken<ArrayList<UserLogin>>(){}.getType();
-                        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-                        ArrayList<UserLogin> userLogins;
-                        try{
-                            userLogins = gson.fromJson(jsonObject.get("message"), type);
-                            if(userLogins!=null){
-                                if(!userLogins.get(0).getUserName().equals("NULL")){
-                                    mithraUtility.putSharedPreferencesData(context, context.getString(R.string.userName), context.getString(R.string.user_name_participant), userLogins.get(0).getUserName());
-                                    mithraUtility.putSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
-                                    callServerRegisterParticipant();
-                                }
-                            }
-                        }catch(Exception e){
-                            if(jsonObject.get("message")!=null) {
-//                                Toast.makeText(getActivity(), jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }
-                }
-            }catch(Exception e){
-                if(jsonObjectLocation.get("message")!=null && jsonObjectLocation.get("message").toString().equals("\"updated\"")) {
-                    Toast.makeText(context, "Your password has been updated.", Toast.LENGTH_LONG).show();
-//                    Toast.makeText(getActivity(), jsonObjectLocation.get("message").toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }else{
-            JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
-            Type type = new TypeToken<FrappeResponse>(){}.getType();
-            if(jsonObjectRegistration.get("data")!=null){
-                FrappeResponse frappeResponse;
-                frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
-                if(isEditable!=null && isEditable.equals("true")){
-                    if(frappeResponse!=null && frappeResponse.getDoctype().equals("participant")){
-                        String registrationName = frappeResponse.getName();
-                        mithraUtility.putSharedPreferencesData(context, context.getString(R.string.registration), frappeResponse.getUser_pri_id(), registrationName);
-//                        callUpdateRegisterStatus();
-                        callCreateTrackingStatus(registrationName);
-                    }else if(frappeResponse!=null && frappeResponse.getDoctype().equals("tracking")){
-                        trackingName = frappeResponse.getName();
-                        mithraUtility.putSharedPreferencesData(context, context.getString(R.string.tracking), frappeResponse.getUser_pri_id(), trackingName);
-                        mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID));
-                        participant_primary_ID = frappeResponse.getUser_pri_id();
-                        moveToSocioDemographyTab();
-                    }
-                }else{
-                    registerParticipantDetails = getRegisterParticipantData();
-                    editButton.setEnabled(true);
-                    editButton.setBackgroundResource(R.drawable.yes_no_button);
-                    isEditable = "false";
-                    setEditable();
-                    Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
-                }
-
-            }else{
-                Log.i("RegistrationFragment", "JsonObjectRegistration data is Empty");
-            }
-        }
-        Log.i("Message", "Success");
-    }
-
-    @Override
-    public void responseReceivedFailure(String message) {
-        Log.i("Message", "Failure");
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        String serverErrorResponse = jsonObject.get("exception").toString();
-        if(serverErrorResponse.contains("frappe.exceptions.DuplicateEntryError")){
-            participantUserNameET.setError("User Name already exits. Please give other user name.");
-        }else{
-            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -775,5 +686,155 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void getAllPHQParticipants(String message) {
+        Gson gson = new Gson();
+        Type typeLocation = new TypeToken<ArrayList<PHQParticipantDetails>>(){}.getType();
+        JsonObject jsonObjectLocation = JsonParser.parseString(message).getAsJsonObject();
+
+        if(jsonObjectLocation.get("message")!=null){
+            try{
+                ArrayList<PHQParticipantDetails> locationsArrayListObj = gson.fromJson(jsonObjectLocation.get("message"), typeLocation);
+                if(locationsArrayListObj.size() > 1) {
+                    locationsArrayList = locationsArrayListObj;
+                    prepareSpinnerData();
+                }
+            }catch(Exception e){
+                Toast.makeText(getActivity(), jsonObjectLocation.get("message").toString(), Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(getActivity(), jsonObjectLocation.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void loginForParticipant(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectLocation = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObjectLocation.get("message")!=null){
+            try{
+                Type type = new TypeToken<ArrayList<UserLogin>>(){}.getType();
+                JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+                ArrayList<UserLogin> userLogins;
+                try{
+                    userLogins = gson.fromJson(jsonObject.get("message"), type);
+                    if(userLogins!=null){
+                        if(!userLogins.get(0).getUserName().equals("NULL")){
+                            mithraUtility.putSharedPreferencesData(context, context.getString(R.string.userName), context.getString(R.string.user_name_participant), userLogins.get(0).getUserName());
+                            mithraUtility.putSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
+                            callServerRegisterParticipant();
+                        }
+                    }
+                }catch(Exception e){
+                    if(jsonObject.get("message")!=null) {
+                        Toast.makeText(getActivity(), jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }catch(Exception e){
+                if(jsonObjectLocation.get("message")!=null && jsonObjectLocation.get("message").toString().equals("\"updated\"")) {
+                    Toast.makeText(context, "Your password has been updated.", Toast.LENGTH_LONG).show();
+                }
+            }
+        }else{
+            Toast.makeText(getActivity(), jsonObjectLocation.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void registerParticipant(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        Type type = new TypeToken<FrappeResponse>() {
+        }.getType();
+        if (jsonObjectRegistration.get("data") != null) {
+            FrappeResponse frappeResponse;
+            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
+            if (frappeResponse != null && frappeResponse.getDoctype().equals("participant")) {
+                String registrationName = frappeResponse.getName();
+                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.registration), frappeResponse.getUser_pri_id(), registrationName);
+                callUpdateRegisterStatus();
+                callCreateTrackingStatus(registrationName);
+            }
+        } else {
+            Toast.makeText(getActivity(), jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void createTrackingStatus(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        Type type = new TypeToken<FrappeResponse>(){}.getType();
+        if(jsonObjectRegistration.get("data")!=null){
+            FrappeResponse frappeResponse;
+            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
+            trackingName = frappeResponse.getName();
+            mithraUtility.putSharedPreferencesData(context, context.getString(R.string.tracking), frappeResponse.getUser_pri_id(), trackingName);
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID));
+            participant_primary_ID = frappeResponse.getUser_pri_id();
+            moveToSocioDemographyTab();
+        }else{
+            Toast.makeText(getActivity(), jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void individualParticipantDetails(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectLocation = JsonParser.parseString(message).getAsJsonObject();
+        Type typeParticipant = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
+        ArrayList<RegisterParticipant> registerParticipantArrayList = gson.fromJson(jsonObjectLocation.get("message"), typeParticipant);
+        registerParticipantDetails = registerParticipantArrayList.get(0);
+        editButton.setEnabled(true);
+        setEditable();
+    }
+
+    @Override
+    public void updateParticipantDetails(String message) {
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObjectRegistration.get("data")!=null){
+                registerParticipantDetails = getRegisterParticipantData();
+                editButton.setEnabled(true);
+                editButton.setBackgroundResource(R.drawable.yes_no_button);
+                isEditable = "false";
+                setEditable();
+                Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getActivity(), jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void updateParticipantPassword(String message) {
+        JsonObject jsonObjectLocation = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObjectLocation.get("message")!=null){
+            if(jsonObjectLocation.get("message")!=null && jsonObjectLocation.get("message").toString().equals("\"updated\"")) {
+                Toast.makeText(context, "Your password has been updated.", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(getActivity(), jsonObjectLocation.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void updateRegisterStatus(String message) {
+        Log.i("Message", "Success");
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+        Log.i("Message", "Failure");
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        String serverErrorResponse = jsonObject.get("exception").toString();
+        if(serverErrorResponse.contains("frappe.exceptions.DuplicateEntryError")){
+            participantUserNameET.setError("User Name already exits. Please give other user name.");
+        }else{
+            if(message!=null){
+                mithraUtility.showAppropriateMessages(context, serverErrorResponse);
+            }else{
+                Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+            }        }
     }
 }

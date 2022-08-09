@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,17 +21,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.PHQScreeningServerEvents;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.PHQParticipantDetails;
 import com.example.mithraapplication.ModelClasses.ParticipantScreening;
 import com.example.mithraapplication.ModelClasses.UpdateScreeningStatus;
 import com.example.mithraapplication.PHQParticipantsScreen;
-import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.ParticipantsScreen;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -41,7 +40,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
-public class PHQScreeningFragment extends Fragment implements HandleServerResponse {
+public class PHQScreeningFragment extends Fragment implements HandleServerResponse, PHQScreeningServerEvents {
 
 //    public PHQScreeningFragment(String isEditable) {
 //        // Required empty public constructor
@@ -432,6 +431,7 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/screening";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setPhqScreeningServerEvents(this);
         requestObject.postScreeningDetails(context, participantScreening, url);
     }
     private void callUpdatePHQEligibilityStatus(String ScreeningID) {
@@ -440,44 +440,8 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
         updateScreeningStatus.setScreening_id(ScreeningID);
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setPhqScreeningServerEvents(this);
         requestObject.putUpdateScreeningStatus(context, updateScreeningStatus, url);
-    }
-
-    @Override
-    public void responseReceivedSuccessfully(String message) {
-        Gson gson = new Gson();
-        Type type = new TypeToken<ParticipantScreening>(){}.getType();
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        ParticipantScreening participantScreening;
-        try{
-            participantScreening = gson.fromJson(jsonObject.get("data"), type);
-            String screeningID = mithraUtility.getSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID));
-            if(participantScreening!=null){
-                if(!participantScreening.getName().equals(PHQScreeningID.getText().toString()) && !participantScreening.getName().equals("NULL")){
-//                    if(participantScreening.getScore() >= 7){
-                        mithraUtility.putSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID), participantScreening.getName());
-                        callUpdatePHQEligibilityStatus(participantScreening.getName());
-                }else{
-                    moveToPHQParticipantsScreen();
-                }
-            }
-        }catch(Exception e){
-            if(jsonObject.get("data")!=null) {
-                Toast.makeText(context, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    @Override
-    public void responseReceivedFailure(String message) {
-        Log.i("Message", "Failure");
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        String serverErrorResponse = jsonObject.get("exc_type").toString();
-        if(serverErrorResponse.contains("ValidationError")){
-            Toast.makeText(context, "Please give all the details.", Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -532,5 +496,43 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void postScreeningDetails(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ParticipantScreening>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        ParticipantScreening participantScreening;
+        try{
+            participantScreening = gson.fromJson(jsonObject.get("data"), type);
+            if(participantScreening!=null){
+                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID), participantScreening.getName());
+                callUpdatePHQEligibilityStatus(participantScreening.getName());
+            }
+        }catch(Exception e){
+            Toast.makeText(context, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void updateScreeningStatus(String message) {
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        try{
+            moveToPHQParticipantsScreen();
+        }catch(Exception e){
+            Toast.makeText(context, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(context, serverErrorResponse);
+        }else{
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

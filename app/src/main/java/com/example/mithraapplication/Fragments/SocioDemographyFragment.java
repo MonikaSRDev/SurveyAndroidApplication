@@ -19,15 +19,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.SocioDemographyServerEvents;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
+import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.SocioDemography;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.example.mithraapplication.ModelClasses.UpdateSocioDemographyTracking;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -35,7 +37,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
-public class SocioDemographyFragment extends Fragment implements HandleServerResponse {
+public class SocioDemographyFragment extends Fragment implements HandleServerResponse, SocioDemographyServerEvents {
 
     private Button nextButton, nuclearFamilyButton, jointFamilyButton,
             neverMarriedButton, marriedButton, divorcedButton, separatedButton, widowButton,
@@ -54,6 +56,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     private String isEditable = "true";
     private SocioDemography socioDemographyDetails = null;
     private Context context;
+    private PHQLocations phqLocations;
 
 
     @Nullable
@@ -94,10 +97,11 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         setOnclickOfEditButton();
     }
 
-    public SocioDemographyFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable){
+    public SocioDemographyFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable, PHQLocations phqLocations){
         this.context = context;
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
+        this.phqLocations = phqLocations;
     }
 
     /**
@@ -193,15 +197,15 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
 
             if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("No Schooling")){
                 noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("< 5")){
+            }else if(participantSchooling!=null && participantSchooling.contains("<5")){
                 lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("5 – 7")){
+            }else if(participantSchooling!=null && participantSchooling.contains("5-7")){
                 fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("8 – 9")){
+            }else if(participantSchooling!=null && participantSchooling.contains("8-9")){
                 eightToNineButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("10 – 11")){
+            }else if(participantSchooling!=null && participantSchooling.contains("10-11")){
                 tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
-            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("12 or more")){
+            }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("12ormore")){
                 twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
@@ -384,7 +388,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         });
 
         twelveOrMoreButton.setOnClickListener(v -> {
-            participantSchooling = "12 or more";
+            participantSchooling = "12ormore";
             noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
@@ -761,6 +765,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/demography";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setSocioDemographyServerEvents(this);
         requestObject.postSocioDemographyDetails(context, getUserEnteredData(), url);
     }
 
@@ -772,6 +777,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         trackingParticipantStatus.setModified_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setSocioDemographyServerEvents(this);
         requestObject.putTrackingStatusSocioDemography(context, trackingParticipantStatus, url);
     }
 
@@ -779,6 +785,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/demography/" + trackingParticipantStatus.getSocio_demography();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setSocioDemographyServerEvents(this);
         requestObject.getParticipantSocioDemographyDetails(context, url);
     }
 
@@ -789,54 +796,12 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         socioDemographyObject.setModified_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setSocioDemographyServerEvents(this);
         requestObject.putSocioDemographyDetails(context, socioDemographyObject, url);
     }
 
     private void moveToDiseaseProfileTab(){
         ((ParticipantProfileScreen)context).setupSelectedTabFragment(2);
-    }
-
-
-    @Override
-    public void responseReceivedSuccessfully(String message) {
-        Gson gson = new Gson();
-        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
-        Type type = new TypeToken<FrappeResponse>(){}.getType();
-        if(jsonObjectRegistration.get("data")!=null){
-            FrappeResponse frappeResponse;
-            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
-            if(isEditable!=null && isEditable.equals("true")){
-                if (frappeResponse != null && frappeResponse.getDoctype().equals("demography")) {
-                    String registrationName = frappeResponse.getName();
-                    mithraUtility.putSharedPreferencesData(context, context.getString(R.string.socio_demography), frappeResponse.getUser_pri_id(), registrationName);
-                    callUpdateTrackingDetails(registrationName);
-                } else if (frappeResponse != null && frappeResponse.getDoctype().equals("tracking")) {
-                    trackingName = frappeResponse.getName();
-                    participant_primary_ID = frappeResponse.getUser_pri_id();
-                    moveToDiseaseProfileTab();
-                }
-            }else{
-                if(isEditable!=null && isEditable.equals("reEdit")){
-                    editButton.setBackgroundResource(R.drawable.yes_no_button);
-                    Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
-                }
-                Type typeSocioDemography = new TypeToken<SocioDemography>(){}.getType();
-                socioDemographyDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeSocioDemography);
-                trackingParticipantStatus.setUser_pri_id(socioDemographyDetails.getUser_pri_id());
-                editButton.setEnabled(true);
-                nextButton.setVisibility(View.INVISIBLE);
-                isEditable = "false";
-                setEditable();
-            }
-        }else{
-            //Do nothing
-            Log.i("SocioDemographyFragment", "JsonObjectRegistration data is Empty");
-        }
-    }
-
-    @Override
-    public void responseReceivedFailure(String message) {
-
     }
 
     /**
@@ -906,5 +871,90 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void postSocioDemography(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        Type type = new TypeToken<FrappeResponse>() {
+        }.getType();
+        if (jsonObjectRegistration.get("data") != null) {
+            FrappeResponse frappeResponse;
+            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
+            if (frappeResponse != null && frappeResponse.getDoctype().equals("demography")) {
+                String registrationName = frappeResponse.getName();
+                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.socio_demography), frappeResponse.getUser_pri_id(), registrationName);
+                callUpdateTrackingDetails(registrationName);
+            }
+            else {
+                Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void updateSocioTrackingDetails(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        Type type = new TypeToken<FrappeResponse>(){}.getType();
+        if(jsonObjectRegistration.get("data")!=null){
+            FrappeResponse frappeResponse;
+            frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
+            trackingName = frappeResponse.getName();
+            participant_primary_ID = frappeResponse.getUser_pri_id();
+            moveToDiseaseProfileTab();
+        }else{
+            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void individualSocioDemography(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObjectRegistration.get("data")!=null){
+            Type typeSocioDemography = new TypeToken<SocioDemography>(){}.getType();
+            socioDemographyDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeSocioDemography);
+            trackingParticipantStatus.setUser_pri_id(socioDemographyDetails.getUser_pri_id());
+            editButton.setEnabled(true);
+            nextButton.setVisibility(View.INVISIBLE);
+            isEditable = "false";
+            setEditable();
+        }else{
+            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void updateSocioDemographyDetails(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObjectRegistration.get("data")!=null){
+            if(isEditable!=null && isEditable.equals("reEdit")){
+                editButton.setBackgroundResource(R.drawable.yes_no_button);
+                Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
+            }
+            Type typeSocioDemography = new TypeToken<SocioDemography>(){}.getType();
+            socioDemographyDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeSocioDemography);
+            trackingParticipantStatus.setUser_pri_id(socioDemographyDetails.getUser_pri_id());
+            editButton.setEnabled(true);
+            nextButton.setVisibility(View.INVISIBLE);
+            isEditable = "false";
+            setEditable();
+        }else{
+            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(context, serverErrorResponse);
+        }else{
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

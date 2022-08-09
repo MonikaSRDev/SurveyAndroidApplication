@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.LocaleList;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
 import com.google.gson.Gson;
@@ -31,7 +32,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DashboardParticipantDetailsScreen extends AppCompatActivity implements HandleServerResponse{
+public class DashboardParticipantDetailsScreen extends AppCompatActivity implements HandleServerResponse {
 
     private Button englishButtonDashboard, kannadaButtonDashboard;
     private LinearLayout dashboardLinearLayout, participantLinearLayout, PHQLinearLayout;
@@ -206,21 +207,14 @@ public class DashboardParticipantDetailsScreen extends AppCompatActivity impleme
     }
 
     @Override
-    public void responseReceivedSuccessfully(String message) {
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-//        try{
-////            trackingParticipantStatus = gson.fromJson(jsonObject.get("data"), type);
-////            setParticipantDetails();
-//        }catch(Exception e){
-//            Toast.makeText(DashboardParticipantDetailsScreen.this, jsonObject.get("data").toString(), Toast.LENGTH_LONG).show();
-//        }
-    }
-
-    @Override
     public void responseReceivedFailure(String message) {
-
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(this, serverErrorResponse);
+        }else{
+            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**

@@ -19,12 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mithraapplication.Adapters.ParticipantScreenAdapter;
-import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.ParticipantsAllListServerEvents;
+import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -34,10 +36,9 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ParticipantsAllListFragment extends Fragment implements HandleServerResponse {
+public class ParticipantsAllListFragment extends Fragment implements HandleServerResponse, ParticipantsAllListServerEvents {
 
     private TextView addNewParticipantTV, participantDetailsAllList, participantEnrollmentStatusAllList, participantSurveyStatusAllList, participantModuleStatusAllList, participantReferralStatusAllList;
     private ImageView addNewParticipantIcon;
@@ -46,6 +47,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     private ParticipantScreenAdapter participantScreenAdapter;
     private Context context;
     private PHQLocations phqLocations;
+    private final MithraUtility mithraUtility = new MithraUtility();
 
     public ParticipantsAllListFragment(Context context, PHQLocations phqLocations) {
         this.context = context;
@@ -125,39 +127,8 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.participant.api.participants";
         ServerRequestAndResponse serverRequestAndResponse = new ServerRequestAndResponse();
         serverRequestAndResponse.setHandleServerResponse(this);
+        serverRequestAndResponse.setParticipantsAllListServerEvents(this);
         serverRequestAndResponse.getAllParticipantsDetails(context, url);
-    }
-
-    @Override
-    public void responseReceivedSuccessfully(String message) {
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        ArrayList<RegisterParticipant> registerParticipantsArrayList;
-
-        try{
-            registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
-            registerParticipantsArrayList = registerParticipantsArrayList.stream()
-                        .filter(RegisterParticipant -> RegisterParticipant.getParticipantSHGAssociation().equalsIgnoreCase(phqLocations.getSHGName()))
-                        .collect(Collectors.toCollection(ArrayList::new));
-            if(registerParticipantsArrayList.size() == 0){
-                addNewParticipantIcon.setVisibility(View.VISIBLE);
-                addNewParticipantTV.setVisibility(View.VISIBLE);
-                floatingAddButton.setVisibility(View.GONE);
-            }else{
-                addNewParticipantIcon.setVisibility(View.GONE);
-                addNewParticipantTV.setVisibility(View.GONE);
-                floatingAddButton.setVisibility(View.VISIBLE);
-                setRecyclerView(registerParticipantsArrayList);
-            }
-        }catch(Exception e){
-            Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void responseReceivedFailure(String message) {
-
     }
 
     /**
@@ -188,5 +159,43 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void getAllParticipantsDetails(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        ArrayList<RegisterParticipant> registerParticipantsArrayList;
+
+        try{
+            registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
+            registerParticipantsArrayList = registerParticipantsArrayList.stream()
+                    .filter(RegisterParticipant -> RegisterParticipant.getParticipantSHGAssociation().equalsIgnoreCase(phqLocations.getSHGName()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+            if(registerParticipantsArrayList.size() == 0){
+                addNewParticipantIcon.setVisibility(View.VISIBLE);
+                addNewParticipantTV.setVisibility(View.VISIBLE);
+                floatingAddButton.setVisibility(View.GONE);
+            }else{
+                addNewParticipantIcon.setVisibility(View.GONE);
+                addNewParticipantTV.setVisibility(View.GONE);
+                floatingAddButton.setVisibility(View.VISIBLE);
+                setRecyclerView(registerParticipantsArrayList);
+            }
+        }catch(Exception e){
+            Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(context, serverErrorResponse);
+        }else{
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -237,7 +237,7 @@ public class PHQScreeningScreen extends AppCompatActivity {
 
         participantTV.setText(R.string.participants);
         dashboardTV.setText(R.string.dashboard);
-        phqScreenTitle.setText(R.string.phq_screening);
+        phqScreenTitle.setText(R.string.phq_screen);
         phqScreeningTV.setText(R.string.phq_screening);
         Objects.requireNonNull(phqScreeningTabLayout.getTabAt(0)).setText(R.string.phq_screening);
         Objects.requireNonNull(phqScreeningTabLayout.getTabAt(1)).setText(R.string.screening);

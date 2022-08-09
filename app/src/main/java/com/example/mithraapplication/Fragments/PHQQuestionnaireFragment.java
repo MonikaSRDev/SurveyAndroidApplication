@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,23 +30,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.Adapters.PHQQuestionnaireAdapter;
-import com.example.mithraapplication.HandleServerResponse;
-import com.example.mithraapplication.LoginScreen;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.PHQQuestionnaireServerEvents;
 import com.example.mithraapplication.MithraUtility;
-import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
 import com.example.mithraapplication.ModelClasses.OptionsRequest;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.PHQSurveyPostAnswers;
-import com.example.mithraapplication.ModelClasses.PostSurveyQuestions;
 import com.example.mithraapplication.ModelClasses.QuestionAnswers;
 import com.example.mithraapplication.ModelClasses.QuestionOptions;
+import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.SurveyQuestions;
 import com.example.mithraapplication.PHQParticipantsScreen;
-import com.example.mithraapplication.ParticipantLandingScreen;
+import com.example.mithraapplication.PHQScreeningScreen;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.ServerRequestAndResponse;
-import com.example.mithraapplication.SurveyScreen;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -54,9 +54,8 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Objects;
 
-public class PHQQuestionnaireFragment extends Fragment implements HandleServerResponse {
+public class PHQQuestionnaireFragment extends Fragment implements HandleServerResponse, PHQQuestionnaireServerEvents {
 
     private EditText phqID, phqParticipantName;
     private TextView phqSHGName;
@@ -87,7 +86,6 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_phq_questionnaire, container, false);
     }
 
@@ -96,8 +94,6 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         super.onViewCreated(view, savedInstanceState);
         RegisterViews(view);
         setOnClickForSaveButton();
-//        getIntentData();
-//        initializeData();
         setOnClickForSaveButton();
         callServerToGetPHQ9Questions();
         callServerToGetPHQ9Options();
@@ -333,6 +329,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         surveyQuestions.setType("SUR0001");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setPhqQuestionnaireServerEvents(this);
         requestObject.getPHQ9Questions(context, surveyQuestions, url);
     }
 
@@ -345,6 +342,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         optionsRequest.setFilter_data("{'sur_pri_id':'SUR0001'}");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setPhqQuestionnaireServerEvents(this);
         requestObject.getPHQ9Options(context, optionsRequest, url);
     }
 
@@ -352,7 +350,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
      * Description : Update the server with the data entered by the user
      */
     private void callServerForPostPHQAnswers(){
-        String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/phq9_scr_sub";
+        String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_scr_sub.api.phq9_scr_sub";
         totalSurveyTime = mithraUtility.getTimeDifferenceMinutes(surveyStartDateTime, surveyEndDateTime);
         PHQSurveyPostAnswers phqSurveyPostAnswers = new PHQSurveyPostAnswers();
         phqSurveyPostAnswers.setCreated_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
@@ -369,58 +367,8 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         phqSurveyPostAnswers.setRegister("no");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setPhqQuestionnaireServerEvents(this);
         requestObject.postPHQScreeningAnswers(context, phqSurveyPostAnswers, url);
-    }
-
-
-    @Override
-    public void responseReceivedSuccessfully(String message) {
-        Log.i("SurveyScreen", "responseReceivedSuccessfully");
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<QuestionAnswers>>(){}.getType();
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        if(jsonObject.get("message")!=null) {
-            ArrayList<QuestionAnswers> questionAnswersArrayList = new ArrayList<>();
-            try {
-                questionAnswersArrayList = gson.fromJson(jsonObject.get("message"), type);
-                if (questionAnswersArrayList.size() > 0) {
-                    questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
-                    Log.i("SurveyScreen", "responseReceivedSuccessfully : " + questionAnswersArrayList);
-                    questionArray = questionAnswersArrayList;
-//                    surveyStartDateTime = mithraUtility.getCurrentTime();
-//                    setRecyclerView();
-                }
-            } catch (Exception e) {
-                Type typeOptions = new TypeToken<ArrayList<QuestionOptions>>(){}.getType();
-                if(jsonObject.get("message")!=null) {
-                    ArrayList<QuestionOptions> questionOptionsArrayList = new ArrayList<>();
-                    try {
-                        questionOptionsArrayList = gson.fromJson(jsonObject.get("message"), typeOptions);
-                        if (questionOptionsArrayList.size() > 0) {
-                            optionsArray = questionOptionsArrayList;
-                            surveyStartDateTime = mithraUtility.getCurrentTime();
-                            setRecyclerView();
-                        }
-                    } catch (Exception ex) {
-                        Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        }else{
-            JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
-            Type typeFrappe = new TypeToken<FrappeResponse>(){}.getType();
-            if(jsonObjectRegistration.get("data")!=null) {
-                FrappeResponse frappeResponse;
-                frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), typeFrappe);
-                showDialogForPHQScreeningID(frappeResponse.getName());
-            }
-        }
-    }
-
-    @Override
-    public void responseReceivedFailure(String message) {
-
     }
 
     @Override
@@ -442,6 +390,89 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
 
         saveButton.setText(R.string.save);
+
+        Resources res = getResources();
+        Configuration conf = res.getConfiguration();
+        LocaleList lang = conf.getLocales();
+        if(lang.get(0).getLanguage().equals("kn")){
+            PHQScreeningScreen.isLanguageSelected = "kn";
+        }else{
+            PHQScreeningScreen.isLanguageSelected = "en";
+        }
+
+        if(phqQuestionnaireAdapter!=null){
+            phqQuestionnaireAdapter.notifyDataSetChanged();
+        }
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void getPHQ9Questions(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<QuestionAnswers>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObject.get("message")!=null) {
+            ArrayList<QuestionAnswers> questionAnswersArrayList;
+            try {
+                questionAnswersArrayList = gson.fromJson(jsonObject.get("message"), type);
+                if (questionAnswersArrayList.size() > 0) {
+                    questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
+                    Log.i("SurveyScreen", "responseReceivedSuccessfully : " + questionAnswersArrayList);
+                    questionArray = questionAnswersArrayList;
+                }
+            } catch (Exception e) {
+                Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void getPHQ9Options(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        Type typeOptions = new TypeToken<ArrayList<QuestionOptions>>(){}.getType();
+        if(jsonObject.get("message")!=null) {
+            ArrayList<QuestionOptions> questionOptionsArrayList;
+            try {
+                questionOptionsArrayList = gson.fromJson(jsonObject.get("message"), typeOptions);
+                if (questionOptionsArrayList.size() > 0) {
+                    optionsArray = questionOptionsArrayList;
+                    surveyStartDateTime = mithraUtility.getCurrentTime();
+                    setRecyclerView();
+                }
+            } catch (Exception ex) {
+                Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
+            Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void postPHQAnswers(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
+        Type typeFrappe = new TypeToken<ArrayList<RegisterParticipant>>(){}.getType();
+        if(jsonObjectRegistration.get("message")!=null) {
+            ArrayList<RegisterParticipant> frappeResponse;
+            frappeResponse = gson.fromJson(jsonObjectRegistration.get("message"), typeFrappe);
+            showDialogForPHQScreeningID(frappeResponse.get(0).getPhq_scr_id());
+        } else{
+            Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(context, serverErrorResponse);
+        }else{
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

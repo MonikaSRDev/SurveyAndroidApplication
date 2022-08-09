@@ -20,6 +20,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mithraapplication.Adapters.PHQSHGListAdapter;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.CoordinatorSHGServerEvents;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.google.gson.Gson;
@@ -33,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class CoordinatorSHGList extends AppCompatActivity implements HandleServerResponse{
+public class CoordinatorSHGList extends AppCompatActivity implements HandleServerResponse, CoordinatorSHGServerEvents {
     private GridView phqGridView;
     private LinearLayout phqScreeningLinearlayout, dashboardLinearLayout, participantLinearLayout;
     private TextView phqScreeningTV, dashboardTV, participantTV, coordinatorSHGTV, phqScreenTitle;
@@ -125,43 +128,8 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         phqCoordinatorLocations.setEligible("yes");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setCoordinatorSHGServerEvents(this);
         requestObject.getCoordinatorLocations(CoordinatorSHGList.this, phqCoordinatorLocations, url);
-    }
-
-    @Override
-    public void responseReceivedSuccessfully(String message) {
-        Log.i("SurveyScreen", "responseReceivedSuccessfully");
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<PHQLocations>>(){}.getType();
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        if(jsonObject.get("message")!=null) {
-            ArrayList<PHQLocations> phqLocationsArrayList = new ArrayList<>();
-
-            try {
-                phqLocationsArrayList = gson.fromJson(jsonObject.get("message"), type);
-                if(phqLocationsArrayList.size()!=0){
-                    phqLocations = phqLocationsArrayList.stream()
-                            .filter(phqLocations -> phqLocations.getActive().equalsIgnoreCase("yes"))
-                            .collect(Collectors.toCollection(ArrayList::new));
-                    setGridViewAdapter();
-                }
-            } catch (Exception e) {
-                Toast.makeText(CoordinatorSHGList.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
-            }
-        }else{
-            JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
-            Type typeFrappe = new TypeToken<FrappeResponse>(){}.getType();
-            if(jsonObjectRegistration.get("data")!=null) {
-                FrappeResponse frappeResponse;
-                frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), typeFrappe);
-            }
-        }
-    }
-
-    @Override
-    public void responseReceivedFailure(String message) {
-
     }
 
     @Override
@@ -238,5 +206,39 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         dashboardTV.setText(R.string.dashboard);
         phqScreeningTV.setText(R.string.phq_screening);
         phqScreenTitle.setText(R.string.coordinator_shg);
+    }
+
+    @Override
+    public void coordinatorSHGList(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<PHQLocations>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObject.get("message")!=null) {
+            ArrayList<PHQLocations> phqLocationsArrayList;
+            try {
+                phqLocationsArrayList = gson.fromJson(jsonObject.get("message"), type);
+                if(phqLocationsArrayList.size()!=0){
+                    phqLocations = phqLocationsArrayList.stream()
+                            .filter(phqLocations -> phqLocations.getActive().equalsIgnoreCase("yes"))
+                            .collect(Collectors.toCollection(ArrayList::new));
+                    setGridViewAdapter();
+                }
+            } catch (Exception e) {
+                Toast.makeText(CoordinatorSHGList.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(CoordinatorSHGList.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void responseReceivedFailure(String message) {
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(this, serverErrorResponse);
+        }else{
+            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 }

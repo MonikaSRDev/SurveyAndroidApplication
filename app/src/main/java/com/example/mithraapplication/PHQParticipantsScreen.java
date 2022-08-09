@@ -20,10 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.Adapters.PHQParticipantsAdapter;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.PHQParticipantServerEvents;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.PHQParticipantDetails;
-import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -33,11 +35,10 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class PHQParticipantsScreen extends AppCompatActivity implements HandleServerResponse{
+public class PHQParticipantsScreen extends AppCompatActivity implements HandleServerResponse, PHQParticipantServerEvents {
 
     private LinearLayout phqScreeningLinearlayout, dashboardLinearLayout, participantLinearLayout;
     private TextView phqScreeningTV, dashboardTV, participantTV, shgParticipantsTV, phqScreenTitle, PHQParticipantIDTV,
@@ -49,6 +50,7 @@ public class PHQParticipantsScreen extends AppCompatActivity implements HandleSe
     private PHQLocations phqLocations;
     private FloatingActionButton PHQForSurvey;
     private Button englishButton, kannadaButton;
+    private final MithraUtility mithraUtility = new MithraUtility();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,45 +183,19 @@ public class PHQParticipantsScreen extends AppCompatActivity implements HandleSe
         String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.phq9_scr_sub.api.pre_screenings";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
+        requestObject.setPhqParticipantServerEvents(this);
         requestObject.getPHQParticipantDetails(PHQParticipantsScreen.this, url);
-    }
-
-
-    @Override
-    public void responseReceivedSuccessfully(String message) {
-        Log.i("SurveyScreen", "responseReceivedSuccessfully");
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<PHQParticipantDetails>>(){}.getType();
-        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-        if(jsonObject.get("message")!=null) {
-            ArrayList<PHQParticipantDetails> phqParticipantDetails = new ArrayList<>();
-
-            try {
-                phqParticipantDetails = gson.fromJson(jsonObject.get("message"), type);
-                if (phqParticipantDetails.size() > 1) {
-//                    phqParticipantDetails.sort(Comparator.comparingInt(participantDetails -> Integer.parseInt(participantDetails.getPHQScreeningID())));
-                    phqParticipantDetailsArrayList = phqParticipantDetails.stream()
-                            .filter(participantDetails -> participantDetails.getSHGName().equalsIgnoreCase(phqLocations.getName()))
-                            .collect(Collectors.toCollection(ArrayList::new));
-                    setRecyclerView();
-                }
-            } catch (Exception e) {
-                Toast.makeText(PHQParticipantsScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
-            }
-        }else{
-            JsonObject jsonObjectRegistration = JsonParser.parseString(message).getAsJsonObject();
-            Type typeFrappe = new TypeToken<FrappeResponse>(){}.getType();
-            if(jsonObjectRegistration.get("data")!=null) {
-                FrappeResponse frappeResponse;
-                frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), typeFrappe);
-            }
-        }
     }
 
     @Override
     public void responseReceivedFailure(String message) {
-
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(this, serverErrorResponse);
+        }else{
+            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -295,5 +271,30 @@ public class PHQParticipantsScreen extends AppCompatActivity implements HandleSe
         PHQEligibilityTV.setText(R.string.eligibility);
 
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void getPHQParticipantsDetails(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<PHQParticipantDetails>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObject.get("message")!=null) {
+            ArrayList<PHQParticipantDetails> phqParticipantDetails;
+
+            try {
+                phqParticipantDetails = gson.fromJson(jsonObject.get("message"), type);
+                if (phqParticipantDetails.size() > 1) {
+//                    phqParticipantDetails.sort(Comparator.comparingInt(participantDetails -> Integer.parseInt(participantDetails.getPHQScreeningID())));
+                    phqParticipantDetailsArrayList = phqParticipantDetails.stream()
+                            .filter(participantDetails -> participantDetails.getSHGName().equalsIgnoreCase(phqLocations.getName()))
+                            .collect(Collectors.toCollection(ArrayList::new));
+                    setRecyclerView();
+                }
+            } catch (Exception e) {
+                Toast.makeText(PHQParticipantsScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(PHQParticipantsScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }

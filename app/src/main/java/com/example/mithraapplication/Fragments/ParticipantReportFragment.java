@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.Adapters.ParticipantReportAdapter;
+import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.ParticipantReport;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
@@ -48,12 +49,14 @@ public class ParticipantReportFragment extends Fragment implements AdapterView.O
     private ArrayAdapter userStatusAdapter;
     private Spinner userCurrentStatusSpinner;
     private RegisterParticipant registerParticipant;
+    private PHQLocations phqLocations;
 
-    public ParticipantReportFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant) {
+    public ParticipantReportFragment(Context context, TrackingParticipantStatus trackingParticipantStatus, String isEditable, RegisterParticipant registerParticipant, PHQLocations phqLocations) {
         this.context = context;
         this.trackingParticipantStatus = trackingParticipantStatus;
         this.isEditable = isEditable;
         this.registerParticipant = registerParticipant;
+        this.phqLocations = phqLocations;
     }
 
     @Override

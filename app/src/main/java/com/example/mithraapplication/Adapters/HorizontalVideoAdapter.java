@@ -22,12 +22,14 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.FullScreenVideoView;
-import com.example.mithraapplication.HandleFileDownloadResponse;
-import com.example.mithraapplication.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.HandleFileDownloadResponse;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.SingleVideo;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -134,13 +136,14 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
     }
 
     @Override
-    public void responseReceivedSuccessfully(String message) {
-
-    }
-
-    @Override
     public void responseReceivedFailure(String message) {
-
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(context, serverErrorResponse);
+        }else{
+            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

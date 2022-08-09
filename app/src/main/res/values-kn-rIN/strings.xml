@@ -136,7 +136,8 @@
     <string name="update">ನವೀಕರಿಸಿ</string>
     <string name="not_eligible_text">ನೀವು ಸಮೀಕ್ಷೆಗೆ ಅರ್ಹರಲ್ಲ ಎಂದು ಹೇಳಲು ವಿಷಾದಿಸುತ್ತೇನೆ</string>
     <string name="ok">ಸರಿ</string>
-    <string name="phq_screening">PHQ ಸ್ಕ್ರೀನಿಂಗ್</string>
+    <string name="phq_screening">ಎಸ್.ಎಚ್.ಜಿ ಸ್ಕ್ರೀನಿಂಗ್</string>
+    <string name="phq_screen">PHQ ಸ್ಕ್ರೀನಿಂಗ್</string>
     <string name="manual_id">ಹಸ್ತಚಾಲಿತ ಐಡಿ</string>
     <string name="pre_screening">ಪೂರ್ವ ಸ್ಕ್ರೀನಿಂಗ್</string>
     <string name="phq9">PHQ9</string>

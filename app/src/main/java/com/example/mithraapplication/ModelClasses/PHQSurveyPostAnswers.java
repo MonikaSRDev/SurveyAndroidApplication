@@ -8,7 +8,9 @@ public class PHQSurveyPostAnswers extends JsonServerObject{
     @SerializedName("sur_pri_id")
     private String type = "null";
     private String answer = "null";
+    @SerializedName("survey_start")
     private String survey_start_time = "null";
+    @SerializedName("survey_stop")
     private String survey_end_time = "null";
     private String minutes = "null";
     private String score = "null";

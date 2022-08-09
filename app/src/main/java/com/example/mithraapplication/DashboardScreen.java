@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.Adapters.DashboardVerticalParticipantsAdapter;
 import com.example.mithraapplication.Adapters.HorizontalDashboardAdapter;
+import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
+import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
+import com.example.mithraapplication.MithraAppServerEventsListeners.DashboardServerEvents;
 import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.example.mithraapplication.ModelClasses.ParticipantStatus;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
@@ -36,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class DashboardScreen extends AppCompatActivity implements HandleServerResponse{
+public class DashboardScreen extends AppCompatActivity implements HandleServerResponse, DashboardServerEvents {
 
     private Button englishButtonDashboard, kannadaButtonDashboard;
     private RecyclerView horizontalRecyclerView, verticalRecyclerView;
@@ -309,36 +313,52 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
 
     }
 
-    private void callGetAllParticipantsDetails(){
-        String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.participant.api.participants";
-        ServerRequestAndResponse serverRequestAndResponse = new ServerRequestAndResponse();
-        serverRequestAndResponse.setHandleServerResponse(this);
-        serverRequestAndResponse.getAllParticipantsDetails(DashboardScreen.this, url);
-    }
-
     private void callGetCardDetails(){
         String url = "http://" + getString(R.string.base_url) +"/api/method/mithra.mithra.doctype.tracking.api.card_data";
         ServerRequestAndResponse serverRequestAndResponse = new ServerRequestAndResponse();
         serverRequestAndResponse.setHandleServerResponse(this);
+        serverRequestAndResponse.setDashboardServerEvents(this);
         serverRequestAndResponse.getCardDetails(DashboardScreen.this, url);
     }
-
-//    private void callGetFilteredData(){
-//        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"enroll\", \"=\", \"" + "yes" + "\"]]";
-//        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
-//        requestObject.setHandleServerResponse(this);
-//        requestObject.getTrackingDetails(DashboardScreen.this, url);
-//    }
 
     private void callGetParticipantDetails(){
         String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.tracking.api.enrollstatus";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
-        requestObject.getTrackingDetails(DashboardScreen.this, url);
+        requestObject.setDashboardServerEvents(this);
+        requestObject.getParticipantDetails(DashboardScreen.this, url);
     }
 
     @Override
-    public void responseReceivedSuccessfully(String message) {
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public void getCardDetails(String message) {
+        Gson gson = new Gson();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObject.get("message")!=null){
+            Type typeCardDetails = new TypeToken<ParticipantStatus>(){}.getType();
+            ParticipantStatus participantStatus = gson.fromJson(jsonObject.get("message"), typeCardDetails);
+            initializeData(participantStatus);
+            setRecyclerView();
+        }else{
+            Toast.makeText(DashboardScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void getParticipantDetails(String message) {
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<ParticipantDetails>>(){}.getType();
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
@@ -357,35 +377,22 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
                     setVerticalRecyclerView(registerParticipantsArrayList);
                 }
             }catch(Exception e){
-                Type typeCardDetails = new TypeToken<ParticipantStatus>(){}.getType();
-                ParticipantStatus participantStatus = gson.fromJson(jsonObject.get("message"), typeCardDetails);
-                initializeData(participantStatus);
-                setRecyclerView();
-//            Toast.makeText(DashboardScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(DashboardScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
             }
         }else{
-            Type typeTrackingDetails = new TypeToken<ArrayList<TrackingParticipantStatus>>(){}.getType();
-            trackingParticipantStatusArrayList = gson.fromJson(jsonObject.get("data"), typeTrackingDetails);
+            Toast.makeText(DashboardScreen.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override
     public void responseReceivedFailure(String message) {
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (getCurrentFocus() != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        if(message!=null){
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            String serverErrorResponse = jsonObject.get("exception").toString();
+            mithraUtility.showAppropriateMessages(this, serverErrorResponse);
+        }else{
+            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
         }
-        return super.dispatchTouchEvent(ev);
     }
+
 }

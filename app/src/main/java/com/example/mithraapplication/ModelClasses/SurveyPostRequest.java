@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class SurveyPostRequest extends  JsonServerObject{
     private String user_pri_id = "null";
     private String created_user = "null";
-    private String type = "null";
+    private String surveyPrimaryID = "null";
+    private String surveyInstanceID = "null";
     private ArrayList<ParticipantAnswers> answer = new ArrayList<>() ;
     private String survey_start = "null";
     private String survey_stop = "null";
@@ -26,14 +27,6 @@ public class SurveyPostRequest extends  JsonServerObject{
 
     public void setCreated_user(String created_user) {
         this.created_user = created_user;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public ArrayList<ParticipantAnswers> getAnswer() {
@@ -74,5 +67,21 @@ public class SurveyPostRequest extends  JsonServerObject{
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public String getSurveyPrimaryID() {
+        return surveyPrimaryID;
+    }
+
+    public void setSurveyPrimaryID(String surveyPrimaryID) {
+        this.surveyPrimaryID = surveyPrimaryID;
+    }
+
+    public String getSurveyInstanceID() {
+        return surveyInstanceID;
+    }
+
+    public void setSurveyInstanceID(String surveyInstanceID) {
+        this.surveyInstanceID = surveyInstanceID;
     }
 }
