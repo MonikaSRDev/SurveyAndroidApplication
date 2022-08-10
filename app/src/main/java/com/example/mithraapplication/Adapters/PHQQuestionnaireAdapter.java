@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
 
 public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnaireAdapter.ViewHolder>{
     private Context context;
-    private ArrayList<QuestionAnswers> questionAnswersArrayList;
-    private ArrayList<QuestionOptions> questionOptionsArrayList;
+    private final ArrayList<QuestionAnswers> questionAnswersArrayList;
+    private final ArrayList<QuestionOptions> questionOptionsArrayList;
     private ArrayList<QuestionOptions> filteredQuestionOptionsArrayList = new ArrayList<>();
-    private ArrayList<ParticipantAnswers>  phqParticipantAnswers = new ArrayList<>();
+    private final ArrayList<ParticipantAnswers>  phqParticipantAnswers = new ArrayList<>();
     private int totalScore = 0;
     private String postAnswers = "";
 

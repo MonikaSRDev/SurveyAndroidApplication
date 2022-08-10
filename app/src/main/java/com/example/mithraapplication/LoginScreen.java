@@ -115,6 +115,7 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         userLogin.setUserPassword(password);
         userLogin.setActive("Yes");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
         requestObject.setLoginServerEvents(this);
         requestObject.postUserLogin(LoginScreen.this, userLogin, url);
     }

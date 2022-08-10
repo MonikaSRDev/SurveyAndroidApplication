@@ -26,8 +26,8 @@ import com.example.mithraapplication.R;
 import java.util.ArrayList;
 
 public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfileAdapter.ViewHolder> {
-    private ArrayList<DiseasesProfile>  diseasesProfileArrayList;
-    private ArrayList<DiseasesProfile>  userEnteredDiseasesProfileArrayList = new ArrayList<>();
+    private final ArrayList<DiseasesProfile>  diseasesProfileArrayList;
+    private final ArrayList<DiseasesProfile>  userEnteredDiseasesProfileArrayList = new ArrayList<>();
     private final Context context;
     private final String isEditable;
 

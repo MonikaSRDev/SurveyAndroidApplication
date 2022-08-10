@@ -10,6 +10,8 @@ import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.LocaleList;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -70,7 +72,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
     private PHQQuestionnaireAdapter phqQuestionnaireAdapter;
     private RecyclerView questionsRecyclerView;
     private ArrayList<PHQSurveyPostAnswers> phqSurveyPostAnswersArrayList = new ArrayList<>();
-    private String postAnswers = null;
+    private String postAnswers = null, ManualID, participantName;
     private Context context;
 
     public PHQQuestionnaireFragment(Context context, PHQLocations phqLocations) {
@@ -94,10 +96,8 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         super.onViewCreated(view, savedInstanceState);
         RegisterViews(view);
         setOnClickForSaveButton();
-        setOnClickForSaveButton();
+        editTextChangeListeners();
         callServerToGetPHQ9Questions();
-        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                new IntentFilter("PHQQuestionnaire"));
     }
 
     private void initializeData() {
@@ -241,6 +241,9 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
 
     private void RegisterViews(View view) {
         saveButton = view.findViewById(R.id.PHQQuestionnaireSaveButton);
+        saveButton.setEnabled(false);
+        saveButton.setBackgroundResource(R.drawable.yes_no_button);
+        saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
         phqSHGName = view.findViewById(R.id.PHQQuestionnaireSHGTV);
         phqSHGName.setText(phqLocations.getSHGName());
         phqID = view.findViewById(R.id.PHQQuestionnaireID);
@@ -258,6 +261,52 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         });
     }
 
+    private void editTextChangeListeners(){
+        phqID.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                boolean valid = getUserEnteredData();
+                if(valid){
+                    saveButton.setEnabled(true);
+                    saveButton.setBackgroundResource(R.drawable.status_button);
+                    saveButton.setTextColor(getResources().getColor(R.color.white, context.getTheme()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        phqParticipantName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                boolean valid = getUserEnteredData();
+                if(valid){
+                    saveButton.setEnabled(true);
+                    saveButton.setBackgroundResource(R.drawable.status_button);
+                    saveButton.setTextColor(getResources().getColor(R.color.white, context.getTheme()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     /**
      * Description : This broadcast receiver is used get the data from the adapter
      */
@@ -268,13 +317,16 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
             totalScore = intent.getIntExtra("TotalScore", 0);
             if(postAnswers.length() > 0){
                 callServerForPostPHQAnswers();
+            }else{
+//                Toast.makeText(context, "Please answer atleast one question.", Toast.LENGTH_LONG).show();
             }
         }
     };
 
     @Override
     public void onResume() {
-        context.registerReceiver(mMessageReceiver, new IntentFilter("PHQScreeningSurveyData"));
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                new IntentFilter("PHQQuestionnaire"));
         super.onResume();
     }
 
@@ -318,6 +370,40 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         questionsRecyclerView.setAdapter(phqQuestionnaireAdapter);
     }
 
+    private boolean getUserEnteredData(){
+        ManualID = phqID.getText().toString();
+        participantName = phqParticipantName.getText().toString();
+
+        if(ManualID!=null && ManualID.isEmpty()){
+            phqID.setError("Please enter Manual ID.");
+            saveButton.setEnabled(false);
+            saveButton.setBackgroundResource(R.drawable.yes_no_button);
+            saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
+            return false;
+        }else if(ManualID!=null && ManualID.length() < 5){
+            phqID.setError("Manual ID should be minimum of 5 characters.");
+            saveButton.setEnabled(false);
+            saveButton.setBackgroundResource(R.drawable.yes_no_button);
+            saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
+            return false;
+        }
+
+        if(participantName!=null && participantName.isEmpty()){
+            phqParticipantName.setError("Please enter Name.");
+            saveButton.setEnabled(false);
+            saveButton.setBackgroundResource(R.drawable.yes_no_button);
+            saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
+            return false;
+        }else if(participantName!=null && participantName.length() < 5){
+            phqParticipantName.setError("Name should be minimum of 5 characters.");
+            saveButton.setEnabled(false);
+            saveButton.setBackgroundResource(R.drawable.yes_no_button);
+            saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Description : Call the server to get the PHQ9 questions for the participant
      */
@@ -325,7 +411,6 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.survey_questions.api.questions";
         SurveyQuestions surveyQuestions = new SurveyQuestions();
         surveyQuestions.setFilter_data("{'sur_pri_id':'SUR0001'}");
-//        surveyQuestions.setFilter_data("SUR0001");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.setPhqQuestionnaireServerEvents(this);
@@ -359,8 +444,8 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         phqSurveyPostAnswers.setAnswer(postAnswers.substring(0, postAnswers.length()-1));
         phqSurveyPostAnswers.setSurvey_start_time(surveyStartDateTime);
         phqSurveyPostAnswers.setSurvey_end_time(surveyEndDateTime);
-        phqSurveyPostAnswers.setMan_id(phqID.getText().toString());
-        phqSurveyPostAnswers.setParticipantName(phqParticipantName.getText().toString());
+        phqSurveyPostAnswers.setMan_id(ManualID);
+        phqSurveyPostAnswers.setParticipantName(participantName);
         phqSurveyPostAnswers.setScreening_id("S0068");
         phqSurveyPostAnswers.setShg(phqLocations.getName());
         phqSurveyPostAnswers.setRegister("no");
@@ -400,7 +485,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         }
 
         if(phqQuestionnaireAdapter!=null){
-            phqQuestionnaireAdapter.notifyDataSetChanged();
+            setRecyclerView();
         }
         super.onConfigurationChanged(newConfig);
     }

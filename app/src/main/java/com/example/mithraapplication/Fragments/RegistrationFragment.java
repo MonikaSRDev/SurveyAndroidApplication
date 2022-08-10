@@ -239,14 +239,14 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             createNewPasswordButton.setVisibility(View.VISIBLE);
             createNewPasswordButton.setEnabled(false);
 //
-            if(PHQScreeningSpinner!=null){
-                PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getPhq_scr_id()));
+            if(PHQScreeningSpinner!=null && PHQScreeningSpinnerAdapter!= null && PHQScreeningSpinnerAdapter.getCount()!=0){
+                PHQScreeningSpinner.setSelection(PHQScreeningSpinnerAdapter.getPosition(registerParticipantDetails.getPhq_scr_id()));
                 PHQScreeningSpinner.setEnabled(false);
                 PHQScreeningSpinner.setBackgroundResource(R.drawable.inputs_background);
             }
 
-            if(ManualIDSpinner!=null){
-                ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getMan_id()));
+            if(ManualIDSpinner!=null && ManualIDSpinnerAdapter!=null && ManualIDSpinnerAdapter.getCount()!=0){
+                ManualIDSpinner.setSelection((ManualIDSpinnerAdapter).getPosition(registerParticipantDetails.getMan_id()));
                 ManualIDSpinner.setEnabled(false);
                 ManualIDSpinner.setBackgroundResource(R.drawable.inputs_background);
             }
@@ -303,13 +303,13 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             onClickOfCreateNewPassword();
 
             if(PHQScreeningSpinner!=null){
-                PHQScreeningSpinner.setSelection(((ArrayAdapter<String>)PHQScreeningSpinner.getAdapter()).getPosition(registerParticipantDetails.getPhq_scr_id()));
+                PHQScreeningSpinner.setSelection(PHQScreeningSpinnerAdapter.getPosition(registerParticipantDetails.getPhq_scr_id()));
                 PHQScreeningSpinner.setEnabled(false);
                 PHQScreeningSpinner.setBackgroundResource(R.drawable.inputs_background);
             }
 
             if(ManualIDSpinner!=null){
-                ManualIDSpinner.setSelection(((ArrayAdapter<String>)ManualIDSpinner.getAdapter()).getPosition(registerParticipantDetails.getMan_id()));
+                ManualIDSpinner.setSelection(ManualIDSpinnerAdapter.getPosition(registerParticipantDetails.getMan_id()));
                 ManualIDSpinner.setEnabled(false);
                 ManualIDSpinner.setBackgroundResource(R.drawable.inputs_background);
             }
@@ -648,6 +648,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                     .filter(phqParticipantDetails -> phqParticipantDetails.getSHGName().equalsIgnoreCase(phqLocations.getName())).collect(Collectors.toCollection(ArrayList::new));
 
             locationsArrayList = locationsArrayList.stream()
+                    .filter(phqParticipantDetails -> !phqParticipantDetails.getScreeningConsentScore().equalsIgnoreCase("pending")).collect(Collectors.toCollection(ArrayList::new));
+
+            locationsArrayList = locationsArrayList.stream()
                     .filter(phqParticipantDetails -> Integer.parseInt(phqParticipantDetails.getScreeningConsentScore()) >= 7).collect(Collectors.toCollection(ArrayList::new));
         }
         temporaryList = locationsArrayList;
@@ -658,12 +661,16 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
         ManualIDSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, ManualNamesList);
         ManualIDSpinner.setAdapter(ManualIDSpinnerAdapter);
-        participantManualID = ManualNamesList.get(0);
+        if(ManualNamesList.size() > 0){
+            participantManualID = ManualNamesList.get(0);
+        }
         ManualIDSpinner.setOnItemSelectedListener(this);
 
         PHQScreeningSpinnerAdapter = new ArrayAdapter(context, R.layout.spinner_item, PHQScreeningNamesList);
         PHQScreeningSpinner.setAdapter(PHQScreeningSpinnerAdapter);
-        participantPHQScreeningID = PHQScreeningNamesList.get(0);
+        if(PHQScreeningNamesList.size() > 0){
+            participantPHQScreeningID = PHQScreeningNamesList.get(0);
+        }
         PHQScreeningSpinner.setOnItemSelectedListener(this);
 
         ParticipantNameAdapter = new ArrayAdapter(context, R.layout.spinner_item, ParticipantNamesList);
@@ -676,7 +683,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             participantNameAutoCompleteTV.showDropDown();
             return false;
         });
-        participantName = PHQScreeningNamesList.get(0);
+        if(PHQScreeningNamesList.size() > 0){
+            participantName = PHQScreeningNamesList.get(0);
+        }
     }
 
     @Override
@@ -862,6 +871,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 mithraUtility.showAppropriateMessages(context, serverErrorResponse);
             }else{
                 Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
-            }        }
+            }
+        }
     }
 }

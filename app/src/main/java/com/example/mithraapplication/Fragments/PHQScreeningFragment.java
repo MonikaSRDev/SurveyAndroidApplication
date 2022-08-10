@@ -143,19 +143,13 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
     }
 
     private void onClickRegisterButton(){
-
         screeningRegisterButton.setOnClickListener(v -> {
-            ParticipantScreening participantScreening = new ParticipantScreening();
-            participantScreening.setYears(ageAboveEighteen);
-            participantScreening.setResident(resident);
-            participantScreening.setCbo(CBOMeeting);
-            participantScreening.setMental_illness(mentalIllness);
-            participantScreening.setSubstance(substanceAbuse);
-            participantScreening.setSuicide(suicideAttempt);
-            participantScreening.setAgree(participationConsent);
-            participantScreening.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
-
             int score = 0;
+
+            if(ageAboveEighteen.equalsIgnoreCase("NULL") || resident.equalsIgnoreCase("NULL") || CBOMeeting.equalsIgnoreCase("NULL") || mentalIllness.equalsIgnoreCase("NULL")
+                    || substanceAbuse.equalsIgnoreCase("NULL") || suicideAttempt.equalsIgnoreCase("NULL") || participationConsent.equalsIgnoreCase("NULL")){
+                Toast.makeText(context, "Please enter all the details.", Toast.LENGTH_LONG).show();
+            }
 
             if(!ageAboveEighteen.equals("NULL") && ageAboveEighteen.equals("Yes")){
                 score = score + 1;
@@ -179,7 +173,17 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
                 score = score + 1;
             }
 
+            ParticipantScreening participantScreening = new ParticipantScreening();
+            participantScreening.setYears(ageAboveEighteen);
+            participantScreening.setResident(resident);
+            participantScreening.setCbo(CBOMeeting);
+            participantScreening.setMental_illness(mentalIllness);
+            participantScreening.setSubstance(substanceAbuse);
+            participantScreening.setSuicide(suicideAttempt);
+            participantScreening.setAgree(participationConsent);
             participantScreening.setScore(score);
+            participantScreening.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+
             callServerPostScreeningDetails(participantScreening);
         });
     }

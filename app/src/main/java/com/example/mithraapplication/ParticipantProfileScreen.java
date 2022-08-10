@@ -55,7 +55,7 @@ import java.util.Objects;
 public class ParticipantProfileScreen extends AppCompatActivity implements HandleServerResponse, ParticipantProfileServerEvents {
 
     public Button englishButtonProfile, kannadaButtonProfile, profileEditButton;
-    private TextView profileTitleTV, dashboardTVProfile, participantTVProfile, coordinatorNameTVProfile, profileParticipantName;
+    private TextView profileTitleTV, dashboardTVProfile, participantTVProfile, coordinatorNameTVProfile, profileParticipantName, phqTVProfile;
     private LinearLayout dashboardLinearLayoutProfile, participantLinearLayoutProfile, socioDemographyLinearLayout, PHQLinearLayout;
     private ImageView mithraLogoProfile, coordinatorProfile, notificationsIconProfile, participantsIconParticipant;
     private TabLayout profileTabLayout;
@@ -101,6 +101,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         PHQLinearLayout = findViewById(R.id.PHQScreeningLinearLayoutProfile);
 
         profileTitleTV = findViewById(R.id.profileTitleTV);
+        phqTVProfile = findViewById(R.id.PHQScreeningTVProfile);
         dashboardTVProfile = findViewById(R.id.dashboardTVProfile);
         participantTVProfile = findViewById(R.id.participantsTVProfile);
         participantTVProfile.setTextColor(getResources().getColor(R.color.text_color));
@@ -468,6 +469,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         profileTitleTV.setText(R.string.profile);
         dashboardTVProfile.setText(R.string.dashboard);
         participantTVProfile.setText(R.string.participants);
+        phqTVProfile.setText(R.string.phq_screening);
         profileEditButton.setText(R.string.edit);
         Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.registration);
         Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText(R.string.socio_demography);

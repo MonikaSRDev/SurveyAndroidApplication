@@ -209,6 +209,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
                     .filter(RegisterParticipant -> RegisterParticipant.getParticipantSHGAssociation().equalsIgnoreCase(phqLocations.getSHGName()))
                     .collect(Collectors.toCollection(ArrayList::new));
             if(registerParticipantsArrayList.size() == 0){
+                stopProgressBar();
                 addNewParticipantIcon.setVisibility(View.VISIBLE);
                 addNewParticipantTV.setVisibility(View.VISIBLE);
                 floatingAddButton.setVisibility(View.GONE);

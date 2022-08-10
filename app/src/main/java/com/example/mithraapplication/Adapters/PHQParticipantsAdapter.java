@@ -47,6 +47,9 @@ public class PHQParticipantsAdapter extends RecyclerView.Adapter<PHQParticipants
         if(participantDetails.getScreeningConsentScore().equals("pending")){
             holder.phqEligibility.setText("Pending");
             holder.eligibilityStatus.setBackgroundColor(context.getResources().getColor(R.color.notEligibleColor, context.getTheme()));
+        }else if(Integer.parseInt(participantDetails.getScreeningConsentScore()) < 7){
+            holder.phqEligibility.setText(participantDetails.getScreening_ID());
+            holder.eligibilityStatus.setBackgroundColor(context.getResources().getColor(R.color.notEligibleColor, context.getTheme()));
         }else{
             holder.phqEligibility.setText(participantDetails.getScreening_ID());
             holder.eligibilityStatus.setBackgroundColor(context.getResources().getColor(R.color.completed_color, context.getTheme()));

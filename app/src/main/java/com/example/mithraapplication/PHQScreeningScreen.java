@@ -1,13 +1,18 @@
 package com.example.mithraapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.LocaleList;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -238,11 +243,33 @@ public class PHQScreeningScreen extends AppCompatActivity {
 
         participantTV.setText(R.string.participants);
         dashboardTV.setText(R.string.dashboard);
-        phqScreenTitle.setText(R.string.phq_screen);
+        phqScreenTitle.setText(R.string.phq_screening);
         phqScreeningTV.setText(R.string.phq_screening);
-        Objects.requireNonNull(phqScreeningTabLayout.getTabAt(0)).setText(R.string.phq_screening);
+        Objects.requireNonNull(phqScreeningTabLayout.getTabAt(0)).setText(R.string.phq_screen);
         Objects.requireNonNull(phqScreeningTabLayout.getTabAt(1)).setText(R.string.screening);
 
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        View view = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (view instanceof EditText) {
+            View w = getCurrentFocus();
+            int[] source_coordinates = new int[2];
+            w.getLocationOnScreen(source_coordinates);
+            float x = event.getRawX() + w.getLeft() - source_coordinates[0];
+            float y = event.getRawY() + w.getTop() - source_coordinates[1];
+
+            if (event.getAction() == MotionEvent.ACTION_UP
+                    && (x < w.getLeft() || x >= w.getRight()
+                    || y < w.getTop() || y > w.getBottom()) ) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+        return ret;
     }
 }
