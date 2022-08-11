@@ -70,8 +70,10 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     private String isEditable;
     private Context context;
     private DiseasesProfilePostRequest diseasesProfileDetails = null;
+    private DiseasesProfilePostRequest diseasesProfilePostRequest = new DiseasesProfilePostRequest();
     private Dialog dialog;
     private PHQLocations phqLocations;
+    private boolean isConfigChanged = false;
 
     @Nullable
     @Override
@@ -95,7 +97,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             isEditable = "true";
             editButton.setEnabled(false);
             editButton.setVisibility(View.GONE);
-            setRecyclerView(isEditable);
+            setRecyclerView(isEditable, diseasesProfilesArray);
         }
         if(isEditable!= null && isEditable.equals("false")){
             nextDiseaseProfileButton.setVisibility(View.INVISIBLE);
@@ -118,26 +120,37 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle args = intent.getBundleExtra("ParticipantDiseaseData");
-            diseasesProfile.clear();
-            diseasesProfile = (ArrayList<DiseasesProfile>) args.getSerializable("ARRAYLIST");
-            if(isEditable!=null && !isEditable.equals("true")){
-                callServerUpdateDiseaseProfileDetails();
+//            diseasesProfile.clear();
+            diseasesProfile = (ArrayList<DiseasesProfile>) args.getSerializable("ParticipantDiseaseList");
+            if(isConfigChanged){
+                if(diseasesProfileAdapter!=null){
+                    setRecyclerView(isEditable, diseasesProfile);
+                    isConfigChanged = false;
+                }
             }else{
-                callServerPostDiseasesProfile();
+                boolean isValid = getDiseaseProfileData();
+                if(isValid){
+                    if(isEditable!=null && !isEditable.equals("true")){
+                        callServerUpdateDiseaseProfileDetails();
+                    }else{
+                        callServerPostDiseasesProfile();
+                    }
+                }else{
+                    Toast.makeText(context, "Please give all the details.", Toast.LENGTH_LONG).show();
+                }
             }
         }
     };
 
     @Override
     public void onResume() {
-        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                new IntentFilter("DiseasesProfileData"));
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, new IntentFilter("DiseasesProfileData"));
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        context.unregisterReceiver(mMessageReceiver);
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
         super.onPause();
     }
 
@@ -285,8 +298,8 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     /**
      * Description : Sets the recycler view with the data disease profile array list and the editable parameter
      */
-    private void setRecyclerView(String isEditable){
-        diseasesProfileAdapter = new DiseasesProfileAdapter(context, diseasesProfilesArray, isEditable);
+    private void setRecyclerView(String isEditable, ArrayList<DiseasesProfile> diseasesProfileArrayList){
+        diseasesProfileAdapter = new DiseasesProfileAdapter(context, diseasesProfileArrayList, isEditable);
         recyclerViewLeft.setAdapter(diseasesProfileAdapter);
         recyclerViewLeft.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL) {
             @Override
@@ -324,7 +337,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 nextDiseaseProfileButton.setText(R.string.save);
                 nextDiseaseProfileButton.setBackgroundResource(R.drawable.button_background);
                 nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.white, context.getTheme()));
-                setRecyclerView(isEditable);
+                setRecyclerView(isEditable, diseasesProfilesArray);
             }else if(isEditable!=null && isEditable.equals("reEdit")){
                 editButton.setBackgroundResource(R.drawable.yes_no_button);
                 isEditable = "false";
@@ -333,7 +346,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 nextDiseaseProfileButton.setText(R.string.save);
                 nextDiseaseProfileButton.setBackgroundResource(R.drawable.inputs_background);
                 nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
-                setRecyclerView(isEditable);
+                setRecyclerView(isEditable, diseasesProfilesArray);
             }
         });
     }
@@ -390,7 +403,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile1.setDiagnosedAge(arr[1]);
                 profile1.setReceivedTreatment(arr[2]);
                 profile1.setLimitActivities(arr[3]);
-                profile1.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile1.setSpecifyDisease(arr[4]);
+                }else{
+                    profile1.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile1);
@@ -410,7 +427,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile2.setDiagnosedAge(arr[1]);
                 profile2.setReceivedTreatment(arr[2]);
                 profile2.setLimitActivities(arr[3]);
-                profile2.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile2.setSpecifyDisease(arr[4]);
+                }else{
+                    profile2.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile2);
@@ -430,7 +451,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile3.setDiagnosedAge(arr[1]);
                 profile3.setReceivedTreatment(arr[2]);
                 profile3.setLimitActivities(arr[3]);
-                profile3.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile3.setSpecifyDisease(arr[4]);
+                }else{
+                    profile3.setSpecifyDisease("null");
+                }
             }
             diseasesProfilesArray.add(profile3);
         }
@@ -450,7 +475,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile4.setDiagnosedAge(arr[1]);
                 profile4.setReceivedTreatment(arr[2]);
                 profile4.setLimitActivities(arr[3]);
-                profile4.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile4.setSpecifyDisease(arr[4]);
+                }else{
+                    profile4.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile4);
@@ -470,7 +499,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile5.setDiagnosedAge(arr[1]);
                 profile5.setReceivedTreatment(arr[2]);
                 profile5.setLimitActivities(arr[3]);
-                profile5.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile5.setSpecifyDisease(arr[4]);
+                }else{
+                    profile5.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile5);
@@ -490,7 +523,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile6.setDiagnosedAge(arr[1]);
                 profile6.setReceivedTreatment(arr[2]);
                 profile6.setLimitActivities(arr[3]);
-                profile6.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile6.setSpecifyDisease(arr[4]);
+                }else{
+                    profile6.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile6);
@@ -510,7 +547,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile7.setDiagnosedAge(arr[1]);
                 profile7.setReceivedTreatment(arr[2]);
                 profile7.setLimitActivities(arr[3]);
-                profile7.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile7.setSpecifyDisease(arr[4]);
+                }else{
+                    profile7.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile7);
@@ -530,7 +571,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile8.setDiagnosedAge(arr[1]);
                 profile8.setReceivedTreatment(arr[2]);
                 profile8.setLimitActivities(arr[3]);
-                profile8.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile8.setSpecifyDisease(arr[4]);
+                }else{
+                    profile8.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile8);
@@ -550,7 +595,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile9.setDiagnosedAge(arr[1]);
                 profile9.setReceivedTreatment(arr[2]);
                 profile9.setLimitActivities(arr[3]);
-                profile9.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile9.setSpecifyDisease(arr[4]);
+                }else{
+                    profile9.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile9);
@@ -570,7 +619,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile10.setDiagnosedAge(arr[1]);
                 profile10.setReceivedTreatment(arr[2]);
                 profile10.setLimitActivities(arr[3]);
-                profile10.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile10.setSpecifyDisease(arr[4]);
+                }else{
+                    profile10.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile10);
@@ -590,7 +643,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile11.setDiagnosedAge(arr[1]);
                 profile11.setReceivedTreatment(arr[2]);
                 profile11.setLimitActivities(arr[3]);
-                profile11.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile11.setSpecifyDisease(arr[4]);
+                }else{
+                    profile11.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile11);
@@ -610,7 +667,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile12.setDiagnosedAge(arr[1]);
                 profile12.setReceivedTreatment(arr[2]);
                 profile12.setLimitActivities(arr[3]);
-                profile12.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile12.setSpecifyDisease(arr[4]);
+                }else{
+                    profile12.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile12);
@@ -630,7 +691,11 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile13.setDiagnosedAge(arr[1]);
                 profile13.setReceivedTreatment(arr[2]);
                 profile13.setLimitActivities(arr[3]);
-                profile13.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile13.setSpecifyDisease(arr[4]);
+                }else{
+                    profile13.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile13);
@@ -650,12 +715,16 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 profile14.setDiagnosedAge(arr[1]);
                 profile14.setReceivedTreatment(arr[2]);
                 profile14.setLimitActivities(arr[3]);
-                profile14.setSpecifyDisease(arr[4]);
+                if(diseaseName.length() > 4){
+                    profile14.setSpecifyDisease(arr[4]);
+                }else{
+                    profile14.setSpecifyDisease("null");
+                }
             }
         }
         diseasesProfilesArray.add(profile14);
 
-        setRecyclerView(isEditable);
+        setRecyclerView(isEditable, diseasesProfilesArray);
 
     }
 
@@ -664,11 +733,32 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
      */
     private String getDiseaseList(int position){
         List<String> disease = new ArrayList<>();
-        disease.add(diseasesProfile.get(position).getDiagnosed());
-        disease.add(diseasesProfile.get(position).getDiagnosedAge());
-        disease.add(diseasesProfile.get(position).getReceivedTreatment());
-        disease.add(diseasesProfile.get(position).getLimitActivities());
+        if(diseasesProfile.get(position).getDiagnosed()!=null && !diseasesProfile.get(position).getDiagnosed().equalsIgnoreCase("null")){
+            disease.add(diseasesProfile.get(position).getDiagnosed());
+        }else{
+            return "false";
+        }
+
+        if(diseasesProfile.get(position).getDiagnosedAge()!=null && !diseasesProfile.get(position).getDiagnosedAge().equalsIgnoreCase("null")){
+            disease.add(diseasesProfile.get(position).getDiagnosedAge());
+        }else{
+            return "false";
+        }
+
+        if(diseasesProfile.get(position).getReceivedTreatment()!=null && !diseasesProfile.get(position).getReceivedTreatment().equalsIgnoreCase("null")){
+            disease.add(diseasesProfile.get(position).getReceivedTreatment());
+        }else{
+            return "false";
+        }
+
+        if(diseasesProfile.get(position).getLimitActivities()!=null && !diseasesProfile.get(position).getLimitActivities().equalsIgnoreCase("null")){
+            disease.add(diseasesProfile.get(position).getLimitActivities());
+        }else{
+            return "false";
+        }
+
         disease.add(diseasesProfile.get(position).getSpecifyDisease());
+
         String diseaseStr = String.join(",", disease );
         diseaseStr = "[" + diseaseStr + "]";
 
@@ -681,99 +771,201 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
     /**
      * Description : Prepare the data in the format to send it to the server.
      */
-    private DiseasesProfilePostRequest getDiseaseProfileData(){
-        DiseasesProfilePostRequest diseasesProfilePostRequest = new DiseasesProfilePostRequest();
+    private boolean getDiseaseProfileData(){
+        diseasesProfilePostRequest = new DiseasesProfilePostRequest();
         diseasesProfilePostRequest.setUser_pri_id(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID)));
         if(diseasesProfile!=null && diseasesProfile.size() > 0){
             if(diseasesProfile.get(0).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setDiabetes_mellitus(getDiseaseList(0));
-            }else{
+                String valid = getDiseaseList(0);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setDiabetes_mellitus(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(0).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setDiabetes_mellitus(diseasesProfile.get(0).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(1).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setHypertension(getDiseaseList(1));
-            }else{
+                String valid = getDiseaseList(1);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setHypertension(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(1).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setHypertension(diseasesProfile.get(1).getDiagnosed());
+            }else {
+                return false;
             }
 
             if(diseasesProfile.get(2).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setHeart_disease(getDiseaseList(2));
-            }else{
+                String valid = getDiseaseList(2);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setHeart_disease(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(2).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setHeart_disease(diseasesProfile.get(2).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(3).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setThyroid(getDiseaseList(3));
-            }else{
+                String valid = getDiseaseList(3);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setThyroid(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(3).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setThyroid(diseasesProfile.get(3).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(4).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setChronic_liver_disease(getDiseaseList(4));
-            }else{
+                String valid = getDiseaseList(4);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setChronic_liver_disease(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(4).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setChronic_liver_disease(diseasesProfile.get(4).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(5).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setChronic_renal_disease(getDiseaseList(5));
-            }else{
+                String valid = getDiseaseList(5);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setChronic_renal_disease(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(5).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setChronic_renal_disease(diseasesProfile.get(5).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(6).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setMalignancy(getDiseaseList(6));
-            }else{
+                String valid = getDiseaseList(6);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setMalignancy(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(6).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setMalignancy(diseasesProfile.get(6).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(7).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setDisabilities(getDiseaseList(7));
-            }else{
+                String valid = getDiseaseList(7);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setDisabilities(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(7).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setDisabilities(diseasesProfile.get(7).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(8).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setGastric_problem(getDiseaseList(8));
-            }else{
+                String valid = getDiseaseList(8);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setGastric_problem(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(8).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setGastric_problem(diseasesProfile.get(8).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(9).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setMental_illness(getDiseaseList(9));
-            }else{
+                String valid = getDiseaseList(9);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setMental_illness(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(9).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setMental_illness(diseasesProfile.get(9).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(10).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setEpilepsy(getDiseaseList(10));
-            }else{
+                String valid = getDiseaseList(10);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setEpilepsy(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(10).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setEpilepsy(diseasesProfile.get(10).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(11).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setAsthma(getDiseaseList(11));
-            }else{
+                String valid = getDiseaseList(11);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setAsthma(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(11).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setAsthma(diseasesProfile.get(11).getDiagnosed());
+            }else{
+                return false;
             }
 
             if(diseasesProfile.get(12).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setSkin_disease(getDiseaseList(12));
-            }else{
+                String valid = getDiseaseList(12);
+                if(valid!=null && !valid.equalsIgnoreCase("false")){
+                    diseasesProfilePostRequest.setSkin_disease(valid);
+                }else{
+                    return false;
+                }
+            }else if(diseasesProfile.get(12).getDiagnosed().equals("no")){
                 diseasesProfilePostRequest.setSkin_disease(diseasesProfile.get(12).getDiagnosed());
+            }else{
+                return false;
             }
 
-            if(diseasesProfile.get(13).getDiagnosed().equals("yes")){
-                diseasesProfilePostRequest.setOther_diseases(getDiseaseList(13));
-            }else{
-                diseasesProfilePostRequest.setOther_diseases(diseasesProfile.get(13).getDiagnosed());
+            if(diseasesProfile.size() > 13){
+                if(diseasesProfile.get(13).getDiagnosed().equals("yes")){
+                    String valid = getDiseaseList(13);
+                    if(valid!=null && !valid.equalsIgnoreCase("false")){
+                        diseasesProfilePostRequest.setOther_diseases(valid);
+                    }else{
+                        return false;
+                    }
+                }else if(diseasesProfile.get(13).getDiagnosed().equals("no")){
+                    diseasesProfilePostRequest.setOther_diseases(diseasesProfile.get(13).getDiagnosed());
+                }else{
+                    return false;
+                }
             }
+        }else{
+            return false;
         }
 
         diseasesProfilePostRequest.setActive("yes");
         diseasesProfilePostRequest.setCreated_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
 
-        return diseasesProfilePostRequest;
+        return true;
     }
 
     /**
@@ -781,7 +973,6 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
      */
     private void callServerPostDiseasesProfile(){
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile";
-        DiseasesProfilePostRequest diseasesProfilePostRequest = getDiseaseProfileData();
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.setDiseaseProfileServerEvents(this);
@@ -821,7 +1012,6 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
      */
     private void callServerUpdateDiseaseProfileDetails() {
         String url = "http://"+ context.getString(R.string.base_url)+ "/api/resource/disease_profile/" +  trackingParticipantStatus.getDisease_profile();
-        DiseasesProfilePostRequest diseasesProfilePostRequest = getDiseaseProfileData();
         diseasesProfilePostRequest.setUser_pri_id(trackingParticipantStatus.getUser_pri_id());
         diseasesProfilePostRequest.setModified_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
@@ -847,6 +1037,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             ParticipantProfileScreen.isLanguageSelected = "en";
         }
 
+        isConfigChanged = true;
         if(diseasesProfileAdapter!=null){
             diseasesProfileAdapter.sendDataToActivity();
         }
@@ -895,9 +1086,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             nextDiseaseProfileButton.setText(R.string.save);
         }
 
-        if(diseasesProfileAdapter!=null){
-            setRecyclerView(isEditable);
-        }
+//        if(diseasesProfileAdapter!=null){
+//            setRecyclerView(isEditable);
+//        }
     }
 
     @Override
@@ -921,7 +1112,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
             if (frappeResponse != null && frappeResponse.getDoctype().equals("disease_profile")) {
                 String registrationName = frappeResponse.getName();
-                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.disease_profile), frappeResponse.getUser_pri_id(), registrationName);
+                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.disease_profile_sp), frappeResponse.getUser_pri_id(), registrationName);
                 callUpdateTrackingDetails(registrationName);
             }
         }else{
@@ -941,9 +1132,9 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             moveToParticipantsScreen();
             mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.userScreeningName), context.getString(R.string.userScreeningID));
             mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.tracking), frappeResponse.getUser_pri_id());
-            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.registration), frappeResponse.getUser_pri_id());
-            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.socio_demography), frappeResponse.getUser_pri_id());
-            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.disease_profile), frappeResponse.getUser_pri_id());
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.registration_sp), frappeResponse.getUser_pri_id());
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.socio_demography_sp), frappeResponse.getUser_pri_id());
+            mithraUtility.removeSharedPreferencesData(context, context.getString(R.string.disease_profile_sp), frappeResponse.getUser_pri_id());
         }else{
             Toast.makeText(context, jsonObjectRegistration.get("message").toString(), Toast.LENGTH_LONG).show();
         }

@@ -62,7 +62,7 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
     public void onBindViewHolder(@NonNull HorizontalVideoAdapter.ViewHolder holder, int position) {
         holder.singleVideoViewThumbnail.setImageBitmap(generateThumbnailForVideo());
         if(singleVideoArrayList.get(position).getVideoStatus().equals("Completed")){
-            downloadFileFromServer(holder);
+//            downloadFileFromServer(holder);
             holder.videoStatusTV.setText(R.string.completed);
             holder.videoStatusTV.setTextColor(context.getResources().getColor(R.color.completed_color, context.getTheme()));
             holder.videoStatusIcon.setImageDrawable(context.getDrawable(R.drawable.completed_icon));

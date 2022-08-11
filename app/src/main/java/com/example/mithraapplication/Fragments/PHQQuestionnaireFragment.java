@@ -35,10 +35,12 @@ import com.example.mithraapplication.Adapters.PHQQuestionnaireAdapter;
 import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
 import com.example.mithraapplication.MithraAppServerEventsListeners.PHQQuestionnaireServerEvents;
 import com.example.mithraapplication.MithraUtility;
+import com.example.mithraapplication.ModelClasses.DiseasesProfile;
 import com.example.mithraapplication.ModelClasses.FrappeResponse;
 import com.example.mithraapplication.ModelClasses.OptionsRequest;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
 import com.example.mithraapplication.ModelClasses.PHQSurveyPostAnswers;
+import com.example.mithraapplication.ModelClasses.ParticipantAnswers;
 import com.example.mithraapplication.ModelClasses.QuestionAnswers;
 import com.example.mithraapplication.ModelClasses.QuestionOptions;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
@@ -56,6 +58,8 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PHQQuestionnaireFragment extends Fragment implements HandleServerResponse, PHQQuestionnaireServerEvents {
 
@@ -74,6 +78,9 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
     private ArrayList<PHQSurveyPostAnswers> phqSurveyPostAnswersArrayList = new ArrayList<>();
     private String postAnswers = null, ManualID, participantName;
     private Context context;
+    private boolean isConfigChanged = false;
+    private ArrayList<QuestionOptions> filteredQuestionOptionsArrayList = new ArrayList<>();
+    private ArrayList<ParticipantAnswers>  phqParticipantAnswersArrayList = new ArrayList<>();
 
     public PHQQuestionnaireFragment(Context context, PHQLocations phqLocations) {
         this.context = context;
@@ -302,7 +309,18 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
 
             @Override
             public void afterTextChanged(Editable s) {
-
+//                String name = phqParticipantName.getText().toString();
+//                if(!name.equals("") && name.matches("^[a-zA-Z0-9]*$")){
+//                    participantName = name;
+//                    saveButton.setEnabled(true);
+//                    saveButton.setBackgroundResource(R.drawable.status_button);
+//                    saveButton.setTextColor(getResources().getColor(R.color.white, context.getTheme()));
+//                }else{
+//                    phqParticipantName.setError("Name should contain both alphabets and numbers.");
+//                    saveButton.setEnabled(false);
+//                    saveButton.setBackgroundResource(R.drawable.yes_no_button);
+//                    saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
+//                }
             }
         });
     }
@@ -313,26 +331,31 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            postAnswers = intent.getStringExtra("PHQScreeningSurveyData");
-            totalScore = intent.getIntExtra("TotalScore", 0);
-            if(postAnswers.length() > 0){
-                callServerForPostPHQAnswers();
+            Bundle args = intent.getBundleExtra("PHQScreeningSurveyListData");
+            phqParticipantAnswersArrayList = (ArrayList<ParticipantAnswers>) args.getSerializable("PHQScreeningSurveyList");
+            if(isConfigChanged){
+                if(phqQuestionnaireAdapter!=null){
+                    setRecyclerView();
+                    isConfigChanged = false;
+                }
             }else{
-//                Toast.makeText(context, "Please answer atleast one question.", Toast.LENGTH_LONG).show();
+                boolean isValid = getPostAnswersData();
+                if(isValid){
+                    callServerForPostPHQAnswers();
+                }
             }
         }
     };
 
     @Override
     public void onResume() {
-        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                new IntentFilter("PHQQuestionnaire"));
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, new IntentFilter("PHQQuestionnaire"));
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        context.unregisterReceiver(mMessageReceiver);
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
         super.onPause();
     }
 
@@ -364,7 +387,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
     }
 
     private void setRecyclerView(){
-        phqQuestionnaireAdapter = new PHQQuestionnaireAdapter(context, questionArray, optionsArray);
+        phqQuestionnaireAdapter = new PHQQuestionnaireAdapter(context, questionArray, optionsArray, phqParticipantAnswersArrayList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         questionsRecyclerView.setLayoutManager(linearLayoutManager);
         questionsRecyclerView.setAdapter(phqQuestionnaireAdapter);
@@ -404,6 +427,42 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         return true;
     }
 
+    private boolean getPostAnswersData(){
+        totalScore = 0;
+        postAnswers = "";
+        int i = 0;
+        for (ParticipantAnswers participantAnswers: phqParticipantAnswersArrayList) {
+            if(participantAnswers.getOption_id()!=null && !participantAnswers.getOption_id().equalsIgnoreCase("null")){
+                if(participantAnswers.getSelected_answer_weightage()!=null && !participantAnswers.getSelected_answer_weightage().equalsIgnoreCase("null")){
+                    totalScore = totalScore + Integer.parseInt(participantAnswers.getSelected_answer_weightage());
+                    postAnswers = postAnswers + getAnswersList(i, phqParticipantAnswersArrayList);
+                    i++;
+                }
+            }else{
+                Toast.makeText(context, "Please answer all the questions.", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private String getAnswersList(int position, ArrayList<ParticipantAnswers> surveyAnswersArrayList){
+        List<String> surveyAnswer = new ArrayList<>();
+        surveyAnswer.add("'qn_id'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_id() +"'");
+        surveyAnswer.add("'qn_no'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_no()+"'");
+        surveyAnswer.add("'question'" + ":'" + surveyAnswersArrayList.get(position).getQuestion()+"'");
+        surveyAnswer.add("'option_id'" + ":'" + surveyAnswersArrayList.get(position).getOption_id()+"'");
+        surveyAnswer.add("'ans'" + ":'" + surveyAnswersArrayList.get(position).getSelected_answer()+"'");
+        surveyAnswer.add("'w'" + ":'" + surveyAnswersArrayList.get(position).getSelected_answer_weightage()+"'");
+        surveyAnswer.add("'qn_start'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_start_time()+"'");
+        surveyAnswer.add("'qn_stop'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_stop_time()+"'");
+        surveyAnswer.add("'seconds'" + ":'" + surveyAnswersArrayList.get(position).getSeconds_taken()+"'");
+        String surveyAnswerStr = String.join(",", surveyAnswer );
+        surveyAnswerStr = "{" + surveyAnswerStr + "}";
+
+        return surveyAnswerStr;
+    }
+
     /**
      * Description : Call the server to get the PHQ9 questions for the participant
      */
@@ -441,7 +500,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         phqSurveyPostAnswers.setType("SUR0001");
         phqSurveyPostAnswers.setScore(String.valueOf(totalScore));
         phqSurveyPostAnswers.setMinutes(totalSurveyTime);
-        phqSurveyPostAnswers.setAnswer(postAnswers.substring(0, postAnswers.length()-1));
+        phqSurveyPostAnswers.setAnswer(postAnswers); //.substring(0, postAnswers.length()-1)
         phqSurveyPostAnswers.setSurvey_start_time(surveyStartDateTime);
         phqSurveyPostAnswers.setSurvey_end_time(surveyEndDateTime);
         phqSurveyPostAnswers.setMan_id(ManualID);
@@ -484,8 +543,9 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
             PHQScreeningScreen.isLanguageSelected = "en";
         }
 
+        isConfigChanged = true;
         if(phqQuestionnaireAdapter!=null){
-            setRecyclerView();
+            phqQuestionnaireAdapter.sendDataToActivity();
         }
         super.onConfigurationChanged(newConfig);
     }

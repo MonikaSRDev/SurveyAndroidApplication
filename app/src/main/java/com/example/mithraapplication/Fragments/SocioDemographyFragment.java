@@ -692,14 +692,6 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
      * Description : This method is used to get the data entered by the user
      */
     private SocioDemography getUserEnteredData(){
-        numAdultFamily = !numAdultFamilyET.getText().toString().isEmpty() ? numAdultFamilyET.getText().toString() : "NULL";
-        totalFamilyIncome = !totalFamilyIncomeET.getText().toString().isEmpty() ? totalFamilyIncomeET.getText().toString(): "NULL";
-        totalEarningFamilyMembers = !totalEarningFamilyMembersET.getText().toString().isEmpty() ? totalEarningFamilyMembersET.getText().toString(): "NULL";
-        numChildFamily = !numChildFamilyET.getText().toString().isEmpty() ? numChildFamilyET.getText().toString(): "NULL";
-        associationDuration = !associationDurationET.getText().toString().isEmpty() ? associationDurationET.getText().toString(): "NULL";
-        SHGMeetings = !SHGMeetingsET.getText().toString().isEmpty() ? SHGMeetingsET.getText().toString(): "NULL";
-        nearestPHC = !nearestPHCET.getText().toString().isEmpty() ? nearestPHCET.getText().toString(): "NULL";
-
         SocioDemography socioDemographyObject = new SocioDemography();
         socioDemographyObject.setUser_pri_id(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID)));
         socioDemographyObject.setYearsOfEducation(participantSchooling);
@@ -721,19 +713,84 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
         return socioDemographyObject;
     }
 
+    private boolean isUserEnteredAllDetails(){
+        numAdultFamily = !numAdultFamilyET.getText().toString().isEmpty() ? numAdultFamilyET.getText().toString() : "NULL";
+        totalFamilyIncome = !totalFamilyIncomeET.getText().toString().isEmpty() ? totalFamilyIncomeET.getText().toString(): "NULL";
+        totalEarningFamilyMembers = !totalEarningFamilyMembersET.getText().toString().isEmpty() ? totalEarningFamilyMembersET.getText().toString(): "NULL";
+        numChildFamily = !numChildFamilyET.getText().toString().isEmpty() ? numChildFamilyET.getText().toString(): "NULL";
+        associationDuration = !associationDurationET.getText().toString().isEmpty() ? associationDurationET.getText().toString(): "NULL";
+        SHGMeetings = !SHGMeetingsET.getText().toString().isEmpty() ? SHGMeetingsET.getText().toString(): "NULL";
+        nearestPHC = !nearestPHCET.getText().toString().isEmpty() ? nearestPHCET.getText().toString(): "NULL";
+
+        if(numAdultFamily.equalsIgnoreCase("null") && totalFamilyIncome.equalsIgnoreCase("null") && totalEarningFamilyMembers.equalsIgnoreCase("null") && numChildFamily.equalsIgnoreCase("null") &&
+                associationDuration.equalsIgnoreCase("null") && SHGMeetings.equalsIgnoreCase("null") && nearestPHC.equalsIgnoreCase("null") && participantSchooling.equalsIgnoreCase("null") && participantCaste.equalsIgnoreCase("null") &&
+                participantOccupation.equalsIgnoreCase("null") && participantReligion.equalsIgnoreCase("null") && participantFamilyType.equalsIgnoreCase("null") && participantMaritalStatus.equalsIgnoreCase("null") ){
+            Toast.makeText(context, "Please enter all the details.", Toast.LENGTH_LONG).show();
+            return false;
+        }else if(numAdultFamily.equalsIgnoreCase("null") || numAdultFamily.isEmpty() || numAdultFamily.equalsIgnoreCase(" ")){
+            numAdultFamilyET.setError("Please enter the number of adult family members");
+            return false;
+        }else if(totalFamilyIncome.equalsIgnoreCase("null") || totalFamilyIncome.isEmpty() || totalFamilyIncome.equalsIgnoreCase(" ")){
+            totalFamilyIncomeET.setError("Please enter total family income.");
+            return false;
+        }else if(totalEarningFamilyMembers.equalsIgnoreCase("null") || totalEarningFamilyMembers.isEmpty() || totalEarningFamilyMembers.equalsIgnoreCase(" ")){
+            totalEarningFamilyMembersET.setError("Please enter the number of total earning family members");
+            return false;
+        }else if(numChildFamily.equalsIgnoreCase("null") || numChildFamily.isEmpty() || numChildFamily.equalsIgnoreCase(" ")){
+            numChildFamilyET.setError("Please enter the number of children in the family.");
+            return false;
+        }else if(associationDuration.equalsIgnoreCase("null") || associationDuration.isEmpty() || associationDuration.equalsIgnoreCase(" ")){
+            associationDurationET.setError("Please enter the duration of association with CBO/SHG.");
+            return false;
+        }else if(SHGMeetings.equalsIgnoreCase("null") || SHGMeetings.isEmpty() || SHGMeetings.equalsIgnoreCase(" ")){
+            SHGMeetingsET.setError("Please enter the number of SHG meetings attended.");
+            return false;
+        }else if(nearestPHC.equalsIgnoreCase("null") || nearestPHC.isEmpty() || nearestPHC.equalsIgnoreCase(" ")){
+            nearestPHCET.setError("Please enter the nearest PHC.");
+            return false;
+        }else if(participantFamilyType.equalsIgnoreCase("null")){
+            Toast.makeText(context, "Please select participant's Family Type.", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(participantReligion.equalsIgnoreCase("null")){
+            Toast.makeText(context, "Please select participant's religion.", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(participantMaritalStatus.equalsIgnoreCase("null")){
+            Toast.makeText(context, "Please select participant's marital status.", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(participantOccupation.equalsIgnoreCase("null")){
+            Toast.makeText(context, "Please select participant's occupation.", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(participantCaste.equalsIgnoreCase("null")){
+            Toast.makeText(context, "Please select participant's caste.", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(participantSchooling.equalsIgnoreCase("null")){
+            Toast.makeText(context, "Please select participant's schooling.", Toast.LENGTH_SHORT).show();
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     /**
      * Description : This method is called when user clicks on the next button
      */
     private void onClickOfNextButton(){
         nextButton.setOnClickListener(v -> {
             if(isEditable!=null && isEditable.equals("true")){
-                callServerPostSocioDemography();
+                boolean isValid = isUserEnteredAllDetails();
+                if(isValid){
+                    callServerPostSocioDemography();
+                }
 //            moveToDiseaseProfileTab();
             }else{
-                if(trackingParticipantStatus!=null){
-                    callServerUpdateSocioDemographyDetails();
-                }else{
-                    callServerPostSocioDemography();
+
+                boolean isValid = isUserEnteredAllDetails();
+                if(isValid){
+                    if(trackingParticipantStatus!=null){
+                        callServerUpdateSocioDemographyDetails();
+                    }else{
+                        callServerPostSocioDemography();
+                    }
                 }
             }
         });
@@ -884,7 +941,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
             if (frappeResponse != null && frappeResponse.getDoctype().equals("demography")) {
                 String registrationName = frappeResponse.getName();
-                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.socio_demography), frappeResponse.getUser_pri_id(), registrationName);
+                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.socio_demography_sp), frappeResponse.getUser_pri_id(), registrationName);
                 callUpdateTrackingDetails(registrationName);
             }
             else {

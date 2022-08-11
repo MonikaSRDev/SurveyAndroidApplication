@@ -37,10 +37,7 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     private final ArrayList<QuestionAnswers> questionAnswersArrayList;
     private final ArrayList<QuestionOptions> questionOptionsArrayList;
     private ArrayList<QuestionOptions> filteredQuestionOptionsArrayList = new ArrayList<>();
-    private final ArrayList<ParticipantAnswers>  phqParticipantAnswers = new ArrayList<>();
-    private int totalScore = 0;
-    private String postAnswers = "";
-
+    private ArrayList<ParticipantAnswers>  phqParticipantAnswers = new ArrayList<>();
 
     @NonNull
     @Override
@@ -49,10 +46,11 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
         return new PHQQuestionnaireAdapter.ViewHolder(view);
     }
 
-    public PHQQuestionnaireAdapter(Context context, ArrayList<QuestionAnswers> questionAnswersArrayList, ArrayList<QuestionOptions> questionOptionsArrayList){
+    public PHQQuestionnaireAdapter(Context context, ArrayList<QuestionAnswers> questionAnswersArrayList, ArrayList<QuestionOptions> questionOptionsArrayList, ArrayList<ParticipantAnswers> phqParticipantAnswers){
         this.context = context;
         this.questionAnswersArrayList = questionAnswersArrayList;
         this.questionOptionsArrayList = questionOptionsArrayList;
+        this.phqParticipantAnswers = phqParticipantAnswers;
     }
 
     @Override
@@ -60,15 +58,18 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
 
         filteredQuestionOptionsArrayList.clear();
 
-        ParticipantAnswers participantAnswers = new ParticipantAnswers();
-
-        phqParticipantAnswers.add(participantAnswers);
-
         QuestionAnswers questionAnswers = questionAnswersArrayList.get(position);
         String questionID = questionAnswers.getName();
 
         filteredQuestionOptionsArrayList = questionOptionsArrayList.stream()
-                .filter(questionOptions -> !questionOptions.getQuestion_id().equalsIgnoreCase(questionID)).collect(Collectors.toCollection(ArrayList::new));
+                .filter(questionOptions -> questionOptions.getQuestion_id().equalsIgnoreCase(questionID)).collect(Collectors.toCollection(ArrayList::new));
+
+        if (phqParticipantAnswers != null && phqParticipantAnswers.size() == questionAnswersArrayList.size()) {
+            setExistingData(holder, phqParticipantAnswers.get(position));
+        }else{
+            ParticipantAnswers participantAnswers = new ParticipantAnswers();
+            phqParticipantAnswers.add(participantAnswers);
+        }
 
         holder.questionNumber.setText(position + 1 +".");
         if(isLanguageSelected.equals("en")){
@@ -120,6 +121,55 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
             option4LinearLayout = itemView.findViewById(R.id.PHQ_option_four_linearLayout);
         }
     }
+
+    private void setExistingData(ViewHolder holder, ParticipantAnswers participantAnswers){
+        String selected_option_id = participantAnswers.getOption_id();
+
+        if(selected_option_id!=null && !selected_option_id.equalsIgnoreCase("null")){
+            if(selected_option_id.equals(filteredQuestionOptionsArrayList.get(0).getId())){
+                holder.option_view_one.setVisibility(View.VISIBLE);
+                holder.option_view_two.setVisibility(View.INVISIBLE);
+                holder.option_view_three.setVisibility(View.INVISIBLE);
+                holder.option_view_four.setVisibility(View.INVISIBLE);
+
+                holder.option_oneTV.setTextColor(context.getResources().getColor(R.color.options_color));
+                holder.option_twoTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_threeTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_fourTV.setTextColor(context.getResources().getColor(R.color.text_color));
+            } else if(selected_option_id.equals(filteredQuestionOptionsArrayList.get(1).getId())){
+                holder.option_view_one.setVisibility(View.INVISIBLE);
+                holder.option_view_two.setVisibility(View.VISIBLE);
+                holder.option_view_three.setVisibility(View.INVISIBLE);
+                holder.option_view_four.setVisibility(View.INVISIBLE);
+
+                holder.option_oneTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_twoTV.setTextColor(context.getResources().getColor(R.color.options_color));
+                holder.option_threeTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_fourTV.setTextColor(context.getResources().getColor(R.color.text_color));
+            } else if(selected_option_id.equals(filteredQuestionOptionsArrayList.get(2).getId())){
+                holder.option_view_one.setVisibility(View.INVISIBLE);
+                holder.option_view_two.setVisibility(View.INVISIBLE);
+                holder.option_view_three.setVisibility(View.VISIBLE);
+                holder.option_view_four.setVisibility(View.INVISIBLE);
+
+                holder.option_oneTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_twoTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_threeTV.setTextColor(context.getResources().getColor(R.color.options_color));
+                holder.option_fourTV.setTextColor(context.getResources().getColor(R.color.text_color));
+            } else if(selected_option_id.equals(filteredQuestionOptionsArrayList.get(3).getId())){
+                holder.option_view_one.setVisibility(View.INVISIBLE);
+                holder.option_view_two.setVisibility(View.INVISIBLE);
+                holder.option_view_three.setVisibility(View.INVISIBLE);
+                holder.option_view_four.setVisibility(View.VISIBLE);
+
+                holder.option_oneTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_twoTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_threeTV.setTextColor(context.getResources().getColor(R.color.text_color));
+                holder.option_fourTV.setTextColor(context.getResources().getColor(R.color.options_color));
+            }
+        }
+    }
+
     /**
      * Description : Get the option selected by the participant and assign weightage to it.
      */
@@ -142,16 +192,16 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     }
 
     private void onClickOfOptionOne(ViewHolder holder, QuestionAnswers questionAnswers) {
+        filteredQuestionOptionsArrayList.clear();
+        String questionID = questionAnswers.getName();
+        filteredQuestionOptionsArrayList = questionOptionsArrayList.stream()
+                .filter(questionOptions -> questionOptions.getQuestion_id().equalsIgnoreCase(questionID)).collect(Collectors.toCollection(ArrayList::new));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getName());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion(questionAnswers.getQuestion_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer(filteredQuestionOptionsArrayList.get(0).getOption_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer_weightage(String.valueOf(filteredQuestionOptionsArrayList.get(0).getOption_w()));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_no(questionAnswers.getQn_number());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setOption_id(filteredQuestionOptionsArrayList.get(0).getId());
-
-        totalScore +=  Integer.parseInt(filteredQuestionOptionsArrayList.get(0).getOption_w());
-
-        postAnswers = postAnswers + getAnswersList(holder.getAbsoluteAdapterPosition(), phqParticipantAnswers) + ",";
 
         holder.option_view_one.setVisibility(View.VISIBLE);
         holder.option_view_two.setVisibility(View.INVISIBLE);
@@ -166,17 +216,16 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     }
 
     private void onClickOfOptionTwo(ViewHolder holder, QuestionAnswers questionAnswers) {
+        filteredQuestionOptionsArrayList.clear();
+        String questionID = questionAnswers.getName();
+        filteredQuestionOptionsArrayList = questionOptionsArrayList.stream()
+                .filter(questionOptions -> questionOptions.getQuestion_id().equalsIgnoreCase(questionID)).collect(Collectors.toCollection(ArrayList::new));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getName());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion(questionAnswers.getQuestion_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer(filteredQuestionOptionsArrayList.get(1).getOption_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer_weightage(String.valueOf(filteredQuestionOptionsArrayList.get(1).getOption_w()));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_no(questionAnswers.getQn_number());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setOption_id(filteredQuestionOptionsArrayList.get(1).getId());
-
-
-        totalScore +=  Integer.parseInt(filteredQuestionOptionsArrayList.get(1).getOption_w());
-
-        postAnswers = postAnswers + getAnswersList(holder.getAbsoluteAdapterPosition(), phqParticipantAnswers) + ",";
 
         holder.option_view_one.setVisibility(View.INVISIBLE);
         holder.option_view_two.setVisibility(View.VISIBLE);
@@ -190,17 +239,16 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     }
 
     private void onClickOfOptionThree(ViewHolder holder, QuestionAnswers questionAnswers) {
+        filteredQuestionOptionsArrayList.clear();
+        String questionID = questionAnswers.getName();
+        filteredQuestionOptionsArrayList = questionOptionsArrayList.stream()
+                .filter(questionOptions -> questionOptions.getQuestion_id().equalsIgnoreCase(questionID)).collect(Collectors.toCollection(ArrayList::new));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getName());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion(questionAnswers.getQuestion_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer(filteredQuestionOptionsArrayList.get(2).getOption_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer_weightage(String.valueOf(filteredQuestionOptionsArrayList.get(2).getOption_w()));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_no(questionAnswers.getQn_number());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setOption_id(filteredQuestionOptionsArrayList.get(2).getId());
-
-
-        totalScore +=  Integer.parseInt(filteredQuestionOptionsArrayList.get(2).getOption_w());
-
-        postAnswers = postAnswers + getAnswersList(holder.getAbsoluteAdapterPosition(), phqParticipantAnswers) + ",";
 
         holder.option_view_one.setVisibility(View.INVISIBLE);
         holder.option_view_two.setVisibility(View.INVISIBLE);
@@ -214,17 +262,16 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
     }
 
     private void onClickOfOptionFour(ViewHolder holder, QuestionAnswers questionAnswers) {
+        filteredQuestionOptionsArrayList.clear();
+        String questionID = questionAnswers.getName();
+        filteredQuestionOptionsArrayList = questionOptionsArrayList.stream()
+                .filter(questionOptions -> questionOptions.getQuestion_id().equalsIgnoreCase(questionID)).collect(Collectors.toCollection(ArrayList::new));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_id(questionAnswers.getName());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion(questionAnswers.getQuestion_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer(filteredQuestionOptionsArrayList.get(3).getOption_e());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setSelected_answer_weightage(String.valueOf(filteredQuestionOptionsArrayList.get(3).getOption_w()));
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setQuestion_no(questionAnswers.getQn_number());
         phqParticipantAnswers.get(holder.getAbsoluteAdapterPosition()).setOption_id(filteredQuestionOptionsArrayList.get(3).getId());
-
-
-        totalScore +=  Integer.parseInt(filteredQuestionOptionsArrayList.get(3).getOption_w());
-
-        postAnswers = postAnswers + getAnswersList(holder.getAbsoluteAdapterPosition(), phqParticipantAnswers) + ",";
 
         holder.option_view_one.setVisibility(View.INVISIBLE);
         holder.option_view_two.setVisibility(View.INVISIBLE);
@@ -237,23 +284,6 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
         holder.option_fourTV.setTextColor(context.getResources().getColor(R.color.options_color));
     }
 
-    private String getAnswersList(int position, ArrayList<ParticipantAnswers> surveyAnswersArrayList){
-        List<String> surveyAnswer = new ArrayList<>();
-        surveyAnswer.add("'qn_id'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_id() +"'");
-        surveyAnswer.add("'qn_no'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_no()+"'");
-        surveyAnswer.add("'question'" + ":'" + surveyAnswersArrayList.get(position).getQuestion()+"'");
-        surveyAnswer.add("'option_id'" + ":'" + surveyAnswersArrayList.get(position).getOption_id()+"'");
-        surveyAnswer.add("'ans'" + ":'" + surveyAnswersArrayList.get(position).getSelected_answer()+"'");
-        surveyAnswer.add("'w'" + ":'" + surveyAnswersArrayList.get(position).getSelected_answer_weightage()+"'");
-        surveyAnswer.add("'qn_start'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_start_time()+"'");
-        surveyAnswer.add("'qn_stop'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_stop_time()+"'");
-        surveyAnswer.add("'seconds'" + ":'" + surveyAnswersArrayList.get(position).getSeconds_taken()+"'");
-        String surveyAnswerStr = String.join(",", surveyAnswer );
-        surveyAnswerStr = "{" + surveyAnswerStr + "}";
-
-        return surveyAnswerStr;
-    }
-
     @Override
     public int getItemCount() {
         return questionAnswersArrayList.size();
@@ -264,8 +294,9 @@ public class PHQQuestionnaireAdapter extends RecyclerView.Adapter<PHQQuestionnai
      */
     public void sendDataToActivity(){
         Intent intent = new Intent("PHQQuestionnaire");
-        intent.putExtra("PHQScreeningSurveyData",postAnswers);
-        intent.putExtra("TotalScore",totalScore);
+        Bundle args = new Bundle();
+        args.putSerializable("PHQScreeningSurveyList", phqParticipantAnswers);
+        intent.putExtra("PHQScreeningSurveyListData",args);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }

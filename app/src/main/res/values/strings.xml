@@ -190,4 +190,8 @@
     <string name="screening_id">Screening ID</string>
     <string name="phq_id">PHQ ID</string>
 
+    <string name="registration_sp" translatable="false">Registration</string>
+    <string name="socio_demography_sp" translatable="false">SocioDemography</string>
+    <string name="disease_profile_sp" translatable="false">DiseaseProfile</string>
+
 </resources>

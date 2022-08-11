@@ -80,17 +80,11 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_screen);
         RegisterViews();
-//        removeDataStoredSharedPreferences();
-//        getDataStoredFromSharedPreferences();
-//        initializeData();
-//        startDateTime = mithraUtility.getCurrentTime();
-//        setCardData();
         getSelectedOption();
         onClickNextButton();
         onClickOfLanguageButton();
         getCurrentLocale();
         callServerToGetPHQ9Questions();
-        callServerToGetPHQ9Options();
     }
 
     private void getDataStoredFromSharedPreferences() {
@@ -284,6 +278,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         optionImageButtonThree = findViewById(R.id.optionImageBtn3);
         optionImageButtonFour = findViewById(R.id.optionImageBtn4);
         speakerButton = findViewById(R.id.imageButtonSpeaker);
+        speakerButton.setEnabled(false);
 
         option_view_one = findViewById(R.id.option_one_view);
         option_view_two = findViewById(R.id.option_two_view);
@@ -523,7 +518,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 option_threeTV.setText(filteredOptionsArray.get(2).getOption_e());
                 option_fourTV.setText(filteredOptionsArray.get(3).getOption_e());
                 onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
-                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
+//                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
             } else {
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
                 totalQuestions.setText("of " + questionArray.size() + "");
@@ -533,7 +528,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 option_threeTV.setText(filteredOptionsArray.get(2).getOption_k());
                 option_fourTV.setText(filteredOptionsArray.get(3).getOption_k());
                 onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
-                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
+//                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
             }
 
         } else {
@@ -599,7 +594,6 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         String url = "http://" + getString(R.string.base_url) + "/api/method/mithra.mithra.doctype.survey_questions.api.questions";
         SurveyQuestions surveyQuestions = new SurveyQuestions();
         surveyQuestions.setFilter_data("{'sur_pri_id':'SUR0001'}");
-//        surveyQuestions.setFilter_data("SUR0001");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.setSurveyServerEvents(this);
@@ -735,7 +729,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 option_threeTV.setText(filteredOptionsArray.get(2).getOption_e());
                 option_fourTV.setText(filteredOptionsArray.get(3).getOption_e());
                 onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
-                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
+//                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_e());
             } else {
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_k());
                 totalQuestions.setText("of " + questionArray.size() + "");
@@ -745,7 +739,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                 option_threeTV.setText(filteredOptionsArray.get(2).getOption_k());
                 option_fourTV.setText(filteredOptionsArray.get(3).getOption_k());
                 onClickOfSpeakerButton(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
-                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
+//                downloadFileFromServer(questionArray.get(questionIndex).getAudio_fileURL(), questionArray.get(questionIndex).getAudio_filename_k());
             }
         }
     }
@@ -793,6 +787,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
                     questionAnswersArrayList.sort(Comparator.comparingInt(question -> Integer.parseInt(question.getQn_number())));
                     Log.i("SurveyScreen", "responseReceivedSuccessfully : " + questionAnswersArrayList);
                     questionArray = questionAnswersArrayList;
+                    callServerToGetPHQ9Options();
                 }
             } catch (Exception e) {
                 Toast.makeText(this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
@@ -833,7 +828,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         if (jsonObjectRegistration.get("data") != null) {
             FrappeResponse frappeResponse;
             frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), typeFrappe);
-            removeDataStoredSharedPreferences();
+//            removeDataStoredSharedPreferences();
         }
     }
 }

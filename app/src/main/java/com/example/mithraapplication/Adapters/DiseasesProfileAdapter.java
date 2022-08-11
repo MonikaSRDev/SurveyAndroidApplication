@@ -96,6 +96,13 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
 
         DiseasesProfile diseasesProfile = diseasesProfileArrayList.get(position);
 
+        userEnteredDiseasesProfileArrayList.get(position).setDiseaseName(diseasesProfile.getDiseaseName());
+        userEnteredDiseasesProfileArrayList.get(position).setDiseaseNameKannada(diseasesProfile.getDiseaseNameKannada());
+        userEnteredDiseasesProfileArrayList.get(position).setLimitActivities(diseasesProfile.getLimitActivities());
+        userEnteredDiseasesProfileArrayList.get(position).setReceivedTreatment(diseasesProfile.getReceivedTreatment());
+        userEnteredDiseasesProfileArrayList.get(position).setSpecifyDisease(diseasesProfile.getSpecifyDisease());
+        userEnteredDiseasesProfileArrayList.get(position).setDiagnosedAge(diseasesProfile.getDiagnosedAge());
+
         if(isLanguageSelected.equals("kn")){
             holder.diseaseTV.setText(diseasesProfile.getDiseaseNameKannada());
         }else{
@@ -112,14 +119,14 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
 
         enableDisableViews(isEditable == null || !isEditable.equalsIgnoreCase("false"), holder);
         displayDiseaseProfileData(holder, diseasesProfile);
-        onClickOfYesDiseaseButton(holder);
-        onClickOfNoDiseaseButton(holder);
-        onClickOfYesReceivedTreatmentButton(holder);
-        onClickOfNoReceivedTreatmentButton(holder);
-        onClickOfYesLimitActivitiesButton(holder);
-        onClickOfNoLimitActivitiesButton(holder);
-        getDiagnosedAgeOfParticipant(holder);
-        getSpecificDiseaseOfParticipant(holder);
+        onClickOfYesDiseaseButton(holder, diseasesProfile);
+        onClickOfNoDiseaseButton(holder, diseasesProfile);
+        onClickOfYesReceivedTreatmentButton(holder, diseasesProfile);
+        onClickOfNoReceivedTreatmentButton(holder, diseasesProfile);
+        onClickOfYesLimitActivitiesButton(holder, diseasesProfile);
+        onClickOfNoLimitActivitiesButton(holder, diseasesProfile);
+        getDiagnosedAgeOfParticipant(holder, diseasesProfile);
+        getSpecificDiseaseOfParticipant(holder, diseasesProfile);
     }
 
     /**
@@ -219,9 +226,10 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     /**
      * Description : This method is handles the onclick action on "YesDiseaseButton"
      */
-    private void onClickOfYesDiseaseButton(ViewHolder holder) {
+    private void onClickOfYesDiseaseButton(ViewHolder holder, DiseasesProfile diseasesProfile) {
         holder.yesDiseaseButton.setOnClickListener(v -> {
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("yes");
+
             holder.yesDiseaseButton.setBackgroundResource(R.drawable.selected_yes_button);
             holder.noDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
             holder.expandableConstraintLayout.setVisibility(View.VISIBLE);
@@ -231,9 +239,10 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     /**
      * Description : This method is handles the onclick action on "NoDiseaseButton"
      */
-    private void onClickOfNoDiseaseButton(ViewHolder holder) {
+    private void onClickOfNoDiseaseButton(ViewHolder holder, DiseasesProfile diseasesProfile) {
         holder.noDiseaseButton.setOnClickListener(v -> {
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed("no");
+
             holder.noDiseaseButton.setBackgroundResource(R.drawable.selected_no_button);
             holder.yesDiseaseButton.setBackgroundResource(R.drawable.yes_no_button);
             holder.expandableConstraintLayout.setVisibility(View.GONE);
@@ -243,9 +252,10 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     /**
      * Description : This method is handles the onclick action on "YesReceivedTreatmentButton"
      */
-    private void onClickOfYesReceivedTreatmentButton(ViewHolder holder) {
+    private void onClickOfYesReceivedTreatmentButton(ViewHolder holder, DiseasesProfile diseasesProfile) {
         holder.yesReceivedTreatmentButton.setOnClickListener(v -> {
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("yes");
+
             holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_yes_button);
             holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
         });
@@ -254,9 +264,10 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     /**
      * Description : This method is handles the onclick action on "NoReceivedTreatmentButton"
      */
-    private void onClickOfNoReceivedTreatmentButton(ViewHolder holder) {
+    private void onClickOfNoReceivedTreatmentButton(ViewHolder holder, DiseasesProfile diseasesProfile) {
         holder.noReceivedTreatmentButton.setOnClickListener(v -> {
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment("no");
+
             holder.yesReceivedTreatmentButton.setBackgroundResource(R.drawable.yes_no_button);
             holder.noReceivedTreatmentButton.setBackgroundResource(R.drawable.selected_no_button);
         });
@@ -265,9 +276,10 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     /**
      * Description : This method is handles the onclick action on "YesLimitActivitiesButton"
      */
-    private void onClickOfYesLimitActivitiesButton(ViewHolder holder) {
+    private void onClickOfYesLimitActivitiesButton(ViewHolder holder, DiseasesProfile diseasesProfile) {
         holder.yesLimitActivities.setOnClickListener(v -> {
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("yes");
+
             holder.yesLimitActivities.setBackgroundResource(R.drawable.selected_yes_button);
             holder.noLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
         });
@@ -276,9 +288,10 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     /**
      * Description : This method is handles the onclick action on "NoLimitActivitiesButton"
      */
-    private void onClickOfNoLimitActivitiesButton(ViewHolder holder) {
+    private void onClickOfNoLimitActivitiesButton(ViewHolder holder, DiseasesProfile diseasesProfile) {
         holder.noLimitActivities.setOnClickListener(v -> {
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setLimitActivities("no");
+
             holder.yesLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
             holder.noLimitActivities.setBackgroundResource(R.drawable.selected_no_button);
         });
@@ -287,7 +300,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     /**
      * Description : This method is used to get the disease diagnosed age of the participant
      */
-    private void getDiagnosedAgeOfParticipant(ViewHolder holder){
+    private void getDiagnosedAgeOfParticipant(ViewHolder holder, DiseasesProfile diseasesProfile){
         holder.diagnosedAgeET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -312,7 +325,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     /**
      * Description : This method is used to get the specific disease name from the participant if they have any disease other than the listed
      */
-    private void getSpecificDiseaseOfParticipant(ViewHolder holder){
+    private void getSpecificDiseaseOfParticipant(ViewHolder holder, DiseasesProfile diseasesProfile){
         holder.specifyDiseaseET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -340,7 +353,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
     public void sendDataToActivity(){
         Intent intent = new Intent("DiseasesProfileData");
         Bundle args = new Bundle();
-        args.putSerializable("ARRAYLIST", userEnteredDiseasesProfileArrayList);
+        args.putSerializable("ParticipantDiseaseList", userEnteredDiseasesProfileArrayList);
         intent.putExtra("ParticipantDiseaseData",args);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

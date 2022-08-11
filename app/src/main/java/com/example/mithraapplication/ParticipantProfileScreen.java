@@ -237,9 +237,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         trackingParticipantStatus = new TrackingParticipantStatus();
         String tracking = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.tracking), participant_primary_ID);
         String screeningName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.userScreeningName), getString(R.string.userScreeningID));
-        String registrationName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration), participant_primary_ID);
-        String socioDemographyName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography), participant_primary_ID);
-        String diseaseProfileName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile), participant_primary_ID);
+        String registrationName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration_sp), participant_primary_ID);
+        String socioDemographyName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography_sp), participant_primary_ID);
+        String diseaseProfileName = mithraUtility.getSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile_sp), participant_primary_ID);
 
         switch(position){
             case 0: if(registrationName!=null && !registrationName.equals("NULL")){
@@ -533,9 +533,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 trackingName = trackingParticipantStatus.getName();
                 participant_primary_ID = registerParticipant.getUser_pri_id();
                 mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.tracking), participant_primary_ID, trackingParticipantStatus.getName());
-                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration), participant_primary_ID, trackingParticipantStatus.getRegistration());
-                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography), participant_primary_ID, trackingParticipantStatus.getSocio_demography());
-                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile), participant_primary_ID, trackingParticipantStatus.getDisease_profile());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration_sp), participant_primary_ID, trackingParticipantStatus.getRegistration());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography_sp), participant_primary_ID, trackingParticipantStatus.getSocio_demography());
+                mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile_sp), participant_primary_ID, trackingParticipantStatus.getDisease_profile());
             }else{
                 trackingParticipantStatus = null;
             }

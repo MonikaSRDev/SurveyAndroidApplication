@@ -66,7 +66,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     private Spinner PHQScreeningSpinner, ManualIDSpinner, CountryCodeSpinner;
     private String participantName, participantUserName, participantPassword;
     private String participantVillageName, participantSHGAssociation, participantPanchayat, participantGender, participantPhoneNum, participantCountryCode, participantManualID, participantPHQScreeningID;
-    private int participantAge;
+    private String participantAge;
     private List<String> PHQScreeningNamesList, ManualNamesList, ParticipantNamesList, CountryCodeList = new ArrayList<>();
     private List<PHQParticipantDetails> locationsArrayList, filteredPHQScreeningList, filteredManualIDList, temporaryList;
     private ArrayAdapter PHQScreeningSpinnerAdapter, ParticipantNameAdapter, ManualIDSpinnerAdapter;
@@ -277,9 +277,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             }
             participantPhoneNumberET.setText(participantPhoneNum);
 
-            participantUserNameET.setFocusable(true);
-            participantUserNameET.setClickable(true);
-            participantUserNameET.setFocusableInTouchMode(true);
+            participantUserNameET.setFocusable(false);
+            participantUserNameET.setClickable(false);
+            participantUserNameET.setFocusableInTouchMode(false);
             participantUserNameET.setText(registerParticipantDetails.getParticipantUserName());
 
             participantPasswordTV.setVisibility(View.INVISIBLE);
@@ -322,14 +322,40 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
      */
     private boolean getUserEnteredData(){
         participantName = participantNameAutoCompleteTV.getText().toString();
-        participantAge = !participantAgeET.getText().toString().isEmpty() ? Integer.parseInt(participantAgeET.getText().toString()): 0;
-        participantPhoneNum = participantCountryCode + participantPhoneNumberET.getText().toString();
+        participantAge = !participantAgeET.getText().toString().isEmpty() ? participantAgeET.getText().toString(): "";
+        participantPhoneNum = participantPhoneNumberET.getText().toString();
         participantUserName = participantUserNameET.getText().toString();
         participantPassword = participantPasswordET.getText().toString();
 
-        if(participantUserName.isEmpty() || participantUserName.length() < 6){
-            participantUserNameET.setError("Username must be atleast 6 characters");
+        if(participantName.isEmpty()){
+            participantNameAutoCompleteTV.setError("Please enter the participant name.");
+            return false;
         }
+
+        if(participantAge.isEmpty()){
+            participantAgeET.setError("Please enter the participant age.");
+            return false;
+        }
+
+        if(participantPhoneNumberET.getText().toString().isEmpty()){
+            participantPhoneNumberET.setError("Please enter the participant phone number.");
+            return false;
+        }else{
+            if(participantPhoneNumberET.getText().toString().length() < 6){
+                participantPhoneNumberET.setError("Please enter a valid participant phone number.");
+                return false;
+            }
+        }
+
+        if(participantUserName.isEmpty() || participantUserName.length() < 4){
+            participantUserNameET.setError("Username must be minimum of 4 characters");
+            return false;
+        }
+
+        if(!participantName.isEmpty() && !participantAge.isEmpty() && !participantPhoneNumberET.getText().toString().isEmpty() && !participantUserName.isEmpty()){
+            return true;
+        }
+
         boolean valid = false;
         if(participantPassword.isEmpty()){
             participantPasswordET.setError("Please enter a password.");
@@ -440,9 +466,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
     private void onClickRegisterButton(){
         createButton.setOnClickListener(v -> {
             boolean isvalid = getUserEnteredData();
-            if(isEditable!=null && isEditable.equals("reEdit")){
-                callServerUpdateParticipantDetails();
-            }
+//            if(isEditable!=null && isEditable.equals("reEdit")){
+//                callServerUpdateParticipantDetails();
+//            }
             if(isvalid) {
                 if(isEditable!=null && isEditable.equals("reEdit")){
                     callServerUpdateParticipantDetails();
@@ -473,7 +499,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         registerParticipant.setParticipantName(participantName);
         registerParticipant.setParticipantGender(participantGender);
         registerParticipant.setParticipantAge(String.valueOf(participantAge));
-        registerParticipant.setParticipantPhoneNumber(participantPhoneNum);
+        registerParticipant.setParticipantPhoneNumber(participantCountryCode + participantPhoneNum);
         registerParticipant.setLocation(phqLocations.getName());
         registerParticipant.setPhq_scr_id(participantPHQScreeningID);
         registerParticipant.setMan_id(participantManualID);
@@ -789,7 +815,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             frappeResponse = gson.fromJson(jsonObjectRegistration.get("data"), type);
             if (frappeResponse != null && frappeResponse.getDoctype().equals("participant")) {
                 String registrationName = frappeResponse.getName();
-                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.registration), frappeResponse.getUser_pri_id(), registrationName);
+                mithraUtility.putSharedPreferencesData(context, context.getString(R.string.registration_sp), frappeResponse.getUser_pri_id(), registrationName);
                 callUpdateRegisterStatus();
                 callCreateTrackingStatus(registrationName);
             }
