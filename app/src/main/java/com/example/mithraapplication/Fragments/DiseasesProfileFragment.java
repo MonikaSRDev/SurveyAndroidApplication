@@ -128,17 +128,6 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                     isConfigChanged = false;
                     setRecyclerView(isEditable, diseasesProfile);
                 }
-            }else{
-//                boolean isValid = getDiseaseProfileData();
-//                if(isValid){
-//                    if(isEditable!=null && !isEditable.equals("true")){
-//                        callServerUpdateDiseaseProfileDetails();
-//                    }else{
-//                        callServerPostDiseasesProfile();
-//                    }
-//                }else{
-//                    Toast.makeText(context, "Please give all the details.", Toast.LENGTH_LONG).show();
-//                }
             }
         }
     };
