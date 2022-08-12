@@ -197,79 +197,247 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
 
             if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("No Schooling")){
                 noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                eightToNineButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantSchooling!=null && participantSchooling.contains("<5")){
+                noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                eightToNineButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantSchooling!=null && participantSchooling.contains("5-7")){
+                noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                eightToNineButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantSchooling!=null && participantSchooling.contains("8-9")){
+                noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 eightToNineButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantSchooling!=null && participantSchooling.contains("10-11")){
+                noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                eightToNineButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantSchooling!=null && participantSchooling.equalsIgnoreCase("12ormore")){
+                noSchoolingButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                lessThanFiveButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                fiveToSevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                eightToNineButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                tenToElevenButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 twelveOrMoreButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
             if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Professional")){
                 professionalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                skilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                unskilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                agricultureButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Clerical")){
+                professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 clericalButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                skilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                unskilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                agricultureButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Sales and Services")){
+                professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                skilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                unskilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                agricultureButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Skilled Manual")){
+                professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 skilledManualButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                unskilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                agricultureButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Unskilled Manual")){
+                professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                skilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 unskilledManualButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                agricultureButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantOccupation!=null && participantOccupation.equalsIgnoreCase("Agriculture")){
+                professionalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                clericalButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                salesAndServicesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                skilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                unskilledManualButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 agricultureButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
             if(participantReligion!=null && participantReligion.equalsIgnoreCase("Hindu")){
                 hinduButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                sikhButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                buddhistButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                jainButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Muslim")){
+                hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 muslimButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                sikhButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                buddhistButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                jainButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Christian")){
+                hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 christianButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                sikhButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                buddhistButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                jainButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Sikh")){
+                hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 sikhButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                buddhistButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                jainButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Buddhist/Neo buddhist")){
+                hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                sikhButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 buddhistButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                jainButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Jain")){
+                hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                sikhButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                buddhistButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 jainButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                otherReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Other")){
+                hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                sikhButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                buddhistButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                jainButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 otherReligionButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantReligion!=null && participantReligion.equalsIgnoreCase("Preferred Not to Answer")){
+                hinduButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                muslimButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                christianButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                sikhButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                buddhistButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                jainButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherReligionButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 pNAReligionButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
             if(participantCaste!=null && participantCaste.equalsIgnoreCase("Scheduled Caste")){
                 scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                doNotKnowCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNACasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Scheduled Tribe")){
+                scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                doNotKnowCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNACasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Other Backward Class")){
+                scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                doNotKnowCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNACasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Don't Know")){
+                scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 doNotKnowCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                otherCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                pNACasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Other")){
+                scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                doNotKnowCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 otherCasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                pNACasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantCaste!=null && participantCaste.equalsIgnoreCase("Preferred Not to Answer")){
+                scheduledCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                scheduledTribeButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                backwardClassesButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                doNotKnowCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                otherCasteButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 pNACasteButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
             if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Never Married")){
                 neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                marriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                divorcedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                separatedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                widowButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Married")){
+                neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 marriedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                divorcedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                separatedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                widowButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Divorced")){
+                neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                marriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 divorcedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                separatedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                widowButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Separated")){
+                neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                marriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                divorcedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 separatedButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                widowButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantMaritalStatus!=null && participantMaritalStatus.equalsIgnoreCase("Widow")) {
+                neverMarriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                marriedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                divorcedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
+                separatedButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 widowButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
 
             if(participantFamilyType != null && participantFamilyType.equalsIgnoreCase("Nuclear Family")){
                 nuclearFamilyButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
+                jointFamilyButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
             }else if(participantFamilyType != null && participantFamilyType.equalsIgnoreCase("Joint Family")){
+                nuclearFamilyButton.setBackgroundResource(R.drawable.socio_demo_inputs_background);
                 jointFamilyButton.setBackgroundResource(R.drawable.socio_demo_selected_inputs_background);
             }
         }

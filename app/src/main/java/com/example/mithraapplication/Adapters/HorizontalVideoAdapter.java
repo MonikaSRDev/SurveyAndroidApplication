@@ -90,6 +90,7 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
      */
     private void downloadFileFromServer(ViewHolder holder){
         String path = context.getFilesDir().getAbsolutePath() + "/" + "file.mp4";
+//        String path ="android.resource://" + context.getPackageName() + "/" + R.raw.mithra_introduction_video;
         File file = new File(path);
         if(file.exists()){
             Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
@@ -125,7 +126,8 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
             Intent intent = new Intent(context, FullScreenVideoView.class);
             intent.putExtra("ModulePosition", pos);
             intent.putExtra("VideoPosition", holder.getAbsoluteAdapterPosition());
-            intent.putExtra("VideoPath", context.getFilesDir().getAbsolutePath() + "/" + "file.mp4");
+//            intent.putExtra("VideoPath", context.getFilesDir().getAbsolutePath() + "/" + "file.mp4");
+            intent.putExtra("VideoPath", "android.resource://" + context.getPackageName() + "/" + R.raw.mithra_introduction_video);
             context.startActivity(intent);
         });
     }

@@ -335,6 +335,9 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         if(participantAge.isEmpty()){
             participantAgeET.setError("Please enter the participant age.");
             return false;
+        }else if(Integer.parseInt(participantAge) < 18){
+            participantAgeET.setError("Participant age should be 18 and above.");
+            return false;
         }
 
         if(participantPhoneNumberET.getText().toString().isEmpty()){
@@ -352,15 +355,13 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             return false;
         }
 
-        if(!participantName.isEmpty() && !participantAge.isEmpty() && !participantPhoneNumberET.getText().toString().isEmpty() && !participantUserName.isEmpty()){
-            return true;
-        }
-
         boolean valid = false;
         if(participantPassword.isEmpty()){
             participantPasswordET.setError("Please enter a password.");
+            valid = false;
         }else if(participantPassword.length() < 4){
             participantPasswordET.setError("Password must be minimum of 4 characters.");
+            valid = false;
         } else {
             valid = checkIfPasswordMatches(participantPassword, participantConfirmPasswordET.getText().toString());
             if(valid){
@@ -370,6 +371,11 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                 return false;
             }
         }
+
+        if(!participantName.isEmpty() && !participantAge.isEmpty() && !participantPhoneNumberET.getText().toString().isEmpty() && !participantUserName.isEmpty() && !participantPassword.isEmpty() && participantPassword.length() > 3){
+            return true;
+        }
+
         return valid;
     }
 

@@ -186,7 +186,11 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         if(isEditable!=null && !isEditable.equals("true")){
             callGetParticipantTrackingDetails();
 //            ((LinearLayout) Objects.requireNonNull(profileTabLayout.getTabAt(0)).view).setVisibility(View.GONE);
-            Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText("Profile");
+
+            TabLayout.Tab tab = profileTabLayout.getTabAt(0);
+            assert tab != null;
+            tab.setText(R.string.profile);
+//            Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.profile);
             enableTab(1);
             enableTab(2);
             if(registerParticipant!=null){
@@ -471,7 +475,11 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         participantTVProfile.setText(R.string.participants);
         phqTVProfile.setText(R.string.phq_screening);
         profileEditButton.setText(R.string.edit);
-        Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.registration);
+        if(isEditable!=null && !isEditable.equals("true")){
+            Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.profile);
+        }else{
+            Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.registration);
+        }
         Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText(R.string.socio_demography);
         Objects.requireNonNull(profileTabLayout.getTabAt(2)).setText(R.string.disease_profile);
         super.onConfigurationChanged(newConfig);

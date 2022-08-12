@@ -3,6 +3,7 @@
     android:layout_width="986dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardBackgroundColor="@color/white">
 
     <LinearLayout
@@ -66,23 +67,71 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/enrollmentStatusIconPart"
-            android:layout_width="130dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="120dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/enrolment_status_icon"/>
+            android:layout_gravity="center_vertical">
 
-        <ImageView
-            android:id="@+id/surveyStatusIconPart"
-            android:layout_width="130dp"
+            <ProgressBar
+                android:id="@+id/enrollmentStatusPBParticipants"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:indeterminateOnly="false"
+                android:progressDrawable="@drawable/enrollment_progress_bar"
+                android:progress="66"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/enrollmentStatusPercentageParticipants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="66%"
+                android:textColor="@color/enrollmentStatusColor"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/enrollmentStatusPBParticipants"
+                app:layout_constraintEnd_toEndOf="@+id/enrollmentStatusPBParticipants"
+                app:layout_constraintStart_toStartOf="@+id/enrollmentStatusPBParticipants"
+                app:layout_constraintTop_toTopOf="@+id/enrollmentStatusPBParticipants" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="120dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/survey_status_icon"/>
+            android:layout_gravity="center_vertical">
+
+            <ProgressBar
+                android:id="@+id/surveyProgressBarParticipants"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:indeterminateOnly="false"
+                android:progressDrawable="@drawable/survey_progress_bar"
+                android:progress="66"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/surveyStatusPercentageParticipants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="66%"
+                android:textColor="@color/surveyStatusColor"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/surveyProgressBarParticipants"
+                app:layout_constraintEnd_toEndOf="@+id/surveyProgressBarParticipants"
+                app:layout_constraintStart_toStartOf="@+id/surveyProgressBarParticipants"
+                app:layout_constraintTop_toTopOf="@+id/surveyProgressBarParticipants" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/moduleStatusDashboardTVPart"

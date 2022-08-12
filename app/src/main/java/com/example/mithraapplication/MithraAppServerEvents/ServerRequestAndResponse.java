@@ -69,9 +69,9 @@ public class ServerRequestAndResponse extends Application {
     }
 
     public enum ServerMethodNames{
-        LoginUser, CoordinatorSHG, GetCardDetails, GetParticipantDetails, GetTrackingDetails, GetSHGList, GetPHQParticipants, GetPHQQuestions,
-        GetPHQOptions, PostSurveyAnswers, GetPHQ9Questions, GetPHQ9Options, PostPHQAnswers, PostScreeningDetails, UpdateEligibilityStatus,
-        GetAllPHQParticipantsDetails, LoginForParticipant, RegisterParticipant, CreateTrackingDetails, IndividualParticipantDetails,
+        LoginUser, CoordinatorSHG, GetCardDetails, GetParticipantDetails, GetTrackingDetails, GetPHQParticipants,
+        GetAllTrackingDetails, PostSurveyAnswers, GetPHQ9Questions, GetPHQ9Options, PostPHQAnswers, PostScreeningDetails,
+        LoginForParticipant, RegisterParticipant, CreateTrackingDetails, IndividualParticipantDetails,
         UpdateParticipantDetails, UpdateParticipantPassword, UpdateRegisterStatus, PostSocioDemography, UpdateSocioTrackingDetails,
         IndividualSocioDemographyDetails, UpdateSocioDemographyDetails, PostDiseasesProfile, UpdateDiseaseTrackingDetails, IndividualDiseaseProfileDetails,
         UpdateDiseaseProfileDetails, UpdateScreeningStatus, GetAllParticipantDetails, GetSurveyQuestions, GetSurveyOptions, GetParticipantScreening
@@ -545,6 +545,15 @@ public class ServerRequestAndResponse extends Application {
                     handleServerResponse.responseReceivedFailure(message);
                 }
                 break;
+
+            case GetAllTrackingDetails:
+                if(participantsAllListServerEvents!=null){
+                    participantsAllListServerEvents.getParticipantTrackingData(message);
+                }else{
+                    handleServerResponse.responseReceivedFailure(message);
+                }
+                break;
+
         }
     }
 
@@ -728,7 +737,9 @@ public class ServerRequestAndResponse extends Application {
         putJsonRequest(context, ServerMethodNames.UpdateSocioDemographyDetails, socioDemography.ToJSON(), url);
     }
 
-
+    public void getAllTrackingDetails(Context context, String url){
+        getJsonRequest(context, ServerMethodNames.GetAllTrackingDetails, url);
+    }
 
 
 

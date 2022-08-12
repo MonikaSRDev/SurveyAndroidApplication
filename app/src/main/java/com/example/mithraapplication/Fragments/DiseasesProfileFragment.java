@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.LocaleList;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.mithraapplication.Adapters.DiseasesProfileAdapter;
+import com.example.mithraapplication.LoginScreen;
 import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
 import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.example.mithraapplication.MithraAppServerEventsListeners.DiseaseProfileServerEvents;
@@ -46,6 +48,7 @@ import com.example.mithraapplication.ModelClasses.UpdateDiseaseProfileTracking;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.ParticipantsScreen;
 import com.example.mithraapplication.R;
+import com.example.mithraapplication.SplashScreen;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -124,20 +127,20 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             diseasesProfile = (ArrayList<DiseasesProfile>) args.getSerializable("ParticipantDiseaseList");
             if(isConfigChanged){
                 if(diseasesProfileAdapter!=null){
-                    setRecyclerView(isEditable, diseasesProfile);
                     isConfigChanged = false;
+                    setRecyclerView(isEditable, diseasesProfile);
                 }
             }else{
-                boolean isValid = getDiseaseProfileData();
-                if(isValid){
-                    if(isEditable!=null && !isEditable.equals("true")){
-                        callServerUpdateDiseaseProfileDetails();
-                    }else{
-                        callServerPostDiseasesProfile();
-                    }
-                }else{
-                    Toast.makeText(context, "Please give all the details.", Toast.LENGTH_LONG).show();
-                }
+//                boolean isValid = getDiseaseProfileData();
+//                if(isValid){
+//                    if(isEditable!=null && !isEditable.equals("true")){
+//                        callServerUpdateDiseaseProfileDetails();
+//                    }else{
+//                        callServerPostDiseasesProfile();
+//                    }
+//                }else{
+//                    Toast.makeText(context, "Please give all the details.", Toast.LENGTH_LONG).show();
+//                }
             }
         }
     };
@@ -320,6 +323,18 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         nextDiseaseProfileButton.setOnClickListener(v -> {
             if(diseasesProfileAdapter != null) {
                 diseasesProfileAdapter.sendDataToActivity();
+                new Handler().postDelayed(() -> {
+                    boolean isValid = getDiseaseProfileData();
+                    if(isValid){
+                        if(isEditable!=null && !isEditable.equals("true")){
+                            callServerUpdateDiseaseProfileDetails();
+                        }else{
+                            callServerPostDiseasesProfile();
+                        }
+                    }else{
+                        Toast.makeText(context, "Please give all the details.", Toast.LENGTH_LONG).show();
+                    }
+                }, 500);
             }
         });
     }

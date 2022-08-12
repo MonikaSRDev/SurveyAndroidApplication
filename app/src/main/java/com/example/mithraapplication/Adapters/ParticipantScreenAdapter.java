@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,7 +50,8 @@ public class ParticipantScreenAdapter extends RecyclerView.Adapter<ParticipantSc
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         View statusView;
-        TextView participantDetailsName, participantDetailsAge, participantDetailsVillage;
+        TextView participantDetailsName, participantDetailsAge, participantDetailsVillage, enrollmentPercentage, surveyPercentage;
+        ProgressBar enrollmentProgressBar, surveyProgressBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,6 +59,10 @@ public class ParticipantScreenAdapter extends RecyclerView.Adapter<ParticipantSc
             participantDetailsName = itemView.findViewById(R.id.participantDetailsName);
             participantDetailsAge = itemView.findViewById(R.id.participantDetailsAge);
             participantDetailsVillage = itemView.findViewById(R.id.participantDetailsVillage);
+            enrollmentPercentage = itemView.findViewById(R.id.enrollmentStatusPercentageParticipants);
+            enrollmentProgressBar = itemView.findViewById(R.id.enrollmentStatusPBParticipants);
+            surveyPercentage = itemView.findViewById(R.id.surveyStatusPercentageParticipants);
+            surveyProgressBar = itemView.findViewById(R.id.surveyProgressBarParticipants);
         }
     }
 

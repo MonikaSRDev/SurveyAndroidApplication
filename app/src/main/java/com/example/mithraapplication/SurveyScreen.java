@@ -508,7 +508,7 @@ public class SurveyScreen extends AppCompatActivity implements HandleServerRespo
         }
         if (questionIndex < questionArray.size()) {
             filteredOptionsArray = optionsArray.stream()
-                    .filter(questionOptions -> !questionOptions.getQuestion_id().equalsIgnoreCase(questionArray.get(questionIndex).getName())).collect(Collectors.toCollection(ArrayList::new));
+                    .filter(questionOptions -> questionOptions.getQuestion_id().equalsIgnoreCase(questionArray.get(questionIndex).getName())).collect(Collectors.toCollection(ArrayList::new));
             if (selectedLanguage.equals("1")) {
                 ph9Question.setText(questionArray.get(questionIndex).getQuestion_e());
                 totalQuestions.setText("of " + questionArray.size() + "");

@@ -25,10 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mithraapplication.Adapters.ParticipantScreenAdapter;
+import com.example.mithraapplication.DashboardScreen;
 import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
 import com.example.mithraapplication.MithraAppServerEventsListeners.ParticipantsAllListServerEvents;
 import com.example.mithraapplication.MithraUtility;
 import com.example.mithraapplication.ModelClasses.PHQLocations;
+import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.R;
@@ -166,6 +168,14 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         serverRequestAndResponse.getAllParticipantsDetails(context, url);
     }
 
+    private void callGetTrackingDetails(){
+        String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.tracking.api.enrollstatus";
+        ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
+        requestObject.setHandleServerResponse(this);
+        requestObject.setParticipantsAllListServerEvents(this);
+        requestObject.getAllTrackingDetails(context, url);
+    }
+
     /**
      * @param newConfig
      * Description : This method is used to update the views on change of language
@@ -204,6 +214,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         ArrayList<RegisterParticipant> registerParticipantsArrayList;
 
         try{
+//            callGetTrackingDetails();
             registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
             registerParticipantsArrayList = registerParticipantsArrayList.stream()
                     .filter(RegisterParticipant -> RegisterParticipant.getParticipantSHGAssociation().equalsIgnoreCase(phqLocations.getSHGName()))
@@ -220,6 +231,23 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
                 setRecyclerView(registerParticipantsArrayList);
             }
         }catch(Exception e){
+            Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void getParticipantTrackingData(String message) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<ParticipantDetails>>(){}.getType();
+        JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+        if(jsonObject.get("message")!=null){
+            try{
+//                registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
+//                oldParticipantsArrayList = registerParticipantsArrayList;
+            }catch(Exception e){
+                Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+            }
+        }else{
             Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
         }
     }

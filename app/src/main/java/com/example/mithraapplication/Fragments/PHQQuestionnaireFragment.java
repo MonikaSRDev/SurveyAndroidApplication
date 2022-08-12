@@ -435,7 +435,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
             if(participantAnswers.getOption_id()!=null && !participantAnswers.getOption_id().equalsIgnoreCase("null")){
                 if(participantAnswers.getSelected_answer_weightage()!=null && !participantAnswers.getSelected_answer_weightage().equalsIgnoreCase("null")){
                     totalScore = totalScore + Integer.parseInt(participantAnswers.getSelected_answer_weightage());
-                    postAnswers = postAnswers + getAnswersList(i, phqParticipantAnswersArrayList);
+                    postAnswers = postAnswers + getAnswersList(i, phqParticipantAnswersArrayList) + ",";
                     i++;
                 }
             }else{
@@ -454,9 +454,9 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         surveyAnswer.add("'option_id'" + ":'" + surveyAnswersArrayList.get(position).getOption_id()+"'");
         surveyAnswer.add("'ans'" + ":'" + surveyAnswersArrayList.get(position).getSelected_answer()+"'");
         surveyAnswer.add("'w'" + ":'" + surveyAnswersArrayList.get(position).getSelected_answer_weightage()+"'");
-        surveyAnswer.add("'qn_start'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_start_time()+"'");
-        surveyAnswer.add("'qn_stop'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_stop_time()+"'");
-        surveyAnswer.add("'seconds'" + ":'" + surveyAnswersArrayList.get(position).getSeconds_taken()+"'");
+//        surveyAnswer.add("'qn_start'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_start_time()+"'");
+//        surveyAnswer.add("'qn_stop'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_stop_time()+"'");
+//        surveyAnswer.add("'seconds'" + ":'" + surveyAnswersArrayList.get(position).getSeconds_taken()+"'");
         String surveyAnswerStr = String.join(",", surveyAnswer );
         surveyAnswerStr = "{" + surveyAnswerStr + "}";
 
@@ -500,7 +500,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         phqSurveyPostAnswers.setType("SUR0001");
         phqSurveyPostAnswers.setScore(String.valueOf(totalScore));
         phqSurveyPostAnswers.setMinutes(totalSurveyTime);
-        phqSurveyPostAnswers.setAnswer(postAnswers); //.substring(0, postAnswers.length()-1)
+        phqSurveyPostAnswers.setAnswer(postAnswers.substring(0, postAnswers.length() - 1)); //.substring(0, postAnswers.length()-1)
         phqSurveyPostAnswers.setSurvey_start_time(surveyStartDateTime);
         phqSurveyPostAnswers.setSurvey_end_time(surveyEndDateTime);
         phqSurveyPostAnswers.setMan_id(ManualID);
