@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.mithraapplication.Adapters.DiseasesProfileAdapter;
-import com.example.mithraapplication.LoginScreen;
 import com.example.mithraapplication.MithraAppServerEvents.HandleServerResponse;
 import com.example.mithraapplication.MithraAppServerEvents.ServerRequestAndResponse;
 import com.example.mithraapplication.MithraAppServerEventsListeners.DiseaseProfileServerEvents;
@@ -48,7 +47,6 @@ import com.example.mithraapplication.ModelClasses.UpdateDiseaseProfileTracking;
 import com.example.mithraapplication.ParticipantProfileScreen;
 import com.example.mithraapplication.ParticipantsScreen;
 import com.example.mithraapplication.R;
-import com.example.mithraapplication.SplashScreen;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
