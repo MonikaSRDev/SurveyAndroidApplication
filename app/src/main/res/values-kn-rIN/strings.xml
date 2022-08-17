@@ -67,7 +67,6 @@
     <string name="village_name">ಗ್ರಾಮ</string>
     <string name="shg_association">ಸ್ವ-ಸಹಾಯ ಗುಂಪು</string>
 
-
     <string name="socio_demography">ಸಾಮಾಜಿಕ ಜನಸಂಖ್ಯಾಶಾಸ್ತ್ರ</string>
     <string name="SHGMeetings6Months">ಕಳೆದ ತಿಂಗಳುಗಳಲ್ಲಿ ನೀವು\nಎಷ್ಟು CBO ಸಭೆಗಳಿಗೆ\nಹಾಜರಾಗಿದ್ದೀರಿ?</string>
     <string name="no_schooling">ಶಾಲಾ ಶಿಕ್ಷಣವಿಲ್ಲ</string>
@@ -158,7 +157,6 @@
     <string name="phq_screening_id">PHQ ಸ್ಕ್ರೀನಿಂಗ್ ಐಡಿ</string>
     <string name="coordinator_shg">ಸಂಯೋಜಕರ ಎಸ್.ಎಚ್.ಜಿ</string>
     <string name="researcher_shg">ಸಂಶೋಧಕರ ಎಸ್.ಎಚ್.ಜಿ</string>
-
 
     <string name="something_wrong">ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="update_message">ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ.</string>
