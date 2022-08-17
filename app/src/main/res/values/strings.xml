@@ -1,7 +1,7 @@
 <resources>
 
-    <!--    <string name="base_url" translatable="false">192.168.2.156:80</string>-->
-    <string name="base_url" translatable="false">43.205.146.90</string>
+        <string name="base_url" translatable="false">192.168.2.156:80</string>
+<!--    <string name="base_url" translatable="false">43.205.146.90</string>-->
 
     <string name="app_name">Mithra</string>
     <string name="sign_in" translatable="false">Sign In</string>
@@ -167,7 +167,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="update">Update</string>
     <string name="not_eligible_text">Regret to say that you are not eligible for the Survey</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="phq_screening">SHG Screening</string>
     <string name="phq_screen">PHQ Screening</string>
     <string name="phq_screening_id">PHQ Screening ID</string>

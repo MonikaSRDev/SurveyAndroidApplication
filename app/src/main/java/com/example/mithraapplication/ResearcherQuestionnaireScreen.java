@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mithraapplication.Adapters.ResearcherQuestionnaireAdapter;
-import com.example.mithraapplication.ModelClasses.SurveyQuestionAnswers;
+import com.example.mithraapplication.ModelClasses.QuestionAnswers;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -22,7 +22,7 @@ import java.util.Locale;
 public class ResearcherQuestionnaireScreen extends AppCompatActivity {
 
     private ResearcherQuestionnaireAdapter questionnaireSingleAdapter;
-    private ArrayList<SurveyQuestionAnswers> surveyQuestionAnswersArrayList = new ArrayList<>() ;
+    private ArrayList<QuestionAnswers> surveyQuestionAnswersArrayList = new ArrayList<>() ;
     private RecyclerView recyclerViewSurvey;
     private TextView participantName;
     private Button englishButton, kannadaButton;
@@ -41,40 +41,40 @@ public class ResearcherQuestionnaireScreen extends AppCompatActivity {
     }
 
     private void initializeData(){
-        SurveyQuestionAnswers surveyQuestionAnswers = new SurveyQuestionAnswers();
-        surveyQuestionAnswers.setE_Question("This is the first question");
-        surveyQuestionAnswers.setQuestionNumber("1.");
+        QuestionAnswers surveyQuestionAnswers = new QuestionAnswers();
+        surveyQuestionAnswers.setQuestion_e("This is the first question");
+        surveyQuestionAnswers.setQn_number("1.");
         surveyQuestionAnswers.setSection("1");
-        surveyQuestionAnswers.setSectionHeading("Please complete the question before moving to the next question.");
-        surveyQuestionAnswers.setInputType("text");
+        surveyQuestionAnswers.setSection_name("Please complete the question before moving to the next question.");
+        surveyQuestionAnswers.setOption_type("text");
 
-        SurveyQuestionAnswers surveyQuestionAnswers1 = new SurveyQuestionAnswers();
-        surveyQuestionAnswers1.setE_Question("This is the second question");
-        surveyQuestionAnswers1.setQuestionNumber("2.");
+        QuestionAnswers surveyQuestionAnswers1 = new QuestionAnswers();
+        surveyQuestionAnswers1.setQuestion_e("This is the second question");
+        surveyQuestionAnswers1.setQn_number("2.");
         surveyQuestionAnswers1.setSection("1");
-        surveyQuestionAnswers1.setSectionHeading("Please complete the question before moving to the next question.");
-        surveyQuestionAnswers1.setInputType("numeric");
+        surveyQuestionAnswers1.setSection_name("Please complete the question before moving to the next question.");
+        surveyQuestionAnswers1.setOption_type("numeric");
 
-        SurveyQuestionAnswers surveyQuestionAnswers2 = new SurveyQuestionAnswers();
-        surveyQuestionAnswers2.setE_Question("This is the third question");
-        surveyQuestionAnswers2.setQuestionNumber("3.");
+        QuestionAnswers surveyQuestionAnswers2 = new QuestionAnswers();
+        surveyQuestionAnswers2.setQuestion_e("This is the third question");
+        surveyQuestionAnswers2.setQn_number("3.");
         surveyQuestionAnswers2.setSection("1");
-        surveyQuestionAnswers2.setSectionHeading("Please complete the question before moving to the next question.");
-        surveyQuestionAnswers2.setInputType("date");
+        surveyQuestionAnswers2.setSection_name("Please complete the question before moving to the next question.");
+        surveyQuestionAnswers2.setOption_type("date");
 
-        SurveyQuestionAnswers surveyQuestionAnswers3 = new SurveyQuestionAnswers();
-        surveyQuestionAnswers3.setE_Question("This is the fourth question");
-        surveyQuestionAnswers3.setQuestionNumber("4.");
+        QuestionAnswers surveyQuestionAnswers3 = new QuestionAnswers();
+        surveyQuestionAnswers3.setQuestion_e("This is the fourth question");
+        surveyQuestionAnswers3.setQn_number("4.");
         surveyQuestionAnswers3.setSection("1");
-        surveyQuestionAnswers3.setSectionHeading("Please complete the question before moving to the next question.");
-        surveyQuestionAnswers3.setInputType("single");
+        surveyQuestionAnswers3.setSection_name("Please complete the question before moving to the next question.");
+        surveyQuestionAnswers3.setOption_type("single");
 
-        SurveyQuestionAnswers surveyQuestionAnswers4 = new SurveyQuestionAnswers();
-        surveyQuestionAnswers4.setE_Question("This is the fifth question");
-        surveyQuestionAnswers4.setQuestionNumber("5.");
+        QuestionAnswers surveyQuestionAnswers4 = new QuestionAnswers();
+        surveyQuestionAnswers4.setQuestion_e("This is the fifth question");
+        surveyQuestionAnswers4.setQn_number("5.");
         surveyQuestionAnswers4.setSection("1");
-        surveyQuestionAnswers4.setSectionHeading("Please complete the question before moving to the next question.");
-        surveyQuestionAnswers4.setInputType("multi_choice");
+        surveyQuestionAnswers4.setSection_name("Please complete the question before moving to the next question.");
+        surveyQuestionAnswers4.setOption_type("multi_choice");
 
         surveyQuestionAnswersArrayList.add(surveyQuestionAnswers);
         surveyQuestionAnswersArrayList.add(surveyQuestionAnswers1);

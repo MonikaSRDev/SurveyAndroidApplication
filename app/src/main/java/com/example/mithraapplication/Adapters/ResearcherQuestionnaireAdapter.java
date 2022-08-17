@@ -16,14 +16,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mithraapplication.ModelClasses.SurveyQuestionAnswers;
+import com.example.mithraapplication.ModelClasses.QuestionAnswers;
 import com.example.mithraapplication.R;
 
 import java.util.ArrayList;
 
 public class ResearcherQuestionnaireAdapter extends RecyclerView.Adapter<ResearcherQuestionnaireAdapter.ViewHolder>{
     private Context context;
-    private ArrayList<SurveyQuestionAnswers> surveyQuestionAnswersArrayList;
+    private ArrayList<QuestionAnswers> surveyQuestionAnswersArrayList;
     @NonNull
     @Override
     public ResearcherQuestionnaireAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -33,7 +33,7 @@ public class ResearcherQuestionnaireAdapter extends RecyclerView.Adapter<Researc
         return new ResearcherQuestionnaireAdapter.ViewHolder(view);
     }
 
-    public ResearcherQuestionnaireAdapter(Context context, ArrayList<SurveyQuestionAnswers> surveyQuestionAnswersArrayList){
+    public ResearcherQuestionnaireAdapter(Context context, ArrayList<QuestionAnswers> surveyQuestionAnswersArrayList){
         this.surveyQuestionAnswersArrayList = surveyQuestionAnswersArrayList;
         this.context = context;
     }
@@ -63,22 +63,22 @@ public class ResearcherQuestionnaireAdapter extends RecyclerView.Adapter<Researc
     @Override
     public void onBindViewHolder(@NonNull ResearcherQuestionnaireAdapter.ViewHolder holder, int position) {
 
-        SurveyQuestionAnswers surveyQuestionAnswers = surveyQuestionAnswersArrayList.get(position);
+        QuestionAnswers surveyQuestionAnswers = surveyQuestionAnswersArrayList.get(position);
 
-        holder.questionNumber.setText(surveyQuestionAnswers.getQuestionNumber());
-        holder.questionTV.setText(surveyQuestionAnswers.getE_Question());
+        holder.questionNumber.setText(surveyQuestionAnswers.getQn_number());
+        holder.questionTV.setText(surveyQuestionAnswers.getQuestion_e());
 
-        if(surveyQuestionAnswers.getInputType()!=null && surveyQuestionAnswers.getInputType().equalsIgnoreCase("numeric")){
+        if(surveyQuestionAnswers.getOption_type()!=null && surveyQuestionAnswers.getOption_type().equalsIgnoreCase("numeric")){
             holder.answerEditText.setVisibility(View.VISIBLE);
             holder.answerEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
             holder.answersRadioGroup.setVisibility(View.GONE);
             holder.answersCheckBox.setVisibility(View.GONE);
-        }else if(surveyQuestionAnswers.getInputType()!=null && surveyQuestionAnswers.getInputType().equalsIgnoreCase("date")){
+        }else if(surveyQuestionAnswers.getOption_type()!=null && surveyQuestionAnswers.getOption_type().equalsIgnoreCase("date")){
             holder.answerEditText.setVisibility(View.VISIBLE);
             holder.answerEditText.setInputType(InputType.TYPE_CLASS_DATETIME);
             holder.answersRadioGroup.setVisibility(View.GONE);
             holder.answersCheckBox.setVisibility(View.GONE);
-        }else if(surveyQuestionAnswers.getInputType()!=null && surveyQuestionAnswers.getInputType().equalsIgnoreCase("single")){
+        }else if(surveyQuestionAnswers.getOption_type()!=null && surveyQuestionAnswers.getOption_type().equalsIgnoreCase("single")){
             holder.answersRadioGroup.setVisibility(View.VISIBLE);
             holder.answerEditText.setVisibility(View.GONE);
             holder.answersCheckBox.setVisibility(View.GONE);
@@ -91,7 +91,7 @@ public class ResearcherQuestionnaireAdapter extends RecyclerView.Adapter<Researc
                 holder.answersRadioGroup.addView(rdbtn);
             }
 
-        }else if(surveyQuestionAnswers.getInputType()!=null && surveyQuestionAnswers.getInputType().equalsIgnoreCase("multi_choice")){
+        }else if(surveyQuestionAnswers.getOption_type()!=null && surveyQuestionAnswers.getOption_type().equalsIgnoreCase("multi_choice")){
             holder.answersCheckBox.setVisibility(View.VISIBLE);
             holder.answerEditText.setVisibility(View.GONE);
             holder.answersRadioGroup.setVisibility(View.GONE);
@@ -101,7 +101,7 @@ public class ResearcherQuestionnaireAdapter extends RecyclerView.Adapter<Researc
                 cb.setTextColor(context.getResources().getColor(R.color.text_color));
                 holder.answersCheckBox.addView(cb);
             }
-        }else if(surveyQuestionAnswers.getInputType()!=null && surveyQuestionAnswers.getInputType().equalsIgnoreCase("text")){
+        }else if(surveyQuestionAnswers.getOption_type()!=null && surveyQuestionAnswers.getOption_type().equalsIgnoreCase("text")){
             holder.answerEditText.setVisibility(View.VISIBLE);
             holder.answerEditText.setInputType(InputType.TYPE_CLASS_TEXT);
             holder.answersRadioGroup.setVisibility(View.GONE);
