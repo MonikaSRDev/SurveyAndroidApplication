@@ -1,4 +1,8 @@
 <resources>
+
+    <!--    <string name="base_url" translatable="false">192.168.2.156:80</string>-->
+    <string name="base_url" translatable="false">43.205.146.90</string>
+
     <string name="app_name">Mithra</string>
     <string name="sign_in" translatable="false">Sign In</string>
     <string name="userid" translatable="false">UserId</string>
@@ -17,7 +21,6 @@
     <string name="register">Register</string>
     <string name="save">Save</string>
 
-
     <string name="next_question">Next</string>
     <string name="disease_profile">Disease Profile</string>
     <string name="thyroid" translatable="false">Thyroid</string>
@@ -29,9 +32,6 @@
     <string name="diagnosed_age">How old were you when this was diagnosed?</string>
     <string name="specify_disease">Specify other disease</string>
     <string name="kannada">ಕನ್ನಡ</string>
-
-<!--    <string name="base_url" translatable="false">192.168.2.156:80</string>-->
-    <string name="base_url" translatable="false">43.205.146.90</string>
 
     <string name="mp_token" translatable="false">token 2559f591d98ea66:9e2cdc0890cc4eb</string>
     <string name="mc_token" translatable="false">token c043b3fae600f17:b7d57f73ccc6f7e</string>
@@ -46,8 +46,6 @@
     <string name="user_name_coordinator" translatable="false">CoordinatorUserName</string>
     <string name="user_name_researcher" translatable="false">ResearcherUserName</string>
     <string name="survey_answers" translatable="false">Survey Answers</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="logout">Logout</string>
     <string name="back">Back</string>
     <string name="survey">Survey</string>
