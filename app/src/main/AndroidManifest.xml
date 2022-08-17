@@ -78,7 +78,7 @@
             android:configChanges="locale"/>
 
         <activity
-            android:name=".QuestionnaireSingleScreen"
+            android:name=".ResearcherQuestionnaireScreen"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan|stateHidden"
             android:configChanges="locale"/>
@@ -103,6 +103,18 @@
 
         <activity
             android:name=".CoordinatorSHGList"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:configChanges="locale"/>
+
+        <activity
+            android:name=".ResearcherSHGList"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:configChanges="locale"/>
+
+        <activity
+            android:name=".ResearcherParticipantsScreen"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan|stateHidden"
             android:configChanges="locale"/>

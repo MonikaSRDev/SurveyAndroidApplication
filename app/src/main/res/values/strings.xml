@@ -29,8 +29,10 @@
     <string name="diagnosed_age">How old were you when this was diagnosed?</string>
     <string name="specify_disease">Specify other disease</string>
     <string name="kannada">ಕನ್ನಡ</string>
-    <string name="base_url" translatable="false">192.168.2.156:80</string>
-<!--    <string name="base_url" translatable="false">43.205.146.90</string>-->
+
+<!--    <string name="base_url" translatable="false">192.168.2.156:80</string>-->
+    <string name="base_url" translatable="false">43.205.146.90</string>
+
     <string name="mp_token" translatable="false">token 2559f591d98ea66:9e2cdc0890cc4eb</string>
     <string name="mc_token" translatable="false">token c043b3fae600f17:b7d57f73ccc6f7e</string>
     <string name="participate_name" translatable="false">Participate 1</string>
@@ -92,6 +94,7 @@
     <string name="trackingDiseaseProfile" translatable="false">DiseaseProfileName</string>
     <string name="participantPrimaryID" translatable="false">ParticipantPrimaryID</string>
     <string name="coordinatorPrimaryID" translatable="false">CoordinatorPrimaryID</string>
+    <string name="researcherPrimaryID" translatable="false">CoordinatorPrimaryID</string>
     <string name="userPassword" translatable="false">Password</string>
     <string name="user_name">User Name</string>
     <string name="password">Password</string>
@@ -172,6 +175,7 @@
     <string name="phq_screening_id">PHQ Screening ID</string>
     <string name="manual_id">Manual ID</string>
     <string name="coordinator_shg">Coordinator SHG</string>
+    <string name="researcher_shg">Researcher SHG</string>
     <string name="pre_screening">Pre screening</string>
     <string name="phq9">PHQ9</string>
     <string name="bads">BADS</string>
@@ -193,5 +197,36 @@
     <string name="registration_sp" translatable="false">Registration</string>
     <string name="socio_demography_sp" translatable="false">SocioDemography</string>
     <string name="disease_profile_sp" translatable="false">DiseaseProfile</string>
+
+    <string name="something_wrong">Something went wrong. Please try again later.</string>
+    <string name="update_message">Updated Successfully.</string>
+    <string name="enter_all_details">Please give all the details.</string>
+    <string name="answer_all_questions">Please answer all the questions.</string>
+    <string name="name_min_5">Name should be minimum of 5 characters.</string>
+    <string name="enter_name">Please enter Name.</string>
+    <string name="enter_man_id">Please enter Manual ID.</string>
+    <string name="man_min_5">Manual ID should be minimum of 5 characters.</string>
+    <string name="enter_name_participant">Please enter the participant name.</string>
+    <string name="enter_age">Please enter the participant age.</string>
+    <string name="age_above_18">Participant age should be 18 and above.</string>
+    <string name="enter_phone_num">Please enter the participant phone number.</string>
+    <string name="enter_valid_phone_num">Please enter a valid participant phone number.</string>
+    <string name="username_min_4">Username must be minimum of 4 characters</string>
+    <string name="enter_password">Please enter a password.</string>
+    <string name="password_min_4">Password must be minimum of 4 characters.</string>
+    <string name="password_not_matching">Password does not match. Please check and re-enter the password.</string>
+    <string name="survey_pending">Survey\'s Pending</string>
+
+    <string name="not_active_message">Regret to say that you are Inactive.</string>
+    <string name="no_access_message">Regret to say that you are not allowed to use the application.</string>
+
+    <string name="login_active_date" translatable="false">2022-08-31</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
+    <string name="reason">Reason</string>
+    <string name="no_survey_taken_to_display">No survey taken to display</string>
+    <string name="status_update">Previous and current status are both same.</string>
+    <string name="current_status">Current Status</string>
+    <string name="report">Report</string>
 
 </resources>

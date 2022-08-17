@@ -30,5 +30,19 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
+        <TextView
+            android:id="@+id/noSurveyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_survey_taken_to_display"
+            android:textColor="@color/text_color"
+            android:textSize="22sp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

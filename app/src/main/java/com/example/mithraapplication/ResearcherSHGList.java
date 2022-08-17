@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class CoordinatorSHGList extends AppCompatActivity implements HandleServerResponse, CoordinatorSHGServerEvents {
+public class ResearcherSHGList extends AppCompatActivity implements HandleServerResponse, CoordinatorSHGServerEvents {
     private GridView phqGridView;
     private LinearLayout phqScreeningLinearlayout, dashboardLinearLayout, participantLinearLayout;
     private TextView phqScreeningTV, dashboardTV, participantTV, coordinatorSHGTV, phqScreenTitle;
@@ -63,6 +63,7 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         phqScreeningLinearlayout = findViewById(R.id.phqScreeningLL);
         phqScreeningTV = findViewById(R.id.phqScreeningTV);
         phqScreeningIcon = findViewById(R.id.phqScreeningIcon);
+        phqScreeningLinearlayout.setVisibility(View.GONE);
 
         dashboardLinearLayout = findViewById(R.id.dashboardLinearLayoutPHQ);
         dashboardTV = findViewById(R.id.dashboardTVPHQ);
@@ -74,7 +75,7 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
 
         participantTV.setTextColor(getResources().getColor(R.color.text_color));
         participantLinearLayout.setBackgroundResource(R.drawable.selected_page);
-        participantIcon.setImageDrawable(getResources().getDrawable(R.drawable.participants_icon_black, CoordinatorSHGList.this.getTheme()));
+        participantIcon.setImageDrawable(getResources().getDrawable(R.drawable.participants_icon_black, ResearcherSHGList.this.getTheme()));
 
         coordinatorSHGTV = findViewById(R.id.dashboardTitleTVPHQ);
         coordinatorSHGTV.setText("Coordinator SHG List");
@@ -83,25 +84,25 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         kannadaButton = findViewById(R.id.kannadaButtonPHQ);
 
         phqScreenTitle = findViewById(R.id.dashboardTitleTVPHQ);
-        phqScreenTitle.setText(R.string.coordinator_shg);
+        phqScreenTitle.setText(R.string.researcher_shg);
     }
 
     private void moveToDashboardScreen(){
         dashboardLinearLayout.setOnClickListener(v -> {
-            Intent participantIntent = new Intent(CoordinatorSHGList.this, DashboardScreen.class);
+            Intent participantIntent = new Intent(ResearcherSHGList.this, DashboardScreen.class);
             startActivity(participantIntent);
         });
     }
 
     private void moveToPHQScreening(){
         phqScreeningLinearlayout.setOnClickListener(v -> {
-            Intent participantIntent = new Intent(CoordinatorSHGList.this, PHQ9SHGListScreen.class);
+            Intent participantIntent = new Intent(ResearcherSHGList.this, PHQ9SHGListScreen.class);
             startActivity(participantIntent);
         });
     }
 
     private void moveToParticipantsScreen(PHQLocations phqLocations){
-        Intent participantIntent = new Intent(CoordinatorSHGList.this, ParticipantsScreen.class);
+        Intent participantIntent = new Intent(ResearcherSHGList.this, ResearcherParticipantsScreen.class);
         participantIntent.putExtra("PHQLocations", (Serializable) phqLocations);
         startActivity(participantIntent);
     }
@@ -124,18 +125,18 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
     private void callGetCoordinatorSHGList(){
         String url = "http://"+ getString(R.string.base_url)+ "/api/method/mithra.mithra.doctype.location.api.co_eli_loc_list";
         PHQLocations phqCoordinatorLocations = new PHQLocations();
-        phqCoordinatorLocations.setCoordinatorName(mithraUtility.getSharedPreferencesData(CoordinatorSHGList.this, getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
+        phqCoordinatorLocations.setCoordinatorName(mithraUtility.getSharedPreferencesData(ResearcherSHGList.this, getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
         phqCoordinatorLocations.setEligible("yes");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.setCoordinatorSHGServerEvents(this);
-        requestObject.getCoordinatorLocations(CoordinatorSHGList.this, phqCoordinatorLocations, url);
+        requestObject.getCoordinatorLocations(ResearcherSHGList.this, phqCoordinatorLocations, url);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(CoordinatorSHGList.this, DashboardScreen.class);
+        Intent intent = new Intent(ResearcherSHGList.this, DashboardScreen.class);
         startActivity(intent);
         finish();
     }
@@ -146,17 +147,17 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
     private void onClickOfLanguageButton(){
         englishButton.setOnClickListener(v -> {
             englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-            englishButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            englishButton.setTextColor(getResources().getColor(R.color.black, ResearcherSHGList.this.getTheme()));
             kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-            kannadaButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, ResearcherSHGList.this.getTheme()));
             changeLocalLanguage("en");
         });
 
         kannadaButton.setOnClickListener(v -> {
             kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-            kannadaButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, ResearcherSHGList.this.getTheme()));
             englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
-            englishButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            englishButton.setTextColor(getResources().getColor(R.color.black, ResearcherSHGList.this.getTheme()));
             changeLocalLanguage("kn");
         });
     }
@@ -182,14 +183,14 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         LocaleList lang = conf.getLocales();
         if(lang.get(0).getLanguage().equals("kn")){
             kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_selected_button);
-            kannadaButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, ResearcherSHGList.this.getTheme()));
             englishButton.setBackgroundResource(R.drawable.left_english_toggle_button);
-            englishButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            englishButton.setTextColor(getResources().getColor(R.color.black, ResearcherSHGList.this.getTheme()));
         }else{
             englishButton.setBackgroundResource(R.drawable.left_english_toggle_selected_button);
-            englishButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            englishButton.setTextColor(getResources().getColor(R.color.black, ResearcherSHGList.this.getTheme()));
             kannadaButton.setBackgroundResource(R.drawable.right_kannada_toggle_button);
-            kannadaButton.setTextColor(getResources().getColor(R.color.black, CoordinatorSHGList.this.getTheme()));
+            kannadaButton.setTextColor(getResources().getColor(R.color.black, ResearcherSHGList.this.getTheme()));
         }
         res.updateConfiguration(conf, dm);
         onConfigurationChanged(conf);
@@ -205,7 +206,7 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
         participantTV.setText(R.string.participants);
         dashboardTV.setText(R.string.dashboard);
         phqScreeningTV.setText(R.string.phq_screening);
-        phqScreenTitle.setText(R.string.coordinator_shg);
+        phqScreenTitle.setText(R.string.researcher_shg);
     }
 
     @Override
@@ -228,10 +229,10 @@ public class CoordinatorSHGList extends AppCompatActivity implements HandleServe
                     setGridViewAdapter();
                 }
             } catch (Exception e) {
-                Toast.makeText(CoordinatorSHGList.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ResearcherSHGList.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
             }
         }else{
-            Toast.makeText(CoordinatorSHGList.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(ResearcherSHGList.this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
         }
     }
 

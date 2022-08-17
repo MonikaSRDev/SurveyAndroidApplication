@@ -57,6 +57,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     private PHQLocations phqLocations;
     private final MithraUtility mithraUtility = new MithraUtility();
     private Dialog dialog;
+    private ArrayList<ParticipantDetails> registerParticipantsArrayList = new ArrayList<>();
 
     public ParticipantsAllListFragment(Context context, PHQLocations phqLocations) {
         this.context = context;
@@ -79,7 +80,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         super.onViewCreated(view, savedInstanceState);
         startProgressBar();
         RegisterViews(view);
-        callGetAllParticipantsDetails();
+        callGetTrackingDetails();
         onClickAddNewParticipantIcon();
         onClickFloatingAddNewParticipantButton();
     }
@@ -118,7 +119,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
     }
 
     private void setRecyclerView(ArrayList<RegisterParticipant> registerParticipants){
-        participantScreenAdapter = new ParticipantScreenAdapter(context, registerParticipants, this::moveToParticipantProfileScreen);
+        participantScreenAdapter = new ParticipantScreenAdapter(context, registerParticipants, registerParticipantsArrayList, this::moveToParticipantProfileScreen);
         participantListRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false){
             @Override
             public void onLayoutCompleted(final RecyclerView.State state) {
@@ -214,11 +215,11 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         ArrayList<RegisterParticipant> registerParticipantsArrayList;
 
         try{
-//            callGetTrackingDetails();
             registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
             registerParticipantsArrayList = registerParticipantsArrayList.stream()
                     .filter(RegisterParticipant -> RegisterParticipant.getParticipantSHGAssociation().equalsIgnoreCase(phqLocations.getSHGName()))
                     .collect(Collectors.toCollection(ArrayList::new));
+
             if(registerParticipantsArrayList.size() == 0){
                 stopProgressBar();
                 addNewParticipantIcon.setVisibility(View.VISIBLE);
@@ -242,8 +243,11 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
         JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
         if(jsonObject.get("message")!=null){
             try{
-//                registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
-//                oldParticipantsArrayList = registerParticipantsArrayList;
+                registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
+                registerParticipantsArrayList = registerParticipantsArrayList.stream()
+                        .filter(ParticipantDetails -> ParticipantDetails.getShg_associate().equalsIgnoreCase(phqLocations.getSHGName()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                callGetAllParticipantsDetails();
             }catch(Exception e){
                 Toast.makeText(context, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
             }
@@ -259,7 +263,7 @@ public class ParticipantsAllListFragment extends Fragment implements HandleServe
             String serverErrorResponse = jsonObject.get("exception").toString();
             mithraUtility.showAppropriateMessages(context, serverErrorResponse);
         }else{
-            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
         }
     }
 }

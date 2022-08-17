@@ -133,7 +133,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
      * Description : This method is used to display the profile data entered by the user for viewing.
      */
     private void displayDiseaseProfileData(ViewHolder holder, DiseasesProfile diseasesProfile){
-        if(isEditable!=null && !isEditable.equals("true")){
+//        if(isEditable!=null && !isEditable.equals("true")){
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosed(diseasesProfile.getDiagnosed());
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setDiagnosedAge(diseasesProfile.getDiagnosedAge());
             userEnteredDiseasesProfileArrayList.get(holder.getAbsoluteAdapterPosition()).setReceivedTreatment(diseasesProfile.getReceivedTreatment());
@@ -154,7 +154,7 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
                 holder.expandableConstraintLayout.setVisibility(View.GONE);
             }
 
-            if(!diseasesProfile.getDiagnosedAge().equalsIgnoreCase("null")){
+            if(!diseasesProfile.getDiagnosedAge().equalsIgnoreCase("null") && !diseasesProfile.getDiagnosedAge().equalsIgnoreCase("How old were you when this was diagnosed?")){
                 holder.diagnosedAgeET.setText(diseasesProfile.getDiagnosedAge());
             }else{
                 holder.diagnosedAgeET.setText("");
@@ -182,12 +182,12 @@ public class DiseasesProfileAdapter extends RecyclerView.Adapter<DiseasesProfile
                 holder.noLimitActivities.setBackgroundResource(R.drawable.yes_no_button);
             }
 
-            if(!diseasesProfile.getSpecifyDisease().equalsIgnoreCase("null")){
+            if(!diseasesProfile.getSpecifyDisease().equalsIgnoreCase("null") && !diseasesProfile.getSpecifyDisease().equalsIgnoreCase("Specify other disease")){
                 holder.specifyDiseaseET.setText(diseasesProfile.getSpecifyDisease());
             }else{
                 holder.specifyDiseaseET.setText("");
             }
-        }
+//        }
     }
 
     /**

@@ -186,18 +186,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         if(isEditable!=null && !isEditable.equals("true")){
             callGetParticipantTrackingDetails();
 //            ((LinearLayout) Objects.requireNonNull(profileTabLayout.getTabAt(0)).view).setVisibility(View.GONE);
-
-            TabLayout.Tab tab = profileTabLayout.getTabAt(0);
-            assert tab != null;
-            tab.setText(R.string.profile);
-//            Objects.requireNonNull(profileTabLayout.getTabAt(0)).setText(R.string.profile);
-            enableTab(1);
-            enableTab(2);
-            if(registerParticipant!=null){
-                profileParticipantName.setText(registerParticipant.getParticipantName());
-            }
-//            profileTabLayout.addTab(profileTabLayout.newTab().setText("Report"), 3);  // as of now not required
-            setVisibilityForEdit(true);
         }else{
             trackingParticipantStatus = null;
             setupSelectedTabFragment(0);
@@ -252,17 +240,29 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                         registerParticipant.setUser_pri_id(participant_primary_ID);
                         enableTab(0);
                         enableTab(1);
-                        enableTab(2);
+                        disableTab(2);
                         isEditable = "false";
                     }else{
                         trackingParticipantStatus = null;
                         isEditable = "true";
                         enableTab(0);
-                        enableTab(1);
+                        disableTab(1);
+                        disableTab(2);
                     }
 
+                if(socioDemographyName!=null && !socioDemographyName.equals("NULL")){
+                    trackingParticipantStatus.setName(tracking);
+                    trackingParticipantStatus.setRegistration(registrationName);
+                    trackingParticipantStatus.setSocio_demography(socioDemographyName);
+                    registerParticipant.setUser_pri_id(participant_primary_ID);
+                    enableTab(0);
+                    enableTab(1);
+                    enableTab(2);
+                    isEditable = "false";
+                }
+
                     break;
-            case 1: if(registrationName!=null && !socioDemographyName.equals("NULL")){
+            case 1: if(socioDemographyName!=null && !socioDemographyName.equals("NULL")){
                         trackingParticipantStatus.setName(tracking);
                         trackingParticipantStatus.setRegistration(registrationName);
                         trackingParticipantStatus.setSocio_demography(socioDemographyName);
@@ -275,10 +275,10 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                         isEditable = "true";
                         enableTab(0);
                         enableTab(1);
-                        enableTab(2);
+                        disableTab(2);
                     }
                     break;
-            case 2: if(registrationName!=null && !diseaseProfileName.equals("NULL")){
+            case 2: if(diseaseProfileName!=null && !diseaseProfileName.equals("NULL")){
                         trackingParticipantStatus.setName(tracking);
                         trackingParticipantStatus.setRegistration(registrationName);
                         trackingParticipantStatus.setSocio_demography(socioDemographyName);
@@ -293,8 +293,6 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                     enableTab(2);
 //                    enableTab(3);
                     break;
-            case 3: break;
-
         }
     }
 
@@ -422,7 +420,7 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
     }
 
     private void callGetParticipantTrackingDetails(){
-        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\"]&or_filters=[[\"user_pri_id\", \"=\", \"" + registerParticipant.getUser_pri_id() + "\"]]";
+        String url = "http://"+ getString(R.string.base_url)+ "/api/resource/tracking?fields=[\"name\",\"registration\",\"socio_demography\",\"disease_profile\",\"enroll\"]&or_filters=[[\"user_pri_id\", \"=\", \"" + registerParticipant.getUser_pri_id() + "\"]]";
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
         requestObject.setParticipantProfileServerEvents(this);
@@ -482,6 +480,9 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
         }
         Objects.requireNonNull(profileTabLayout.getTabAt(1)).setText(R.string.socio_demography);
         Objects.requireNonNull(profileTabLayout.getTabAt(2)).setText(R.string.disease_profile);
+        if(profileTabLayout.getTabAt(3)!=null){
+            Objects.requireNonNull(profileTabLayout.getTabAt(3)).setText(R.string.report);
+        }
         super.onConfigurationChanged(newConfig);
     }
 
@@ -544,6 +545,20 @@ public class ParticipantProfileScreen extends AppCompatActivity implements Handl
                 mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.registration_sp), participant_primary_ID, trackingParticipantStatus.getRegistration());
                 mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.socio_demography_sp), participant_primary_ID, trackingParticipantStatus.getSocio_demography());
                 mithraUtility.putSharedPreferencesData(ParticipantProfileScreen.this, getString(R.string.disease_profile_sp), participant_primary_ID, trackingParticipantStatus.getDisease_profile());
+
+                TabLayout.Tab tab = profileTabLayout.getTabAt(0);
+                assert tab != null;
+                tab.setText(R.string.profile);
+                enableTab(1);
+                enableTab(2);
+                if(registerParticipant!=null){
+                    profileParticipantName.setText(registerParticipant.getParticipantName());
+                }
+                if(trackingParticipantStatus.getEnroll().equalsIgnoreCase("yes")){
+                    profileTabLayout.addTab(profileTabLayout.newTab().setText(getString(R.string.report)), 3);
+                    enableTab(3);
+                }
+                setVisibilityForEdit(true);
             }else{
                 trackingParticipantStatus = null;
             }

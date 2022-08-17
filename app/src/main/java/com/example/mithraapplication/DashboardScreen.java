@@ -64,7 +64,6 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         setContentView(R.layout.activity_dashboard_screen);
         RegisterViews();
         callGetCardDetails();
-//        callGetAllParticipantsDetails();
         callGetParticipantDetails();
         setOnClickForParticipants();
         onClickOfLanguageButton();
@@ -73,7 +72,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         onClickOfPHQScreening();
 
         mithraLogoDashboard.setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardScreen.this, QuestionnaireSingleScreen.class);
+            Intent intent = new Intent(DashboardScreen.this, ResearcherQuestionnaireScreen.class);
             startActivity(intent);
         });
     }
@@ -365,6 +364,10 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
         if(jsonObject.get("message")!=null){
             try{
                 registerParticipantsArrayList = gson.fromJson(jsonObject.get("message"), type);
+                registerParticipantsArrayList = registerParticipantsArrayList.stream()
+                        .filter(ParticipantDetails -> ParticipantDetails.getActive().equalsIgnoreCase("yes"))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
                 oldParticipantsArrayList = registerParticipantsArrayList;
                 if(registerParticipantsArrayList.size() == 0){
 //                    floatingActionButton.setVisibility(View.GONE);
@@ -391,7 +394,7 @@ public class DashboardScreen extends AppCompatActivity implements HandleServerRe
             String serverErrorResponse = jsonObject.get("exception").toString();
             mithraUtility.showAppropriateMessages(this, serverErrorResponse);
         }else{
-            Toast.makeText(this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
         }
     }
 

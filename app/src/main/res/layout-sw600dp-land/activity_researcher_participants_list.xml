@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutResearcher"
+        android:layout_width="166dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/vertical_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/appLogoResearcher"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/mithra_logo" />
+
+        <LinearLayout
+            android:id="@+id/dashboardLinearLayoutResearcher"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="80dp"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.686"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appLogoResearcher">
+
+            <ImageView
+                android:id="@+id/dashboardIconResearcher"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="18dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/dashboard_icon" />
+
+            <TextView
+                android:id="@+id/dashboardTVResearcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
+                android:text="@string/dashboard"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/participantLinearLayoutResearcher"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.627"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dashboardLinearLayoutResearcher"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/researcherParticipantsIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="18dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/participants_icon" />
+
+            <TextView
+                android:id="@+id/researcherParticipantsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
+                android:text="@string/participants"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/PHQScreeningLinearLayoutParticipant"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="start"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.627"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/participantLinearLayoutResearcher"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/PHQScreeningIconParticipant"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="18dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/participants_icon" />
+
+            <TextView
+                android:id="@+id/PHQScreeningTVParticipant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp"
+                android:text="@string/phq_screening"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <!--        <Button-->
+        <!--            android:id="@+id/logoutButtonParticipant"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="28dp"-->
+        <!--            android:textAllCaps="false"-->
+        <!--            android:text="Logout"-->
+        <!--            android:elevation="10dp"-->
+        <!--            android:background="@drawable/rounded_corners"-->
+        <!--            android:textColor="@color/text_color"-->
+        <!--            android:fontFamily="@font/open_sans_semibold"-->
+        <!--            android:drawableLeft="@drawable/logout_icon"-->
+        <!--            android:paddingStart="5dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="0.205"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/researcherParticipantsTitleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:text="@string/participants"
+        android:textAllCaps="true"
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutResearcher"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutResearcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="40dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.973"
+        app:layout_constraintStart_toEndOf="@+id/researcherParticipantsTitleTV"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/researcherLanguageLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:baselineAligned="false">
+
+            <Button
+                android:id="@+id/englishButtonResearcher"
+                android:layout_width="93dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/left_english_toggle_selected_button"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:text="@string/english"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/kannadaButtonResearcher"
+                android:layout_width="93dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/right_kannada_toggle_button"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:text="@string/kannada"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/researcherNotificationsLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/notification_icon"
+            android:padding="10dp"
+            android:layout_gravity="center"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/researcherProfileImage"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:src="@drawable/coordinator_profile"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/researcherNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Jessica Jones"
+            android:fontFamily="@font/open_sans_semibold"
+            android:layout_gravity="center"
+            android:textSize="12sp"
+            android:textColor="@color/text_color" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="986dp"
+        android:layout_height="600dp"
+        android:layout_margin="100dp"
+        app:cardBackgroundColor="@color/white"
+        android:elevation="15dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutResearcher"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutResearcher">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/researcherParticipantLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4"
+                android:background="@drawable/top_curved_corners"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/researcherParticipantID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:gravity="center"
+                    android:text="@string/part_id"
+                    android:layout_margin="20dp"
+                    android:textColor="@color/text_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/researcherParticipantDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:gravity="center"
+                    android:layout_margin="20dp"
+                    android:text="@string/details"
+                    android:textColor="@color/text_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/researcherParticipantSurveysPending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:layout_margin="20dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:gravity="center"
+                    android:text="@string/survey_pending"
+                    android:textColor="@color/text_color"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/researcherParticipantsRV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/screen_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/researcherParticipantLL" />
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

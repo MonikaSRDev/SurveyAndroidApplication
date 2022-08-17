@@ -146,11 +146,6 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
         screeningRegisterButton.setOnClickListener(v -> {
             int score = 0;
 
-            if(ageAboveEighteen.equalsIgnoreCase("NULL") || resident.equalsIgnoreCase("NULL") || CBOMeeting.equalsIgnoreCase("NULL") || mentalIllness.equalsIgnoreCase("NULL")
-                    || substanceAbuse.equalsIgnoreCase("NULL") || suicideAttempt.equalsIgnoreCase("NULL") || participationConsent.equalsIgnoreCase("NULL")){
-                Toast.makeText(context, "Please enter all the details.", Toast.LENGTH_LONG).show();
-            }
-
             if(!ageAboveEighteen.equals("NULL") && ageAboveEighteen.equals("Yes")){
                 score = score + 1;
             }
@@ -184,7 +179,12 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
             participantScreening.setScore(score);
             participantScreening.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID)));
 
-            callServerPostScreeningDetails(participantScreening);
+            if(ageAboveEighteen.equalsIgnoreCase("NULL") || resident.equalsIgnoreCase("NULL") || CBOMeeting.equalsIgnoreCase("NULL") || mentalIllness.equalsIgnoreCase("NULL")
+                    || substanceAbuse.equalsIgnoreCase("NULL") || suicideAttempt.equalsIgnoreCase("NULL") || participationConsent.equalsIgnoreCase("NULL")){
+                Toast.makeText(context, context.getString(R.string.enter_all_details), Toast.LENGTH_LONG).show();
+            }else{
+                callServerPostScreeningDetails(participantScreening);
+            }
         });
     }
 
@@ -536,7 +536,7 @@ public class PHQScreeningFragment extends Fragment implements HandleServerRespon
             String serverErrorResponse = jsonObject.get("exception").toString();
             mithraUtility.showAppropriateMessages(context, serverErrorResponse);
         }else{
-            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="986dp"
     android:layout_height="500dp"
-    android:background="@color/white">
+    android:background="@drawable/curved_corners">
 
 
     <ImageView
@@ -58,6 +58,10 @@
         android:layout_height="wrap_content"
         android:foregroundGravity="top"
         app:cardBackgroundColor="@color/screen_background"
+        app:cardCornerRadius="10dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -140,6 +144,7 @@
         android:layout_height="wrap_content"
         style="@style/scrollbar_shape_style"
         android:paddingBottom="50dp"
+        android:background="@color/screen_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

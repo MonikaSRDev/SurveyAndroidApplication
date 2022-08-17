@@ -398,13 +398,13 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         participantName = phqParticipantName.getText().toString();
 
         if(ManualID!=null && ManualID.isEmpty()){
-            phqID.setError("Please enter Manual ID.");
+            phqID.setError(context.getString(R.string.enter_man_id));
             saveButton.setEnabled(false);
             saveButton.setBackgroundResource(R.drawable.yes_no_button);
             saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
             return false;
         }else if(ManualID!=null && ManualID.length() < 5){
-            phqID.setError("Manual ID should be minimum of 5 characters.");
+            phqID.setError(context.getString(R.string.man_min_5));
             saveButton.setEnabled(false);
             saveButton.setBackgroundResource(R.drawable.yes_no_button);
             saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
@@ -412,13 +412,13 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         }
 
         if(participantName!=null && participantName.isEmpty()){
-            phqParticipantName.setError("Please enter Name.");
+            phqParticipantName.setError(context.getString(R.string.enter_name));
             saveButton.setEnabled(false);
             saveButton.setBackgroundResource(R.drawable.yes_no_button);
             saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
             return false;
         }else if(participantName!=null && participantName.length() < 5){
-            phqParticipantName.setError("Name should be minimum of 5 characters.");
+            phqParticipantName.setError(context.getString(R.string.name_min_5));
             saveButton.setEnabled(false);
             saveButton.setBackgroundResource(R.drawable.yes_no_button);
             saveButton.setTextColor(getResources().getColor(R.color.text_color, context.getTheme()));
@@ -439,7 +439,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
                     i++;
                 }
             }else{
-                Toast.makeText(context, "Please answer all the questions.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.answer_all_questions), Toast.LENGTH_LONG).show();
                 return false;
             }
         }
@@ -454,9 +454,6 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         surveyAnswer.add("'option_id'" + ":'" + surveyAnswersArrayList.get(position).getOption_id()+"'");
         surveyAnswer.add("'ans'" + ":'" + surveyAnswersArrayList.get(position).getSelected_answer()+"'");
         surveyAnswer.add("'w'" + ":'" + surveyAnswersArrayList.get(position).getSelected_answer_weightage()+"'");
-//        surveyAnswer.add("'qn_start'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_start_time()+"'");
-//        surveyAnswer.add("'qn_stop'" + ":'" + surveyAnswersArrayList.get(position).getQuestion_stop_time()+"'");
-//        surveyAnswer.add("'seconds'" + ":'" + surveyAnswersArrayList.get(position).getSeconds_taken()+"'");
         String surveyAnswerStr = String.join(",", surveyAnswer );
         surveyAnswerStr = "{" + surveyAnswerStr + "}";
 
@@ -505,7 +502,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
         phqSurveyPostAnswers.setSurvey_end_time(surveyEndDateTime);
         phqSurveyPostAnswers.setMan_id(ManualID);
         phqSurveyPostAnswers.setParticipantName(participantName);
-        phqSurveyPostAnswers.setScreening_id("S0068");
+        phqSurveyPostAnswers.setScreening_id("S0001"); //S0001, S0068 - For test server
         phqSurveyPostAnswers.setShg(phqLocations.getName());
         phqSurveyPostAnswers.setRegister("no");
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
@@ -619,7 +616,7 @@ public class PHQQuestionnaireFragment extends Fragment implements HandleServerRe
             String serverErrorResponse = jsonObject.get("exception").toString();
             mithraUtility.showAppropriateMessages(context, serverErrorResponse);
         }else{
-            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="1072dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:id="@+id/verticalRowLLResearcher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:weightSum="4"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/researcherParticipantIDTV"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:text="000"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:layout_weight="0.5"
+            android:layout_margin="10dp" />
+
+        <LinearLayout
+            android:id="@+id/researcherParticipantDetailsLL"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="0.5"
+            android:paddingStart="20dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/researcherPartName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="start"/>
+
+            <TextView
+                android:id="@+id/researcherPartAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/age"
+                android:layout_margin="5dp"
+                android:textSize="14sp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="start" />
+
+            <TextView
+                android:id="@+id/researcherPartVillage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/village"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/open_sans"
+                android:gravity="start" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/researcherSurveyPending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/researcherSurveyNameTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:padding="5dp"
+                    android:text="@string/phq9"
+                    android:textColor="@color/text_color"
+                    android:textSize="14sp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp">
+
+                    <ImageView
+                        android:id="@+id/researcherSurveyIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/survey_high_priority_icon"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/researcherSurveyDaysLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:gravity="center"
+                        android:text="3"
+                        android:layout_marginStart="5dp"
+                        android:textColor="#F44336"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/researcherSurveyIcon"
+                        app:layout_constraintEnd_toEndOf="@+id/researcherSurveyIcon"
+                        app:layout_constraintHorizontal_bias="0.194"
+                        app:layout_constraintStart_toStartOf="@+id/researcherSurveyIcon"
+                        app:layout_constraintTop_toTopOf="@+id/researcherSurveyIcon"
+                        app:layout_constraintVertical_bias="0.47" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

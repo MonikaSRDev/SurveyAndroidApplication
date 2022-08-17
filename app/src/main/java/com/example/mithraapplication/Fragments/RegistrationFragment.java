@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -231,13 +232,28 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
             maleButton.setEnabled(false);
             femaleButton.setEnabled(false);
             othersButton.setEnabled(false);
+            participantGender = registerParticipantDetails.getParticipantGender();
+            if(participantGender!=null && participantGender.equalsIgnoreCase("Female")){
+                maleButton.setBackgroundResource(R.drawable.yes_no_button);
+                femaleButton.setBackgroundResource(R.drawable.selected_button);
+                othersButton.setBackgroundResource(R.drawable.yes_no_button);
+            }else if(participantGender!=null && participantGender.equalsIgnoreCase("Male")){
+                maleButton.setBackgroundResource(R.drawable.selected_button);
+                femaleButton.setBackgroundResource(R.drawable.yes_no_button);
+                othersButton.setBackgroundResource(R.drawable.yes_no_button);
+            }else{
+                maleButton.setBackgroundResource(R.drawable.yes_no_button);
+                femaleButton.setBackgroundResource(R.drawable.yes_no_button);
+                othersButton.setBackgroundResource(R.drawable.selected_button);
+            }
             createButton.setEnabled(false);
             createButton.setTextColor(getResources().getColor(R.color.text_color));
             createButton.setText(R.string.create);
             createButton.setBackgroundResource(R.drawable.inputs_background);
             createButton.setVisibility(View.INVISIBLE);
             createNewPasswordButton.setVisibility(View.VISIBLE);
-            createNewPasswordButton.setEnabled(false);
+            createNewPasswordButton.setEnabled(true);
+            onClickOfCreateNewPassword();
 //
             if(PHQScreeningSpinner!=null && PHQScreeningSpinnerAdapter!= null && PHQScreeningSpinnerAdapter.getCount()!=0){
                 PHQScreeningSpinner.setSelection(PHQScreeningSpinnerAdapter.getPosition(registerParticipantDetails.getPhq_scr_id()));
@@ -284,18 +300,29 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
 
             participantPasswordTV.setVisibility(View.INVISIBLE);
             participantPasswordET.setVisibility(View.GONE);
-            participantPasswordET.setFocusable(false);
-            participantPasswordET.setClickable(false);
-            participantPasswordET.setInputType(InputType.TYPE_CLASS_TEXT);
             participantConfirmPasswordTV.setVisibility(View.INVISIBLE);
             participantConfirmPasswordET.setVisibility(View.INVISIBLE);
 
             maleButton.setEnabled(true);
             femaleButton.setEnabled(true);
             othersButton.setEnabled(true);
+            participantGender = registerParticipantDetails.getParticipantGender();
+            if(participantGender!=null && participantGender.equalsIgnoreCase("Female")){
+                maleButton.setBackgroundResource(R.drawable.yes_no_button);
+                femaleButton.setBackgroundResource(R.drawable.selected_button);
+                othersButton.setBackgroundResource(R.drawable.yes_no_button);
+            }else if(participantGender!=null && participantGender.equalsIgnoreCase("Male")){
+                maleButton.setBackgroundResource(R.drawable.selected_button);
+                femaleButton.setBackgroundResource(R.drawable.yes_no_button);
+                othersButton.setBackgroundResource(R.drawable.yes_no_button);
+            }else{
+                maleButton.setBackgroundResource(R.drawable.yes_no_button);
+                femaleButton.setBackgroundResource(R.drawable.yes_no_button);
+                othersButton.setBackgroundResource(R.drawable.selected_button);
+            }
             createButton.setVisibility(View.VISIBLE);
             createButton.setEnabled(true);
-            createButton.setText(R.string.create);
+            createButton.setText(R.string.update);
             createButton.setTextColor(getResources().getColor(R.color.white));
             createButton.setBackgroundResource(R.drawable.button_background);
             createNewPasswordButton.setVisibility(View.VISIBLE);
@@ -328,46 +355,46 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         participantPassword = participantPasswordET.getText().toString();
 
         if(participantName.isEmpty()){
-            participantNameAutoCompleteTV.setError("Please enter the participant name.");
+            participantNameAutoCompleteTV.setError(context.getString(R.string.enter_name_participant));
             return false;
         }
 
         if(participantAge.isEmpty()){
-            participantAgeET.setError("Please enter the participant age.");
+            participantAgeET.setError(context.getString(R.string.enter_age));
             return false;
         }else if(Integer.parseInt(participantAge) < 18){
-            participantAgeET.setError("Participant age should be 18 and above.");
+            participantAgeET.setError(context.getString(R.string.age_above_18));
             return false;
         }
 
         if(participantPhoneNumberET.getText().toString().isEmpty()){
-            participantPhoneNumberET.setError("Please enter the participant phone number.");
+            participantPhoneNumberET.setError(context.getString(R.string.enter_phone_num));
             return false;
         }else{
             if(participantPhoneNumberET.getText().toString().length() < 6){
-                participantPhoneNumberET.setError("Please enter a valid participant phone number.");
+                participantPhoneNumberET.setError(context.getString(R.string.enter_valid_phone_num));
                 return false;
             }
         }
 
         if(participantUserName.isEmpty() || participantUserName.length() < 4){
-            participantUserNameET.setError("Username must be minimum of 4 characters");
+            participantUserNameET.setError(context.getString(R.string.username_min_4));
             return false;
         }
 
         boolean valid = false;
         if(participantPassword.isEmpty()){
-            participantPasswordET.setError("Please enter a password.");
+            participantPasswordET.setError(context.getString(R.string.enter_password));
             valid = false;
         }else if(participantPassword.length() < 4){
-            participantPasswordET.setError("Password must be minimum of 4 characters.");
+            participantPasswordET.setError(context.getString(R.string.password_min_4));
             valid = false;
         } else {
             valid = checkIfPasswordMatches(participantPassword, participantConfirmPasswordET.getText().toString());
             if(valid){
                 return true;
             }else{
-                participantConfirmPasswordET.setError("Password does not match. Please check and re-enter the password.");
+                participantConfirmPasswordET.setError(context.getString(R.string.password_not_matching));
                 return false;
             }
         }
@@ -422,6 +449,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         EditText passwordET = customLayout.findViewById(R.id.passwordETPopup);
         EditText confirmPasswordET = customLayout.findViewById(R.id.confirmPasswordETPopup);
         Button resetButton = customLayout.findViewById(R.id.resetPasswordButtonPopup);
+        ImageView closeButton = customLayout.findViewById(R.id.closeAlertButtonRegistration);
 
         dialog  = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -451,6 +479,10 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
                     confirmPasswordET.setError("Password does not match. Please check and re-enter the password.");
                 }
             }
+        });
+
+        closeButton.setOnClickListener(v -> {
+            dialog.dismiss();
         });
     }
 
@@ -511,6 +543,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         registerParticipant.setMan_id(participantManualID);
         registerParticipant.setActive("yes");
         registerParticipant.setName("null");
+        registerParticipant.setModified_user("UT-9-2022-07-11-08:19:58-no_one_modified");
         registerParticipant.setCreated_user(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         registerParticipant.setUser_pri_id(mithraUtility.getSharedPreferencesData(context, context.getString(R.string.primaryID), context.getString(R.string.participantPrimaryID)));
 
@@ -532,6 +565,7 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         userLogin.setUserPassword(participantPassword);
         userLogin.setUserRole("participant");
         userLogin.setActive("yes");
+        userLogin.setModified_user("UT-9-2022-07-11-08:19:58-no_one_modified");
         userLogin.setCreated_user(mithraUtility.getSharedPreferencesData(requireActivity(), context.getString(R.string.primaryID), context.getString(R.string.coordinatorPrimaryID)));
         ServerRequestAndResponse requestObject = new ServerRequestAndResponse();
         requestObject.setHandleServerResponse(this);
@@ -879,6 +913,15 @@ public class RegistrationFragment extends Fragment implements AdapterView.OnItem
         JsonObject jsonObjectLocation = JsonParser.parseString(message).getAsJsonObject();
         if(jsonObjectLocation.get("message")!=null){
             if(jsonObjectLocation.get("message")!=null && jsonObjectLocation.get("message").toString().equals("\"updated\"")) {
+                if(isEditable!=null && isEditable.equals("false")){
+                    editButton.setBackgroundResource(R.drawable.yes_no_button);
+                    isEditable = "false";
+                    setEditable();
+                }else if(isEditable!=null && isEditable.equals("reEdit")){
+                    editButton.setBackgroundResource(R.drawable.yes_no_button);
+                    isEditable = "false";
+                    setEditable();
+                }
                 Toast.makeText(context, "Your password has been updated.", Toast.LENGTH_LONG).show();
             }
         }else{

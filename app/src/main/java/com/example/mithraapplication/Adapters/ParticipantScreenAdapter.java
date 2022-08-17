@@ -10,16 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mithraapplication.ModelClasses.ParticipantDetails;
 import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.R;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class ParticipantScreenAdapter extends RecyclerView.Adapter<ParticipantScreenAdapter.ViewHolder> {
 
     private ArrayList<RegisterParticipant> participantArrayList;
     private Context context;
     private final onItemClickListener itemClickListener;
+    private ArrayList<ParticipantDetails> registerParticipantsArrayList;
 
     @NonNull
     @Override
@@ -28,22 +31,48 @@ public class ParticipantScreenAdapter extends RecyclerView.Adapter<ParticipantSc
         return new ParticipantScreenAdapter.ViewHolder(view);
     }
 
-    public ParticipantScreenAdapter(Context context, ArrayList<RegisterParticipant> participantArrayList, onItemClickListener itemClickListener){
+    public ParticipantScreenAdapter(Context context, ArrayList<RegisterParticipant> participantArrayList, ArrayList<ParticipantDetails> registerParticipantsArrayList, onItemClickListener itemClickListener){
         this.context = context;
         this.participantArrayList = participantArrayList;
         this.itemClickListener = itemClickListener;
+        this.registerParticipantsArrayList = registerParticipantsArrayList;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ParticipantScreenAdapter.ViewHolder holder, int position) {
 
-        RegisterParticipant participantDetails = participantArrayList.get(position);
+        RegisterParticipant registerParticipant = participantArrayList.get(position);
+        ParticipantDetails participantDetails = registerParticipantsArrayList.stream().filter(ParticipantDetails -> ParticipantDetails.getRegistration().equals(registerParticipant.getName())).findFirst().orElse(null);
 
-        holder.participantDetailsName.setText(participantDetails.getParticipantName());
-        holder.participantDetailsAge.setText(participantDetails.getParticipantAge());
-        holder.participantDetailsVillage.setText(participantDetails.getParticipantVillageName());
+        holder.participantDetailsName.setText(participantDetails.getFull_name());
+        holder.participantDetailsAge.setText(participantDetails.getAge());
+        holder.participantDetailsVillage.setText(participantDetails.getVillage_name());
 
-        holder.itemView.setOnClickListener(v -> itemClickListener.onItemClick(participantDetails));
+        if(registerParticipant.getActive()!=null && participantDetails.getActive().equalsIgnoreCase("yes")){
+            holder.statusView.setBackgroundColor(context.getResources().getColor(R.color.completed_color, context.getTheme()));
+        }else{
+            holder.statusView.setBackgroundColor(context.getResources().getColor(R.color.notEligibleColor, context.getTheme()));
+        }
+
+        String enrollPercentage = participantDetails.getEnroll();
+        if(enrollPercentage!=null && enrollPercentage.equalsIgnoreCase("yes")){
+            holder.enrollmentProgressBar.setProgress(100);
+            holder.enrollmentPercentage.setText("100%");
+        }else if(enrollPercentage!=null && enrollPercentage.equalsIgnoreCase("66")){
+            holder.enrollmentProgressBar.setProgress(66);
+            holder.enrollmentPercentage.setText("66%");
+        }else if(enrollPercentage!=null && enrollPercentage.equalsIgnoreCase("33")){
+            holder.enrollmentProgressBar.setProgress(33);
+            holder.enrollmentPercentage.setText("33%");
+        }else{
+            holder.enrollmentProgressBar.setProgress(0);
+            holder.enrollmentPercentage.setText("0%");
+        }
+
+        holder.surveyProgressBar.setProgress(10);
+        holder.surveyPercentage.setText("10%");
+
+        holder.itemView.setOnClickListener(v -> itemClickListener.onItemClick(registerParticipant));
 
     }
 
@@ -67,7 +96,7 @@ public class ParticipantScreenAdapter extends RecyclerView.Adapter<ParticipantSc
     }
 
     public interface onItemClickListener{
-        void onItemClick(RegisterParticipant registerparticipant);
+        void onItemClick(RegisterParticipant registerParticipant);
     }
 
     @Override

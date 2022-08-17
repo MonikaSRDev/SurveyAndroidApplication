@@ -21,19 +21,19 @@ import com.example.mithraapplication.R;
 
 import java.util.ArrayList;
 
-public class QuestionnaireSingleAdapter extends RecyclerView.Adapter<QuestionnaireSingleAdapter.ViewHolder>{
+public class ResearcherQuestionnaireAdapter extends RecyclerView.Adapter<ResearcherQuestionnaireAdapter.ViewHolder>{
     private Context context;
     private ArrayList<SurveyQuestionAnswers> surveyQuestionAnswersArrayList;
     @NonNull
     @Override
-    public QuestionnaireSingleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ResearcherQuestionnaireAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.single_questionnaire_row, parent, false);
 
-        return new QuestionnaireSingleAdapter.ViewHolder(view);
+        return new ResearcherQuestionnaireAdapter.ViewHolder(view);
     }
 
-    public QuestionnaireSingleAdapter(Context context, ArrayList<SurveyQuestionAnswers> surveyQuestionAnswersArrayList){
+    public ResearcherQuestionnaireAdapter(Context context, ArrayList<SurveyQuestionAnswers> surveyQuestionAnswersArrayList){
         this.surveyQuestionAnswersArrayList = surveyQuestionAnswersArrayList;
         this.context = context;
     }
@@ -61,7 +61,7 @@ public class QuestionnaireSingleAdapter extends RecyclerView.Adapter<Questionnai
     }
 
     @Override
-    public void onBindViewHolder(@NonNull QuestionnaireSingleAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ResearcherQuestionnaireAdapter.ViewHolder holder, int position) {
 
         SurveyQuestionAnswers surveyQuestionAnswers = surveyQuestionAnswersArrayList.get(position);
 

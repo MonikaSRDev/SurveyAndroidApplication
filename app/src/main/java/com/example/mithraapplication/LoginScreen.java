@@ -71,8 +71,6 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
 
             if(!userName.equals("NULL") && !password.equals("NULL")){
                 callServerForUserLogin(userName, password);
-//                    moveToParticipantLandingPage(userName);
-//                    moveToCoordinatorDashboard();
                 mithraUtility.putSharedPreferencesData(LoginScreen.this, getString(R.string.userName), getString(R.string.user_name_participant), userName);
             }else if(userName.equals("NULL") && !password.equals("NULL")){
                 userNameET.setError("Please enter username.");
@@ -101,6 +99,15 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
      */
     private void moveToCoordinatorDashboard(){
         Intent loginIntent = new Intent(LoginScreen.this, DashboardScreen.class);
+        startActivity(loginIntent);
+        finish();
+    }
+
+    /**
+     * Description : This method is used to move to the coordinator dashboard if the user is a coordinator
+     */
+    private void moveToResearcherPage(){
+        Intent loginIntent = new Intent(LoginScreen.this, ResearcherSHGList.class);
         startActivity(loginIntent);
         finish();
     }
@@ -144,15 +151,27 @@ public class LoginScreen extends AppCompatActivity implements HandleServerRespon
         try{
             userLogins = gson.fromJson(jsonObject.get("message"), type);
             mithraUtility.putSharedPreferencesData(this, getString(R.string.user_role), getString(R.string.user_role), userLogins.get(0).getUserRole());
-            if(userLogins.get(0).getUserRole().equals("participant")){
-                mithraUtility.putSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
-                mithraUtility.putSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
-                moveToParticipantLandingPage(userLogins.get(0).getUserName());
-            }else if(userLogins.get(0).getUserRole().equals("coordinator")){
-                mithraUtility.putSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator), userLogins.get(0).getUserName());
-                mithraUtility.putSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID), userLogins.get(0).getUser_pri_id());
-                moveToCoordinatorDashboard();
+            String date = mithraUtility.getCurrentDate();
+            if(date!=null && !date.equalsIgnoreCase(getString(R.string.login_active_date))){
+                if(userLogins.get(0).getUserRole().equalsIgnoreCase("participant") && userLogins.get(0).getActive().equalsIgnoreCase("yes")){
+                    mithraUtility.putSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_participant), userLogins.get(0).getUserName());
+                    mithraUtility.putSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.participantPrimaryID), userLogins.get(0).getUser_pri_id());
+                    moveToParticipantLandingPage(userLogins.get(0).getUserName());
+                }else if(userLogins.get(0).getUserRole().equalsIgnoreCase("coordinator") && userLogins.get(0).getActive().equalsIgnoreCase("yes")){
+                    mithraUtility.putSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_coordinator), userLogins.get(0).getUserName());
+                    mithraUtility.putSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.coordinatorPrimaryID), userLogins.get(0).getUser_pri_id());
+                    moveToCoordinatorDashboard();
+                }else if(userLogins.get(0).getUserRole().equalsIgnoreCase("researcher") && userLogins.get(0).getActive().equalsIgnoreCase("yes")){
+                    mithraUtility.putSharedPreferencesData(this, getString(R.string.userName), getString(R.string.user_name_researcher), userLogins.get(0).getUserName());
+                    mithraUtility.putSharedPreferencesData(this, getString(R.string.primaryID), getString(R.string.researcherPrimaryID), userLogins.get(0).getUser_pri_id());
+                    moveToResearcherPage();
+                }else{
+                    Toast.makeText(LoginScreen.this, getString(R.string.not_active_message), Toast.LENGTH_LONG).show();
+                }
+            }else{
+                Toast.makeText(LoginScreen.this, getString(R.string.no_access_message), Toast.LENGTH_LONG).show();
             }
+
         }catch(Exception e){
             Toast.makeText(this, jsonObject.get("message").toString(), Toast.LENGTH_LONG).show();
         }

@@ -969,7 +969,7 @@ public class SocioDemographyFragment extends Fragment implements HandleServerRes
             if(isEditable!=null && isEditable.equals("false")){
                 editButton.setBackgroundResource(R.drawable.status_button);
                 nextButton.setVisibility(View.VISIBLE);
-                nextButton.setText(R.string.next);
+                nextButton.setText(R.string.update);
                 nextButton.setBackgroundResource(R.drawable.button_background);
                 nextButton.setTextColor(getResources().getColor(R.color.white));
                 isEditable = "reEdit";

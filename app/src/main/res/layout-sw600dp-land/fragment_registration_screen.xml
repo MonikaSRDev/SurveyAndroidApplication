@@ -290,19 +290,6 @@
                 android:nextFocusForward="@id/participantPasswordET"
                 android:cursorVisible="true"/>
 
-            <Button
-                android:id="@+id/createNewPasswordButton"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:background="@drawable/inputs_background"
-                android:fontFamily="@font/open_sans_semibold"
-                android:text="@string/create_new_password"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color"
-                android:layout_marginTop="12dp"
-                android:textSize="16sp"
-                android:visibility="gone"/>
-
             <TextView
                 android:id="@+id/passwordTV"
                 android:layout_width="wrap_content"
@@ -311,7 +298,21 @@
                 android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/password"
                 android:textColor="@color/text_color"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="visible"/>
+
+            <Button
+                android:id="@+id/createNewPasswordButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/inputs_background"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="@string/create_new_password"
+                android:textAllCaps="false"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/text_color"
+                android:textSize="16sp"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/participantPasswordET"
@@ -329,6 +330,7 @@
                 android:textColorHint="@color/hint_text_color"
                 android:textSize="14sp"
                 android:imeOptions="actionNext"
+                android:visibility="visible"
                 android:nextFocusForward="@id/participantConfirmPasswordET"/>
 
             <TextView
@@ -339,6 +341,7 @@
                 android:fontFamily="@font/open_sans_semibold"
                 android:text="@string/confirm_password"
                 android:textColor="@color/text_color"
+                android:visibility="visible"
                 android:textSize="14sp" />
 
             <EditText
@@ -355,6 +358,7 @@
                 android:minHeight="48dp"
                 android:padding="10dp"
                 android:textColor="@color/text_color"
+                android:visibility="visible"
                 android:textColorHint="@color/hint_text_color"
                 android:textSize="14sp" />
 

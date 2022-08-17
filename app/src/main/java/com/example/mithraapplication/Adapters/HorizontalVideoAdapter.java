@@ -144,7 +144,7 @@ public class HorizontalVideoAdapter extends RecyclerView.Adapter<HorizontalVideo
             String serverErrorResponse = jsonObject.get("exception").toString();
             mithraUtility.showAppropriateMessages(context, serverErrorResponse);
         }else{
-            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
         }
     }
 

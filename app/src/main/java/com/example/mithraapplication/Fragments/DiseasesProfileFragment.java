@@ -319,7 +319,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                             callServerPostDiseasesProfile();
                         }
                     }else{
-                        Toast.makeText(context, "Please give all the details.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, context.getString(R.string.enter_all_details), Toast.LENGTH_LONG).show();
                     }
                 }, 500);
             }
@@ -336,7 +336,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
                 isEditable = "reEdit";
                 nextDiseaseProfileButton.setVisibility(View.VISIBLE);
                 nextDiseaseProfileButton.setEnabled(true);
-                nextDiseaseProfileButton.setText(R.string.save);
+                nextDiseaseProfileButton.setText(R.string.update);
                 nextDiseaseProfileButton.setBackgroundResource(R.drawable.button_background);
                 nextDiseaseProfileButton.setTextColor(getResources().getColor(R.color.white, context.getTheme()));
                 setRecyclerView(isEditable, diseasesProfilesArray);
@@ -1166,7 +1166,7 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
         if(jsonObjectRegistration.get("data")!=null){
             if(isEditable!=null && isEditable.equals("reEdit")){
                 editButton.setBackgroundResource(R.drawable.yes_no_button);
-                Toast.makeText(context, "Updated Successfully", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.update_message), Toast.LENGTH_LONG).show();
             }
             Type typeDiseaseProfile = new TypeToken<DiseasesProfilePostRequest>(){}.getType();
             diseasesProfileDetails = gson.fromJson(jsonObjectRegistration.get("data"), typeDiseaseProfile);
@@ -1187,7 +1187,6 @@ public class DiseasesProfileFragment extends Fragment implements HandleServerRes
             String serverErrorResponse = jsonObject.get("exception").toString();
             mithraUtility.showAppropriateMessages(context, serverErrorResponse);
         }else{
-            Toast.makeText(context, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
-        }
+            Toast.makeText(context, context.getString(R.string.something_wrong), Toast.LENGTH_LONG).show();        }
     }
 }

@@ -109,6 +109,23 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/participantNameResearcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:text="@string/participant_name"
+        android:textAllCaps="false"
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayoutQS"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <LinearLayout
         android:id="@+id/linearLayoutQS"
         android:layout_width="wrap_content"

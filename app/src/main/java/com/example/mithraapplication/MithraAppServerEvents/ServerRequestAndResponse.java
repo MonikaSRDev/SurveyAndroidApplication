@@ -16,8 +16,10 @@ import com.example.mithraapplication.MithraAppServerEventsListeners.PHQParticipa
 import com.example.mithraapplication.MithraAppServerEventsListeners.PHQQuestionnaireServerEvents;
 import com.example.mithraapplication.MithraAppServerEventsListeners.PHQScreeningServerEvents;
 import com.example.mithraapplication.MithraAppServerEventsListeners.ParticipantProfileServerEvents;
+import com.example.mithraapplication.MithraAppServerEventsListeners.ParticipantReportServerEvents;
 import com.example.mithraapplication.MithraAppServerEventsListeners.ParticipantsAllListServerEvents;
 import com.example.mithraapplication.MithraAppServerEventsListeners.RegistrationServerEvents;
+import com.example.mithraapplication.MithraAppServerEventsListeners.ResearcherParticipantsServerEvents;
 import com.example.mithraapplication.MithraAppServerEventsListeners.SocioDemographyServerEvents;
 import com.example.mithraapplication.MithraAppServerEventsListeners.SurveyServerEvents;
 import com.example.mithraapplication.MithraUtility;
@@ -32,6 +34,7 @@ import com.example.mithraapplication.ModelClasses.RegisterParticipant;
 import com.example.mithraapplication.ModelClasses.SocioDemography;
 import com.example.mithraapplication.ModelClasses.SurveyQuestions;
 import com.example.mithraapplication.ModelClasses.TrackingParticipantStatus;
+import com.example.mithraapplication.ModelClasses.UpdateActiveStatus;
 import com.example.mithraapplication.ModelClasses.UpdateDiseaseProfileTracking;
 import com.example.mithraapplication.ModelClasses.UpdatePassword;
 import com.example.mithraapplication.ModelClasses.UpdateRegisterParticipant;
@@ -58,7 +61,9 @@ public class ServerRequestAndResponse extends Application {
     private static PHQQuestionnaireServerEvents phqQuestionnaireServerEvents = null;
     private static PHQScreeningServerEvents phqScreeningServerEvents = null;
     private static RegistrationServerEvents registrationServerEvents = null;
+    private static ParticipantReportServerEvents participantReportServerEvents = null;
     private static SocioDemographyServerEvents socioDemographyServerEvents = null;
+    private static ResearcherParticipantsServerEvents researcherParticipantsServerEvents = null;
     private static SurveyServerEvents surveyServerEvents = null;
     private static HandleFileDownloadResponse handleFileDownloadResponse = null;
     private final MithraUtility mithraUtility = new MithraUtility();
@@ -71,10 +76,11 @@ public class ServerRequestAndResponse extends Application {
     public enum ServerMethodNames{
         LoginUser, CoordinatorSHG, GetCardDetails, GetParticipantDetails, GetTrackingDetails, GetPHQParticipants,
         GetAllTrackingDetails, PostSurveyAnswers, GetPHQ9Questions, GetPHQ9Options, PostPHQAnswers, PostScreeningDetails,
-        LoginForParticipant, RegisterParticipant, CreateTrackingDetails, IndividualParticipantDetails,
+        LoginForParticipant, RegisterParticipant, CreateTrackingDetails, IndividualParticipantDetails, GetAllParticipantDetailsResearcher,
         UpdateParticipantDetails, UpdateParticipantPassword, UpdateRegisterStatus, PostSocioDemography, UpdateSocioTrackingDetails,
         IndividualSocioDemographyDetails, UpdateSocioDemographyDetails, PostDiseasesProfile, UpdateDiseaseTrackingDetails, IndividualDiseaseProfileDetails,
-        UpdateDiseaseProfileDetails, UpdateScreeningStatus, GetAllParticipantDetails, GetSurveyQuestions, GetSurveyOptions, GetParticipantScreening
+        UpdateDiseaseProfileDetails, UpdateScreeningStatus, GetAllParticipantDetails, GetSurveyQuestions, GetSurveyOptions, GetParticipantScreening,
+        UpdateActiveStatus
     }
 
     /**
@@ -554,6 +560,14 @@ public class ServerRequestAndResponse extends Application {
                 }
                 break;
 
+            case GetAllParticipantDetailsResearcher:
+                if(researcherParticipantsServerEvents!=null){
+                    researcherParticipantsServerEvents.getAllParticipantsForResearcher(message);
+                }else{
+                    handleServerResponse.responseReceivedFailure(message);
+                }
+                break;
+
         }
     }
 
@@ -603,6 +617,14 @@ public class ServerRequestAndResponse extends Application {
 
     public void setSurveyServerEvents(SurveyServerEvents surveyServerEvents){
         ServerRequestAndResponse.surveyServerEvents = surveyServerEvents;
+    }
+
+    public void setResearcherParticipantsServerEvents(ResearcherParticipantsServerEvents researcherParticipantsServerEvents){
+        ServerRequestAndResponse.researcherParticipantsServerEvents = researcherParticipantsServerEvents;
+    }
+
+    public void setParticipantReportServerEvents(ParticipantReportServerEvents participantReportServerEvents){
+        ServerRequestAndResponse.participantReportServerEvents = participantReportServerEvents;
     }
 
     public void setHandleServerResponse(HandleServerResponse context){
@@ -667,6 +689,10 @@ public class ServerRequestAndResponse extends Application {
 
     public void getAllParticipantsDetails(Context context, String url){
         getJsonRequest(context, ServerMethodNames.GetAllParticipantDetails, url);
+    }
+
+    public void getAllParticipantsDetailsResearcher(Context context, String url){
+        getJsonRequest(context, ServerMethodNames.GetAllParticipantDetailsResearcher, url);
     }
 
     public void getPHQ9Questions(Context context, SurveyQuestions surveyQuestions, String url){
@@ -739,6 +765,10 @@ public class ServerRequestAndResponse extends Application {
 
     public void getAllTrackingDetails(Context context, String url){
         getJsonRequest(context, ServerMethodNames.GetAllTrackingDetails, url);
+    }
+
+    public void putUpdateActiveStatus(Context context, UpdateActiveStatus updateActiveStatus, String url){
+        putJsonRequest(context, ServerMethodNames.UpdateActiveStatus, updateActiveStatus.ToJSON(), url);
     }
 
 

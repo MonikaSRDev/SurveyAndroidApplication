@@ -17,6 +17,7 @@ public class UserLogin extends JsonServerObject{
     private String active = "yes";
     private String user_pri_id = "NULL";
     private String created_user = "NULL";
+    private String modified_user = "UT-9-2022-07-11-08:19:58-no_one_modified";
 
     public String getUserName() {
         return userName;
@@ -64,6 +65,14 @@ public class UserLogin extends JsonServerObject{
 
     public void setCreated_user(String created_user) {
         this.created_user = created_user;
+    }
+
+    public String getModified_user() {
+        return modified_user;
+    }
+
+    public void setModified_user(String modified_user) {
+        this.modified_user = modified_user;
     }
 
     public JsonServerObject FromJson(String jsonString, String methodName){
